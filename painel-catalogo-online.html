@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ZUM — Painel Catálogo Online</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,sans-serif;background:#f4f4f4;min-height:100vh}
+
+/* ===== HEADER ===== */
+.header{background:#111;color:#fff;padding:0 20px;display:flex;align-items:stretch;justify-content:space-between;position:sticky;top:0;z-index:100;min-height:52px}
+.logo{font-size:18px;letter-spacing:6px;font-weight:300;display:flex;align-items:center;padding-right:24px;border-right:1px solid rgba(255,255,255,.1);flex-shrink:0}
+.tabs{display:flex;align-items:stretch;flex:1;padding:0 8px}
+.tab-btn{padding:0 18px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;background:none;border:none;color:rgba(255,255,255,.5);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap}
+.tab-btn.on{color:#fff;border-bottom-color:#fff}
+.tab-btn:hover{color:rgba(255,255,255,.85)}
+.header-btns{display:flex;align-items:center;gap:8px;padding-left:8px;border-left:1px solid rgba(255,255,255,.1)}
+.btn{padding:8px 14px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border:none;cursor:pointer;transition:all .15s;white-space:nowrap;display:inline-flex;align-items:center;gap:5px}
+.btn-outline{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.35)}
+.btn-outline:hover{background:rgba(255,255,255,.1)}
+.btn-white{background:#fff;color:#111}
+.btn-white:hover{background:#ddd}
+.btn-dark{background:#111;color:#fff;border:1px solid #555}
+.btn-dark:hover{background:#333}
+.btn-green{background:#27ae60;color:#fff}
+.btn-green:hover{background:#219a52}
+.btn-red{background:#c0392b;color:#fff}
+.btn-red:hover{background:#a93226}
+
+/* ===== TABS ===== */
+.tab-content{display:none}
+.tab-content.on{display:block}
+
+/* ===== TOOLBAR ===== */
+.toolbar{background:#fff;border-bottom:1px solid #e5e5e5;padding:10px 20px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.search-wrap{position:relative;flex:1;min-width:160px;max-width:360px}
+.search-wrap input{width:100%;padding:8px 12px 8px 32px;border:1px solid #ddd;font-size:13px;color:#111;outline:none;background:#f9f9f9}
+.search-wrap input:focus{border-color:#111;background:#fff}
+.search-icon{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:#bbb;font-size:14px;pointer-events:none}
+.filter-tabs{display:flex;gap:4px}
+.ftab{padding:5px 12px;font-size:9px;letter-spacing:1px;text-transform:uppercase;border:1px solid #ddd;color:#999;cursor:pointer;background:#fff}
+.ftab.on{background:#111;color:#fff;border-color:#111}
+.count-label{font-size:11px;color:#999;margin-left:auto}
+
+/* ===== PRODUCT GRID ===== */
+.main{padding:20px;max-width:1000px;margin:0 auto}
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.prod-card{background:#fff;border:2px solid transparent;transition:border-color .15s;position:relative;cursor:grab;user-select:none}
+.prod-card.inativo{opacity:.45;filter:grayscale(.6)}
+.prod-card.dragging{opacity:.35;border-color:#999}
+.prod-card.drag-over{border-color:#111;border-style:dashed}
+.drag-handle{position:absolute;top:7px;left:7px;width:22px;height:22px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.08);cursor:grab;z-index:5;color:#888;font-size:13px;border-radius:2px}
+.ordem-badge{position:absolute;top:7px;right:7px;background:#111;color:#fff;font-size:9px;font-weight:700;width:20px;height:20px;display:flex;align-items:center;justify-content:center;z-index:5}
+
+/* toggle publicar */
+.toggle-pub{position:absolute;bottom:8px;right:8px;z-index:6;display:flex;align-items:center;gap:4px;background:rgba(255,255,255,.93);padding:3px 7px;border-radius:20px;box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.toggle-pub span{font-size:9px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:#111}
+.tgl{position:relative;width:30px;height:16px;cursor:pointer;flex-shrink:0}
+.tgl input{opacity:0;width:0;height:0;position:absolute}
+.tgl-s{position:absolute;inset:0;background:#ccc;border-radius:16px;transition:.2s}
+.tgl-s:before{content:'';position:absolute;width:12px;height:12px;left:2px;bottom:2px;background:#fff;border-radius:50%;transition:.2s}
+.tgl input:checked+.tgl-s{background:#111}
+.tgl input:checked+.tgl-s:before{transform:translateX(14px)}
+
+/* foto */
+.photo-area{position:relative;aspect-ratio:3/4;background:#f0ece8;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer}
+.photo-area img{width:100%;height:100%;object-fit:cover}
+.photo-placeholder{display:flex;flex-direction:column;align-items:center;gap:5px;color:#bbb;pointer-events:none}
+.photo-placeholder span{font-size:9px;letter-spacing:1px;text-transform:uppercase}
+.upload-hover{position:absolute;inset:0;background:rgba(0,0,0,.48);display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;letter-spacing:1px;text-transform:uppercase;opacity:0;transition:opacity .15s}
+.photo-area:hover .upload-hover{opacity:1}
+.photo-input{display:none}
+.upload-ing{position:absolute;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;letter-spacing:1px;text-transform:uppercase}
+
+/* info produto */
+.prod-info{padding:10px 12px 6px}
+.prod-name{font-size:10px;font-weight:700;color:#111;letter-spacing:.5px;text-transform:uppercase;margin-bottom:2px;line-height:1.3}
+.prod-sku{font-size:9px;color:#bbb;letter-spacing:.8px;margin-bottom:6px}
+.prod-price{font-size:15px;font-weight:700;color:#111;margin-bottom:6px}
+.prod-meta{display:flex;flex-direction:column;gap:4px}
+.meta-row{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.meta-label{font-size:8px;color:#bbb;letter-spacing:1px;text-transform:uppercase;width:40px;flex-shrink:0;font-weight:600}
+.color-dot{width:12px;height:12px;border-radius:50%;border:1px solid rgba(0,0,0,.1);flex-shrink:0;position:relative}
+.color-dot[title]:hover::after{content:attr(title);position:absolute;bottom:calc(100%+4px);left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:2px 6px;font-size:9px;white-space:nowrap;pointer-events:none;z-index:20}
+.size-badge{padding:1px 5px;border:1px solid #ddd;font-size:9px;color:#666}
+.stock-badge{font-size:9px;font-weight:700;padding:2px 5px}
+.stock-ok{color:#2e7d32;background:#e8f5e9}
+.stock-low{color:#e65100;background:#fff3e0}
+.stock-out{color:#c62828;background:#ffebee}
+.prod-footer{padding:6px 12px 8px;border-top:1px solid #f2f2f2;display:flex;gap:6px;align-items:center}
+.fotos-count{font-size:9px;color:#bbb;margin-left:auto}
+.sync-badge{display:inline-block;background:#2980b9;color:#fff;font-size:8px;padding:1px 5px;letter-spacing:.5px;font-weight:700;margin-left:4px;vertical-align:middle}
+.badge-label{font-size:8px;background:#111;color:#fff;padding:1px 6px;letter-spacing:1px}
+
+/* ===== MODAL ===== */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;display:none;align-items:center;justify-content:center;padding:16px}
+.overlay.on{display:flex}
+.modal{background:#fff;width:100%;max-width:480px;max-height:90vh;overflow-y:auto}
+.modal-hd{padding:16px 18px;border-bottom:1px solid #eee;display:flex;align-items:center;justify-content:space-between}
+.modal-hd h2{font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase}
+.modal-close{font-size:20px;cursor:pointer;color:#bbb;line-height:1}
+.modal-body{padding:16px 18px;display:flex;flex-direction:column;gap:12px}
+.mfield label{display:block;font-size:9px;color:#999;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;font-weight:600}
+.mfield input,.mfield select,.mfield textarea{width:100%;padding:8px 11px;border:1px solid #ddd;font-size:13px;color:#111;outline:none;font-family:inherit}
+.mfield input:focus,.mfield select:focus{border-color:#111}
+.modal-ft{padding:12px 18px;border-top:1px solid #eee;display:flex;gap:8px;justify-content:flex-end}
+.fotos-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:5px}
+.foto-thumb{aspect-ratio:3/4;background:#f0ece8;position:relative;overflow:hidden}
+.foto-thumb img{width:100%;height:100%;object-fit:cover}
+.foto-del{position:absolute;top:2px;right:2px;width:16px;height:16px;background:#c0392b;color:#fff;border:none;cursor:pointer;font-size:10px;display:flex;align-items:center;justify-content:center;line-height:1}
+.foto-add{aspect-ratio:3/4;background:#f9f9f9;border:2px dashed #ddd;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#bbb;font-size:18px;transition:all .15s}
+.foto-add:hover{border-color:#111;color:#111}
+.foto-uploading{aspect-ratio:3/4;background:#f0ece8;display:flex;align-items:center;justify-content:center;font-size:9px;color:#999;text-transform:uppercase;letter-spacing:1px}
+.video-badge{position:absolute;bottom:5px;left:5px;background:rgba(0,0,0,.6);color:#fff;font-size:9px;padding:1px 5px;border-radius:2px;letter-spacing:.5px;pointer-events:none}
+.foto-thumb video{width:100%;height:100%;object-fit:cover}
+.media-count{font-size:9px;color:#bbb;margin-left:auto}
+.media-count b{color:#111}
+
+/* ===== BANNER SECTION ===== */
+.banner-section{padding:20px;max-width:700px;margin:0 auto}
+.section-hd{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid #e8e8e8}
+.section-hd h2{font-size:10px;letter-spacing:3px;color:#999;text-transform:uppercase;font-weight:700}
+.format-tag{display:inline-flex;align-items:center;gap:6px;background:#f4f4f4;border:1px solid #e0e0e0;padding:3px 10px;font-size:10px;color:#555;letter-spacing:.5px;margin-top:6px}
+.format-tag b{color:#111;font-weight:700}
+.format-ratio{display:inline-block;margin-left:6px;border:1px solid #bbb;font-size:8px;color:#999;padding:1px 4px;letter-spacing:.5px}
+.banner-card{background:#fff;margin-bottom:12px;border:2px solid transparent;transition:border-color .15s}
+.banner-card.ativo{border-color:#e8e8e8}
+.banner-card-hd{padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #f2f2f2}
+.banner-card-hd .num{font-size:10px;font-weight:700;color:#bbb;width:20px;flex-shrink:0}
+.banner-card-hd .label{font-size:11px;font-weight:700;color:#111;flex:1}
+.banner-card-body{padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.banner-card-body.disabled{opacity:.35;pointer-events:none}
+/* preview com proporções reais */
+.banner-preview{width:100%;background:#222;display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:4px;overflow:hidden;position:relative;cursor:pointer}
+.banner-preview.topo{aspect-ratio:480/240} /* 2:1 */
+.banner-preview.meio{aspect-ratio:480/140} /* ~3.4:1 */
+.banner-preview img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55}
+.banner-preview .prev-tag{font-size:8px;color:rgba(255,255,255,.7);letter-spacing:2px;text-transform:uppercase;position:relative;z-index:1}
+.banner-preview .prev-titulo{font-size:15px;color:#fff;font-weight:700;letter-spacing:1px;position:relative;z-index:1}
+.banner-preview .prev-sub{font-size:9px;color:rgba(255,255,255,.6);position:relative;z-index:1}
+.banner-preview .prev-empty{font-size:10px;color:#666;letter-spacing:1px;position:relative}
+.banner-preview .upload-hover{position:absolute;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;letter-spacing:1px;text-transform:uppercase;opacity:0;transition:opacity .15s;z-index:2}
+.banner-preview:hover .upload-hover{opacity:1}
+.dim-note{font-size:10px;color:#aaa;margin-bottom:6px;line-height:1.5}
+.bfield label{display:block;font-size:9px;color:#999;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;font-weight:600}
+.bfield input,.bfield select{width:100%;padding:7px 10px;border:1px solid #ddd;font-size:12px;color:#111;outline:none;font-family:inherit}
+.bfield input:focus,.bfield select:focus{border-color:#111}
+.banner-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.btn-del-banner{font-size:9px;color:#c0392b;background:none;border:none;cursor:pointer;letter-spacing:.5px;padding:0;font-weight:700;align-self:flex-start}
+.btn-del-banner:hover{text-decoration:underline}
+.add-banner-btn{width:100%;padding:12px;border:2px dashed #ddd;background:#fff;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#999;cursor:pointer;transition:all .15s;margin-top:4px}
+.add-banner-btn:hover{border-color:#111;color:#111}
+
+/* ===== CONFIG ===== */
+.config-section{padding:24px 20px;max-width:560px;margin:0 auto}
+.config-group{background:#fff;padding:20px;margin-bottom:16px}
+.config-group h3{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;color:#111;padding-bottom:8px;border-bottom:1px solid #f2f2f2}
+.cfield{margin-bottom:12px}
+.cfield label{display:block;font-size:9px;color:#999;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;font-weight:600}
+.cfield input{width:100%;padding:9px 12px;border:1px solid #ddd;font-size:12px;color:#111;outline:none;font-family:monospace}
+.cfield input:focus{border-color:#111}
+.cfield .hint{font-size:10px;color:#bbb;margin-top:4px;line-height:1.5}
+.config-btns{display:flex;gap:8px;margin-top:4px}
+
+/* ===== MISC ===== */
+.empty-state{text-align:center;padding:50px 20px;color:#bbb}
+.empty-state .icon{font-size:40px;margin-bottom:14px}
+.empty-state p{font-size:13px;line-height:1.6}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 20px;font-size:12px;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;z-index:300;border-radius:2px;box-shadow:0 4px 12px rgba(0,0,0,.25)}
+.toast.on{opacity:1}
+.tgl-lrg{position:relative;width:36px;height:20px;cursor:pointer;flex-shrink:0}
+.tgl-lrg input{opacity:0;width:0;height:0;position:absolute}
+.tgl-lrg .tgl-s{position:absolute;inset:0;background:#ddd;border-radius:20px;transition:.2s}
+.tgl-lrg .tgl-s:before{content:'';position:absolute;width:14px;height:14px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.2s}
+.tgl-lrg input:checked+.tgl-s{background:#111}
+.tgl-lrg input:checked+.tgl-s:before{transform:translateX(16px)}
+.warning-box{background:#fff8e1;border:1px solid #ffe082;padding:8px 12px;font-size:11px;color:#795548;margin-top:6px;line-height:1.5}
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="header">
+  <div class="logo">ZUM</div>
+  <div class="tabs">
+    <button class="tab-btn on" id="tb-produtos" onclick="setTab('produtos')">Produtos</button>
+    <button class="tab-btn" id="tb-topo" onclick="setTab('topo')">Banners Topo</button>
+    <button class="tab-btn" id="tb-meio" onclick="setTab('meio')">Banners Meio</button>
+    <button class="tab-btn" id="tb-config" onclick="setTab('config')">⚙ Config</button>
+  </div>
+  <div class="header-btns">
+    <button class="btn btn-outline" onclick="sincronizar()">↻ Sync</button>
+    <button class="btn btn-white" onclick="publicarTudo()" id="btnPublicar">🚀 Publicar Tudo</button>
+  </div>
+</div>
+
+<!-- ===== TAB: PRODUTOS ===== -->
+<div class="tab-content on" id="tab-produtos">
+  <div class="toolbar">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Buscar por nome ou SKU..." oninput="filtrar(this.value)" autocomplete="off">
+    </div>
+    <div class="filter-tabs">
+      <div class="ftab on" id="ftab-todos" onclick="setFiltroTab('todos')">Todos</div>
+      <div class="ftab" id="ftab-ativos" onclick="setFiltroTab('ativos')">Publicados</div>
+      <div class="ftab" id="ftab-inativos" onclick="setFiltroTab('inativos')">Ocultos</div>
+    </div>
+    <button class="btn btn-dark" onclick="abrirModalNovo()">+ Produto</button>
+    <span class="count-label" id="countLabel"></span>
+  </div>
+  <div class="main">
+    <div class="products-grid" id="productsGrid"></div>
+    <div class="empty-state" id="emptyState" style="display:none">
+      <div class="icon">📦</div>
+      <p>Nenhum produto encontrado.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB: BANNERS TOPO ===== -->
+<div class="tab-content" id="tab-topo">
+  <div class="banner-section">
+    <div class="section-hd">
+      <div>
+        <h2>Banners do Topo · Rotativos</h2>
+        <div class="format-tag">
+          <b>480 × 240 px</b> · proporção 2:1 · landscape
+          <span class="format-ratio">JPG · PNG · GIF · MP4 · MOV</span>
+        </div>
+      </div>
+    </div>
+    <div id="listaTopo"></div>
+    <button class="add-banner-btn" onclick="addBannerTopo()" id="btnAddTopo">+ Adicionar banner</button>
+  </div>
+</div>
+
+<!-- ===== TAB: BANNERS MEIO ===== -->
+<div class="tab-content" id="tab-meio">
+  <div class="banner-section">
+    <div class="section-hd">
+      <div>
+        <h2>Banners do Meio · Aparecem entre produtos</h2>
+        <div class="format-tag">
+          <b>480 × 140 px</b> · proporção 3.4:1 · faixa larga
+          <span class="format-ratio">JPG · PNG · GIF · MP4 · MOV</span>
+        </div>
+      </div>
+    </div>
+    <div id="listaMeio"></div>
+    <button class="add-banner-btn" onclick="addBannerMeio()" id="btnAddMeio">+ Adicionar banner</button>
+  </div>
+</div>
+
+<!-- ===== TAB: CONFIG ===== -->
+<div class="tab-content" id="tab-config">
+  <div class="config-section">
+    <div class="config-group">
+      <h3>Planilha — ZumAgent</h3>
+      <div class="cfield">
+        <label>URL do Web App</label>
+        <input type="url" id="cfAsUrl" placeholder="https://script.google.com/...exec" oninput="salvarConfig()">
+        <div class="hint">Extensões → Apps Script → Implantar → Gerenciar implantações</div>
+      </div>
+      <div class="cfield">
+        <label>API Token</label>
+        <input type="text" id="cfToken" placeholder="token configurado no Apps Script" oninput="salvarConfig()" style="font-family:monospace">
+      </div>
+      <div class="config-btns">
+        <button class="btn btn-dark" onclick="sincronizar()">↻ Testar conexão</button>
+      </div>
+    </div>
+    <div class="config-group">
+      <h3>GitHub — Publicação online</h3>
+      <div class="cfield">
+        <label>Personal Access Token</label>
+        <input type="password" id="cfGhToken" placeholder="ghp_..." oninput="salvarConfig()" style="font-family:monospace">
+        <div class="hint">Precisa de permissão <b>Contents → Read and write</b> no repo <b>gugacriacao/zum-catalogo-online</b></div>
+      </div>
+      <div class="config-btns">
+        <button class="btn btn-dark" onclick="publicarTudo()">🚀 Publicar agora</button>
+        <button class="btn btn-outline" style="color:#111;border-color:#ccc" onclick="abrirInstrucoes()">? Como gerar token</button>
+      </div>
+    </div>
+    <div class="config-group" style="background:#f9f6f0">
+      <h3>Repositório</h3>
+      <div class="cfield">
+        <label>Owner / Repo</label>
+        <input type="text" id="cfOwner" value="gugacriacao" oninput="salvarConfig()">
+      </div>
+      <div class="cfield">
+        <label>Nome do repositório</label>
+        <input type="text" id="cfRepo" value="zum-catalogo-online" oninput="salvarConfig()">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL PRODUTO ===== -->
+<div class="overlay" id="modalProd">
+  <div class="modal">
+    <div class="modal-hd">
+      <h2 id="modalTitle">Produto</h2>
+      <span class="modal-close" onclick="fecharModal()">✕</span>
+    </div>
+    <div class="modal-body">
+      <div class="mfield">
+        <label>Nome do produto</label>
+        <input type="text" id="mNome" placeholder="Ex: Vestido recorte costas">
+      </div>
+      <div class="mfield">
+        <label>SKU (código base)</label>
+        <input type="text" id="mSku" placeholder="Ex: ZUM-VDRC-105">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="mfield">
+          <label>Categoria</label>
+          <select id="mCat">
+            <option value="Vestidos">Vestidos</option>
+            <option value="T-shirts">T-shirts</option>
+            <option value="Bodies">Bodies</option>
+            <option value="Calças">Calças</option>
+            <option value="Conjuntos">Conjuntos</option>
+            <option value="Outros">Outros</option>
+          </select>
+        </div>
+        <div class="mfield">
+          <label>Preço (R$)</label>
+          <input type="number" id="mPreco" step="0.01" placeholder="179.90">
+        </div>
+      </div>
+      <div class="mfield">
+        <label>Cores disponíveis (separadas por vírgula)</label>
+        <input type="text" id="mCores" placeholder="Preto, Bordô, Marrom, Off-white">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="mfield">
+          <label>Tamanhos (vírgula)</label>
+          <input type="text" id="mTams" placeholder="P, M, G ou Único">
+        </div>
+        <div class="mfield">
+          <label>Badge</label>
+          <input type="text" id="mBadge" placeholder="Novo, Promoção...">
+        </div>
+      </div>
+      <div class="mfield">
+        <label>Nota de estoque</label>
+        <input type="text" id="mEstoque" placeholder="Ex: Poucas unidades em M">
+      </div>
+      <div class="mfield">
+        <label>Mídias do produto <span id="fotosCountLbl" style="font-size:9px;color:#bbb;font-weight:400;text-transform:none;letter-spacing:0">0 / 3 mídias</span></label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+          <span style="background:#f4f4f4;border:1px solid #e0e0e0;padding:3px 8px;font-size:9px;color:#555;letter-spacing:.5px">
+            🖼 <b>Card (vitrine)</b> · 3:4 retrato · ideal <b>480 × 640 px</b>
+          </span>
+          <span style="background:#f4f4f4;border:1px solid #e0e0e0;padding:3px 8px;font-size:9px;color:#555;letter-spacing:.5px">
+            🔍 <b>Página do produto</b> · 1:1 quadrado · ideal <b>480 × 480 px</b>
+          </span>
+          <span style="background:#f4f4f4;border:1px solid #e0e0e0;padding:3px 8px;font-size:9px;color:#555;letter-spacing:.5px">
+            ▶ JPG · PNG · GIF · MP4 · MOV
+          </span>
+        </div>
+        <div class="fotos-grid" id="fotosGrid"></div>
+        <input type="file" id="fotoInputModal" accept="image/jpeg,image/png,image/gif,image/webp,video/mp4,video/quicktime,.mov,.mp4,.gif,.png,.jpg" multiple style="display:none" onchange="uploadFotosModal(this)">
+        <div class="warning-box" id="fotoWarning" style="display:none">⚠ Configure o GitHub Token em ⚙ Config para publicar as mídias online.</div>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-red" id="btnDeletar" onclick="deletarProduto()" style="margin-right:auto;display:none">🗑 Remover</button>
+      <button class="btn" style="border:1px solid #ddd" onclick="fecharModal()">Cancelar</button>
+      <button class="btn btn-dark" onclick="salvarModal()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL INSTRUÇÕES GH ===== -->
+<div class="overlay" id="modalInst">
+  <div class="modal">
+    <div class="modal-hd">
+      <h2>Como gerar o GitHub Token</h2>
+      <span class="modal-close" onclick="document.getElementById('modalInst').classList.remove('on')">✕</span>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:13px;color:#555;line-height:1.9">
+        <b>1.</b> Acesse <a href="https://github.com/settings/tokens" target="_blank" style="color:#111;font-weight:700">github.com/settings/tokens</a><br>
+        <b>2.</b> Clique em <b>Generate new token (classic)</b><br>
+        <b>3.</b> Marque a permissão <b>repo</b> (Contents read & write)<br>
+        <b>4.</b> Clique em <b>Generate token</b><br>
+        <b>5.</b> Copie o token (começa com <b>ghp_</b>) e cole no campo acima
+      </p>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-dark" onclick="document.getElementById('modalInst').classList.remove('on')">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ==================== CONSTANTES ==================== */
+var GH_OWNER = 'gugacriacao';
+var GH_REPO  = 'zum-catalogo-online';
+
+var COR_MAP = {
+  'Preto':'#1a1a1a','PT':'#1a1a1a',
+  'Bordô':'#7b2d42','Bordo':'#7b2d42','BD':'#7b2d42',
+  'Vinho':'#5e2233','VH':'#5e2233',
+  'Marrom':'#6b3f2a','MR':'#6b3f2a',
+  'Off-white':'#f0ebe0','OW':'#f0ebe0',
+  'Branco':'#f5f5f5','BR':'#f5f5f5',
+  'Azul':'#3e5a7a','AZ':'#3e5a7a',
+  'Azul Marinho':'#1a2f5a','AN':'#1a2f5a',
+  'Rosa':'#d4a5a5','RS':'#d4a5a5',
+  'Verde':'#4a7a5a','VD':'#4a7a5a',
+  'Cinza':'#888','CZ':'#888',
+  'Bege':'#e8d5b7','BG':'#e8d5b7'
+};
+var COR_CODE_MAP = {'PT':'Preto','BD':'Bordô','MR':'Marrom','OW':'Off-white','VH':'Vinho','AZ':'Azul','RS':'Rosa','VD':'Verde','BR':'Branco','AN':'Azul Marinho','CZ':'Cinza','BG':'Bege'};
+
+var CATALOGO_VERSION = '3';
+
+var PRODUTOS_INICIAIS = [
+  {sku:'ZUM-VDRC-105',nome:'Vestido recorte costas',cat:'Vestidos',preco:179.90,cores:['Preto','Bordô','Off-white'],tamanhos:['UN'],stock:'',badge:'',fotos:[],ativo:true,estoqueNum:1},
+  {sku:'ZUM-VDBT-102',nome:'Vestido busto torcido',cat:'Vestidos',preco:179.90,cores:['Preto','Marrom','Bordô'],tamanhos:['UN'],stock:'',badge:'',fotos:[],ativo:true,estoqueNum:3},
+  {sku:'ZUM-VDMG-104',nome:'Vestido manga',cat:'Vestidos',preco:179.90,cores:['Marrom','Preto','Azul'],tamanhos:['UN'],stock:'',badge:'',fotos:[],ativo:true,estoqueNum:5},
+  {sku:'ZUM-VDDN-103',nome:'Vestido decote nadador',cat:'Vestidos',preco:179.90,cores:['Preto','Rosa','Azul','Verde'],tamanhos:['UN'],stock:'',badge:'',fotos:[],ativo:false,estoqueNum:0},
+  {sku:'ZUM-VDBA-101',nome:'Vestido básico',cat:'Vestidos',preco:179.90,cores:['Preto','Marrom'],tamanhos:['UN'],stock:'',badge:'',fotos:[],ativo:false,estoqueNum:0},
+  {sku:'ZUM-VDALC-100',nome:'Vestido alça',cat:'Vestidos',preco:179.90,cores:['Bordô','Off-white'],tamanhos:['UN'],stock:'',badge:'',fotos:[],ativo:false,estoqueNum:0},
+  {sku:'ZUM-TSOV-200',nome:'T-shirt Over básico',cat:'T-shirts',preco:99.00,cores:['Preto','Branco','Marrom','Azul Marinho'],tamanhos:['P','G'],stock:'',badge:'',fotos:[],ativo:true,estoqueNum:9},
+  {sku:'ZUM-BDBA-300',nome:'Body assimétrico',cat:'Bodies',preco:60.00,cores:['Preto','Marrom'],tamanhos:['UN'],stock:'',badge:'',fotos:[],ativo:true,estoqueNum:3},
+  {sku:'ZUM-BDBM-301',nome:'Body manguinha',cat:'Bodies',preco:60.00,cores:['Cinza','Marrom'],tamanhos:['UN'],stock:'',badge:'',fotos:[],ativo:true,estoqueNum:3},
+  {sku:'ZUM-CC-400',nome:'Calça cargo',cat:'Calças',preco:189.90,cores:['Preto','Bege'],tamanhos:['P','M','G'],stock:'',badge:'',fotos:[],ativo:true,estoqueNum:8},
+  {sku:'ZUM-CJBC-001',nome:'Conjunto calça e t-shirt',cat:'Conjuntos',preco:279.90,cores:['Marrom'],tamanhos:['UN'],stock:'',badge:'',fotos:[],ativo:false,estoqueNum:0}
+];
+
+/* ==================== ESTADO ==================== */
+var catalogo = [];
+var bannersTopo = [];
+var bannersMeio = [];
+var filtroTexto = '';
+var filtroTab = 'todos';
+var modalIdx = -1;
+var dragSrc = null;
+var tabAtual = 'produtos';
+
+/* ==================== INIT ==================== */
+function init() {
+  // Carregar config
+  document.getElementById('cfAsUrl').value   = localStorage.getItem('zum-as-url') || '';
+  document.getElementById('cfToken').value   = localStorage.getItem('zum-api-token') || '';
+  document.getElementById('cfGhToken').value = localStorage.getItem('zum-gh-token') || '';
+  var owner = localStorage.getItem('zum-gh-owner') || 'gugacriacao';
+  var repo  = localStorage.getItem('zum-gh-repo')  || 'zum-catalogo-online';
+  document.getElementById('cfOwner').value = owner;
+  document.getElementById('cfRepo').value  = repo;
+  GH_OWNER = owner; GH_REPO = repo;
+
+  // Carregar produtos
+  var saved   = localStorage.getItem('zum-catalogo');
+  var version = localStorage.getItem('zum-catalogo-version');
+  if (saved && version === CATALOGO_VERSION) {
+    try { catalogo = JSON.parse(saved); } catch(e) {}
+  }
+  if (!catalogo.length) {
+    catalogo = JSON.parse(JSON.stringify(PRODUTOS_INICIAIS));
+    salvarLocal();
+    localStorage.setItem('zum-catalogo-version', CATALOGO_VERSION);
+  }
+
+  // Carregar banners topo
+  var st = localStorage.getItem('zum-banners-topo');
+  try { bannersTopo = st ? JSON.parse(st) : []; } catch(e) { bannersTopo = []; }
+  if (!bannersTopo.length) bannersTopo = [{ativo:false,tag:'',titulo:'',sub:'',img:''}];
+
+  // Carregar banners meio
+  var sm = localStorage.getItem('zum-banners');
+  try { bannersMeio = sm ? JSON.parse(sm) : []; } catch(e) { bannersMeio = []; }
+  if (!bannersMeio.length) bannersMeio = [{ativo:false,sku:'',after:2,img:'',mk:'',mt:''}];
+
+  renderGrid();
+  renderTopo();
+  renderMeio();
+}
+
+function salvarConfig() {
+  GH_OWNER = document.getElementById('cfOwner').value.trim() || 'gugacriacao';
+  GH_REPO  = document.getElementById('cfRepo').value.trim()  || 'zum-catalogo-online';
+  localStorage.setItem('zum-as-url',    document.getElementById('cfAsUrl').value.trim());
+  localStorage.setItem('zum-api-token', document.getElementById('cfToken').value.trim());
+  localStorage.setItem('zum-gh-token',  document.getElementById('cfGhToken').value.trim());
+  localStorage.setItem('zum-gh-owner',  GH_OWNER);
+  localStorage.setItem('zum-gh-repo',   GH_REPO);
+}
+
+/* ==================== TABS ==================== */
+function setTab(t) {
+  tabAtual = t;
+  ['produtos','topo','meio','config'].forEach(function(id){
+    document.getElementById('tab-'+id).classList.toggle('on', id===t);
+    document.getElementById('tb-'+id).classList.toggle('on', id===t);
+  });
+}
+
+/* ==================== RENDER PRODUTOS ==================== */
+function renderGrid() {
+  var lista = catalogo.filter(function(p) {
+    var passaTxt = !filtroTexto || p.nome.toLowerCase().includes(filtroTexto.toLowerCase()) || p.sku.toLowerCase().includes(filtroTexto.toLowerCase());
+    var passaTab = filtroTab==='todos' || (filtroTab==='ativos'&&p.ativo) || (filtroTab==='inativos'&&!p.ativo);
+    return passaTxt && passaTab;
+  });
+
+  var ativos = catalogo.filter(function(p){ return p.ativo; }).length;
+  document.getElementById('countLabel').textContent = ativos + ' publicado' + (ativos!==1?'s':'') + ' · ' + catalogo.length + ' total';
+
+  var grid  = document.getElementById('productsGrid');
+  var empty = document.getElementById('emptyState');
+
+  if (!lista.length) { grid.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display = 'none';
+
+  grid.innerHTML = lista.map(function(p) {
+    var idx = catalogo.indexOf(p);
+    var foto = p.fotos && p.fotos[0] ? p.fotos[0] : null;
+    var isGhUrl = foto && (foto.startsWith('http')||foto.startsWith('FOTOS'));
+    var coresHtml = (p.cores||[]).map(function(c){
+      return '<div class="color-dot" style="background:'+(COR_MAP[c]||'#ccc')+'" title="'+c+'"></div>';
+    }).join('');
+    var sizesHtml = (p.tamanhos||[]).map(function(s){ return '<span class="size-badge">'+s+'</span>'; }).join('');
+    var estoque = typeof p.estoqueNum === 'number' ? p.estoqueNum : null;
+    var stockHtml = '';
+    if (estoque !== null) {
+      var sc = estoque > 5 ? 'stock-ok' : estoque > 0 ? 'stock-low' : 'stock-out';
+      var sl = estoque > 5 ? estoque+' un.' : estoque > 0 ? estoque+' un. (pouco)' : 'Sem estoque';
+      if (p.syncBadge) sl += '<span class="sync-badge">sync</span>';
+      stockHtml = '<div class="meta-row"><span class="meta-label">Estoque</span><span class="stock-badge '+sc+'">'+sl+'</span></div>';
+    }
+
+    var firstMedia = p.fotos && p.fotos[0] ? p.fotos[0] : null;
+    var isVid = firstMedia && isVideoSrc(firstMedia);
+    var mediaCount = (p.fotos||[]).length;
+    var mediaHtml = firstMedia
+      ? (isVid
+          ? '<video src="'+firstMedia+'" style="width:100%;height:100%;object-fit:cover" muted playsinline loop autoplay></video><div class="video-badge">▶ vídeo</div>'
+          : '<img src="'+firstMedia+'" alt="" onerror="this.style.display=\'none\'">')
+      : '<div class="photo-placeholder"><div style="font-size:24px">📷</div><span>Adicionar mídia</span></div>';
+
+    return '<div class="prod-card'+(p.ativo?'':' inativo')+'" id="pc'+idx+'" draggable="true"'+
+      ' onclick="abrirModal('+idx+')"'+
+      ' ondragstart="onDragStart(event,'+idx+')" ondragover="onDragOver(event,'+idx+')" ondrop="onDrop(event,'+idx+')" ondragleave="onDragLeave('+idx+')">' +
+      '<div class="drag-handle" onclick="event.stopPropagation()">⠿</div>'+
+      '<div class="ordem-badge">'+(idx+1)+'</div>'+
+
+      '<div class="photo-area" id="pa'+idx+'" onclick="event.stopPropagation();abrirModal('+idx+')" title="Card: 3:4 (480×640px) · Página: 1:1 (480×480px)">' +
+        mediaHtml +
+        '<div class="upload-hover">'+(firstMedia?'✎ Editar mídias':'+ Mídia')+'</div>' +
+      '</div>'+
+
+      '<div class="toggle-pub" onclick="event.stopPropagation()">'+
+        '<span>'+(p.ativo?'Publicado':'Oculto')+'</span>'+
+        '<label class="tgl">'+
+          '<input type="checkbox" '+(p.ativo?'checked':'')+' onchange="toggleAtivo('+idx+',this.checked)">'+
+          '<span class="tgl-s"></span>'+
+        '</label>'+
+      '</div>'+
+
+      '<div class="prod-info">'+
+        '<div class="prod-name">'+p.nome+'</div>'+
+        '<div class="prod-sku">'+p.sku+'</div>'+
+        '<div class="prod-price">R$ '+(p.preco||0).toFixed(2).replace('.',',')+'</div>'+
+        '<div class="prod-meta">'+
+          (coresHtml?'<div class="meta-row"><span class="meta-label">Cores</span>'+coresHtml+'</div>':'')+
+          (sizesHtml?'<div class="meta-row"><span class="meta-label">Tam.</span>'+sizesHtml+'</div>':'')+
+          stockHtml+
+        '</div>'+
+      '</div>'+
+
+      '<div class="prod-footer">'+
+        (p.badge?'<span class="badge-label">'+p.badge+'</span>':'')+
+        '<span class="media-count"><b>'+mediaCount+'</b>/3 mídia'+(mediaCount!==1?'s':'')+'</span>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+}
+
+/* ==================== TOGGLE ATIVO ==================== */
+function toggleAtivo(idx, val) {
+  var p = catalogo[idx];
+
+  if (val) {
+    // Verifica condições de risco antes de publicar
+    var avisos = [];
+    if (p.estoqueNum === 0) avisos.push('sem estoque cadastrado');
+    if (p.desativadoPlanilha)  avisos.push('desabilitado na planilha (Ativo = Não)');
+
+    if (avisos.length) {
+      var msg = '⚠️ ATENÇÃO — ' + p.nome + '\n\n'
+        + 'Este produto está ' + avisos.join(' e ') + '.\n\n'
+        + 'Deseja publicar no catálogo mesmo assim?';
+      if (!confirm(msg)) {
+        renderGrid(); // reverte o checkbox visual
+        return;
+      }
+    }
+  }
+
+  p.ativo = val;
+  salvarLocal();
+  renderGrid();
+  toast(val ? '✓ Produto publicado' : 'Produto ocultado');
+}
+
+/* ==================== FILTROS ==================== */
+function filtrar(q) { filtroTexto = q; renderGrid(); }
+
+function setFiltroTab(tab) {
+  filtroTab = tab;
+  ['todos','ativos','inativos'].forEach(function(t){
+    document.getElementById('ftab-'+t).classList.toggle('on', t===tab);
+  });
+  renderGrid();
+}
+
+/* ==================== HELPERS DE MÍDIA ==================== */
+var ACCEPT_MEDIA = 'image/jpeg,image/png,image/gif,image/webp,video/mp4,video/quicktime,.mov,.mp4,.gif,.png,.jpg,.jpeg';
+var MAX_MIDIAS = 3;
+
+function isVideoSrc(src) {
+  if (!src) return false;
+  var s = src.toLowerCase();
+  return s.startsWith('data:video/') || s.endsWith('.mp4') || s.endsWith('.mov') || s.endsWith('.webm');
+}
+
+function extFromFile(file) {
+  var n = file.name.toLowerCase();
+  if (n.endsWith('.mov')) return 'mov';
+  if (n.endsWith('.mp4')) return 'mp4';
+  if (n.endsWith('.gif')) return 'gif';
+  if (n.endsWith('.png')) return 'png';
+  if (n.endsWith('.webp')) return 'webp';
+  return 'jpg';
+}
+
+/* ==================== MODAL PRODUTO ==================== */
+function abrirModal(idx) {
+  modalIdx = idx;
+  var p = catalogo[idx];
+  document.getElementById('modalTitle').textContent = p.nome;
+  document.getElementById('mNome').value   = p.nome||'';
+  document.getElementById('mSku').value    = p.sku||'';
+  document.getElementById('mCat').value    = p.cat||'Vestidos';
+  document.getElementById('mPreco').value  = p.preco||'';
+  document.getElementById('mCores').value  = (p.cores||[]).join(', ');
+  document.getElementById('mTams').value   = (p.tamanhos||[]).join(', ');
+  document.getElementById('mEstoque').value= p.stock||'';
+  document.getElementById('mBadge').value  = p.badge||'';
+  document.getElementById('btnDeletar').style.display = 'block';
+  var semToken = !localStorage.getItem('zum-gh-token');
+  document.getElementById('fotoWarning').style.display = semToken ? 'block' : 'none';
+  renderFotosModal(p.fotos||[]);
+  document.getElementById('modalProd').classList.add('on');
+}
+
+function abrirModalNovo() {
+  modalIdx = -1;
+  window._novoFotos = [];
+  document.getElementById('modalTitle').textContent = 'Novo produto';
+  ['mNome','mSku','mPreco','mCores','mTams','mEstoque','mBadge'].forEach(function(id){ document.getElementById(id).value=''; });
+  document.getElementById('mCat').value = 'Vestidos';
+  document.getElementById('btnDeletar').style.display = 'none';
+  var semToken = !localStorage.getItem('zum-gh-token');
+  document.getElementById('fotoWarning').style.display = semToken ? 'block' : 'none';
+  renderFotosModal([]);
+  document.getElementById('modalProd').classList.add('on');
+}
+
+function fecharModal() { document.getElementById('modalProd').classList.remove('on'); modalIdx=-1; }
+
+function renderFotosModal(fotos) {
+  var html = fotos.map(function(f,i){
+    if (f === '__uploading__') {
+      return '<div class="foto-uploading">⏳ Enviando...</div>';
+    }
+    var isVid = isVideoSrc(f);
+    return '<div class="foto-thumb" style="position:relative">'+
+      (isVid
+        ? '<video src="'+f+'" style="width:100%;height:100%;object-fit:cover" muted playsinline></video><div class="video-badge">▶</div>'
+        : '<img src="'+f+'" onerror="this.style.display=\'none\'">')+
+      '<button class="foto-del" onclick="delFotoModal('+i+')">✕</button>'+
+    '</div>';
+  }).join('');
+  // Slot de adicionar: só aparece se tiver menos de MAX_MIDIAS
+  if (fotos.length < MAX_MIDIAS) {
+    html += '<div class="foto-add" onclick="document.getElementById(\'fotoInputModal\').click()" title="Aceita: JPG, PNG, GIF, MP4, MOV">+</div>';
+  }
+  document.getElementById('fotosGrid').innerHTML = html;
+  // Atualiza label de contador no modal
+  var lbl = document.getElementById('fotosCountLbl');
+  if (lbl) lbl.textContent = fotos.filter(function(f){return f!=='__uploading__';}).length + ' / ' + MAX_MIDIAS + ' mídias';
+}
+
+function delFotoModal(i) {
+  var fotos = modalIdx>=0 ? catalogo[modalIdx].fotos : window._novoFotos;
+  fotos.splice(i,1);
+  renderFotosModal(fotos);
+}
+
+function uploadFotosModal(input) {
+  var files = Array.from(input.files);
+  var token = localStorage.getItem('zum-gh-token');
+  var fotos = modalIdx>=0 ? catalogo[modalIdx].fotos : (window._novoFotos = window._novoFotos||[]);
+  var sku   = modalIdx>=0 ? catalogo[modalIdx].sku : (document.getElementById('mSku').value.trim().toUpperCase());
+
+  // Limita ao máximo de mídias
+  var disponiveis = MAX_MIDIAS - fotos.filter(function(f){return f!=='__uploading__';}).length;
+  files = files.slice(0, disponiveis);
+  if (!files.length) { toast('⚠ Limite de '+MAX_MIDIAS+' mídias por produto'); input.value=''; return; }
+
+  files.forEach(function(file) {
+    var ext = extFromFile(file);
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var dataUrl = e.target.result;
+      if (!token || !sku) {
+        fotos.push(dataUrl);
+        salvarLocal();
+        renderFotosModal(fotos);
+        toast('⚠ Mídia salva localmente. Configure o GitHub Token para publicar.');
+      } else {
+        var nFoto = fotos.filter(function(f){return f!=='__uploading__'&&!f.startsWith('data:');}).length + 1;
+        var path = 'FOTOS/'+sku+'/midia-0'+nFoto+'.'+ext;
+        var fi = fotos.length;
+        fotos.push('__uploading__');
+        renderFotosModal(fotos);
+        uploadParaGitHub(dataUrl, path)
+          .then(function() {
+            fotos[fi] = path;
+            salvarLocal();
+            renderFotosModal(fotos);
+            toast('✓ Mídia publicada!');
+          })
+          .catch(function(err) {
+            fotos.splice(fi,1);
+            renderFotosModal(fotos);
+            toast('❌ '+err.message);
+          });
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+  input.value='';
+}
+
+function salvarModal() {
+  var nome = document.getElementById('mNome').value.trim();
+  var sku  = document.getElementById('mSku').value.trim().toUpperCase();
+  if (!nome||!sku) { toast('⚠ Preencha nome e SKU'); return; }
+  var prod = {
+    nome:nome, sku:sku,
+    cat: document.getElementById('mCat').value,
+    preco: parseFloat(document.getElementById('mPreco').value)||0,
+    cores: document.getElementById('mCores').value.split(',').map(function(c){return c.trim();}).filter(Boolean),
+    tamanhos: document.getElementById('mTams').value.split(',').map(function(s){return s.trim();}).filter(Boolean),
+    stock: document.getElementById('mEstoque').value.trim(),
+    badge: document.getElementById('mBadge').value.trim(),
+    fotos: modalIdx>=0 ? (catalogo[modalIdx].fotos||[]) : (window._novoFotos||[])
+  };
+  if (modalIdx>=0) {
+    var ativo = catalogo[modalIdx].ativo;
+    var estoqueNum = catalogo[modalIdx].estoqueNum;
+    catalogo[modalIdx] = Object.assign(catalogo[modalIdx], prod);
+    catalogo[modalIdx].ativo = ativo;
+    catalogo[modalIdx].estoqueNum = estoqueNum;
+  } else {
+    prod.ativo = false; prod.estoqueNum = 0;
+    catalogo.push(prod);
+    window._novoFotos=[];
+  }
+  salvarLocal(); renderGrid(); fecharModal();
+  toast('✓ Produto salvo');
+}
+
+function deletarProduto() {
+  if (modalIdx<0) return;
+  if (!confirm('Remover "'+catalogo[modalIdx].nome+'" do catálogo?')) return;
+  catalogo.splice(modalIdx,1);
+  salvarLocal(); renderGrid(); fecharModal();
+  toast('Produto removido');
+}
+
+/* ==================== DRAG & DROP ==================== */
+function onDragStart(e,idx) { dragSrc=idx; e.dataTransfer.effectAllowed='move'; document.getElementById('pc'+idx).classList.add('dragging'); }
+function onDragOver(e,idx) { e.preventDefault(); e.dataTransfer.dropEffect='move'; if(dragSrc!==idx) document.getElementById('pc'+idx).classList.add('drag-over'); return false; }
+function onDragLeave(idx) { document.getElementById('pc'+idx).classList.remove('drag-over'); }
+function onDrop(e,idx) {
+  e.preventDefault();
+  document.getElementById('pc'+idx).classList.remove('drag-over');
+  if(dragSrc===null||dragSrc===idx) return;
+  var item=catalogo.splice(dragSrc,1)[0]; catalogo.splice(idx,0,item);
+  dragSrc=null; salvarLocal(); renderGrid();
+}
+document.addEventListener('dragend',function(){
+  dragSrc=null;
+  document.querySelectorAll('.prod-card').forEach(function(c){ c.classList.remove('dragging','drag-over'); });
+});
+
+/* ==================== BANNERS TOPO ==================== */
+function renderTopo() {
+  document.getElementById('listaTopo').innerHTML = bannersTopo.map(function(b,i) {
+    return bannerTopoCard(b, i);
+  }).join('');
+  document.getElementById('btnAddTopo').style.display = bannersTopo.length >= 5 ? 'none' : 'block';
+}
+
+function bannerTopoCard(b, i) {
+  var imgSrc = b.img || '';
+  return '<div class="banner-card'+(b.ativo?' ativo':'')+'" id="bctopo'+i+'">'+
+    '<div class="banner-card-hd">'+
+      '<span class="num">'+(i+1)+'</span>'+
+      '<span class="label">Banner topo '+(i+1)+'</span>'+
+      '<label class="tgl-lrg">'+
+        '<input type="checkbox" '+(b.ativo?'checked':'')+' onchange="toggleTopo('+i+')">'+
+        '<span class="tgl-s"></span>'+
+      '</label>'+
+    '</div>'+
+    '<div class="banner-card-body'+(b.ativo?'':' disabled')+'" id="bctopo-body'+i+'">'+
+      '<div class="banner-preview topo" id="topoPrev'+i+'" onclick="uploadBannerTopo('+i+')" style="'+(imgSrc&&!isVideoSrc(imgSrc)?'background-image:url(\''+imgSrc+'\');background-size:cover;background-position:center':'')+'">'+
+        (imgSrc&&isVideoSrc(imgSrc)?'<video src="'+imgSrc+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55" autoplay muted loop playsinline></video>':'')+
+        (imgSrc?'':'<div class="prev-empty">📷 Clique para adicionar imagem ou vídeo</div>')+
+        (b.tag||b.titulo||b.sub?
+          '<div class="prev-tag">'+b.tag+'</div>'+
+          '<div class="prev-titulo">'+b.titulo+'</div>'+
+          '<div class="prev-sub">'+b.sub+'</div>':
+          '')+
+        '<div class="upload-hover">'+(imgSrc?'↺ Trocar':'+ Imagem / Vídeo / GIF')+'</div>'+
+      '</div>'+
+      '<input type="file" id="bfTopo'+i+'" accept="image/jpeg,image/png,image/gif,image/webp,video/mp4,video/quicktime,.mov,.mp4,.gif,.png,.jpg" style="display:none" onchange="processarBannerTopo('+i+',this)">'+
+      (imgSrc?'<div style="font-size:9px;color:#27ae60;margin-bottom:8px">✓ '+imgSrc+'</div>':'')+
+      '<div class="banner-row">'+
+        '<div class="bfield"><label>Tag (topo)</label><input type="text" id="topoTag'+i+'" value="'+(b.tag||'')+'" placeholder="Ex: Nova coleção" oninput="updateBannerTopo('+i+')"></div>'+
+        '<div class="bfield"><label>Título</label><input type="text" id="topoTitulo'+i+'" value="'+(b.titulo||'')+'" placeholder="Ex: Verão 2026" oninput="updateBannerTopo('+i+')"></div>'+
+      '</div>'+
+      '<div class="bfield"><label>Linha de baixo</label><input type="text" id="topoSub'+i+'" value="'+(b.sub||'')+'" placeholder="Ex: Conheça os novos vestidos" oninput="updateBannerTopo('+i+')"></div>'+
+      '<button class="btn-del-banner" onclick="delBannerTopo('+i+')">🗑 Remover banner</button>'+
+    '</div>'+
+  '</div>';
+}
+
+function toggleTopo(i) {
+  bannersTopo[i].ativo = document.getElementById('bctopo'+i).querySelector('input[type=checkbox]').checked;
+  salvarBanners(); renderTopo();
+}
+
+function updateBannerTopo(i) {
+  bannersTopo[i].tag    = document.getElementById('topoTag'+i).value;
+  bannersTopo[i].titulo = document.getElementById('topoTitulo'+i).value;
+  bannersTopo[i].sub    = document.getElementById('topoSub'+i).value;
+  salvarBanners();
+  // Atualiza preview sem re-render total
+  var prev = document.getElementById('topoPrev'+i);
+  if (!prev) return;
+  // remove textos antigos
+  prev.querySelectorAll('.prev-tag,.prev-titulo,.prev-sub').forEach(function(el){el.remove()});
+  var t = bannersTopo[i];
+  if (t.tag||t.titulo||t.sub) {
+    var tag = document.createElement('div'); tag.className='prev-tag'; tag.textContent=t.tag||''; prev.appendChild(tag);
+    var tit = document.createElement('div'); tit.className='prev-titulo'; tit.textContent=t.titulo||''; prev.appendChild(tit);
+    var sub = document.createElement('div'); sub.className='prev-sub'; sub.textContent=t.sub||''; prev.appendChild(sub);
+  }
+}
+
+function uploadBannerTopo(i) { document.getElementById('bfTopo'+i).click(); }
+
+function processarBannerTopo(i, input) {
+  var file = input.files[0]; if (!file) return;
+  var token = localStorage.getItem('zum-gh-token');
+  var ext = extFromFile(file);
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var dataUrl = e.target.result;
+    if (!token) {
+      bannersTopo[i].img = dataUrl;
+      salvarBanners(); renderTopo();
+      toast('⚠ Banner salvo localmente. Configure o GitHub Token para publicar.');
+    } else {
+      var path = 'BANNERS/TOPO/banner-topo-0'+(i+1)+'.'+ext;
+      toast('⏳ Enviando banner...');
+      uploadParaGitHub(dataUrl, path)
+        .then(function() {
+          bannersTopo[i].img = path;
+          salvarBanners(); renderTopo();
+          toast('✓ Banner publicado!');
+        })
+        .catch(function(err){ toast('❌ '+err.message); });
+    }
+  };
+  reader.readAsDataURL(file);
+  input.value='';
+}
+
+function addBannerTopo() {
+  if (bannersTopo.length >= 5) return;
+  bannersTopo.push({ativo:false,tag:'',titulo:'',sub:'',img:''});
+  salvarBanners(); renderTopo();
+}
+
+function delBannerTopo(i) {
+  if (!confirm('Remover este banner?')) return;
+  bannersTopo.splice(i,1);
+  if (!bannersTopo.length) bannersTopo.push({ativo:false,tag:'',titulo:'',sub:'',img:''});
+  salvarBanners(); renderTopo();
+}
+
+/* ==================== BANNERS MEIO ==================== */
+function renderMeio() {
+  document.getElementById('listaMeio').innerHTML = bannersMeio.map(function(b,i) {
+    return bannerMeioCard(b, i);
+  }).join('');
+  bannersMeio.forEach(function(b,i){
+    var sel = document.getElementById('meioSku'+i);
+    if (sel && b.sku) sel.value = b.sku;
+  });
+  document.getElementById('btnAddMeio').style.display = bannersMeio.length >= 5 ? 'none' : 'block';
+}
+
+function bannerMeioCard(b, i) {
+  var imgSrc = b.img || '';
+  // Lista de produtos para o select (a partir do catálogo)
+  var opts = '<option value="">— Selecione produto vinculado —</option>' +
+    catalogo.map(function(p){ return '<option value="'+p.sku+'">'+p.nome+' ('+p.sku+')</option>'; }).join('');
+
+  return '<div class="banner-card'+(b.ativo?' ativo':'')+'" id="bcmeio'+i+'">'+
+    '<div class="banner-card-hd">'+
+      '<span class="num">'+(i+1)+'</span>'+
+      '<span class="label">Banner meio '+(i+1)+'</span>'+
+      '<label class="tgl-lrg">'+
+        '<input type="checkbox" '+(b.ativo?'checked':'')+' onchange="toggleMeio('+i+')">'+
+        '<span class="tgl-s"></span>'+
+      '</label>'+
+    '</div>'+
+    '<div class="banner-card-body'+(b.ativo?'':' disabled')+'" id="bcmeio-body'+i+'">'+
+      '<div class="banner-preview meio" onclick="uploadBannerMeio('+i+')" style="'+(imgSrc&&!isVideoSrc(imgSrc)?'background-image:url(\''+imgSrc+'\');background-size:cover;background-position:center':'')+'">'+
+        (imgSrc&&isVideoSrc(imgSrc)?'<video src="'+imgSrc+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55" autoplay muted loop playsinline></video>':'')+
+        (imgSrc?'':'<div class="prev-empty">📷 Clique para adicionar imagem ou vídeo</div>')+
+        '<div class="upload-hover">'+(imgSrc?'↺ Trocar':'+ Imagem / Vídeo / GIF')+'</div>'+
+      '</div>'+
+      '<input type="file" id="bfMeio'+i+'" accept="image/jpeg,image/png,image/gif,image/webp,video/mp4,video/quicktime,.mov,.mp4,.gif,.png,.jpg" style="display:none" onchange="processarBannerMeio('+i+',this)">'+
+      (imgSrc?'<div style="font-size:9px;color:#27ae60;margin-bottom:8px">✓ '+imgSrc+'</div>':'')+
+      '<div class="banner-row">'+
+        '<div class="bfield"><label>Produto vinculado (ao clicar)</label><select id="meioSku'+i+'" onchange="updateMeioSku('+i+')">'+opts+'</select></div>'+
+        '<div class="bfield"><label>Aparece após produto nº</label>'+
+          '<input type="number" id="meioAfter'+i+'" value="'+(b.after||2)+'" min="1" max="50" onchange="bannersMeio['+i+'].after=parseInt(this.value)||2;salvarBanners()">'+
+        '</div>'+
+      '</div>'+
+      '<div class="banner-row">'+
+        '<div class="bfield"><label>Label (topo do banner)</label><input type="text" id="meioMk'+i+'" value="'+(b.mk||'')+'" placeholder="Ex: Destaque" onchange="bannersMeio['+i+'].mk=this.value;salvarBanners()"></div>'+
+        '<div class="bfield"><label>Título do banner</label><input type="text" id="meioMt'+i+'" value="'+(b.mt||'')+'" placeholder="Ex: Vestido recorte" onchange="bannersMeio['+i+'].mt=this.value;salvarBanners()"></div>'+
+      '</div>'+
+      '<button class="btn-del-banner" onclick="delBannerMeio('+i+')">🗑 Remover banner</button>'+
+    '</div>'+
+  '</div>';
+}
+
+function toggleMeio(i) {
+  bannersMeio[i].ativo = document.getElementById('bcmeio'+i).querySelector('input[type=checkbox]').checked;
+  salvarBanners(); renderMeio();
+}
+
+function updateMeioSku(i) {
+  bannersMeio[i].sku = document.getElementById('meioSku'+i).value;
+  // Auto-preenche mk/mt pelo produto selecionado
+  var prod = catalogo.filter(function(p){ return p.sku === bannersMeio[i].sku; })[0];
+  if (prod) {
+    bannersMeio[i].mt = bannersMeio[i].mt || prod.nome;
+    bannersMeio[i].mk = bannersMeio[i].mk || prod.cat;
+  }
+  salvarBanners(); renderMeio();
+}
+
+function uploadBannerMeio(i) { document.getElementById('bfMeio'+i).click(); }
+
+function processarBannerMeio(i, input) {
+  var file = input.files[0]; if (!file) return;
+  var token = localStorage.getItem('zum-gh-token');
+  var ext = extFromFile(file);
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var dataUrl = e.target.result;
+    if (!token) {
+      bannersMeio[i].img = dataUrl;
+      salvarBanners(); renderMeio();
+      toast('⚠ Banner salvo localmente. Configure o GitHub Token para publicar.');
+    } else {
+      var path = 'BANNERS/MEIO/banner-meio-0'+(i+1)+'.'+ext;
+      toast('⏳ Enviando banner...');
+      uploadParaGitHub(dataUrl, path)
+        .then(function() {
+          bannersMeio[i].img = path;
+          salvarBanners(); renderMeio();
+          toast('✓ Banner publicado!');
+        })
+        .catch(function(err){ toast('❌ '+err.message); });
+    }
+  };
+  reader.readAsDataURL(file);
+  input.value='';
+}
+
+function addBannerMeio() {
+  if (bannersMeio.length >= 5) return;
+  bannersMeio.push({ativo:false,sku:'',after:2,img:'',mk:'',mt:''});
+  salvarBanners(); renderMeio();
+}
+
+function delBannerMeio(i) {
+  if (!confirm('Remover este banner?')) return;
+  bannersMeio.splice(i,1);
+  if (!bannersMeio.length) bannersMeio.push({ativo:false,sku:'',after:2,img:'',mk:'',mt:''});
+  salvarBanners(); renderMeio();
+}
+
+/* ==================== SALVAR LOCAL ==================== */
+function salvarLocal() {
+  localStorage.setItem('zum-catalogo', JSON.stringify(catalogo));
+  localStorage.setItem('zum-catalogo-version', CATALOGO_VERSION);
+}
+
+function salvarBanners() {
+  localStorage.setItem('zum-banners-topo', JSON.stringify(bannersTopo));
+  localStorage.setItem('zum-banners', JSON.stringify(bannersMeio));
+}
+
+/* ==================== SINCRONIZAR ==================== */
+function sincronizar() {
+  var url   = (localStorage.getItem('zum-as-url')   ||'').trim();
+  var token = (localStorage.getItem('zum-api-token')||'').trim();
+  if (!url) { setTab('config'); toast('⚠ Configure a URL do ZumAgent em ⚙ Config'); return; }
+  toast('Conectando com a planilha...');
+  fetch(url+'?api=produtos'+(token?'&token='+encodeURIComponent(token):''))
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if (!data.ok) { toast('❌ '+(data.erro||'Erro na planilha')); return; }
+      var rows = data.produtos || [];
+      var novos=0, atualizados=0;
+      var agrupado = {};
+      rows.forEach(function(p){
+        var skuFull = String(p.codigo||'').trim();
+        if (!skuFull.startsWith('ZUM-')) return;
+        var partes = skuFull.split('-');
+        var base = partes.slice(0,3).join('-');
+        if (!agrupado[base]) agrupado[base]={preco:0,estoque:0,cores:[],tams:[],cat:'',nome:''};
+        var g = agrupado[base];
+        g.estoque += Number(p.estoque)||0;
+        if (!g.preco && p.preco) g.preco = Number(p.preco);
+        if (!g.cat && p.categoria) g.cat = p.categoria;
+        if (!g.nome && p.descricao) g.nome = p.descricao;
+        var corNome = COR_CODE_MAP[partes[3]||''] || (p.cor ? p.cor.charAt(0).toUpperCase()+p.cor.slice(1).toLowerCase() : '');
+        if (corNome && g.cores.indexOf(corNome)<0) g.cores.push(corNome);
+        var tam = partes[4]||'UN';
+        if (g.tams.indexOf(tam)<0) g.tams.push(tam);
+      });
+      Object.keys(agrupado).forEach(function(base){
+        var g = agrupado[base];
+        var ex = catalogo.filter(function(p){ return p.sku===base; })[0];
+        if (ex) {
+          if (g.preco) ex.preco = g.preco;
+          ex.estoqueNum = g.estoque;
+          g.cores.forEach(function(c){ if(ex.cores.indexOf(c)<0) ex.cores.push(c); });
+          if (g.tams.length > ex.tamanhos.length) ex.tamanhos = g.tams;
+          ex.syncBadge = true;
+          atualizados++;
+        } else {
+          catalogo.push({sku:base,nome:g.nome,cat:g.cat||'Vestidos',preco:g.preco||0,cores:g.cores,tamanhos:g.tams.length?g.tams:['UN'],stock:'',badge:'',fotos:[],ativo:true,estoqueNum:g.estoque,syncBadge:true});
+          novos++;
+        }
+      });
+      salvarLocal(); renderGrid();
+      toast('✓ Sync: '+novos+' novo(s) · '+atualizados+' atualizado(s)');
+    })
+    .catch(function(){ toast('❌ Não conectou. Verifique URL e token.'); });
+}
+
+/* ==================== UPLOAD PARA GITHUB ==================== */
+async function uploadParaGitHub(dataUrl, path) {
+  var token = (localStorage.getItem('zum-gh-token')||'').trim();
+  if (!token) throw new Error('Token GitHub não configurado');
+  var owner = localStorage.getItem('zum-gh-owner') || GH_OWNER;
+  var repo  = localStorage.getItem('zum-gh-repo')  || GH_REPO;
+  var base64 = dataUrl.indexOf(',')>=0 ? dataUrl.split(',')[1] : dataUrl;
+  var api = 'https://api.github.com/repos/'+owner+'/'+repo+'/contents/'+path;
+
+  var sha = null;
+  try {
+    var res = await fetch(api, {headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json'}});
+    if (res.ok) sha = (await res.json()).sha;
+  } catch(e) {}
+
+  var body = {message:'Upload: '+path, content:base64};
+  if (sha) body.sha = sha;
+
+  var r = await fetch(api, {
+    method:'PUT',
+    headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json','Content-Type':'application/json'},
+    body: JSON.stringify(body)
+  });
+  if (!r.ok) {
+    var err = await r.json().catch(function(){ return {}; });
+    throw new Error(err.message || 'GitHub API '+r.status);
+  }
+  return path;
+}
+
+async function uploadJsonParaGitHub(conteudo, path) {
+  var token = (localStorage.getItem('zum-gh-token')||'').trim();
+  if (!token) throw new Error('Token GitHub não configurado');
+  var owner = localStorage.getItem('zum-gh-owner') || GH_OWNER;
+  var repo  = localStorage.getItem('zum-gh-repo')  || GH_REPO;
+  var base64 = btoa(unescape(encodeURIComponent(conteudo)));
+  var api = 'https://api.github.com/repos/'+owner+'/'+repo+'/contents/'+path;
+
+  var sha = null;
+  try {
+    var res = await fetch(api, {headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json'}});
+    if (res.ok) sha = (await res.json()).sha;
+  } catch(e) {}
+
+  var body = {message:'Publicar: '+path, content:base64};
+  if (sha) body.sha = sha;
+
+  var r = await fetch(api, {
+    method:'PUT',
+    headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json','Content-Type':'application/json'},
+    body: JSON.stringify(body)
+  });
+  if (!r.ok) {
+    var err = await r.json().catch(function(){ return {}; });
+    throw new Error(err.message || 'GitHub API '+r.status);
+  }
+}
+
+/* ==================== PUBLICAR TUDO ==================== */
+async function publicarTudo() {
+  var token = (localStorage.getItem('zum-gh-token')||'').trim();
+  if (!token) { setTab('config'); toast('⚠ Configure o GitHub Token em ⚙ Config'); return; }
+
+  var btn = document.getElementById('btnPublicar');
+  btn.disabled = true;
+  btn.textContent = '⏳ Publicando...';
+
+  try {
+    // 1. Gera produtos.json
+    var ativos = catalogo.filter(function(p){ return p.ativo; });
+    var produtosJson = JSON.stringify({
+      geradoEm: new Date().toISOString(),
+      produtos: ativos.map(function(p, i){
+        return {
+          sku: p.sku, nome: p.nome, cat: p.cat, preco: p.preco,
+          cores: p.cores, tamanhos: p.tamanhos,
+          stock: p.stock || 'Em estoque', badge: p.badge || '',
+          estoqueNum: p.estoqueNum || 0,
+          fotos: (p.fotos||[]).filter(function(f){return f && !f.startsWith('data:') && f!=='__uploading__';}).map(function(f,fi){
+            // Se já é caminho relativo (FOTOS/...) ou URL: usa como está
+            return (f.startsWith('FOTOS')||f.startsWith('http')) ? f : 'FOTOS/'+p.sku+'/midia-0'+(fi+1)+'.jpg';
+          }),
+          ordem: i + 1
+        };
+      })
+    }, null, 2);
+
+    await uploadJsonParaGitHub(produtosJson, 'produtos.json');
+
+    // 2. Gera banners.json
+    var bannersJson = JSON.stringify({
+      geradoEm: new Date().toISOString(),
+      topo: bannersTopo.filter(function(b){ return b.ativo && (b.img||b.titulo); }).map(function(b){
+        return {ativo:true, tag:b.tag||'', titulo:b.titulo||'', sub:b.sub||'', img:b.img||''};
+      }),
+      meio: bannersMeio.filter(function(b){ return b.ativo && b.img; }).map(function(b){
+        return {ativo:true, sku:b.sku, after:b.after||2, img:b.img, mk:b.mk||'', mt:b.mt||''};
+      })
+    }, null, 2);
+
+    await uploadJsonParaGitHub(bannersJson, 'banners.json');
+
+    btn.disabled = false;
+    btn.textContent = '🚀 Publicar Tudo';
+    toast('✓ Publicado! Catálogo atualiza em ~30 segundos.');
+  } catch(e) {
+    btn.disabled = false;
+    btn.textContent = '🚀 Publicar Tudo';
+    toast('❌ Erro: '+e.message);
+  }
+}
+
+/* ==================== INSTRUÇÕES ==================== */
+function abrirInstrucoes() { document.getElementById('modalInst').classList.add('on'); }
+
+/* ==================== TOAST ==================== */
+var _toastTimer = null;
+function toast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('on');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(function(){ t.classList.remove('on'); }, 3500);
+}
+
+/* ==================== START ==================== */
+init();
+</script>
+</body>
+</html>

@@ -439,7 +439,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
     <div class="addr-box">Assim que o pagamento for identificado, você recebe a confirmação por e-mail e seu pedido entra em separação.</div>
   </div>
   <div class="btn-bar two">
-    <button class="btn-out" onclick="goHome()">Voltar à loja</button>
+    <button class="btn-out" onclick="goHome()">Voltar ao catálogo</button>
     <button class="btn-blk" onclick="goSuccess()">Já paguei</button>
   </div>
 </section>
@@ -475,7 +475,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
     <div class="msg">Parabéns pela escolha &#10024;<br>Seu pedido foi confirmado com sucesso.</div>
     <div class="order-box" id="successBox"></div>
     <div class="email-note">Em breve seu produto chega até você. Fique atento ao seu e-mail — enviaremos cada atualização do pedido por lá.</div>
-    <button class="btn-blk" onclick="resetAll()">Voltar à loja</button>
+    <button class="btn-blk" onclick="resetAll()">Voltar ao catálogo</button>
   </div>
 </section>
 
@@ -495,7 +495,7 @@ var PRODUCTS = [
   {sku:'ZUM-VDMG-104', cat:'Vestidos', name:'Vestido manga', price:179.90, badge:'', bg:'#eceae8',
    colors:[{n:'Marrom',c:'#6b3f2a'},{n:'Preto',c:'#1a1a1a'},{n:'Azul',c:'#3e5a7a'}],
    sizes:[{s:'UN'}], stock:'', media:[]},
-  {sku:'ZUM-TSOV-200', cat:'T-shirts', name:'T-shirt oversized', price:99.00, badge:'', bg:'#e8ecee',
+  {sku:'ZUM-TSOV-200', cat:'T-shirts', name:'T-shirt Over básico', price:99.00, badge:'', bg:'#e8ecee',
    colors:[{n:'Preto',c:'#1a1a1a'},{n:'Branco',c:'#f5f5f5'},{n:'Marrom',c:'#6b3f2a'},{n:'Azul Marinho',c:'#1a2f5a'}],
    sizes:[{s:'P'},{s:'G'}], stock:'', media:[]},
   {sku:'ZUM-CC-400', cat:'Calças', name:'Calça cargo', price:189.90, badge:'', bg:'#e8ece8',
@@ -520,14 +520,8 @@ var COR_NOME_TO_COD = {
   'Vinho':'VH','Azul':'AZ','Rosa':'RS','Verde':'VD',
   'Branco':'BR','Azul Marinho':'AN','Cinza':'CZ','Bege':'BG'
 };
-/* Banners do meio: só entram aqui quando a pasta BANNERS/MEIO/banner-meio-X/
-   tiver a IMAGEM + o produto.txt com um código válido. O script de publicação
-   preenche esta lista automaticamente. Pasta vazia/errada = não aparece. */
-var MID_BANNERS = [
-  /* exemplo de como fica quando publicado (precisa de img + sku válido):
-  {after:2, img:'BANNERS/MEIO/banner-meio-1/banner-meio-1.jpg', mk:'Destaque', mt:'Vestido recorte', sku:'ZUM-VDRC-105'}
-  */
-];
+/* Banners do meio — preenchido pelo loadBanners() a partir de banners.json */
+var MID_BANNERS = [];
 
 // Layout do grid — mude a sequência à vontade
 // Exemplos:
@@ -870,31 +864,37 @@ function resetAll(){cart=[];updateBag();selInst=0;payMethod='pix';pedidoFinaliza
 function openDrawer(){$('drawer').classList.add('show');$('drawerBg').classList.add('show')}
 function closeDrawer(){$('drawer').classList.remove('show');$('drawerBg').classList.remove('show')}
 
-/* ====== BANNER TOPO (lê os .txt da pasta BANNERS/TOPO) ====== */
+/* ====== BANNERS — lê banners.json (publicado pelo admin) com fallback localStorage ====== */
 var BANNER_DEFAULTS=[{tag:'Nova coleção',titulo:'Verão 2026',sub:'Conheça os novos vestidos'}];
 var bSlides=[],bIdx=0,bTimer=null;
-function parseBannerTxt(t){
-  if(!t)return null;var o={};
-  t.split(/\r?\n/).forEach(function(l){
-    var m=l.match(/^\s*(tag|titulo|linha de baixo)\s*:\s*(.*)$/i);
-    if(m){var k=m[1].toLowerCase(),v=m[2].trim();
-      if(k==='tag')o.tag=v;else if(k==='titulo')o.titulo=v;else o.sub=v;}
-  });
-  if((o.tag&&o.tag.length)||(o.titulo&&o.titulo.length)||(o.sub&&o.sub.length))return o;
-  return null;
-}
-function testImg(url){return new Promise(function(res){var i=new Image();i.onload=function(){res(url)};i.onerror=function(){res(null)};i.src=url;});}
 async function loadBanners(){
-  var slides=[],anyOk=false;
-  for(var n=1;n<=3;n++){
-    var base='BANNERS/TOPO/bannerzumtopo-0'+n,txt=null;
-    try{var r=await fetch(base+'.txt',{cache:'no-store'});if(r.ok){txt=await r.text();anyOk=true;}}catch(e){}
-    var data=parseBannerTxt(txt);
-    var img=await testImg(base+'.jpg');if(!img)img=await testImg(base+'.png');
-    if(data||img)slides.push({tag:(data&&data.tag)||'',titulo:(data&&data.titulo)||'',sub:(data&&data.sub)||'',img:img});
-  }
-  if(!anyOk&&slides.length===0)slides=BANNER_DEFAULTS;
-  renderBanners(slides);
+  // Tenta banners.json primeiro (publicado pelo admin.html via GitHub)
+  try {
+    var r=await fetch('banners.json?_='+Date.now(),{cache:'no-store'});
+    if(r.ok){
+      var data=await r.json();
+      // Banners topo
+      var topoAtivos=(data.topo||[]).filter(function(b){return b.ativo;});
+      if(topoAtivos.length){renderBanners(topoAtivos);} else {renderBanners(BANNER_DEFAULTS);}
+      // Banners meio
+      var meioAtivos=(data.meio||[]).filter(function(b){return b.ativo&&b.img;});
+      MID_BANNERS=meioAtivos;
+      return;
+    }
+  } catch(e){}
+  // Fallback: localStorage (salvo pelo admin.html localmente)
+  try {
+    var lt=localStorage.getItem('zum-banners-topo');
+    var lm=localStorage.getItem('zum-banners');
+    var topoLs=lt?JSON.parse(lt):[];
+    var meioLs=lm?JSON.parse(lm):[];
+    var topoAtivosLs=topoLs.filter(function(b){return b.ativo;});
+    if(topoAtivosLs.length){renderBanners(topoAtivosLs);} else {renderBanners(BANNER_DEFAULTS);}
+    MID_BANNERS=meioLs.filter(function(b){return b.ativo&&b.img;});
+    return;
+  } catch(e){}
+  // Último fallback: padrão hardcoded
+  renderBanners(BANNER_DEFAULTS);
 }
 function renderBanners(slides){
   bSlides=slides;bIdx=0;
@@ -921,7 +921,7 @@ function rotateBanner(){
 
 /* ====== CARREGA CATÁLOGO ====== */
 
-// Converte formato do gerenciador/JSON → formato PRODUCTS da loja
+// Converte formato do gerenciador/JSON → formato PRODUCTS do catálogo
 function adaptarProdutos(lista){
   return lista.map(function(p){
     var bg = CAT_BG[p.cat] || '#f0ece8';

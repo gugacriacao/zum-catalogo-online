@@ -1,5 +1,5 @@
 #!/bin/bash
-cd "/Users/tavinho/Library/Mobile Documents/com~apple~CloudDocs/ZUM/CATALOGO ZUM ONLINE"
+cd "/Users/tavinhocarvalho/Library/Mobile Documents/com~apple~CloudDocs/ZUM/CATALOGO ZUM ONLINE"
 
 echo ""
 echo "🔄 Subindo atualizações para o GitHub..."
