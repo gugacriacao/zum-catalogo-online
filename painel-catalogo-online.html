@@ -735,7 +735,9 @@ function uploadFotosModal(input) {
         renderFotosModal(fotos);
         uploadParaGitHub(dataUrl, path)
           .then(function() {
-            fotos[fi] = path;
+            var owner = localStorage.getItem('zum-gh-owner') || GH_OWNER;
+            var repo  = localStorage.getItem('zum-gh-repo')  || GH_REPO;
+            fotos[fi] = 'https://raw.githubusercontent.com/'+owner+'/'+repo+'/main/'+path;
             salvarLocal();
             renderFotosModal(fotos);
             toast('✓ Mídia publicada!');
