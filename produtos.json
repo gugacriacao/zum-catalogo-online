@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-06-26T17:03:05.120Z",
+  "geradoEm": "2026-06-26T17:15:59.795Z",
   "produtos": [
     {
       "sku": "ZUM-VDBT-102",
@@ -42,7 +42,8 @@
       "estoqueNum": 1,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-01.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-02.png"
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-02.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-03.png"
       ],
       "ordem": 2
     },
