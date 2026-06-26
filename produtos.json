@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-06-26T16:08:50.607Z",
+  "geradoEm": "2026-06-26T16:44:43.534Z",
   "produtos": [
     {
       "sku": "ZUM-VDRC-105",
@@ -77,7 +77,11 @@
       "stock": "Em estoque",
       "badge": "",
       "estoqueNum": 3,
-      "fotos": [],
+      "fotos": [
+        "FOTOS/ZUM-VDBT-102/midia-01.png",
+        "FOTOS/ZUM-VDBT-102/midia-02.png",
+        "FOTOS/ZUM-VDBT-102/midia-03.png"
+      ],
       "ordem": 4
     },
     {
