@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ZUM — Gerenciar Banners</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,sans-serif;background:#f5f5f5;min-height:100vh;padding:32px 16px 60px}
+  .header{text-align:center;margin-bottom:32px}
+  .header h1{font-size:28px;letter-spacing:6px;font-weight:400;margin-bottom:6px}
+  .header p{font-size:13px;color:#999;letter-spacing:.5px}
+  .secao-title{max-width:480px;margin:0 auto 12px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#111;font-weight:700;padding-left:2px}
+  .secao-sub{max-width:480px;margin:-8px auto 16px;font-size:11px;color:#bbb}
+  .cards{max-width:480px;margin:0 auto 32px;display:flex;flex-direction:column;gap:12px}
+  .card{background:#fff;padding:16px;border:2px solid transparent;transition:border-color .15s}
+  .card.ativo{border-color:#111}
+  .card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+  .card-title{font-size:13px;font-weight:700;color:#111;letter-spacing:.5px}
+  .toggle{position:relative;width:44px;height:24px;cursor:pointer}
+  .toggle input{opacity:0;width:0;height:0}
+  .slider{position:absolute;inset:0;background:#ddd;border-radius:24px;transition:.2s}
+  .slider:before{content:'';position:absolute;width:18px;height:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.2s}
+  input:checked+.slider{background:#111}
+  input:checked+.slider:before{transform:translateX(20px)}
+  .field{margin-bottom:12px}
+  .field label{display:block;font-size:10px;color:#999;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+  .field input,.field select{width:100%;padding:10px 12px;border:1px solid #ddd;font-size:13px;color:#111;background:#fff;border-radius:0}
+  .field input:focus,.field select:focus{outline:none;border-color:#111}
+  .field .hint{font-size:10px;color:#bbb;margin-top:4px}
+  .preview-banner{width:100%;height:90px;background:#111;display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:12px;overflow:hidden;position:relative}
+  .preview-banner img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.5}
+  .preview-banner .prev-tag{font-size:9px;color:#ccc;letter-spacing:2px;text-transform:uppercase;position:relative;z-index:1}
+  .preview-banner .prev-titulo{font-size:16px;color:#fff;font-weight:700;letter-spacing:1px;position:relative;z-index:1;margin:2px 0}
+  .preview-banner .prev-sub{font-size:9px;color:#ccc;letter-spacing:1px;position:relative;z-index:1}
+  .preview-banner.vazio{background:#eee;justify-content:center}
+  .preview-banner.vazio span{font-size:11px;color:#bbb;letter-spacing:1px}
+  .disabled .field,.disabled .preview-banner{opacity:.4;pointer-events:none}
+  .btn-salvar{display:block;width:100%;max-width:480px;margin:8px auto;padding:16px;background:#111;color:#fff;font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;border:none;cursor:pointer;transition:background .15s}
+  .btn-salvar:hover{background:#333}
+  .btn-salvar.sec{background:#fff;color:#111;border:1.5px solid #111}
+  .btn-salvar.sec:hover{background:#111;color:#fff}
+  .toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:12px 24px;font-size:13px;border-radius:2px;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
+  .toast.show{opacity:1}
+  .divider{max-width:480px;margin:8px auto 28px;border:none;border-top:1px solid #e5e5e5}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>ZUM</h1>
+  <p>Gerencie todos os banners da loja</p>
+</div>
+
+<!-- ===== BANNERS TOPO ===== -->
+<div class="secao-title">Banners do Topo</div>
+<div class="secao-sub">Rotativo automático · Imagem de fundo + textos</div>
+<div class="cards" id="cardsTopo"></div>
+<button class="btn-salvar" onclick="salvarTopo()">Salvar banners do topo</button>
+
+<hr class="divider">
+
+<!-- ===== BANNERS MEIO ===== -->
+<div class="secao-title">Banners do Meio</div>
+<div class="secao-sub">Aparecem entre os produtos · Vinculados a um produto</div>
+<div class="cards" id="cardsMeio"></div>
+<button class="btn-salvar" onclick="salvarMeio()">Salvar banners do meio</button>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var PRODUCTS = [
+  {sku:'ZUM-VDRC-105', name:'Vestido recorte costas'},
+  {sku:'ZUM-VDBT-102', name:'Vestido busto torcido'},
+  {sku:'ZUM-TSOB-200', name:'T-shirt oversized básica'},
+  {sku:'ZUM-BDAS-300', name:'Body assimétrico'}
+];
+
+var bannersTopo = [];
+var bannersMeio = [];
+
+/* ===== INIT ===== */
+function init(){
+  // Topo
+  var st = localStorage.getItem('zum-banners-topo');
+  if(st){ try{ bannersTopo = JSON.parse(st); }catch(e){ bannersTopo=[]; } }
+  while(bannersTopo.length < 3) bannersTopo.push({ativo:false,tag:'',titulo:'',sub:'',img:''});
+
+  // Meio
+  var sm = localStorage.getItem('zum-banners');
+  if(sm){ try{ bannersMeio = JSON.parse(sm); }catch(e){ bannersMeio=[]; } }
+  while(bannersMeio.length < 3) bannersMeio.push({ativo:false,sku:'',after:2,img:''});
+
+  renderTopo();
+  renderMeio();
+}
+
+/* ===== TOPO ===== */
+function renderTopo(){
+  document.getElementById('cardsTopo').innerHTML = bannersTopo.map((b,i)=>
+    '<div class="card'+(b.ativo?' ativo':'')+'" id="ctopo'+i+'">'+
+      '<div class="card-top">'+
+        '<span class="card-title">Banner topo '+(i+1)+'</span>'+
+        '<label class="toggle">'+
+          '<input type="checkbox" id="topoAtivo'+i+'" '+(b.ativo?'checked':'')+' onchange="toggleTopo('+i+')">'+
+          '<span class="slider"></span>'+
+        '</label>'+
+      '</div>'+
+      '<div id="topoBody'+i+'" class="'+(b.ativo?'':'disabled')+'">'+
+        '<div class="preview-banner'+((!b.tag&&!b.titulo&&!b.sub&&!b.img)?' vazio':'')+ '" id="topoPrev'+i+'">'+
+          (b.img?'<img src="'+b.img+'" onerror="this.remove()">':'')+
+          (b.tag||b.titulo||b.sub
+            ?'<div class="prev-tag">'+b.tag+'</div><div class="prev-titulo">'+b.titulo+'</div><div class="prev-sub">'+b.sub+'</div>'
+            :'<span>prévia aparece aqui</span>')+
+        '</div>'+
+        '<div class="field"><label>Imagem de fundo</label>'+
+          '<input type="text" id="topoImg'+i+'" value="'+(b.img||'BANNERS/TOPO/bannerzumtopo-0'+(i+1)+'.jpg')+'" placeholder="caminho da imagem" oninput="atualizarPrevTopo('+i+')">'+
+          '<div class="hint">Ex: BANNERS/TOPO/bannerzumtopo-0'+(i+1)+'.jpg</div>'+
+        '</div>'+
+        '<div class="field"><label>Tag (pequeno, topo)</label>'+
+          '<input type="text" id="topoTag'+i+'" value="'+(b.tag||'')+'" placeholder="Ex: Nova coleção" oninput="atualizarPrevTopo('+i+')">'+
+        '</div>'+
+        '<div class="field"><label>Título (destaque)</label>'+
+          '<input type="text" id="topoTitulo'+i+'" value="'+(b.titulo||'')+'" placeholder="Ex: Verão 2026" oninput="atualizarPrevTopo('+i+')">'+
+        '</div>'+
+        '<div class="field"><label>Linha de baixo</label>'+
+          '<input type="text" id="topoSub'+i+'" value="'+(b.sub||'')+'" placeholder="Ex: Conheça os novos vestidos" oninput="atualizarPrevTopo('+i+')">'+
+        '</div>'+
+      '</div>'+
+    '</div>'
+  ).join('');
+}
+
+function toggleTopo(i){
+  bannersTopo[i].ativo = document.getElementById('topoAtivo'+i).checked;
+  var card = document.getElementById('ctopo'+i);
+  card.classList.toggle('ativo', bannersTopo[i].ativo);
+  document.getElementById('topoBody'+i).className = bannersTopo[i].ativo?'':'disabled';
+}
+
+function atualizarPrevTopo(i){
+  var tag   = document.getElementById('topoTag'+i).value;
+  var titulo= document.getElementById('topoTitulo'+i).value;
+  var sub   = document.getElementById('topoSub'+i).value;
+  var img   = document.getElementById('topoImg'+i).value;
+  var prev  = document.getElementById('topoPrev'+i);
+  prev.className = 'preview-banner'+((!tag&&!titulo&&!sub&&!img)?' vazio':'');
+  prev.innerHTML = (img?'<img src="'+img+'" onerror="this.remove()">':'')+
+    (tag||titulo||sub
+      ?'<div class="prev-tag">'+tag+'</div><div class="prev-titulo">'+titulo+'</div><div class="prev-sub">'+sub+'</div>'
+      :'<span>prévia aparece aqui</span>');
+}
+
+function salvarTopo(){
+  bannersTopo.forEach((b,i)=>{
+    b.img   = document.getElementById('topoImg'+i).value;
+    b.tag   = document.getElementById('topoTag'+i).value;
+    b.titulo= document.getElementById('topoTitulo'+i).value;
+    b.sub   = document.getElementById('topoSub'+i).value;
+  });
+  localStorage.setItem('zum-banners-topo', JSON.stringify(bannersTopo));
+  showToast('✓ Banners do topo salvos!');
+}
+
+/* ===== MEIO ===== */
+function renderMeio(){
+  var opts = PRODUCTS.map(p=>'<option value="'+p.sku+'">'+p.name+'</option>').join('');
+  document.getElementById('cardsMeio').innerHTML = bannersMeio.map((b,i)=>
+    '<div class="card'+(b.ativo?' ativo':'')+'" id="cmeio'+i+'">'+
+      '<div class="card-top">'+
+        '<span class="card-title">Banner meio '+(i+1)+'</span>'+
+        '<label class="toggle">'+
+          '<input type="checkbox" id="meioAtivo'+i+'" '+(b.ativo?'checked':'')+' onchange="toggleMeio('+i+')">'+
+          '<span class="slider"></span>'+
+        '</label>'+
+      '</div>'+
+      '<div id="meioBody'+i+'" class="'+(b.ativo?'':'disabled')+'">'+
+        '<div class="preview-banner'+(b.img?'':' vazio')+'" id="meioPrev'+i+'">'+
+          (b.img?'<img src="'+b.img+'" onerror="this.parentNode.className=\'preview-banner vazio\';this.parentNode.innerHTML=\'<span>imagem não encontrada</span>\'">':'<span>BANNERS/MEIO/banner-meio-'+(i+1)+'/banner-meio-'+(i+1)+'.jpg</span>')+
+        '</div>'+
+        '<div class="field"><label>Produto vinculado</label>'+
+          '<select id="meioSku'+i+'" onchange="bannersMeio['+i+'].sku=this.value">'+
+            '<option value="">— Selecione um produto —</option>'+opts+
+          '</select>'+
+        '</div>'+
+        '<div class="field"><label>Aparece após o produto nº</label>'+
+          '<input type="number" id="meioAfter'+i+'" value="'+(b.after||2)+'" min="1" onchange="bannersMeio['+i+'].after=parseInt(this.value)">'+
+          '<div class="hint">Ex: 2 = aparece depois do 2º produto na grade</div>'+
+        '</div>'+
+      '</div>'+
+    '</div>'
+  ).join('');
+
+  bannersMeio.forEach((b,i)=>{
+    if(b.sku) document.getElementById('meioSku'+i).value = b.sku;
+  });
+}
+
+function toggleMeio(i){
+  bannersMeio[i].ativo = document.getElementById('meioAtivo'+i).checked;
+  var card = document.getElementById('cmeio'+i);
+  card.classList.toggle('ativo', bannersMeio[i].ativo);
+  document.getElementById('meioBody'+i).className = bannersMeio[i].ativo?'':'disabled';
+}
+
+function salvarMeio(){
+  bannersMeio.forEach((b,i)=>{
+    b.sku  = document.getElementById('meioSku'+i).value;
+    b.after= parseInt(document.getElementById('meioAfter'+i).value)||2;
+    b.img  = 'BANNERS/MEIO/banner-meio-'+(i+1)+'/banner-meio-'+(i+1)+'.jpg';
+  });
+  localStorage.setItem('zum-banners', JSON.stringify(bannersMeio));
+  showToast('✓ Banners do meio salvos!');
+}
+
+/* ===== UTIL ===== */
+function showToast(msg){
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 3000);
+}
+
+init();
+</script>
+</body>
+</html>

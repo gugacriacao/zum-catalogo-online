@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ZUM — Ordenar Produtos</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,sans-serif;background:#f5f5f5;min-height:100vh;padding:32px 16px}
+  .header{text-align:center;margin-bottom:32px}
+  .header h1{font-size:28px;letter-spacing:6px;font-weight:400;margin-bottom:6px}
+  .header p{font-size:13px;color:#999;letter-spacing:.5px}
+  .lista{max-width:480px;margin:0 auto}
+  .item{display:flex;align-items:center;gap:14px;background:#fff;padding:14px 16px;margin-bottom:8px;cursor:grab;border:2px solid transparent;border-radius:2px;transition:all .15s;user-select:none}
+  .item:active{cursor:grabbing}
+  .item.drag-over{border-color:#111;background:#f8f8f8}
+  .item.dragging{opacity:.4}
+  .handle{color:#ccc;font-size:18px;flex-shrink:0}
+  .num{width:24px;height:24px;background:#111;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;border-radius:50%}
+  .info{flex:1}
+  .info-name{font-size:14px;font-weight:600;color:#111;margin-bottom:2px}
+  .info-sku{font-size:11px;color:#bbb;letter-spacing:.5px}
+  .info-cat{font-size:10px;color:#999;margin-top:2px;text-transform:uppercase;letter-spacing:.5px}
+  .btn-salvar{display:block;width:100%;max-width:480px;margin:24px auto 0;padding:16px;background:#111;color:#fff;font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;border:none;cursor:pointer;transition:background .15s}
+  .btn-salvar:hover{background:#333}
+  .toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:12px 24px;font-size:13px;border-radius:2px;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
+  .toast.show{opacity:1}
+  .hint{text-align:center;font-size:11px;color:#bbb;margin-bottom:20px;max-width:480px;margin-left:auto;margin-right:auto}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>ZUM</h1>
+  <p>Arraste para reordenar os produtos na loja</p>
+</div>
+
+<div class="hint">⠿ Segure e arraste para mudar a posição</div>
+
+<div class="lista" id="lista"></div>
+
+<button class="btn-salvar" onclick="salvar()">Salvar ordem na loja</button>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var PRODUCTS = [
+  {sku:'ZUM-VDRC-105', cat:'Vestidos', name:'Vestido recorte costas'},
+  {sku:'ZUM-VDBT-102', cat:'Vestidos', name:'Vestido busto torcido'},
+  {sku:'ZUM-TSOB-200', cat:'T-shirts', name:'T-shirt oversized básica'},
+  {sku:'ZUM-BDAS-300', cat:'Bodies',   name:'Body assimétrico'}
+];
+
+var ordem = [];
+var dragSrc = null;
+
+function init(){
+  var saved = localStorage.getItem('zum-ordem');
+  if(saved){
+    try{
+      var skus = JSON.parse(saved);
+      var sorted = skus.map(sku => PRODUCTS.find(p=>p.sku===sku)).filter(Boolean);
+      var rest = PRODUCTS.filter(p=>!skus.includes(p.sku));
+      ordem = sorted.concat(rest);
+    }catch(e){ ordem = PRODUCTS.slice(); }
+  } else {
+    ordem = PRODUCTS.slice();
+  }
+  render();
+}
+
+function render(){
+  var lista = document.getElementById('lista');
+  lista.innerHTML = ordem.map((p,i)=>
+    '<div class="item" draggable="true" data-sku="'+p.sku+'" '+
+      'ondragstart="dragStart(event)" ondragover="dragOver(event)" '+
+      'ondrop="drop(event)" ondragend="dragEnd(event)">'+
+      '<span class="handle">⠿</span>'+
+      '<div class="num">'+(i+1)+'</div>'+
+      '<div class="info">'+
+        '<div class="info-name">'+p.name+'</div>'+
+        '<div class="info-sku">'+p.sku+'</div>'+
+        '<div class="info-cat">'+p.cat+'</div>'+
+      '</div>'+
+    '</div>'
+  ).join('');
+}
+
+function dragStart(e){
+  dragSrc = e.currentTarget;
+  dragSrc.classList.add('dragging');
+  e.dataTransfer.effectAllowed='move';
+}
+
+function dragOver(e){
+  e.preventDefault();
+  e.dataTransfer.dropEffect='move';
+  document.querySelectorAll('.item').forEach(el=>el.classList.remove('drag-over'));
+  e.currentTarget.classList.add('drag-over');
+}
+
+function drop(e){
+  e.preventDefault();
+  var target = e.currentTarget;
+  if(dragSrc===target) return;
+  var skus = Array.from(document.querySelectorAll('.item')).map(el=>el.dataset.sku);
+  var iSrc = skus.indexOf(dragSrc.dataset.sku);
+  var iTgt = skus.indexOf(target.dataset.sku);
+  var moved = ordem.splice(iSrc,1)[0];
+  ordem.splice(iTgt,0,moved);
+  render();
+}
+
+function dragEnd(){
+  document.querySelectorAll('.item').forEach(el=>{
+    el.classList.remove('dragging','drag-over');
+  });
+}
+
+function salvar(){
+  var skus = ordem.map(p=>p.sku);
+  localStorage.setItem('zum-ordem', JSON.stringify(skus));
+  showToast('✓ Ordem salva! Recarregue a loja para ver.');
+}
+
+function showToast(msg){
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 3000);
+}
+
+init();
+</script>
+</body>
+</html>

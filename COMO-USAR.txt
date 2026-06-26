@@ -1,0 +1,48 @@
+ ══════════════════════════════════════════════════════════
+  ZUM — CATÁLOGO ONLINE  ·  COMO ALIMENTAR (guia rápido)
+══════════════════════════════════════════════════════════
+
+▶ PARA VER A LOJA
+  Dê DUPLO CLIQUE no arquivo "loja.html".
+  Ela abre no seu navegador (Safari/Chrome). Funciona no Mac.
+
+──────────────────────────────────────────────────────────
+▶ FOTOS E VÍDEOS DOS PRODUTOS
+──────────────────────────────────────────────────────────
+  Cada produto tem uma pasta dentro de PRODUTOS/[categoria]/[CÓDIGO].
+  Coloque os arquivos com o CÓDIGO + número da ordem:
+
+  PRODUTOS/vestidos/ZUM-VDRC-105/
+      ZUM-VDRC-105-01.jpg   ← imagem PRINCIPAL (o -01 manda)
+      ZUM-VDRC-105-02.jpg
+      ZUM-VDRC-105-03.mp4   ← pode ser vídeo, gif ou foto
+      ...
+
+  • O número final define a ORDEM no catálogo.
+  • O -01 é SEMPRE a principal (foto, vídeo ou gif, tanto faz).
+  • Aceita: .jpg .png .mp4 .mov .gif
+
+──────────────────────────────────────────────────────────
+▶ BANNER DO TOPO (rotativo)
+──────────────────────────────────────────────────────────
+  Coloque em BANNERS/TOPO/ com estes nomes:
+      bannerzumtopo-01.jpg
+      bannerzumtopo-02.jpg
+      bannerzumtopo-03.jpg
+  Eles giram automaticamente no topo da loja.
+
+──────────────────────────────────────────────────────────
+▶ BANNER DO MEIO (aparece no scroll, leva a um produto)
+──────────────────────────────────────────────────────────
+  Cada banner tem sua pasta em BANNERS/MEIO/banner-meio-X/
+  Dentro dela:
+      banner-meio-1.jpg        ← a imagem (horizontal)
+      produto.txt              ← o CÓDIGO do produto que ele abre
+
+  Ex.: se produto.txt contém "ZUM-VDRC-105", ao clicar no banner
+       o cliente vai direto para esse produto pra comprar.
+
+──────────────────────────────────────────────────────────
+  Dúvidas? É só me chamar. Tudo isso pode ser feito pelo
+  Mac, iPhone ou iPad (app Arquivos / Google Drive).
+══════════════════════════════════════════════════════════
