@@ -1,66 +1,6 @@
 {
-  "geradoEm": "2026-06-26T16:56:25.498Z",
+  "geradoEm": "2026-06-26T17:03:05.120Z",
   "produtos": [
-    {
-      "sku": "ZUM-VDRC-105",
-      "nome": "Vestido recorte costas",
-      "cat": "Vestidos",
-      "preco": 179.9,
-      "cores": [
-        "Preto",
-        "Bordô",
-        "Off-white"
-      ],
-      "tamanhos": [
-        "UN"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "estoqueNum": 1,
-      "fotos": [],
-      "ordem": 1
-    },
-    {
-      "sku": "ZUM-TSOV-200",
-      "nome": "T-shirt Over básico",
-      "cat": "T-shirts",
-      "preco": 99,
-      "cores": [
-        "Preto",
-        "Branco",
-        "Marrom",
-        "Azul Marinho"
-      ],
-      "tamanhos": [
-        "P",
-        "G"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "estoqueNum": 9,
-      "fotos": [],
-      "ordem": 2
-    },
-    {
-      "sku": "ZUM-CC-400",
-      "nome": "Calça cargo",
-      "cat": "Calças",
-      "preco": 189.9,
-      "cores": [
-        "Preto",
-        "Bege"
-      ],
-      "tamanhos": [
-        "P",
-        "M",
-        "G"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "estoqueNum": 8,
-      "fotos": [],
-      "ordem": 3
-    },
     {
       "sku": "ZUM-VDBT-102",
       "nome": "Vestido busto torcido",
@@ -82,6 +22,69 @@
         "FOTOS/ZUM-VDBT-102/midia-02.png",
         "FOTOS/ZUM-VDBT-102/midia-03.png"
       ],
+      "ordem": 1
+    },
+    {
+      "sku": "ZUM-VDRC-105",
+      "nome": "Vestido recorte costas",
+      "cat": "Vestidos",
+      "preco": 179.9,
+      "cores": [
+        "Preto",
+        "Bordô",
+        "Off-white"
+      ],
+      "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "estoqueNum": 1,
+      "fotos": [
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-01.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-02.png"
+      ],
+      "ordem": 2
+    },
+    {
+      "sku": "ZUM-TSOV-200",
+      "nome": "T-shirt Over básico",
+      "cat": "T-shirts",
+      "preco": 99,
+      "cores": [
+        "Preto",
+        "Branco",
+        "Marrom",
+        "Azul Marinho"
+      ],
+      "tamanhos": [
+        "P",
+        "G"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "estoqueNum": 9,
+      "fotos": [],
+      "ordem": 3
+    },
+    {
+      "sku": "ZUM-CC-400",
+      "nome": "Calça cargo",
+      "cat": "Calças",
+      "preco": 189.9,
+      "cores": [
+        "Preto",
+        "Bege"
+      ],
+      "tamanhos": [
+        "P",
+        "M",
+        "G"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "estoqueNum": 8,
+      "fotos": [],
       "ordem": 4
     },
     {
