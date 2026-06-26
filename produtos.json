@@ -1,0 +1,139 @@
+{
+  "geradoEm": "2026-06-26T16:08:50.607Z",
+  "produtos": [
+    {
+      "sku": "ZUM-VDRC-105",
+      "nome": "Vestido recorte costas",
+      "cat": "Vestidos",
+      "preco": 179.9,
+      "cores": [
+        "Preto",
+        "Bordô",
+        "Off-white"
+      ],
+      "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "estoqueNum": 1,
+      "fotos": [],
+      "ordem": 1
+    },
+    {
+      "sku": "ZUM-TSOV-200",
+      "nome": "T-shirt Over básico",
+      "cat": "T-shirts",
+      "preco": 99,
+      "cores": [
+        "Preto",
+        "Branco",
+        "Marrom",
+        "Azul Marinho"
+      ],
+      "tamanhos": [
+        "P",
+        "G"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "estoqueNum": 9,
+      "fotos": [],
+      "ordem": 2
+    },
+    {
+      "sku": "ZUM-CC-400",
+      "nome": "Calça cargo",
+      "cat": "Calças",
+      "preco": 189.9,
+      "cores": [
+        "Preto",
+        "Bege"
+      ],
+      "tamanhos": [
+        "P",
+        "M",
+        "G"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "estoqueNum": 8,
+      "fotos": [],
+      "ordem": 3
+    },
+    {
+      "sku": "ZUM-VDBT-102",
+      "nome": "Vestido busto torcido",
+      "cat": "Vestidos",
+      "preco": 179.9,
+      "cores": [
+        "Preto",
+        "Marrom",
+        "Bordô"
+      ],
+      "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "estoqueNum": 3,
+      "fotos": [],
+      "ordem": 4
+    },
+    {
+      "sku": "ZUM-VDMG-104",
+      "nome": "Vestido manga",
+      "cat": "Vestidos",
+      "preco": 179.9,
+      "cores": [
+        "Marrom",
+        "Preto",
+        "Azul"
+      ],
+      "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "estoqueNum": 5,
+      "fotos": [],
+      "ordem": 5
+    },
+    {
+      "sku": "ZUM-BDBA-300",
+      "nome": "Body assimétrico",
+      "cat": "Bodies",
+      "preco": 60,
+      "cores": [
+        "Preto",
+        "Marrom"
+      ],
+      "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "estoqueNum": 3,
+      "fotos": [],
+      "ordem": 6
+    },
+    {
+      "sku": "ZUM-BDBM-301",
+      "nome": "Body manguinha",
+      "cat": "Bodies",
+      "preco": 60,
+      "cores": [
+        "Cinza",
+        "Marrom"
+      ],
+      "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "estoqueNum": 3,
+      "fotos": [],
+      "ordem": 7
+    }
+  ]
+}
