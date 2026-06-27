@@ -29,7 +29,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .bag-count{position:absolute;top:-7px;right:-9px;background:#fff;color:#111;font-size:10px;font-weight:700;min-width:16px;height:16px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 4px}
 
 /* BANNER TOPO */
-.banner-top{position:relative;height:240px;background:#111;overflow:hidden;cursor:pointer}
+.banner-top{position:relative;height:240px;background:#111;overflow:hidden;cursor:pointer;margin-top:50px}
 .banner-top .slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;transition:opacity .6s;background-size:cover;background-position:center}
 .banner-top .slide.on{opacity:1}
 .banner-top .kick{border:1px solid rgba(255,255,255,.4);color:rgba(255,255,255,.7);font-size:9px;letter-spacing:3px;padding:4px 12px;margin-bottom:12px;text-transform:uppercase}
@@ -40,7 +40,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .banner-dots i.on{background:#fff;width:26px}
 
 /* CHIPS */
-.chips-bar{display:flex;align-items:center;border-bottom:1px solid #eee;position:sticky;top:58px;background:#fff;z-index:40}
+.chips-bar{display:flex;align-items:center;border-bottom:1px solid #eee;position:fixed;top:58px;left:0;right:0;background:#fff;z-index:40}
+.chips-spacer{height:50px}
 .chips-wrap{flex:1;overflow:hidden;position:relative}
 .chips-wrap::after{display:none}
 .chips{display:flex;gap:6px;padding:10px 14px;overflow-x:auto;width:100%}
@@ -323,6 +324,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
       </div>
     </div>
   </div>
+  <div class="chips-spacer"></div>
   <div class="grid" id="grid"></div>
 
   <footer style="padding:30px 20px;text-align:center;border-top:1px solid #eee;margin-top:8px">
