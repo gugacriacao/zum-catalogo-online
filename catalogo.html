@@ -731,6 +731,15 @@ function renderGrid(){
     i+=cols; rowIdx++;
   }
   $('grid').innerHTML=html;
+  // Auto-play todos os vídeos de banner (muted, sem interação do usuário)
+  $('grid').querySelectorAll('video[autoplay]').forEach(function(v){
+    v.play().catch(function(){
+      // Se bloqueado, tenta de novo ao primeiro scroll/toque
+      var tryPlay=function(){v.play().catch(function(){});document.removeEventListener('touchstart',tryPlay);document.removeEventListener('scroll',tryPlay);};
+      document.addEventListener('touchstart',tryPlay,{once:true,passive:true});
+      document.addEventListener('scroll',tryPlay,{once:true,passive:true});
+    });
+  });
   // Lazy load vídeos: só carrega e toca quando entra na tela
   var lazyVids = $('grid').querySelectorAll('video[data-src]');
   if (lazyVids.length) {
