@@ -55,7 +55,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .grid-row{display:grid;gap:2px;background:#eee}
 .card{background:#fff;cursor:pointer}
 .card-img{aspect-ratio:3/4;background:#f6f4f2;display:flex;align-items:center;justify-content:center;font-size:46px;position:relative;overflow:hidden}
-.card-img img,.card-img video{width:100%;height:100%;object-fit:cover}
+.card-img img,.card-img video{width:100%;height:100%;object-fit:contain}
 .badge{position:absolute;top:8px;left:8px;background:#111;color:#fff;font-size:8px;letter-spacing:1px;padding:3px 8px;text-transform:uppercase;z-index:2}
 .card-info{padding:11px 12px 16px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
 .card-left{flex:1;min-width:0}
@@ -72,12 +72,18 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .card-pix span{font-size:9px;color:#32BCAD;font-weight:600;letter-spacing:.3px}
 
 /* BANNER MEIO */
-.banner-mid{grid-column:1/-1;height:140px;background:#1a1a1a;position:relative;cursor:pointer;overflow:hidden;display:flex;align-items:center;justify-content:center;background-size:cover;background-position:center}
+.banner-mid{grid-column:1/-1;height:140px;background:#1a1a1a;position:relative;cursor:pointer;overflow:hidden;display:flex;align-items:center;justify-content:center}
 .banner-mid .overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.55),rgba(0,0,0,.15))}
 .banner-mid .content{position:relative;z-index:2;text-align:center;padding:0 24px}
 .banner-mid .mk{color:rgba(255,255,255,.7);font-size:9px;letter-spacing:3px;text-transform:uppercase;margin-bottom:6px}
 .banner-mid .mt{color:#fff;font-size:18px;font-weight:300;letter-spacing:4px;text-transform:uppercase}
 .banner-mid .mc{display:inline-block;margin-top:10px;color:#fff;font-size:10px;letter-spacing:2px;border-bottom:1px solid #fff;padding-bottom:2px;text-transform:uppercase}
+
+/* BANNER STORIES — 9:16 vertical, largura total */
+.banner-stories{grid-column:1/-1;aspect-ratio:9/16;background:#111;position:relative;overflow:hidden}
+/* BANNER STORIES — meia coluna, ao lado de produto */
+.stories-half-row{grid-column:1/-1}
+.banner-stories-half{aspect-ratio:9/16;background:#111;position:relative;overflow:hidden}
 
 /* PRODUTO */
 .gallery{position:relative;background:#f3f1ef}
@@ -522,6 +528,8 @@ var COR_NOME_TO_COD = {
 };
 /* Banners do meio — preenchido pelo loadBanners() a partir de banners.json */
 var MID_BANNERS = [];
+/* Banners stories — formato 9:16 vertical */
+var STORIES_BANNERS = [];
 
 // Layout do grid — mude a sequência à vontade
 // Exemplos:
@@ -538,6 +546,7 @@ var freteOpcao = 'entrega';
 var FRETE_VALOR = 16.90;
 var currentCat = 'Todos';
 var prod = null, selColor=0, selSize=-1, pQty=1, payMethod='pix', selInst=0;
+var curGalMedia = []; // galeria ativa (fotos gerais ou fotos da cor selecionada)
 var pedidoFinalizado = false;
 var SESSION_ID = 'sid-'+Date.now()+'-'+Math.random().toString(36).slice(2,7);
 
@@ -569,7 +578,13 @@ async function as(action, data){
     return await r.json();
   }catch(e){return {};}
 }
-function trackFunil(etapa,sku){as('registrarFunil',{sessionId:SESSION_ID,etapa:etapa,sku:sku||'',ref:document.referrer||''});}
+var _funilRegistrado={};
+function trackFunil(etapa,sku){
+  var chave=etapa+(sku||'');
+  if(_funilRegistrado[chave]) return; // já registrou nesta sessão
+  _funilRegistrado[chave]=true;
+  as('registrarFunil',{sessionId:SESSION_ID,etapa:etapa,sku:sku||'',ref:document.referrer||''});
+}
 
 /* ====== SACOLA ABANDONADA (dispara ao fechar/sair da página) ====== */
 window.addEventListener('beforeunload',function(){
@@ -618,10 +633,47 @@ function renderGrid(){
     html+='<div class="grid-row" style="grid-template-columns:repeat('+cols+',1fr)">'+rowHtml+'</div>';
     // banners do meio após este grupo
     MID_BANNERS.forEach(b=>{
-      var valido=b&&b.img&&b.sku&&PRODUCTS.some(pp=>pp.sku===b.sku);
-      if(valido&&b.after===i+cols&&currentCat==='Todos'){
-        html+='<div class="banner-mid" style="background-image:url(\''+b.img+'\')" onclick="event.stopPropagation();openProduct(\''+b.sku+'\')"><div class="overlay"></div>'+
-          '<div class="content"><div class="mk">'+(b.mk||'')+'</div><div class="mt">'+(b.mt||'')+'</div><div class="mc">Ver produto</div></div></div>';
+      if(!b||!b.img) return;
+      if(currentCat!=='Todos') return;
+      // after: mostrar após N produtos (1-based). Se N >= total, mostra após o último.
+      var aft = b.after||2;
+      var isLastRow = (i + cols >= list.length);
+      var showHere = (aft > i && aft <= i + cols) || (aft > list.length && isLastRow);
+      if(!showHere) return;
+      var _bpos=b.pos||'50% 50%',_bz=b.zoom||1,_bvid=/\.(mp4|mov|webm)$/i.test(b.img);
+      var _bclick=b.sku&&PRODUCTS.some(pp=>pp.sku===b.sku)?' onclick="event.stopPropagation();openProduct(\''+b.sku+'\')" style="cursor:pointer"':'';
+      html+='<div class="banner-mid"'+_bclick+'>'+
+        (_bvid?'<video style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale('+_bz+');transform-origin:'+_bpos+'" src="'+b.img+'" autoplay muted loop playsinline></video>':'<div style="position:absolute;inset:0;background-image:url(\''+b.img+'\');background-size:cover;background-position:'+_bpos+';transform:scale('+_bz+');transform-origin:'+_bpos+'"></div>')+
+        '<div class="overlay"></div>'+
+        '<div class="content"><div class="mk">'+(b.mk||'')+'</div><div class="mt">'+(b.mt||'')+'</div>'+(b.sku?'<div class="mc">Ver produto</div>':'')+'</div></div>';
+    });
+    // banners stories após este grupo
+    STORIES_BANNERS.forEach(function(b){
+      if(!b||!b.img||currentCat!=='Todos') return;
+      var sAft = b.after||4;
+      var sIsLastRow = (i + cols >= list.length);
+      var sShowHere = (sAft > i && sAft <= i + cols) || (sAft > list.length && sIsLastRow);
+      if(!sShowHere) return;
+      var isVid=/\.(mp4|mov|webm)$/i.test(b.img);
+      var bpos=b.pos||'50% 50%', bz=b.zoom||1;
+      var bgEl=isVid?
+        '<video src="'+b.img+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale('+bz+');transform-origin:'+bpos+'" autoplay muted loop playsinline></video>':
+        '<div style="position:absolute;inset:0;background-image:url(\''+b.img+'\');background-size:cover;background-position:'+bpos+';transform:scale('+bz+');transform-origin:'+bpos+'"></div>';
+      var clickAttr=b.sku?' onclick="event.stopPropagation();openProduct(\''+b.sku+'\')"':'';
+      if(b.layout==='half'){
+        var nextProd=PRODUCTS[i+cols]||null;
+        if(nextProd){
+          html+='<div class="grid-row stories-half-row" style="grid-template-columns:1fr 1fr">';
+          html+='<div class="banner-stories-half"'+clickAttr+' style="cursor:'+(b.sku?'pointer':'default')+'">'+bgEl+'</div>';
+          html+='<div class="card" onclick="openProduct(\''+nextProd.sku+'\')" style="background:'+nextProd.bg+'">'+
+            '<div class="card-img"><img src="'+(nextProd.imgs[0]||'')+'"></div>'+
+            '<div class="card-info"><div class="card-left"><div class="card-name">'+nextProd.name+'</div></div>'+
+            '<div class="card-right"><div class="card-apartir">a partir de</div><div class="card-price">'+moneyCard(nextProd.price)+'</div></div></div></div>';
+          html+='</div>';
+          i+=1;
+        }
+      } else {
+        html+='<div class="banner-stories"'+clickAttr+' style="cursor:'+(b.sku?'pointer':'default')+'">'+bgEl+'</div>';
       }
     });
     i+=cols; rowIdx++;
@@ -629,6 +681,41 @@ function renderGrid(){
   $('grid').innerHTML=html;
 }
 function bannerTopClick(){filterCat('Vestidos')}
+
+/* ====== GALERIA DO PRODUTO ====== */
+function buildGallery(mediaArr) {
+  curGalMedia = mediaArr || [];
+  var gMain = $('galMain'), gThumbs = $('galThumbs');
+  if (!curGalMedia.length) {
+    gMain.innerHTML = '<span class="ph ph-lg">ZUM</span>';
+    gThumbs.innerHTML = '';
+    return;
+  }
+  // Renderiza a imagem/vídeo principal (primeira da lista)
+  showGalItem(0);
+  // Thumbnails
+  gThumbs.innerHTML = curGalMedia.map(function(m,i){
+    var isVid = /\.(mp4|mov|webm)$/i.test(m)||m.startsWith('data:video');
+    return '<div class="thumb'+(i===0?' on':'')+'" onclick="setMedia('+i+')" style="background:#f0ece8">'+
+      (isVid?'<video src="'+m+'" style="width:100%;height:100%;object-fit:cover" muted playsinline></video>':
+              '<img src="'+m+'" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display=\'none\'">')+
+    '</div>';
+  }).join('');
+}
+
+function showGalItem(i) {
+  var m = curGalMedia[i];
+  if (!m) { $('galMain').innerHTML='<span class="ph ph-lg">ZUM</span>'; return; }
+  var isVid = /\.(mp4|mov|webm)$/i.test(m)||m.startsWith('data:video');
+  $('galMain').innerHTML = isVid
+    ? '<video src="'+m+'" style="width:100%;height:100%;object-fit:contain" autoplay muted loop playsinline controls></video>'
+    : '<img src="'+m+'" style="width:100%;height:100%;object-fit:contain" onerror="this.style.background=\'#eee\'">';
+}
+
+function setMedia(i) {
+  showGalItem(i);
+  document.querySelectorAll('#galThumbs .thumb').forEach(function(t,x){ t.classList.toggle('on', x===i); });
+}
 
 /* ====== PRODUTO ====== */
 function openProduct(sku){
@@ -639,10 +726,14 @@ function openProduct(sku){
   $('pPrice').innerHTML=moneyFmt(prod.price);
   $('pStock').textContent=prod.stock;
   $('pQty').textContent='1';
-  $('galMain').innerHTML='<span class="ph ph-lg">ZUM</span>';
-  $('galThumbs').innerHTML=prod.media.map((m,i)=>'<div class="thumb'+(i===0?' on':'')+'" onclick="setMedia('+i+')">'+('0'+(i+1)).slice(-2)+'</div>').join('');
+  // Galeria: usa fotos da primeira cor se existir, senão fotos gerais
+  var firstColorName = prod.colors.length ? prod.colors[0].n : null;
+  var mediaInicial = (firstColorName && prod.fotosCores[firstColorName] && prod.fotosCores[firstColorName].length)
+    ? prod.fotosCores[firstColorName]
+    : prod.media;
+  buildGallery(mediaInicial);
   $('pColors').innerHTML=prod.colors.map((c,i)=>'<div class="color'+(i===0?' on':'')+'" style="background:'+c.c+'" onclick="setColor('+i+')"></div>').join('');
-  $('pColorName').textContent=prod.colors[0].n;
+  $('pColorName').textContent=prod.colors[0] ? prod.colors[0].n : '';
   $('pSizes').innerHTML=prod.sizes.map((s,i)=>'<div class="size'+(s.out?' out':'')+(i===selSize?' on':'')+'" onclick="'+(s.out?'':'setSize('+i+')')+'">'+s.s+'</div>').join('');
   $('prodPair').style.display='none';
   var outros=PRODUCTS.filter(p=>p.sku!==sku).sort(()=>Math.random()-.5).slice(0,3);
@@ -650,13 +741,21 @@ function openProduct(sku){
     '<div class="sugest-title">Você também pode gostar</div>'+
     '<div class="sugest-grid">'+outros.map(p=>
       '<div class="sugest-card" onclick="openProduct(\''+p.sku+'\')">'+
-      '<div class="sugest-img"><span class="ph">ZUM</span></div>'+
+      '<div class="sugest-img">'+(p.media[0]?'<img src="'+p.media[0]+'" style="width:100%;height:100%;object-fit:cover">':'<span class="ph">ZUM</span>')+'</div>'+
       '<div class="sugest-name">'+p.name+'</div>'+
       '</div>').join('')+'</div>':'';
   show('s-product');
 }
-function setMedia(i){document.querySelectorAll('#galThumbs .thumb').forEach((t,x)=>t.classList.toggle('on',x===i))}
-function setColor(i){selColor=i;$('pColorName').textContent=prod.colors[i].n;document.querySelectorAll('#pColors .color').forEach((c,x)=>c.classList.toggle('on',x===i))}
+
+function setColor(i){
+  selColor=i;
+  $('pColorName').textContent=prod.colors[i].n;
+  document.querySelectorAll('#pColors .color').forEach((c,x)=>c.classList.toggle('on',x===i));
+  // Troca galeria para as fotos da cor selecionada
+  var corNome = prod.colors[i].n;
+  var mediasCor = prod.fotosCores[corNome];
+  buildGallery((mediasCor && mediasCor.length) ? mediasCor : prod.media);
+}
 function setSize(i){selSize=i;document.querySelectorAll('#pSizes .size').forEach((s,x)=>s.classList.toggle('on',x===i))}
 function prodQty(d){pQty=Math.max(1,pQty+d);$('pQty').textContent=pQty}
 function addToCart(){
@@ -873,12 +972,16 @@ async function loadBanners(){
     var r=await fetch('banners.json?_='+Date.now(),{cache:'no-store'});
     if(r.ok){
       var data=await r.json();
+      // Atualiza URL do ZumAgent se publicado pelo painel
+      if(data.asUrl) AS_URL = data.asUrl;
       // Banners topo
       var topoAtivos=(data.topo||[]).filter(function(b){return b.ativo;});
       if(topoAtivos.length){renderBanners(topoAtivos);} else {renderBanners(BANNER_DEFAULTS);}
       // Banners meio
       var meioAtivos=(data.meio||[]).filter(function(b){return b.ativo&&b.img;});
       MID_BANNERS=meioAtivos;
+      // Banners stories
+      STORIES_BANNERS=(data.stories||[]).filter(function(b){return b.ativo&&b.img;});
       return;
     }
   } catch(e){}
@@ -886,11 +989,14 @@ async function loadBanners(){
   try {
     var lt=localStorage.getItem('zum-banners-topo');
     var lm=localStorage.getItem('zum-banners');
+    var ls=localStorage.getItem('zum-banners-stories');
     var topoLs=lt?JSON.parse(lt):[];
     var meioLs=lm?JSON.parse(lm):[];
+    var storiesLs=ls?JSON.parse(ls):[];
     var topoAtivosLs=topoLs.filter(function(b){return b.ativo;});
     if(topoAtivosLs.length){renderBanners(topoAtivosLs);} else {renderBanners(BANNER_DEFAULTS);}
     MID_BANNERS=meioLs.filter(function(b){return b.ativo&&b.img;});
+    STORIES_BANNERS=storiesLs.filter(function(b){return b.ativo&&b.img;});
     return;
   } catch(e){}
   // Último fallback: padrão hardcoded
@@ -902,10 +1008,13 @@ function renderBanners(slides){
   if(!slides.length){box.style.display='none';return;}
   box.style.display='block';
   document.getElementById('bannerSlides').innerHTML=slides.map(function(s,i){
-    return '<div class="slide'+(i===0?' on':'')+'"'+(s.img?' style="background-image:url(\''+s.img+'\')"':'')+'>'+
-      (s.tag?'<div class="kick">'+s.tag+'</div>':'')+
-      (s.titulo?'<div class="ttl">'+s.titulo+'</div>':'')+
-      (s.sub?'<div class="sub">'+s.sub+'</div>':'')+'</div>';
+    var isVid=s.img&&/\.(mp4|mov|webm)$/i.test(s.img);
+    var pos=s.pos||'50% 50%', z=s.zoom||1;
+    var bg=s.img?(isVid?'<video style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.6;transform:scale('+z+');transform-origin:'+pos+'" src="'+s.img+'" autoplay muted loop playsinline></video>':'<div style="position:absolute;inset:0;background-image:url(\''+s.img+'\');background-size:cover;background-position:'+pos+';transform:scale('+z+');transform-origin:'+pos+'"></div>'):'';
+    return '<div class="slide'+(i===0?' on'+'':'')+'" style="overflow:hidden">'+bg+
+      (s.tag?'<div class="kick" style="position:relative;z-index:1">'+s.tag+'</div>':'')+
+      (s.titulo?'<div class="ttl" style="position:relative;z-index:1">'+s.titulo+'</div>':'')+
+      (s.sub?'<div class="sub" style="position:relative;z-index:1">'+s.sub+'</div>':'')+'</div>';
   }).join('');
   document.getElementById('bannerDots').innerHTML=slides.length>1?slides.map(function(s,i){return '<i'+(i===0?' class="on"':'')+'></i>';}).join(''):'';
   clearInterval(bTimer);
@@ -935,7 +1044,8 @@ function adaptarProdutos(lista){
       badge: p.badge || '', bg: bg,
       colors: colors, sizes: sizes,
       stock: p.stock || (semEstoque ? 'Sem estoque' : ''),
-      media: p.fotos && p.fotos.length ? p.fotos : []
+      media: p.fotos && p.fotos.length ? p.fotos : [],
+      fotosCores: p.fotosCores || {}
     };
   });
 }
@@ -977,6 +1087,47 @@ function adaptarDaPlanilha(rows){
 }
 
 async function carregarCatalogo(){
+  // Pré-carrega fotos e ordem definidos no painel admin
+  // Tenta produtos.json (GitHub) ou localStorage como fonte de fotos/posições
+  var fotosMap = {}, ordemMap = {};
+  var produtosJsonData = null;
+  try{
+    var rp = await fetch('produtos.json',{cache:'no-store'});
+    if(rp.ok){
+      produtosJsonData = await rp.json();
+      if(produtosJsonData.produtos && produtosJsonData.produtos.length){
+        produtosJsonData.produtos.forEach(function(p,i){
+          fotosMap[p.sku]={fotos:p.fotos||[],fotosCores:p.fotosCores||{}};
+          ordemMap[p.sku]=i;
+        });
+      }
+    }
+  }catch(e){}
+  // Fallback: localStorage do painel (uso offline)
+  if(!Object.keys(fotosMap).length){
+    try{
+      var _ls=localStorage.getItem('zum-catalogo');
+      if(_ls) JSON.parse(_ls).filter(function(p){return p.ativo;}).forEach(function(p,i){
+        fotosMap[p.sku]={fotos:p.fotos||[],fotosCores:p.fotosCores||{}};
+        ordemMap[p.sku]=i;
+      });
+    }catch(e){}
+  }
+  // Aplica fotos e ordena conforme posição definida no painel
+  function aplicarFotosOrdem(products){
+    return products.map(function(p){
+      var f=fotosMap[p.sku]||{};
+      return Object.assign({},p,{
+        media:(f.fotos&&f.fotos.length)?f.fotos:p.media,
+        fotosCores:f.fotosCores||p.fotosCores||{}
+      });
+    }).sort(function(a,b){
+      var ia=ordemMap[a.sku]!==undefined?ordemMap[a.sku]:9999;
+      var ib=ordemMap[b.sku]!==undefined?ordemMap[b.sku]:9999;
+      return ia-ib;
+    });
+  }
+
   // 1ª opção: ZumAgent ao vivo — preço e estoque em tempo real da planilha
   if(AS_URL){
     try{
@@ -985,7 +1136,7 @@ async function carregarCatalogo(){
       if(r.ok){
         var data = await r.json();
         if(data.ok && data.produtos && data.produtos.length){
-          PRODUCTS = adaptarDaPlanilha(data.produtos);
+          PRODUCTS = aplicarFotosOrdem(adaptarDaPlanilha(data.produtos));
           renderChips(); renderGrid(); updateBag(); loadBanners();
           return;
         }
@@ -993,25 +1144,19 @@ async function carregarCatalogo(){
     }catch(e){}
   }
 
-  // 2ª opção: produtos.json (versão publicada no Vercel, sem Apps Script)
-  try{
-    var r2 = await fetch('produtos.json',{cache:'no-store'});
-    if(r2.ok){
-      var d2 = await r2.json();
-      if(d2.produtos && d2.produtos.length){
-        PRODUCTS = adaptarProdutos(d2.produtos);
-        renderChips(); renderGrid(); updateBag(); loadBanners();
-        return;
-      }
-    }
-  }catch(e){}
+  // 2ª opção: produtos.json já carregado acima
+  if(produtosJsonData && produtosJsonData.produtos && produtosJsonData.produtos.length){
+    PRODUCTS = adaptarProdutos(produtosJsonData.produtos);
+    renderChips(); renderGrid(); updateBag(); loadBanners();
+    return;
+  }
 
   // 3ª opção: localStorage do gerenciador (uso local)
   var saved = localStorage.getItem('zum-catalogo');
   if(saved){
     try{
       var ativos = JSON.parse(saved).filter(function(p){ return p.ativo; });
-      if(ativos.length) PRODUCTS = adaptarProdutos(ativos);
+      if(ativos.length) PRODUCTS = aplicarFotosOrdem(adaptarProdutos(ativos));
     }catch(e){}
   }
 
