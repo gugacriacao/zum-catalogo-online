@@ -709,7 +709,7 @@ function renderGrid(){
       var isVid=/\.(mp4|mov|webm)$/i.test(b.img);
       var bpos=b.pos||'50% 50%', bz=b.zoom||1;
       var bgEl=isVid?
-        '<video data-src="'+b.img+'" preload="none" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale('+bz+');transform-origin:'+bpos+'" muted loop playsinline></video>':
+        '<video src="'+b.img+'" preload="auto" autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale('+bz+');transform-origin:'+bpos+'"></video>':
         '<div style="position:absolute;inset:0;background-image:url(\''+b.img+'\');background-size:cover;background-position:'+bpos+';transform:scale('+bz+');transform-origin:'+bpos+'"></div>';
       var clickAttr=b.sku?' onclick="event.stopPropagation();openProduct(\''+b.sku+'\')"':'';
       if(b.layout==='half'){
@@ -1068,6 +1068,7 @@ async function loadBanners(){
       MID_BANNERS=meioAtivos;
       // Banners stories
       STORIES_BANNERS=(data.stories||[]).filter(function(b){return b.ativo&&b.img;});
+      renderGrid();
       return;
     }
   } catch(e){}
