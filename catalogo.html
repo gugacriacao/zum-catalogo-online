@@ -41,32 +41,35 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 
 /* CHIPS */
 .chips-bar{display:flex;align-items:center;border-bottom:1px solid #eee;position:sticky;top:58px;background:#fff;z-index:40}
-.chips{display:flex;gap:6px;padding:14px 16px;overflow-x:auto;flex:1}
+.chips-wrap{flex:1;overflow:hidden;position:relative}
+.chips-wrap::after{content:'';position:absolute;right:0;top:0;bottom:0;width:32px;background:linear-gradient(to right,rgba(255,255,255,0),#fff);pointer-events:none}
+.chips{display:flex;gap:6px;padding:14px 16px 14px 16px;overflow-x:auto;width:100%}
 .chips::-webkit-scrollbar{display:none}
 .chip{padding:7px 16px;font-size:11px;border:1px solid #ddd;color:#999;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;background:#fff;transition:all .15s;border-radius:0}
 .chip.on{background:#111;color:#fff;border-color:#111}
-.grid-toggle{display:flex;gap:0;padding:0 14px;flex-shrink:0}
+.grid-toggle{display:flex;gap:0;padding:0 14px;flex-shrink:0;border-left:1px solid #eee}
 .grid-btn{width:30px;height:30px;display:flex;align-items:center;justify-content:center;color:#bbb;cursor:pointer;border:1px solid transparent}
 .grid-btn.on{color:#111;border-color:#ddd}
 .grid-btn svg{width:16px;height:16px}
 
 /* GRID */
-.grid{display:flex;flex-direction:column;gap:8px;background:#fff}
+.grid{display:flex;flex-direction:column;gap:8px;background:#fff;padding:0 8px}
 .grid-row{display:grid;gap:8px;background:#fff}
+.banner-mid,.banner-stories,.stories-half-row{margin-left:-8px;margin-right:-8px;width:calc(100% + 16px)}
 .card{background:#fff;cursor:pointer}
 .card-img{aspect-ratio:2/3;background:#f6f4f2;display:flex;align-items:center;justify-content:center;font-size:46px;position:relative;overflow:hidden}
 .card-img img,.card-img video{width:100%;height:100%;object-fit:cover}
 .badge{position:absolute;top:8px;left:8px;background:#111;color:#fff;font-size:8px;letter-spacing:1px;padding:3px 8px;text-transform:uppercase;z-index:2}
-.card-info{padding:11px 12px 16px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.card-info{padding:10px 12px 14px 15px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
 .card-left{flex:1;min-width:0}
 .card-right{flex-shrink:0;text-align:right}
-.card-name{font-size:13px;color:#888;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px;line-height:1.4;font-weight:700;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.card-price{font-size:22px;font-weight:700;color:#111}
+.card-name{font-size:11px;color:#444;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px;line-height:1.4;font-weight:500;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.card-price{font-size:19px;font-weight:700;color:#111}
 .card-tag{font-size:9px;color:#c0392b;margin-top:3px;letter-spacing:.5px}
-.card-sup,.price-cents{font-size:14px;vertical-align:text-top;font-weight:700;position:relative;top:1px;margin-left:2px;letter-spacing:1px}
-.card-rs,.price-rs{font-size:14px;vertical-align:text-top;font-weight:700;position:relative;top:2px}
-.card-apartir{font-size:9px;color:#999;text-align:right;font-weight:400;letter-spacing:.3px}
-.card-cada{font-size:9px;color:#999;text-align:right;font-weight:400;letter-spacing:.3px;margin-top:-2px;white-space:nowrap}
+.card-sup,.price-cents{font-size:12px;vertical-align:text-top;font-weight:700;position:relative;top:1px;margin-left:2px;letter-spacing:1px}
+.card-rs,.price-rs{font-size:12px;vertical-align:text-top;font-weight:700;position:relative;top:2px}
+.card-apartir{font-size:8px;color:#999;text-align:right;font-weight:400;letter-spacing:.3px}
+.card-cada{font-size:8px;color:#999;text-align:right;font-weight:400;letter-spacing:.3px;margin-top:-2px;white-space:nowrap}
 .card-pix{display:flex;align-items:center;justify-content:flex-end;gap:3px;margin-top:3px;margin-bottom:1px}
 .card-pix img{width:11px;height:11px;display:block}
 .card-pix span{font-size:9px;color:#32BCAD;font-weight:600;letter-spacing:.3px}
@@ -281,7 +284,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   </div>
 
   <div class="chips-bar">
-    <div class="chips" id="chips"></div>
+    <div class="chips-wrap"><div class="chips" id="chips"></div></div>
     <div class="grid-toggle">
       <div class="grid-btn on" id="btnGrid2" onclick="setGridMode(2)" title="2 colunas">
         <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="6" height="6"/><rect x="9" y="1" width="6" height="6"/><rect x="1" y="9" width="6" height="6"/><rect x="9" y="9" width="6" height="6"/></svg>
