@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-06-27T02:20:50.302Z",
+  "geradoEm": "2026-06-27T02:24:29.404Z",
   "produtos": [
     {
       "sku": "ZUM-VDRC-105",
@@ -63,6 +63,27 @@
       "ordem": 3
     },
     {
+      "sku": "ZUM-VDALC-100",
+      "nome": "Vestido alça",
+      "cat": "Vestidos",
+      "preco": 179.9,
+      "cores": [
+        "Bordô",
+        "Off-white",
+        "Azul",
+        "Marrom"
+      ],
+      "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "estoqueNum": 3,
+      "fotos": [],
+      "fotosCores": {},
+      "ordem": 4
+    },
+    {
       "sku": "ZUM-TSOV-200",
       "nome": "T-shirt Over básico",
       "cat": "T-shirts",
@@ -82,7 +103,7 @@
       "estoqueNum": 9,
       "fotos": [],
       "fotosCores": {},
-      "ordem": 4
+      "ordem": 5
     },
     {
       "sku": "ZUM-BDBA-300",
@@ -101,7 +122,7 @@
       "estoqueNum": 3,
       "fotos": [],
       "fotosCores": {},
-      "ordem": 5
+      "ordem": 6
     },
     {
       "sku": "ZUM-BDBM-301",
@@ -120,7 +141,7 @@
       "estoqueNum": 3,
       "fotos": [],
       "fotosCores": {},
-      "ordem": 6
+      "ordem": 7
     },
     {
       "sku": "ZUM-CC-400",
@@ -141,7 +162,7 @@
       "estoqueNum": 8,
       "fotos": [],
       "fotosCores": {},
-      "ordem": 7
+      "ordem": 8
     }
   ]
 }
