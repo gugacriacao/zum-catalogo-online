@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-06-27T02:24:29.404Z",
+  "geradoEm": "2026-06-26T16:44:43.534Z",
   "produtos": [
     {
       "sku": "ZUM-VDRC-105",
@@ -9,79 +9,20 @@
       "cores": [
         "Preto",
         "Bordô",
-        "Off-white",
-        "Azul"
+        "Off-white"
       ],
       "tamanhos": [
         "UN"
       ],
       "stock": "Em estoque",
       "badge": "",
-      "estoqueNum": 2,
-      "fotos": [],
-      "fotosCores": {},
+      "estoqueNum": 1,
+      "fotos": [
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-01.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-02.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-03.png"
+      ],
       "ordem": 1
-    },
-    {
-      "sku": "ZUM-VDBT-102",
-      "nome": "Vestido busto torcido",
-      "cat": "Vestidos",
-      "preco": 179.9,
-      "cores": [
-        "Preto",
-        "Marrom",
-        "Bordô"
-      ],
-      "tamanhos": [
-        "UN"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "estoqueNum": 3,
-      "fotos": [],
-      "fotosCores": {},
-      "ordem": 2
-    },
-    {
-      "sku": "ZUM-VDMG-104",
-      "nome": "Vestido manga",
-      "cat": "Vestidos",
-      "preco": 179.9,
-      "cores": [
-        "Marrom",
-        "Preto",
-        "Azul"
-      ],
-      "tamanhos": [
-        "UN"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "estoqueNum": 5,
-      "fotos": [],
-      "fotosCores": {},
-      "ordem": 3
-    },
-    {
-      "sku": "ZUM-VDALC-100",
-      "nome": "Vestido alça",
-      "cat": "Vestidos",
-      "preco": 179.9,
-      "cores": [
-        "Bordô",
-        "Off-white",
-        "Azul",
-        "Marrom"
-      ],
-      "tamanhos": [
-        "UN"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "estoqueNum": 3,
-      "fotos": [],
-      "fotosCores": {},
-      "ordem": 4
     },
     {
       "sku": "ZUM-TSOV-200",
@@ -102,46 +43,7 @@
       "badge": "",
       "estoqueNum": 9,
       "fotos": [],
-      "fotosCores": {},
-      "ordem": 5
-    },
-    {
-      "sku": "ZUM-BDBA-300",
-      "nome": "Body assimétrico",
-      "cat": "Bodies",
-      "preco": 60,
-      "cores": [
-        "Preto",
-        "Marrom"
-      ],
-      "tamanhos": [
-        "UN"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "estoqueNum": 3,
-      "fotos": [],
-      "fotosCores": {},
-      "ordem": 6
-    },
-    {
-      "sku": "ZUM-BDBM-301",
-      "nome": "Body manguinha",
-      "cat": "Bodies",
-      "preco": 60,
-      "cores": [
-        "Cinza",
-        "Marrom"
-      ],
-      "tamanhos": [
-        "UN"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "estoqueNum": 3,
-      "fotos": [],
-      "fotosCores": {},
-      "ordem": 7
+      "ordem": 2
     },
     {
       "sku": "ZUM-CC-400",
@@ -161,8 +63,85 @@
       "badge": "",
       "estoqueNum": 8,
       "fotos": [],
-      "fotosCores": {},
-      "ordem": 8
+      "ordem": 3
+    },
+    {
+      "sku": "ZUM-VDBT-102",
+      "nome": "Vestido busto torcido",
+      "cat": "Vestidos",
+      "preco": 179.9,
+      "cores": [
+        "Preto",
+        "Marrom",
+        "Bordô"
+      ],
+      "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "estoqueNum": 3,
+      "fotos": [
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDBT-102/midia-01.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDBT-102/midia-02.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDBT-102/midia-03.png"
+      ],
+      "ordem": 4
+    },
+    {
+      "sku": "ZUM-VDMG-104",
+      "nome": "Vestido manga",
+      "cat": "Vestidos",
+      "preco": 179.9,
+      "cores": [
+        "Marrom",
+        "Preto",
+        "Azul"
+      ],
+      "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "estoqueNum": 5,
+      "fotos": [],
+      "ordem": 5
+    },
+    {
+      "sku": "ZUM-BDBA-300",
+      "nome": "Body assimétrico",
+      "cat": "Bodies",
+      "preco": 60,
+      "cores": [
+        "Preto",
+        "Marrom"
+      ],
+      "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "estoqueNum": 3,
+      "fotos": [],
+      "ordem": 6
+    },
+    {
+      "sku": "ZUM-BDBM-301",
+      "nome": "Body manguinha",
+      "cat": "Bodies",
+      "preco": 60,
+      "cores": [
+        "Cinza",
+        "Marrom"
+      ],
+      "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "estoqueNum": 3,
+      "fotos": [],
+      "ordem": 7
     }
   ]
 }
