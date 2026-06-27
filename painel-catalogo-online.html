@@ -65,7 +65,7 @@ body{font-family:-apple-system,sans-serif;background:#f4f4f4;min-height:100vh}
 
 /* foto */
 .photo-area{position:relative;aspect-ratio:3/4;background:#f0ece8;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer}
-.photo-area img{width:100%;height:100%;object-fit:cover}
+.photo-area img{width:100%;height:100%;object-fit:contain}
 .photo-placeholder{display:flex;flex-direction:column;align-items:center;gap:5px;color:#bbb;pointer-events:none}
 .photo-placeholder span{font-size:9px;letter-spacing:1px;text-transform:uppercase}
 .upload-hover{position:absolute;inset:0;background:rgba(0,0,0,.48);display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;letter-spacing:1px;text-transform:uppercase;opacity:0;transition:opacity .15s}
@@ -105,6 +105,10 @@ body{font-family:-apple-system,sans-serif;background:#f4f4f4;min-height:100vh}
 .mfield input,.mfield select,.mfield textarea{width:100%;padding:8px 11px;border:1px solid #ddd;font-size:13px;color:#111;outline:none;font-family:inherit}
 .mfield input:focus,.mfield select:focus{border-color:#111}
 .modal-ft{padding:12px 18px;border-top:1px solid #eee;display:flex;gap:8px;justify-content:flex-end}
+.drop-zone{border:2px dashed #ddd;border-radius:4px;padding:10px;transition:all .2s;min-height:80px;position:relative}
+.drop-zone.drag-over{border-color:#111;background:#f8f8f8}
+.drop-zone.drag-over .drop-hint{color:#111}
+.drop-hint{text-align:center;font-size:11px;color:#bbb;letter-spacing:.5px;padding:6px 0 2px}
 .fotos-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:5px}
 .foto-thumb{aspect-ratio:3/4;background:#f0ece8;position:relative;overflow:hidden}
 .foto-thumb img{width:100%;height:100%;object-fit:cover}
@@ -112,6 +116,17 @@ body{font-family:-apple-system,sans-serif;background:#f4f4f4;min-height:100vh}
 .foto-add{aspect-ratio:3/4;background:#f9f9f9;border:2px dashed #ddd;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#bbb;font-size:18px;transition:all .15s}
 .foto-add:hover{border-color:#111;color:#111}
 .foto-uploading{aspect-ratio:3/4;background:#f0ece8;display:flex;align-items:center;justify-content:center;font-size:9px;color:#999;text-transform:uppercase;letter-spacing:1px}
+/* fotos por cor */
+.cor-row{display:flex;align-items:flex-start;gap:8px;margin-bottom:10px;padding:8px;background:#fafafa;border:1px solid #eee;border-radius:4px}
+.cor-dot-lbl{display:flex;align-items:center;gap:5px;min-width:72px;padding-top:4px}
+.cor-dot-sm{width:14px;height:14px;border-radius:50%;border:1px solid #e0e0e0;flex-shrink:0}
+.cor-lbl-txt{font-size:9px;color:#555;text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+.cor-fotos-row{display:flex;gap:5px;flex-wrap:wrap;flex:1}
+.cor-foto-thumb{width:44px;height:58px;background:#f0ece8;position:relative;overflow:hidden;flex-shrink:0}
+.cor-foto-thumb img,.cor-foto-thumb video{width:100%;height:100%;object-fit:cover}
+.cor-foto-del{position:absolute;top:1px;right:1px;width:14px;height:14px;background:#c0392b;color:#fff;border:none;cursor:pointer;font-size:9px;display:flex;align-items:center;justify-content:center}
+.cor-foto-add{width:44px;height:58px;background:#f9f9f9;border:2px dashed #ddd;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#bbb;font-size:16px;flex-shrink:0;transition:all .15s}
+.cor-foto-add:hover{border-color:#111;color:#111}
 .video-badge{position:absolute;bottom:5px;left:5px;background:rgba(0,0,0,.6);color:#fff;font-size:9px;padding:1px 5px;border-radius:2px;letter-spacing:.5px;pointer-events:none}
 .foto-thumb video{width:100%;height:100%;object-fit:cover}
 .media-count{font-size:9px;color:#bbb;margin-left:auto}
@@ -134,7 +149,8 @@ body{font-family:-apple-system,sans-serif;background:#f4f4f4;min-height:100vh}
 /* preview com proporções reais */
 .banner-preview{width:100%;background:#222;display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:4px;overflow:hidden;position:relative;cursor:pointer}
 .banner-preview.topo{aspect-ratio:480/240} /* 2:1 */
-.banner-preview.meio{aspect-ratio:480/140} /* ~3.4:1 */
+.banner-preview.meio{aspect-ratio:480/140;min-height:80px} /* ~3.4:1 */
+.banner-preview.stories{aspect-ratio:9/16;max-height:380px;max-width:calc(380px * 9 / 16);align-self:center} /* 9:16 portrait */
 .banner-preview img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55}
 .banner-preview .prev-tag{font-size:8px;color:rgba(255,255,255,.7);letter-spacing:2px;text-transform:uppercase;position:relative;z-index:1}
 .banner-preview .prev-titulo{font-size:15px;color:#fff;font-weight:700;letter-spacing:1px;position:relative;z-index:1}
@@ -142,7 +158,25 @@ body{font-family:-apple-system,sans-serif;background:#f4f4f4;min-height:100vh}
 .banner-preview .prev-empty{font-size:10px;color:#666;letter-spacing:1px;position:relative}
 .banner-preview .upload-hover{position:absolute;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;letter-spacing:1px;text-transform:uppercase;opacity:0;transition:opacity .15s;z-index:2}
 .banner-preview:hover .upload-hover{opacity:1}
+.banner-preview.drag-over{outline:2px dashed #fff;background:#333}
+.banner-preview.drag-over .upload-hover{opacity:1;background:rgba(0,0,0,.7)}
+.banner-preview.has-img{cursor:grab}
+.banner-preview.has-img:active{cursor:grabbing}
+.pos-controls{display:flex;align-items:center;gap:3px;flex-wrap:wrap;margin-bottom:8px;margin-top:2px}
+.pos-btn{width:22px;height:22px;border:1px solid #ddd;background:#fafafa;border-radius:3px;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:all .15s}
+.pos-btn:hover{background:#eee;border-color:#bbb}
+.pos-btn.pos-on{background:#111;color:#fff;border-color:#111}
 .dim-note{font-size:10px;color:#aaa;margin-bottom:6px;line-height:1.5}
+.zoom-controls{display:flex;align-items:center;gap:6px;margin-bottom:8px;margin-top:0}
+.zoom-controls>span:first-child{font-size:13px;color:#888}
+.zoom-controls>span:last-of-type{font-size:10px;color:#555;min-width:32px;text-align:right}
+.zoom-controls input[type=range]{flex:1;accent-color:#111;height:3px;cursor:pointer}
+.zoom-reset{border:none;background:none;color:#999;font-size:13px;cursor:pointer;padding:0 2px;line-height:1}
+.zoom-reset:hover{color:#111}
+.st-layout-row{display:flex;align-items:center;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.st-lay-btn{padding:4px 10px;font-size:10px;border:1px solid #ddd;background:#fafafa;border-radius:3px;cursor:pointer;letter-spacing:.3px;transition:all .15s}
+.st-lay-btn:hover{background:#eee}
+.st-lay-btn.on{background:#111;color:#fff;border-color:#111}
 .bfield label{display:block;font-size:9px;color:#999;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;font-weight:600}
 .bfield input,.bfield select{width:100%;padding:7px 10px;border:1px solid #ddd;font-size:12px;color:#111;outline:none;font-family:inherit}
 .bfield input:focus,.bfield select:focus{border-color:#111}
@@ -187,11 +221,13 @@ body{font-family:-apple-system,sans-serif;background:#f4f4f4;min-height:100vh}
     <button class="tab-btn on" id="tb-produtos" onclick="setTab('produtos')">Produtos</button>
     <button class="tab-btn" id="tb-topo" onclick="setTab('topo')">Banners Topo</button>
     <button class="tab-btn" id="tb-meio" onclick="setTab('meio')">Banners Meio</button>
+    <button class="tab-btn" id="tb-stories" onclick="setTab('stories')">Stories</button>
     <button class="tab-btn" id="tb-config" onclick="setTab('config')">⚙ Config</button>
   </div>
   <div class="header-btns">
     <button class="btn btn-outline" onclick="sincronizar()">↻ Sync</button>
     <button class="btn btn-white" onclick="publicarTudo()" id="btnPublicar">🚀 Publicar Tudo</button>
+    <a class="btn btn-outline" id="btnVerCatalogo" href="https://gugacriacao.github.io/zum-catalogo-online/catalogo.html" target="_blank" style="color:#111;border-color:#ccc;text-decoration:none">🛍 Ver Catálogo</a>
   </div>
 </div>
 
@@ -253,6 +289,23 @@ body{font-family:-apple-system,sans-serif;background:#f4f4f4;min-height:100vh}
   </div>
 </div>
 
+<!-- ===== TAB: STORIES ===== -->
+<div class="tab-content" id="tab-stories">
+  <div class="banner-section">
+    <div class="section-hd">
+      <div>
+        <h2>Banners Stories · Formato vertical</h2>
+        <div class="format-tag">
+          <b>1080 × 1920 px</b> · proporção 9:16 · portrait
+          <span class="format-ratio">JPG · PNG · MP4 · MOV</span>
+        </div>
+      </div>
+    </div>
+    <div id="listaStories"></div>
+    <button class="add-banner-btn" onclick="addBannerStories()" id="btnAddStories">+ Adicionar stories</button>
+  </div>
+</div>
+
 <!-- ===== TAB: CONFIG ===== -->
 <div class="tab-content" id="tab-config">
   <div class="config-section">
@@ -280,18 +333,32 @@ body{font-family:-apple-system,sans-serif;background:#f4f4f4;min-height:100vh}
       </div>
       <div class="config-btns">
         <button class="btn btn-dark" onclick="publicarTudo()">🚀 Publicar agora</button>
+        <button class="btn btn-outline" style="color:#111;border-color:#ccc" onclick="sincronizarFotos()" id="btnSincFotos">📸 Subir fotos p/ GitHub</button>
+        <button class="btn btn-outline" style="color:#111;border-color:#ccc" onclick="testarGitHub()">🔍 Testar conexão GitHub</button>
         <button class="btn btn-outline" style="color:#111;border-color:#ccc" onclick="abrirInstrucoes()">? Como gerar token</button>
       </div>
+      <div class="hint" id="hintSincFotos" style="display:none;color:#2e7d32;font-weight:600"></div>
     </div>
     <div class="config-group" style="background:#f9f6f0">
       <h3>Repositório</h3>
       <div class="cfield">
         <label>Owner / Repo</label>
-        <input type="text" id="cfOwner" value="gugacriacao" oninput="salvarConfig()">
+        <input type="text" id="cfOwner" value="gugacriacao" oninput="salvarConfig();atualizarLinkCatalogo()">
       </div>
       <div class="cfield">
         <label>Nome do repositório</label>
-        <input type="text" id="cfRepo" value="zum-catalogo-online" oninput="salvarConfig()">
+        <input type="text" id="cfRepo" value="zum-catalogo-online" oninput="salvarConfig();atualizarLinkCatalogo()">
+      </div>
+    </div>
+    <div class="config-group" style="background:#e8f5e9;border:1px solid #c8e6c9">
+      <h3>🔗 Link público do catálogo</h3>
+      <div class="cfield">
+        <label>Compartilhe este link com seus clientes</label>
+        <div style="display:flex;gap:8px;align-items:center">
+          <input type="text" id="cfLinkPublico" readonly style="font-size:12px;background:#fff;color:#111;font-family:monospace;cursor:pointer" onclick="this.select()" title="Clique para selecionar">
+          <button class="btn btn-dark" style="white-space:nowrap;flex-shrink:0" onclick="copiarLinkCatalogo()">📋 Copiar</button>
+        </div>
+        <div class="hint" id="hintPages">Para ativar o link: vá em <b>github.com/gugacriacao/zum-catalogo-online</b> → Settings → Pages → Source → main → / (root) → Save</div>
       </div>
     </div>
   </div>
@@ -361,9 +428,21 @@ body{font-family:-apple-system,sans-serif;background:#f4f4f4;min-height:100vh}
             ▶ JPG · PNG · GIF · MP4 · MOV
           </span>
         </div>
-        <div class="fotos-grid" id="fotosGrid"></div>
+        <div id="dropZone" class="drop-zone"
+          ondragover="event.preventDefault();this.classList.add('drag-over')"
+          ondragleave="this.classList.remove('drag-over')"
+          ondrop="event.preventDefault();this.classList.remove('drag-over');handleDropMidias(event.dataTransfer.files)">
+          <div class="fotos-grid" id="fotosGrid"></div>
+          <div class="drop-hint" id="dropHint">⬆ Arraste fotos ou vídeos aqui</div>
+        </div>
         <input type="file" id="fotoInputModal" accept="image/jpeg,image/png,image/gif,image/webp,video/mp4,video/quicktime,.mov,.mp4,.gif,.png,.jpg" multiple style="display:none" onchange="uploadFotosModal(this)">
         <div class="warning-box" id="fotoWarning" style="display:none">⚠ Configure o GitHub Token em ⚙ Config para publicar as mídias online.</div>
+      </div>
+      <!-- FOTOS POR COR -->
+      <div class="mfield" id="fotosCoresSection" style="display:none">
+        <label>Fotos por cor <span style="font-size:9px;color:#bbb;font-weight:400;text-transform:none;letter-spacing:0">— ao clicar na cor, troca a foto no catálogo</span></label>
+        <div id="fotosCoresGrid"></div>
+        <input type="file" id="fotoCorInput" accept="image/jpeg,image/png,image/webp,video/mp4,video/quicktime,.mov,.mp4,.jpg,.png" style="display:none" onchange="uploadFotoCor(this)">
       </div>
     </div>
     <div class="modal-ft">
@@ -439,6 +518,7 @@ var PRODUTOS_INICIAIS = [
 var catalogo = [];
 var bannersTopo = [];
 var bannersMeio = [];
+var bannerStories = [];
 var filtroTexto = '';
 var filtroTab = 'todos';
 var modalIdx = -1;
@@ -479,9 +559,15 @@ function init() {
   try { bannersMeio = sm ? JSON.parse(sm) : []; } catch(e) { bannersMeio = []; }
   if (!bannersMeio.length) bannersMeio = [{ativo:false,sku:'',after:2,img:'',mk:'',mt:''}];
 
+  // Carregar banners stories
+  var ss = localStorage.getItem('zum-banners-stories');
+  try { bannerStories = ss ? JSON.parse(ss) : []; } catch(e) { bannerStories = []; }
+  if (!bannerStories.length) bannerStories = [{ativo:false,sku:'',after:4,img:'',layout:'full'}];
+
   renderGrid();
   renderTopo();
   renderMeio();
+  renderStories();
 }
 
 function salvarConfig() {
@@ -497,7 +583,7 @@ function salvarConfig() {
 /* ==================== TABS ==================== */
 function setTab(t) {
   tabAtual = t;
-  ['produtos','topo','meio','config'].forEach(function(id){
+  ['produtos','topo','meio','stories','config'].forEach(function(id){
     document.getElementById('tab-'+id).classList.toggle('on', id===t);
     document.getElementById('tb-'+id).classList.toggle('on', id===t);
   });
@@ -659,6 +745,7 @@ function abrirModal(idx) {
   var semToken = !localStorage.getItem('zum-gh-token');
   document.getElementById('fotoWarning').style.display = semToken ? 'block' : 'none';
   renderFotosModal(p.fotos||[]);
+  renderFotosCoresModal(p.cores||[], p.fotosCores||{});
   document.getElementById('modalProd').classList.add('on');
 }
 
@@ -672,6 +759,8 @@ function abrirModalNovo() {
   var semToken = !localStorage.getItem('zum-gh-token');
   document.getElementById('fotoWarning').style.display = semToken ? 'block' : 'none';
   renderFotosModal([]);
+  window._novoFotosCores = {};
+  renderFotosCoresModal([], {});
   document.getElementById('modalProd').classList.add('on');
 }
 
@@ -706,22 +795,141 @@ function delFotoModal(i) {
   renderFotosModal(fotos);
 }
 
-function uploadFotosModal(input) {
-  var files = Array.from(input.files);
+/* ===== FOTOS POR COR ===== */
+var COR_MAP_PAINEL = {
+  'Preto':'#111','Branco':'#fff','Off-white':'#f5f0e8','Cinza':'#888','Bege':'#d4b896',
+  'Bordô':'#7b1c2c','Vinho':'#6b1428','Marrom':'#5c3317','Rosa':'#e8a0b0',
+  'Azul':'#3a6db5','Azul Marinho':'#1a2d5a','Verde':'#3a7d44','Vermelho':'#c0392b'
+};
+var _corUploadTarget = null; // {corNome, idx} — cor alvo do upload ativo
+
+function getFotosCores() {
+  if (modalIdx>=0) {
+    if (!catalogo[modalIdx].fotosCores) catalogo[modalIdx].fotosCores = {};
+    return catalogo[modalIdx].fotosCores;
+  }
+  if (!window._novoFotosCores) window._novoFotosCores = {};
+  return window._novoFotosCores;
+}
+
+function renderFotosCoresModal(cores, fotosCores) {
+  var sec = document.getElementById('fotosCoresSection');
+  var grid = document.getElementById('fotosCoresGrid');
+  if (!cores.length) { sec.style.display='none'; return; }
+  sec.style.display='block';
+  grid.innerHTML = cores.map(function(cor) {
+    var cor_id = cor.replace(/\s/g,'_');
+    var fotos = (fotosCores[cor]||[]);
+    var thumbs = fotos.map(function(f,i){
+      var isVid = isVideoSrc(f);
+      return '<div class="cor-foto-thumb">'+
+        (isVid?'<video src="'+f+'" style="width:100%;height:100%;object-fit:cover" muted></video>':
+                '<img src="'+f+'" onerror="this.style.display=\'none\'">') +
+        '<button class="cor-foto-del" onclick="delFotoCor(\''+cor+'\','+i+')">✕</button>'+
+      '</div>';
+    }).join('');
+    var corBg = COR_MAP_PAINEL[cor]||'#ccc';
+    var addBtn = fotos.length < 6 ?
+      '<div class="cor-foto-add" onclick="abrirUploadCor(\''+cor+'\')">+</div>' : '';
+    return '<div class="cor-row" id="corRow_'+cor_id+'">'+
+      '<div class="cor-dot-lbl">'+
+        '<div class="cor-dot-sm" style="background:'+corBg+';'+(cor==='Branco'||cor==='Off-white'?'border-color:#ccc':'')+'"></div>'+
+        '<span class="cor-lbl-txt">'+cor+'</span>'+
+      '</div>'+
+      '<div class="cor-fotos-row">'+thumbs+addBtn+'</div>'+
+    '</div>';
+  }).join('');
+}
+
+function abrirUploadCor(corNome) {
+  _corUploadTarget = corNome;
+  document.getElementById('fotoCorInput').value='';
+  document.getElementById('fotoCorInput').click();
+}
+
+function uploadFotoCor(input) {
+  var file = input.files[0];
+  if (!file || !_corUploadTarget) return;
+  var cor = _corUploadTarget;
+  var token = localStorage.getItem('zum-gh-token');
+  var ext = extFromFile(file);
+  var fotosCores = getFotosCores();
+  if (!fotosCores[cor]) fotosCores[cor] = [];
+  var isImg = /image/i.test(file.type) && !/gif/i.test(file.type);
+  if (isImg) ext = 'jpg';
+  comprimirImagem(file).then(function(result) {
+    var dataUrl = result.dataUrl;
+    if (result.compressed) toast('🗜 ' + result.originalKB + 'KB → ' + result.finalKB + 'KB');
+    if (!token) {
+      fotosCores[cor].push(dataUrl);
+      salvarLocal();
+      renderFotosCoresModal(
+        modalIdx>=0 ? (catalogo[modalIdx].cores||[]) : [],
+        fotosCores
+      );
+      toast('⚠ Foto salva localmente. Configure o GitHub Token para publicar.');
+    } else {
+      var sku = modalIdx>=0 ? catalogo[modalIdx].sku : document.getElementById('mSku').value.trim().toUpperCase();
+      var corSlug = cor.toLowerCase().replace(/\s/g,'-');
+      var idx = fotosCores[cor].length;
+      var path = 'FOTOS/'+sku+'/CORES/'+corSlug+'-0'+(idx+1)+'.'+ext;
+      var placeholder = '__uploading__';
+      fotosCores[cor].push(placeholder);
+      renderFotosCoresModal(modalIdx>=0?(catalogo[modalIdx].cores||[]):[], fotosCores);
+      toast('⏳ Enviando foto da cor '+cor+'...');
+      uploadParaGitHub(dataUrl, path)
+        .then(function(){
+          var owner = localStorage.getItem('zum-gh-owner')||GH_OWNER;
+          var repo  = localStorage.getItem('zum-gh-repo') ||GH_REPO;
+          var url   = 'https://raw.githubusercontent.com/'+owner+'/'+repo+'/main/'+path;
+          var fi = fotosCores[cor].indexOf(placeholder);
+          if (fi>=0) fotosCores[cor][fi] = url; else fotosCores[cor].push(url);
+          salvarLocal();
+          renderFotosCoresModal(modalIdx>=0?(catalogo[modalIdx].cores||[]):[], fotosCores);
+          toast('✓ Foto da cor '+cor+' publicada!');
+        })
+        .catch(function(err){ toast('❌ '+err.message); });
+    }
+  });
+  input.value='';
+}
+
+function delFotoCor(corNome, i) {
+  var fotosCores = getFotosCores();
+  if (!fotosCores[corNome]) return;
+  fotosCores[corNome].splice(i,1);
+  salvarLocal();
+  renderFotosCoresModal(
+    modalIdx>=0 ? (catalogo[modalIdx].cores||[]) : [],
+    fotosCores
+  );
+}
+
+function handleDropMidias(fileList) {
+  var allowed = ['image/jpeg','image/png','image/gif','image/webp','video/mp4','video/quicktime'];
+  var files = Array.from(fileList).filter(function(f){
+    return allowed.indexOf(f.type) >= 0 || /\.(mov|mp4|gif|png|jpg|jpeg|webp)$/i.test(f.name);
+  });
+  if (!files.length) return toast('⚠ Formato não suportado');
+  processarArquivosMidia(files);
+}
+
+function processarArquivosMidia(files) {
   var token = localStorage.getItem('zum-gh-token');
   var fotos = modalIdx>=0 ? catalogo[modalIdx].fotos : (window._novoFotos = window._novoFotos||[]);
   var sku   = modalIdx>=0 ? catalogo[modalIdx].sku : (document.getElementById('mSku').value.trim().toUpperCase());
-
-  // Limita ao máximo de mídias
   var disponiveis = MAX_MIDIAS - fotos.filter(function(f){return f!=='__uploading__';}).length;
   files = files.slice(0, disponiveis);
-  if (!files.length) { toast('⚠ Limite de '+MAX_MIDIAS+' mídias por produto'); input.value=''; return; }
-
+  if (!files.length) { toast('⚠ Limite de '+MAX_MIDIAS+' mídias por produto'); return; }
   files.forEach(function(file) {
     var ext = extFromFile(file);
-    var reader = new FileReader();
-    reader.onload = function(e) {
-      var dataUrl = e.target.result;
+    var isImg = /image/i.test(file.type) && !/gif/i.test(file.type);
+    if (isImg) ext = 'png';
+    comprimirImagem(file).then(function(result) {
+      var dataUrl = result.dataUrl;
+      if (result.compressed) {
+        toast('🗜 ' + result.originalKB + 'KB → ' + result.finalKB + 'KB');
+      }
       if (!token || !sku) {
         fotos.push(dataUrl);
         salvarLocal();
@@ -748,11 +956,16 @@ function uploadFotosModal(input) {
             toast('❌ '+err.message);
           });
       }
-    };
-    reader.readAsDataURL(file);
+    });
   });
-  input.value='';
 }
+
+function uploadFotosModal(input) {
+  var files = Array.from(input.files);
+  processarArquivosMidia(files);
+  input.value = '';
+}
+
 
 function salvarModal() {
   var nome = document.getElementById('mNome').value.trim();
@@ -766,7 +979,8 @@ function salvarModal() {
     tamanhos: document.getElementById('mTams').value.split(',').map(function(s){return s.trim();}).filter(Boolean),
     stock: document.getElementById('mEstoque').value.trim(),
     badge: document.getElementById('mBadge').value.trim(),
-    fotos: modalIdx>=0 ? (catalogo[modalIdx].fotos||[]) : (window._novoFotos||[])
+    fotos: modalIdx>=0 ? (catalogo[modalIdx].fotos||[]) : (window._novoFotos||[]),
+    fotosCores: modalIdx>=0 ? (catalogo[modalIdx].fotosCores||{}) : (window._novoFotosCores||{})
   };
   if (modalIdx>=0) {
     var ativo = catalogo[modalIdx].ativo;
@@ -827,16 +1041,36 @@ function bannerTopoCard(b, i) {
       '</label>'+
     '</div>'+
     '<div class="banner-card-body'+(b.ativo?'':' disabled')+'" id="bctopo-body'+i+'">'+
-      '<div class="banner-preview topo" id="topoPrev'+i+'" onclick="uploadBannerTopo('+i+')" style="'+(imgSrc&&!isVideoSrc(imgSrc)?'background-image:url(\''+imgSrc+'\');background-size:cover;background-position:center':'')+'">'+
-        (imgSrc&&isVideoSrc(imgSrc)?'<video src="'+imgSrc+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55" autoplay muted loop playsinline></video>':'')+
-        (imgSrc?'':'<div class="prev-empty">📷 Clique para adicionar imagem ou vídeo</div>')+
+      '<div class="banner-preview topo'+(imgSrc?' has-img':'')+'" id="topoPrev'+i+'"'+
+        ' onclick="uploadBannerTopo('+i+')"'+
+        ' onmousedown="startBannerDrag(\'topo\','+i+',event)"'+
+        ' ondragover="event.preventDefault();this.classList.add(\'drag-over\')"'+
+        ' ondragleave="this.classList.remove(\'drag-over\')"'+
+        ' ondrop="event.preventDefault();this.classList.remove(\'drag-over\');handleDropBannerTopo('+i+',event.dataTransfer.files)"'+
+        '>'+
+        (imgSrc&&!isVideoSrc(imgSrc)?'<div class="bn-bg" style="position:absolute;inset:0;background-image:url(\''+imgSrc+'\');background-size:cover;background-position:'+(b.pos||'50% 50%')+';transform:scale('+(b.zoom||1)+');transform-origin:'+(b.pos||'50% 50%')+'"></div>':'')+
+        (imgSrc&&isVideoSrc(imgSrc)?'<video class="bn-bg" src="'+imgSrc+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.6;transform:scale('+(b.zoom||1)+');transform-origin:'+(b.pos||'50% 50%')+'" autoplay muted loop playsinline></video>':'')+
+        (imgSrc?'':'<div class="prev-empty">📷 Clique ou arraste imagem/vídeo</div>')+
         (b.tag||b.titulo||b.sub?
           '<div class="prev-tag">'+b.tag+'</div>'+
           '<div class="prev-titulo">'+b.titulo+'</div>'+
           '<div class="prev-sub">'+b.sub+'</div>':
           '')+
-        '<div class="upload-hover">'+(imgSrc?'↺ Trocar':'+ Imagem / Vídeo / GIF')+'</div>'+
+        '<div class="upload-hover">'+(imgSrc?'↺ Trocar':'+ Arraste ou clique')+'</div>'+
       '</div>'+
+      (imgSrc?'<div class="pos-controls">'+
+        '<span style="font-size:9px;color:#888;letter-spacing:.5px;text-transform:uppercase">Posição:</span>'+
+        ['top left','top center','top right','center left','center','center right','bottom left','bottom center','bottom right'].map(function(pos){
+          var label={'top left':'↖','top center':'↑','top right':'↗','center left':'←','center':'·','center right':'→','bottom left':'↙','bottom center':'↓','bottom right':'↘'}[pos];
+          return '<button class="pos-btn'+(( b.pos||'50% 50%')===pos?' pos-on':'')+'" onclick="setPosTopo('+i+',\''+pos+'\')" title="'+pos+'">'+label+'</button>';
+        }).join('')+
+      '</div>':'')+
+      (imgSrc?'<div class="zoom-controls">'+
+        '<span title="Zoom">⊕</span>'+
+        '<input type="range" min="0.3" max="3" step="0.05" value="'+(b.zoom||1)+'" oninput="setBannerZoom(\'topo\','+i+',+this.value)">'+
+        '<span id="zlblTopo'+i+'">'+(Math.round((b.zoom||1)*100))+'%</span>'+
+        '<button class="zoom-reset" onclick="setBannerZoom(\'topo\','+i+',1);this.closest(\'.zoom-controls\').querySelector(\'input\').value=1">↺</button>'+
+      '</div>':'')+
       '<input type="file" id="bfTopo'+i+'" accept="image/jpeg,image/png,image/gif,image/webp,video/mp4,video/quicktime,.mov,.mp4,.gif,.png,.jpg" style="display:none" onchange="processarBannerTopo('+i+',this)">'+
       (imgSrc?'<div style="font-size:9px;color:#27ae60;margin-bottom:8px">✓ '+imgSrc+'</div>':'')+
       '<div class="banner-row">'+
@@ -872,7 +1106,116 @@ function updateBannerTopo(i) {
   }
 }
 
-function uploadBannerTopo(i) { document.getElementById('bfTopo'+i).click(); }
+/* ====== DRAG-TO-REPOSITION NOS BANNERS ====== */
+var _bDrag = null, _bDragMoved = false;
+
+function posToXY(pos) {
+  var map = {left:0,center:50,right:100,top:0,bottom:100};
+  var parts = (pos||'center').trim().split(/\s+/);
+  var px = parts[0], py = parts[1]||parts[0];
+  var x = map[px]!==undefined ? map[px] : parseFloat(px)||50;
+  var y = map[py]!==undefined ? map[py] : parseFloat(py)||50;
+  return {x:x, y:y};
+}
+
+function getBannerArr(type) {
+  return type==='topo' ? bannersTopo : (type==='meio' ? bannersMeio : bannerStories);
+}
+function getBannerEl(type, idx) {
+  var prefix = type==='topo'?'topoPrev':(type==='meio'?'meioPrev':'stPrev');
+  return document.getElementById(prefix+idx);
+}
+function getBg(el) { return el ? el.querySelector('.bn-bg') : null; }
+
+function applyBgPos(bg, pos) {
+  if (!bg) return;
+  if (bg.tagName === 'VIDEO') { bg.style.transformOrigin = pos; }
+  else { bg.style.backgroundPosition = pos; bg.style.transformOrigin = pos; }
+}
+
+function startBannerDrag(type, idx, event) {
+  if (event.button !== 0) return;
+  var b = getBannerArr(type)[idx];
+  if (!b || !b.img) return;
+  var xy = posToXY(b.pos);
+  _bDrag = {type:type, idx:idx, sx:event.clientX, sy:event.clientY, px:xy.x, py:xy.y};
+  _bDragMoved = false;
+  event.stopPropagation();
+  event.preventDefault();
+}
+
+document.addEventListener('mousemove', function(e) {
+  if (!_bDrag) return;
+  var dx = e.clientX - _bDrag.sx, dy = e.clientY - _bDrag.sy;
+  if (!_bDragMoved && Math.abs(dx)<4 && Math.abs(dy)<4) return;
+  _bDragMoved = true;
+  var el = getBannerEl(_bDrag.type, _bDrag.idx); if (!el) return;
+  var W = el.offsetWidth||320, H = el.offsetHeight||160;
+  var nx = Math.max(0,Math.min(100, _bDrag.px - dx/W*120));
+  var ny = Math.max(0,Math.min(100, _bDrag.py - dy/H*120));
+  applyBgPos(getBg(el), nx.toFixed(1)+'% '+ny.toFixed(1)+'%');
+  el.style.cursor = 'grabbing';
+});
+
+document.addEventListener('mouseup', function(e) {
+  if (!_bDrag) return;
+  var el = getBannerEl(_bDrag.type, _bDrag.idx);
+  if (el) el.style.cursor = '';
+  if (_bDragMoved && el) {
+    var bg = getBg(el);
+    var pos = bg ? (bg.tagName==='VIDEO' ? bg.style.transformOrigin : bg.style.backgroundPosition) : '50% 50%';
+    getBannerArr(_bDrag.type)[_bDrag.idx].pos = pos;
+    salvarBanners();
+    var cardPfx = _bDrag.type==='topo'?'bctopo':(_bDrag.type==='meio'?'bcmeio':'bcst');
+    var card = document.getElementById(cardPfx+_bDrag.idx);
+    if (card) card.querySelectorAll('.pos-btn').forEach(function(b){b.classList.remove('pos-on');});
+  }
+  _bDrag = null;
+});
+
+function uploadBannerTopo(i) {
+  if (_bDragMoved) { _bDragMoved=false; return; }
+  document.getElementById('bfTopo'+i).click();
+}
+
+function handleDropBannerTopo(i, files) {
+  if (!files || !files[0]) return;
+  var fakeInput = { files: files };
+  processarBannerTopo(i, fakeInput);
+}
+
+function handleDropBannerMeio(i, files) {
+  if (!files || !files[0]) return;
+  var fakeInput = { files: files };
+  processarBannerMeio(i, fakeInput);
+}
+
+function setPosGeneric(type, i, pos) {
+  getBannerArr(type)[i].pos = pos;
+  salvarBanners();
+  var el = getBannerEl(type, i);
+  applyBgPos(getBg(el), pos);
+  var cardId = (type==='topo'?'bctopo':(type==='meio'?'bcmeio':'bcst'))+i;
+  var card = document.getElementById(cardId);
+  if (card) card.querySelectorAll('.pos-btn').forEach(function(btn){
+    btn.classList.toggle('pos-on', btn.title === pos);
+  });
+}
+function setPosTopo(i, pos) { setPosGeneric('topo', i, pos); }
+function setPosMeio(i, pos) { setPosGeneric('meio', i, pos); }
+function setPosStories(i, pos) { setPosGeneric('stories', i, pos); }
+
+function setBannerZoom(type, idx, val) {
+  val = Math.max(0.3, Math.min(3, val));
+  getBannerArr(type)[idx].zoom = val;
+  salvarBanners();
+  var el = getBannerEl(type, idx);
+  var bg = getBg(el);
+  if (bg) bg.style.transform = 'scale('+val+')';
+  var prefix = type==='topo'?'Topo':(type==='meio'?'Meio':'St');
+  var lbl = document.getElementById('zlbl'+prefix+idx);
+  if (lbl) lbl.textContent = Math.round(val*100)+'%';
+}
 
 function processarBannerTopo(i, input) {
   var file = input.files[0]; if (!file) return;
@@ -890,7 +1233,9 @@ function processarBannerTopo(i, input) {
       toast('⏳ Enviando banner...');
       uploadParaGitHub(dataUrl, path)
         .then(function() {
-          bannersTopo[i].img = path;
+          var owner = localStorage.getItem('zum-gh-owner') || GH_OWNER;
+          var repo  = localStorage.getItem('zum-gh-repo')  || GH_REPO;
+          bannersTopo[i].img = 'https://raw.githubusercontent.com/'+owner+'/'+repo+'/main/'+path;
           salvarBanners(); renderTopo();
           toast('✓ Banner publicado!');
         })
@@ -942,11 +1287,31 @@ function bannerMeioCard(b, i) {
       '</label>'+
     '</div>'+
     '<div class="banner-card-body'+(b.ativo?'':' disabled')+'" id="bcmeio-body'+i+'">'+
-      '<div class="banner-preview meio" onclick="uploadBannerMeio('+i+')" style="'+(imgSrc&&!isVideoSrc(imgSrc)?'background-image:url(\''+imgSrc+'\');background-size:cover;background-position:center':'')+'">'+
-        (imgSrc&&isVideoSrc(imgSrc)?'<video src="'+imgSrc+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55" autoplay muted loop playsinline></video>':'')+
-        (imgSrc?'':'<div class="prev-empty">📷 Clique para adicionar imagem ou vídeo</div>')+
-        '<div class="upload-hover">'+(imgSrc?'↺ Trocar':'+ Imagem / Vídeo / GIF')+'</div>'+
+      '<div class="banner-preview meio'+(imgSrc?' has-img':'')+'" id="meioPrev'+i+'"'+
+        ' onclick="uploadBannerMeio('+i+')"'+
+        ' onmousedown="startBannerDrag(\'meio\','+i+',event)"'+
+        ' ondragover="event.preventDefault();this.classList.add(\'drag-over\')"'+
+        ' ondragleave="this.classList.remove(\'drag-over\')"'+
+        ' ondrop="event.preventDefault();this.classList.remove(\'drag-over\');handleDropBannerMeio('+i+',event.dataTransfer.files)"'+
+        '>'+
+        (imgSrc&&!isVideoSrc(imgSrc)?'<div class="bn-bg" style="position:absolute;inset:0;background-image:url(\''+imgSrc+'\');background-size:cover;background-position:'+(b.pos||'50% 50%')+';transform:scale('+(b.zoom||1)+');transform-origin:'+(b.pos||'50% 50%')+'"></div>':'')+
+        (imgSrc&&isVideoSrc(imgSrc)?'<video class="bn-bg" src="'+imgSrc+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.6;transform:scale('+(b.zoom||1)+');transform-origin:'+(b.pos||'50% 50%')+'" autoplay muted loop playsinline></video>':'')+
+        '<div class="prev-empty" style="'+(imgSrc?'visibility:hidden;':'')+'">📷 Clique ou arraste imagem/vídeo</div>'+
+        '<div class="upload-hover">'+(imgSrc?'↺ Trocar':'+ Arraste ou clique')+'</div>'+
       '</div>'+
+      (imgSrc?'<div class="pos-controls">'+
+        '<span style="font-size:9px;color:#888;letter-spacing:.5px;text-transform:uppercase">Posição:</span>'+
+        ['top left','top center','top right','center left','center','center right','bottom left','bottom center','bottom right'].map(function(pos){
+          var label={'top left':'↖','top center':'↑','top right':'↗','center left':'←','center':'·','center right':'→','bottom left':'↙','bottom center':'↓','bottom right':'↘'}[pos];
+          return '<button class="pos-btn'+((b.pos||'50% 50%')===pos?' pos-on':'')+'" onclick="setPosMeio('+i+',\''+pos+'\')" title="'+pos+'">'+label+'</button>';
+        }).join('')+
+      '</div>':'')+
+      (imgSrc?'<div class="zoom-controls">'+
+        '<span title="Zoom">⊕</span>'+
+        '<input type="range" min="0.3" max="3" step="0.05" value="'+(b.zoom||1)+'" oninput="setBannerZoom(\'meio\','+i+',+this.value)">'+
+        '<span id="zlblMeio'+i+'">'+(Math.round((b.zoom||1)*100))+'%</span>'+
+        '<button class="zoom-reset" onclick="setBannerZoom(\'meio\','+i+',1);this.closest(\'.zoom-controls\').querySelector(\'input\').value=1">↺</button>'+
+      '</div>':'')+
       '<input type="file" id="bfMeio'+i+'" accept="image/jpeg,image/png,image/gif,image/webp,video/mp4,video/quicktime,.mov,.mp4,.gif,.png,.jpg" style="display:none" onchange="processarBannerMeio('+i+',this)">'+
       (imgSrc?'<div style="font-size:9px;color:#27ae60;margin-bottom:8px">✓ '+imgSrc+'</div>':'')+
       '<div class="banner-row">'+
@@ -980,7 +1345,10 @@ function updateMeioSku(i) {
   salvarBanners(); renderMeio();
 }
 
-function uploadBannerMeio(i) { document.getElementById('bfMeio'+i).click(); }
+function uploadBannerMeio(i) {
+  if (_bDragMoved) { _bDragMoved=false; return; }
+  document.getElementById('bfMeio'+i).click();
+}
 
 function processarBannerMeio(i, input) {
   var file = input.files[0]; if (!file) return;
@@ -998,7 +1366,9 @@ function processarBannerMeio(i, input) {
       toast('⏳ Enviando banner...');
       uploadParaGitHub(dataUrl, path)
         .then(function() {
-          bannersMeio[i].img = path;
+          var owner = localStorage.getItem('zum-gh-owner') || GH_OWNER;
+          var repo  = localStorage.getItem('zum-gh-repo')  || GH_REPO;
+          bannersMeio[i].img = 'https://raw.githubusercontent.com/'+owner+'/'+repo+'/main/'+path;
           salvarBanners(); renderMeio();
           toast('✓ Banner publicado!');
         })
@@ -1028,9 +1398,146 @@ function salvarLocal() {
   localStorage.setItem('zum-catalogo-version', CATALOGO_VERSION);
 }
 
+/* ==================== BANNERS STORIES ==================== */
+function renderStories() {
+  document.getElementById('listaStories').innerHTML = bannerStories.map(function(b,i) {
+    return bannerStoriesCard(b, i);
+  }).join('');
+  bannerStories.forEach(function(b,i){
+    var sel = document.getElementById('stSku'+i);
+    if (sel && b.sku) sel.value = b.sku;
+  });
+  document.getElementById('btnAddStories').style.display = bannerStories.length >= 5 ? 'none' : 'block';
+}
+
+function bannerStoriesCard(b, i) {
+  var imgSrc = b.img || '';
+  var isVid = isVideoSrc(imgSrc);
+  var opts = '<option value="">— Sem link —</option>' +
+    catalogo.map(function(p){ return '<option value="'+p.sku+'">'+p.nome+' ('+p.sku+')</option>'; }).join('');
+  var layout = b.layout || 'full';
+
+  return '<div class="banner-card'+(b.ativo?' ativo':'')+'" id="bcst'+i+'">'+
+    '<div class="banner-card-hd">'+
+      '<span class="num">'+(i+1)+'</span>'+
+      '<span class="label">Stories '+(i+1)+'</span>'+
+      '<label class="tgl-lrg">'+
+        '<input type="checkbox" '+(b.ativo?'checked':'')+' onchange="toggleStories('+i+')">'+
+        '<span class="tgl-s"></span>'+
+      '</label>'+
+    '</div>'+
+    '<div class="banner-card-body'+(b.ativo?'':' disabled')+'" id="bcst-body'+i+'">'+
+      // Layout toggle
+      '<div class="st-layout-row">'+
+        '<span style="font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.5px">Layout:</span>'+
+        '<button class="st-lay-btn'+(layout==='full'?' on':'')+'" onclick="setStoriesLayout('+i+',\'full\')">▮ Largura total</button>'+
+        '<button class="st-lay-btn'+(layout==='half'?' on':'')+'" onclick="setStoriesLayout('+i+',\'half\')">▌ Meia col. + produto</button>'+
+      '</div>'+
+      // Preview
+      '<div class="banner-preview stories'+(imgSrc?' has-img':'')+'" id="stPrev'+i+'"'+
+        ' onclick="uploadStories('+i+')"'+
+        ' onmousedown="startBannerDrag(\'stories\','+i+',event)"'+
+        ' ondragover="event.preventDefault();this.classList.add(\'drag-over\')"'+
+        ' ondragleave="this.classList.remove(\'drag-over\')"'+
+        ' ondrop="event.preventDefault();this.classList.remove(\'drag-over\');handleDropStories('+i+',event.dataTransfer.files)"'+
+        '>'+
+        (imgSrc&&!isVid?'<div class="bn-bg" style="position:absolute;inset:0;background-image:url(\''+imgSrc+'\');background-size:cover;background-position:'+(b.pos||'50% 50%')+';transform:scale('+(b.zoom||1)+');transform-origin:'+(b.pos||'50% 50%')+'"></div>':'')+
+        (imgSrc&&isVid?'<video class="bn-bg" src="'+imgSrc+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale('+(b.zoom||1)+');transform-origin:'+(b.pos||'50% 50%')+'" autoplay muted loop playsinline></video>':'')+
+        '<div class="prev-empty" style="'+(imgSrc?'visibility:hidden;':'')+'">📱 Clique ou arraste · 9:16 Stories</div>'+
+        '<div class="upload-hover">'+(imgSrc?'↺ Trocar':'+ Arraste ou clique')+'</div>'+
+      '</div>'+
+      (imgSrc?'<div class="pos-controls">'+
+        '<span style="font-size:9px;color:#888;letter-spacing:.5px;text-transform:uppercase">Posição:</span>'+
+        ['top left','top center','top right','center left','center','center right','bottom left','bottom center','bottom right'].map(function(pos){
+          var lbl={'top left':'↖','top center':'↑','top right':'↗','center left':'←','center':'·','center right':'→','bottom left':'↙','bottom center':'↓','bottom right':'↘'}[pos];
+          return '<button class="pos-btn'+((b.pos||'50% 50%')===pos?' pos-on':'')+'" onclick="setPosStories('+i+',\''+pos+'\')" title="'+pos+'">'+lbl+'</button>';
+        }).join('')+
+      '</div>':'')+
+      (imgSrc?'<div class="zoom-controls">'+
+        '<span title="Zoom">⊕</span>'+
+        '<input type="range" min="0.3" max="3" step="0.05" value="'+(b.zoom||1)+'" oninput="setBannerZoom(\'stories\','+i+',+this.value)">'+
+        '<span id="zlblSt'+i+'">'+(Math.round((b.zoom||1)*100))+'%</span>'+
+        '<button class="zoom-reset" onclick="setBannerZoom(\'stories\','+i+',1);this.closest(\'.zoom-controls\').querySelector(\'input\').value=1">↺</button>'+
+      '</div>':'')+
+      '<input type="file" id="bfSt'+i+'" accept="image/jpeg,image/png,image/webp,video/mp4,video/quicktime,.mov,.mp4,.png,.jpg" style="display:none" onchange="processarStories('+i+',this)">'+
+      (imgSrc?'<div style="font-size:9px;color:#27ae60;margin-bottom:8px">✓ '+imgSrc+'</div>':'')+
+      '<div class="banner-row">'+
+        '<div class="bfield"><label>Produto vinculado (ao clicar)</label><select id="stSku'+i+'" onchange="bannerStories['+i+'].sku=this.value;salvarBanners()">'+opts+'</select></div>'+
+        '<div class="bfield"><label>Aparece após produto nº</label>'+
+          '<input type="number" id="stAfter'+i+'" value="'+(b.after||4)+'" min="1" max="50" onchange="bannerStories['+i+'].after=parseInt(this.value)||4;salvarBanners()">'+
+        '</div>'+
+      '</div>'+
+      '<button class="btn-del-banner" onclick="delStories('+i+')">🗑 Remover</button>'+
+    '</div>'+
+  '</div>';
+}
+
+function setStoriesLayout(i, layout) {
+  bannerStories[i].layout = layout;
+  salvarBanners(); renderStories();
+}
+
+function toggleStories(i) {
+  bannerStories[i].ativo = document.getElementById('bcst'+i).querySelector('input[type=checkbox]').checked;
+  salvarBanners(); renderStories();
+}
+
+function uploadStories(i) {
+  if (_bDragMoved) { _bDragMoved=false; return; }
+  document.getElementById('bfSt'+i).click();
+}
+
+function handleDropStories(i, files) {
+  if (!files || !files[0]) return;
+  processarStories(i, {files: files});
+}
+
+function processarStories(i, input) {
+  var file = input.files[0]; if (!file) return;
+  var token = localStorage.getItem('zum-gh-token');
+  var ext = extFromFile(file);
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var dataUrl = e.target.result;
+    if (!token) {
+      bannerStories[i].img = dataUrl;
+      salvarBanners(); renderStories();
+      toast('⚠ Stories salvo localmente. Configure o GitHub Token para publicar.');
+    } else {
+      var path = 'BANNERS/STORIES/stories-0'+(i+1)+'.'+ext;
+      toast('⏳ Enviando stories...');
+      uploadParaGitHub(dataUrl, path)
+        .then(function() {
+          var owner = localStorage.getItem('zum-gh-owner') || GH_OWNER;
+          var repo  = localStorage.getItem('zum-gh-repo')  || GH_REPO;
+          bannerStories[i].img = 'https://raw.githubusercontent.com/'+owner+'/'+repo+'/main/'+path;
+          salvarBanners(); renderStories();
+          toast('✓ Stories publicado!');
+        })
+        .catch(function(err){ toast('❌ '+err.message); });
+    }
+  };
+  reader.readAsDataURL(file);
+  if (input.value !== undefined) input.value = '';
+}
+
+function addBannerStories() {
+  if (bannerStories.length >= 5) return;
+  bannerStories.push({ativo:false,sku:'',after:4,img:'',layout:'full'});
+  salvarBanners(); renderStories();
+}
+
+function delStories(i) {
+  if (!confirm('Remover este stories?')) return;
+  bannerStories.splice(i,1);
+  if (!bannerStories.length) bannerStories = [{ativo:false,sku:'',after:4,img:'',layout:'full'}];
+  salvarBanners(); renderStories();
+}
+
 function salvarBanners() {
   localStorage.setItem('zum-banners-topo', JSON.stringify(bannersTopo));
   localStorage.setItem('zum-banners', JSON.stringify(bannersMeio));
+  localStorage.setItem('zum-banners-stories', JSON.stringify(bannerStories));
 }
 
 /* ==================== SINCRONIZAR ==================== */
@@ -1083,6 +1590,60 @@ function sincronizar() {
     .catch(function(){ toast('❌ Não conectou. Verifique URL e token.'); });
 }
 
+/* ==================== TESTAR GITHUB ==================== */
+async function testarGitHub() {
+  var token = (localStorage.getItem('zum-gh-token')||'').trim();
+  var owner = localStorage.getItem('zum-gh-owner') || GH_OWNER;
+  var repo  = localStorage.getItem('zum-gh-repo')  || GH_REPO;
+
+  if (!token) { toast('⚠ Token não configurado. Cole o token e clique fora do campo.'); return; }
+
+  toast('🔍 Testando conexão...');
+
+  try {
+    // 1. Testa autenticação
+    var r1 = await fetch('https://api.github.com/user', {
+      headers: {'Authorization': 'Bearer '+token, 'Accept': 'application/vnd.github+json'}
+    });
+    if (r1.status === 401) { toast('❌ Token inválido (401) — gere um novo token'); return; }
+    var user = await r1.json();
+
+    // 2. Testa acesso ao repo
+    var r2 = await fetch('https://api.github.com/repos/'+owner+'/'+repo, {
+      headers: {'Authorization': 'Bearer '+token, 'Accept': 'application/vnd.github+json'}
+    });
+    if (r2.status === 404) { toast('❌ Repo não encontrado (404) — verifique owner/repo e se o token tem scope "repo"'); return; }
+    if (r2.status === 403) { toast('❌ Sem permissão (403) — token precisa do scope "repo" completo'); return; }
+    if (!r2.ok) { toast('❌ Erro '+r2.status+' ao acessar repo'); return; }
+
+    // 3. Testa upload de arquivo de teste
+    var testPath = '.zum-test';
+    var testContent = btoa('zum-ok');
+    var testApi = 'https://api.github.com/repos/'+owner+'/'+repo+'/contents/'+testPath;
+    var sha = null;
+    try {
+      var rsha = await fetch(testApi, {headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json'}});
+      if (rsha.ok) sha = (await rsha.json()).sha;
+    } catch(e) {}
+    var testBody = {message:'Teste de upload', content:testContent};
+    if (sha) testBody.sha = sha;
+    var r3 = await fetch(testApi, {
+      method:'PUT',
+      headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json','Content-Type':'application/json'},
+      body: JSON.stringify(testBody)
+    });
+    if (!r3.ok) {
+      var e3 = await r3.json().catch(function(){return{};});
+      toast('✓ Auth OK mas upload falhou: HTTP '+r3.status+' — '+JSON.stringify(e3));
+      return;
+    }
+
+    toast('✓ Tudo OK! Usuário: '+user.login+' · Upload funciona · Pode publicar!');
+  } catch(e) {
+    toast('❌ Erro de rede: '+e.message+' (CORS ou sem internet)');
+  }
+}
+
 /* ==================== UPLOAD PARA GITHUB ==================== */
 async function uploadParaGitHub(dataUrl, path) {
   var token = (localStorage.getItem('zum-gh-token')||'').trim();
@@ -1108,9 +1669,68 @@ async function uploadParaGitHub(dataUrl, path) {
   });
   if (!r.ok) {
     var err = await r.json().catch(function(){ return {}; });
-    throw new Error(err.message || 'GitHub API '+r.status);
+    throw new Error('HTTP '+r.status+': '+(err.message || 'erro desconhecido'));
   }
   return path;
+}
+
+// Comprime imagem via Canvas (max 1200px, JPEG 82%). Vídeos e GIFs passam sem alteração.
+function comprimirImagem(file) {
+  return new Promise(function(resolve) {
+    var isVideo = /video/i.test(file.type) || /\.(mp4|mov|webm)$/i.test(file.name);
+    var isGif   = /gif/i.test(file.type) || /\.gif$/i.test(file.name);
+    if (isVideo || isGif) {
+      var r = new FileReader();
+      r.onload = function(e){ resolve({dataUrl: e.target.result, originalKB: Math.round(file.size/1024), finalKB: Math.round(file.size/1024), compressed: false}); };
+      r.readAsDataURL(file);
+      return;
+    }
+    var img = new Image();
+    var url = URL.createObjectURL(file);
+    img.onload = function() {
+      URL.revokeObjectURL(url);
+      var MAX = 1200;
+      var w = img.width, h = img.height;
+      if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
+      var canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      var ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+      var dataUrl = canvas.toDataURL('image/png');
+      var finalKB = Math.round(dataUrl.length * 0.75 / 1024);
+      resolve({dataUrl: dataUrl, originalKB: Math.round(file.size/1024), finalKB: finalKB, compressed: true});
+    };
+    img.onerror = function() {
+      var r = new FileReader();
+      r.onload = function(e){ resolve({dataUrl: e.target.result, originalKB: Math.round(file.size/1024), finalKB: Math.round(file.size/1024), compressed: false}); };
+      r.readAsDataURL(file);
+    };
+    img.src = url;
+  });
+}
+
+function toBase64(str) {
+  // Converte string UTF-8 para base64 sem usar btoa(unescape(encodeURIComponent))
+  var bytes = new TextEncoder().encode(str);
+  var binary = '';
+  bytes.forEach(function(b){ binary += String.fromCharCode(b); });
+  return btoa(binary);
+}
+
+async function getShaGitHub(api, token) {
+  // Busca SHA sem baixar o conteúdo do arquivo (economiza banda e evita timeout)
+  try {
+    var r = await fetch(api, {
+      headers: {
+        'Authorization': 'Bearer '+token,
+        'Accept': 'application/vnd.github+json',
+        'X-GitHub-Api-Version': '2022-11-28'
+      }
+    });
+    if (!r.ok) return null;
+    var d = await r.json();
+    return d.sha || null;
+  } catch(e) { return null; }
 }
 
 async function uploadJsonParaGitHub(conteudo, path) {
@@ -1118,26 +1738,45 @@ async function uploadJsonParaGitHub(conteudo, path) {
   if (!token) throw new Error('Token GitHub não configurado');
   var owner = localStorage.getItem('zum-gh-owner') || GH_OWNER;
   var repo  = localStorage.getItem('zum-gh-repo')  || GH_REPO;
-  var base64 = btoa(unescape(encodeURIComponent(conteudo)));
-  var api = 'https://api.github.com/repos/'+owner+'/'+repo+'/contents/'+path;
+  var api = 'https://api.github.com/repos/'+owner+'/'+repo+'/contents/'+encodeURIComponent(path).replace(/%2F/g,'/');
 
-  var sha = null;
-  try {
-    var res = await fetch(api, {headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json'}});
-    if (res.ok) sha = (await res.json()).sha;
-  } catch(e) {}
+  var base64;
+  try { base64 = toBase64(conteudo); }
+  catch(e) { base64 = btoa(unescape(encodeURIComponent(conteudo))); }
+
+  var sha = await getShaGitHub(api, token);
 
   var body = {message:'Publicar: '+path, content:base64};
   if (sha) body.sha = sha;
 
   var r = await fetch(api, {
     method:'PUT',
-    headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json','Content-Type':'application/json'},
+    headers:{
+      'Authorization':'Bearer '+token,
+      'Accept':'application/vnd.github+json',
+      'Content-Type':'application/json',
+      'X-GitHub-Api-Version':'2022-11-28'
+    },
     body: JSON.stringify(body)
   });
   if (!r.ok) {
     var err = await r.json().catch(function(){ return {}; });
-    throw new Error(err.message || 'GitHub API '+r.status);
+    // Se falhou por SHA inválido, tenta sem SHA
+    if (r.status === 409 || (err.message||'').toLowerCase().includes('sha')) {
+      body.sha = undefined;
+      delete body.sha;
+      var r2 = await fetch(api, {
+        method:'PUT',
+        headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json','Content-Type':'application/json','X-GitHub-Api-Version':'2022-11-28'},
+        body: JSON.stringify(body)
+      });
+      if (!r2.ok) {
+        var err2 = await r2.json().catch(function(){ return {}; });
+        throw new Error('HTTP '+r2.status+': '+(err2.message||'erro'));
+      }
+      return;
+    }
+    throw new Error('HTTP '+r.status+': '+(err.message || 'erro desconhecido'));
   }
 }
 
@@ -1165,29 +1804,61 @@ async function publicarTudo() {
             // Se já é caminho relativo (FOTOS/...) ou URL: usa como está
             return (f.startsWith('FOTOS')||f.startsWith('http')) ? f : 'FOTOS/'+p.sku+'/midia-0'+(fi+1)+'.jpg';
           }),
+          fotosCores: (function(){
+            var fc = p.fotosCores || {};
+            var out = {};
+            Object.keys(fc).forEach(function(cor){
+              out[cor] = (fc[cor]||[]).filter(function(f){ return f && !f.startsWith('data:') && f!=='__uploading__'; });
+              if (!out[cor].length) delete out[cor];
+            });
+            return out;
+          })(),
           ordem: i + 1
         };
       })
     }, null, 2);
 
+    toast('⏳ Subindo produtos.json...');
     await uploadJsonParaGitHub(produtosJson, 'produtos.json');
+    toast('⏳ produtos.json OK · Subindo banners.json...');
 
     // 2. Gera banners.json
     var bannersJson = JSON.stringify({
       geradoEm: new Date().toISOString(),
+      asUrl: localStorage.getItem('zum-as-url') || '',
       topo: bannersTopo.filter(function(b){ return b.ativo && (b.img||b.titulo); }).map(function(b){
-        return {ativo:true, tag:b.tag||'', titulo:b.titulo||'', sub:b.sub||'', img:b.img||''};
+        return {ativo:true, tag:b.tag||'', titulo:b.titulo||'', sub:b.sub||'', img:b.img||'', pos:b.pos||'50% 50%', zoom:b.zoom||1};
       }),
       meio: bannersMeio.filter(function(b){ return b.ativo && b.img; }).map(function(b){
-        return {ativo:true, sku:b.sku, after:b.after||2, img:b.img, mk:b.mk||'', mt:b.mt||''};
+        return {ativo:true, sku:b.sku, after:b.after||2, img:b.img, mk:b.mk||'', mt:b.mt||'', pos:b.pos||'50% 50%', zoom:b.zoom||1};
+      }),
+      stories: bannerStories.filter(function(b){ return b.ativo && b.img; }).map(function(b){
+        return {ativo:true, sku:b.sku||'', after:b.after||4, img:b.img, layout:b.layout||'full', pos:b.pos||'50% 50%', zoom:b.zoom||1};
       })
     }, null, 2);
 
     await uploadJsonParaGitHub(bannersJson, 'banners.json');
+    toast('⏳ banners.json OK · Subindo catalogo.html...');
+
+    // 3. Publica catalogo.html (o arquivo HTML do catálogo em si)
+    try {
+      var rcat = await fetch('./catalogo.html', {cache:'no-store'});
+      if (rcat.ok) {
+        var catalogoHtml = await rcat.text();
+        await uploadJsonParaGitHub(catalogoHtml, 'catalogo.html');
+      }
+    } catch(e2) {
+      // Se o browser bloqueou o fetch local, ignora — JSONs já foram publicados
+      console.warn('Não foi possível publicar catalogo.html automaticamente:', e2);
+    }
+
+    var owner = localStorage.getItem('zum-gh-owner') || GH_OWNER;
+    var repo  = localStorage.getItem('zum-gh-repo')  || GH_REPO;
+    var linkPublico = 'https://'+owner+'.github.io/'+repo+'/catalogo.html';
 
     btn.disabled = false;
     btn.textContent = '🚀 Publicar Tudo';
-    toast('✓ Publicado! Catálogo atualiza em ~30 segundos.');
+    toast('✓ Publicado! Acesse: '+linkPublico);
   } catch(e) {
     btn.disabled = false;
     btn.textContent = '🚀 Publicar Tudo';
@@ -1208,8 +1879,93 @@ function toast(msg) {
   _toastTimer = setTimeout(function(){ t.classList.remove('on'); }, 3500);
 }
 
+/* ==================== SINCRONIZAR FOTOS BASE64 → GITHUB ==================== */
+async function sincronizarFotos() {
+  var token = (localStorage.getItem('zum-gh-token')||'').trim();
+  if (!token) { setTab('config'); toast('⚠ Configure o GitHub Token em ⚙ Config'); return; }
+
+  var btn = document.getElementById('btnSincFotos');
+  var hint = document.getElementById('hintSincFotos');
+  btn.disabled = true;
+  btn.textContent = '⏳ Subindo fotos...';
+  hint.style.display = 'none';
+
+  var owner = localStorage.getItem('zum-gh-owner') || GH_OWNER;
+  var repo  = localStorage.getItem('zum-gh-repo')  || GH_REPO;
+  var total = 0, erros = 0;
+
+  for (var pi = 0; pi < catalogo.length; pi++) {
+    var p = catalogo[pi];
+    var fotos = p.fotos || [];
+    for (var fi = 0; fi < fotos.length; fi++) {
+      if (!fotos[fi] || !fotos[fi].startsWith('data:')) continue;
+      var ext = fotos[fi].indexOf('data:video') >= 0 ? 'mp4' : 'jpg';
+      var nFoto = fi + 1;
+      var path = 'FOTOS/' + p.sku + '/midia-0' + nFoto + '.' + ext;
+      try {
+        await uploadParaGitHub(fotos[fi], path);
+        catalogo[pi].fotos[fi] = 'https://raw.githubusercontent.com/' + owner + '/' + repo + '/main/' + path;
+        total++;
+      } catch(e) {
+        erros++;
+        console.warn('Erro ao subir foto', path, e);
+      }
+    }
+    // Fotos por cor
+    var fc = p.fotosCores || {};
+    for (var cor in fc) {
+      var corFotos = fc[cor] || [];
+      for (var ci = 0; ci < corFotos.length; ci++) {
+        if (!corFotos[ci] || !corFotos[ci].startsWith('data:')) continue;
+        var extc = corFotos[ci].indexOf('data:video') >= 0 ? 'mp4' : 'jpg';
+        var pathc = 'FOTOS/' + p.sku + '/cor-' + cor.toLowerCase().replace(/\s/g,'-') + '-' + (ci+1) + '.' + extc;
+        try {
+          await uploadParaGitHub(corFotos[ci], pathc);
+          catalogo[pi].fotosCores[cor][ci] = 'https://raw.githubusercontent.com/' + owner + '/' + repo + '/main/' + pathc;
+          total++;
+        } catch(e) {
+          erros++;
+        }
+      }
+    }
+  }
+
+  salvarLocal();
+  btn.disabled = false;
+  btn.textContent = '📸 Subir fotos p/ GitHub';
+
+  if (total > 0) {
+    hint.style.display = 'block';
+    hint.textContent = '✓ ' + total + ' foto(s) enviada(s) para o GitHub.' + (erros > 0 ? ' (' + erros + ' erro(s))' : '') + ' Clique em 🚀 Publicar agora para atualizar o catálogo.';
+    toast('✓ ' + total + ' fotos subidas! Clique em Publicar agora.');
+  } else if (erros > 0) {
+    toast('❌ Erro ao subir fotos. Verifique o token.');
+  } else {
+    toast('ℹ Nenhuma foto local encontrada — todas já estão no GitHub.');
+  }
+}
+
+/* ==================== LINK PÚBLICO ==================== */
+function atualizarLinkCatalogo() {
+  var owner = (document.getElementById('cfOwner') && document.getElementById('cfOwner').value) || localStorage.getItem('zum-gh-owner') || GH_OWNER;
+  var repo  = (document.getElementById('cfRepo')  && document.getElementById('cfRepo').value)  || localStorage.getItem('zum-gh-repo')  || GH_REPO;
+  var link = 'https://'+owner+'.github.io/'+repo+'/catalogo.html';
+  var el = document.getElementById('cfLinkPublico');
+  if (el) el.value = link;
+  var hint = document.getElementById('hintPages');
+  if (hint) hint.innerHTML = 'Para ativar o link: vá em <b>github.com/'+owner+'/'+repo+'</b> → Settings → Pages → Source → main → / (root) → Save';
+}
+function copiarLinkCatalogo() {
+  var el = document.getElementById('cfLinkPublico');
+  if (!el) return;
+  el.select();
+  document.execCommand('copy');
+  toast('✓ Link copiado!');
+}
+
 /* ==================== START ==================== */
 init();
+atualizarLinkCatalogo();
 </script>
 </body>
 </html>
