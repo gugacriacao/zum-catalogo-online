@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-06-30T21:43:47.955Z",
+  "geradoEm": "2026-06-26T16:44:43.534Z",
   "produtos": [
     {
       "sku": "ZUM-VDRC-105",
@@ -16,14 +16,12 @@
       ],
       "stock": "Em estoque",
       "badge": "",
-      "destaque": "",
       "estoqueNum": 1,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-01.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-02.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-03.png"
       ],
-      "fotosCores": {},
       "ordem": 1
     },
     {
@@ -43,10 +41,8 @@
       ],
       "stock": "Em estoque",
       "badge": "",
-      "destaque": "",
       "estoqueNum": 9,
       "fotos": [],
-      "fotosCores": {},
       "ordem": 2
     },
     {
@@ -65,10 +61,8 @@
       ],
       "stock": "Em estoque",
       "badge": "",
-      "destaque": "",
       "estoqueNum": 8,
       "fotos": [],
-      "fotosCores": {},
       "ordem": 3
     },
     {
@@ -86,14 +80,12 @@
       ],
       "stock": "Em estoque",
       "badge": "",
-      "destaque": "",
       "estoqueNum": 3,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDBT-102/midia-01.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDBT-102/midia-02.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDBT-102/midia-03.png"
       ],
-      "fotosCores": {},
       "ordem": 4
     },
     {
@@ -111,10 +103,8 @@
       ],
       "stock": "Em estoque",
       "badge": "",
-      "destaque": "",
       "estoqueNum": 5,
       "fotos": [],
-      "fotosCores": {},
       "ordem": 5
     },
     {
@@ -131,10 +121,8 @@
       ],
       "stock": "Em estoque",
       "badge": "",
-      "destaque": "",
       "estoqueNum": 3,
       "fotos": [],
-      "fotosCores": {},
       "ordem": 6
     },
     {
@@ -151,10 +139,8 @@
       ],
       "stock": "Em estoque",
       "badge": "",
-      "destaque": "",
       "estoqueNum": 3,
       "fotos": [],
-      "fotosCores": {},
       "ordem": 7
     }
   ]
