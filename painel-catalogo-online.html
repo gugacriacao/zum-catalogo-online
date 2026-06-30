@@ -420,7 +420,7 @@ body{font-family:-apple-system,sans-serif;background:#f4f4f4;min-height:100vh}
         <input type="text" id="mEstoque" placeholder="Ex: Poucas unidades em M">
       </div>
       <div class="mfield">
-        <label>Mídias do produto <span id="fotosCountLbl" style="font-size:9px;color:#bbb;font-weight:400;text-transform:none;letter-spacing:0">0 / 3 mídias</span></label>
+        <label>Mídias do produto <span id="fotosCountLbl" style="font-size:9px;color:#bbb;font-weight:400;text-transform:none;letter-spacing:0">0 / 5 mídias</span></label>
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
           <span style="background:#f4f4f4;border:1px solid #e0e0e0;padding:3px 8px;font-size:9px;color:#555;letter-spacing:.5px">
             🖼 <b>Card (vitrine)</b> · 3:4 retrato · ideal <b>480 × 640 px</b>
@@ -569,34 +569,45 @@ async function carregarDoGitHub() {
   var repo  = GH_REPO  || 'zum-catalogo-online';
   var base  = 'https://raw.githubusercontent.com/'+owner+'/'+repo+'/main/';
 
-  // Produtos
+  // Produtos — mescla GitHub com PRODUTOS_INICIAIS para garantir lista completa
   try {
     var rp = await fetch(base+'produtos.json?_='+Date.now(), {cache:'no-store'});
     if (rp.ok) {
       var dp = await rp.json();
-      if (dp.produtos && dp.produtos.length) {
-        catalogo = dp.produtos.map(function(p) {
-          return {
-            sku: p.sku, nome: p.nome||p.name, cat: p.cat,
-            preco: p.preco||p.price, cores: p.cores||[],
-            tamanhos: p.tamanhos||[], stock: p.stock||'',
-            badge: p.badge||'', destaque: p.destaque||'',
-            fotos: p.fotos||[], fotosCores: p.fotosCores||{},
-            estoqueNum: p.estoqueNum||0, ativo: p.ativo !== false,
-            ordem: p.ordem||0, syncBadge: false
-          };
-        });
-        salvarLocal();
-        renderGrid();
-      }
+      var ghProds = (dp.produtos||[]).map(function(p) {
+        return {
+          sku: p.sku, nome: p.nome||p.name, cat: p.cat,
+          preco: p.preco||p.price, cores: p.cores||[],
+          tamanhos: p.tamanhos||[], stock: p.stock||'',
+          badge: p.badge||'', destaque: p.destaque||'',
+          fotos: p.fotos||[], fotosCores: p.fotosCores||{},
+          estoqueNum: p.estoqueNum||0, ativo: p.ativo !== false,
+          ordem: p.ordem||0, syncBadge: false
+        };
+      });
+      // Adiciona produtos do PRODUTOS_INICIAIS que não existem no GitHub
+      var ghSkus = ghProds.map(function(p){ return p.sku; });
+      PRODUTOS_INICIAIS.forEach(function(pi) {
+        if (ghSkus.indexOf(pi.sku) < 0) {
+          ghProds.push({
+            sku: pi.sku, nome: pi.nome, cat: pi.cat,
+            preco: pi.preco, cores: pi.cores||[], tamanhos: pi.tamanhos||[],
+            stock: pi.stock||'', badge: pi.badge||'', destaque: '',
+            fotos: [], fotosCores: {}, estoqueNum: pi.estoqueNum||0,
+            ativo: false, ordem: 999, syncBadge: false
+          });
+        }
+      });
+      catalogo = ghProds;
+      salvarLocal();
     }
   } catch(e) {
     // Fallback localStorage
     var saved = localStorage.getItem('zum-catalogo');
     if (saved) { try { catalogo = JSON.parse(saved); } catch(e2) {} }
     if (!catalogo.length) { catalogo = JSON.parse(JSON.stringify(PRODUTOS_INICIAIS)); salvarLocal(); }
-    renderGrid();
   }
+  renderGrid();
 
   // Banners — tenta URL relativa primeiro (funciona local e no GitHub Pages)
   try {
@@ -717,7 +728,7 @@ function renderGrid() {
 
       '<div class="prod-footer">'+
         (p.badge?'<span class="badge-label">'+p.badge+'</span>':'')+
-        '<span class="media-count"><b>'+mediaCount+'</b>/3 mídia'+(mediaCount!==1?'s':'')+'</span>'+
+        '<span class="media-count"><b>'+mediaCount+'</b>/5 mídia'+(mediaCount!==1?'s':'')+'</span>'+
       '</div>'+
     '</div>';
   }).join('');
@@ -763,7 +774,7 @@ function setFiltroTab(tab) {
 
 /* ==================== HELPERS DE MÍDIA ==================== */
 var ACCEPT_MEDIA = 'image/jpeg,image/png,image/gif,image/webp,video/mp4,video/quicktime,.mov,.mp4,.gif,.png,.jpg,.jpeg';
-var MAX_MIDIAS = 3;
+var MAX_MIDIAS = 5;
 
 function isVideoSrc(src) {
   if (!src) return false;
