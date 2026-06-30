@@ -831,27 +831,61 @@ function abrirModalNovo() {
 
 function fecharModal() { document.getElementById('modalProd').classList.remove('on'); modalIdx=-1; }
 
+var _dragFotoIdx = null;
+
 function renderFotosModal(fotos) {
   var html = fotos.map(function(f,i){
     if (f === '__uploading__') {
       return '<div class="foto-uploading">⏳ Enviando...</div>';
     }
     var isVid = isVideoSrc(f);
-    return '<div class="foto-thumb" style="position:relative">'+
+    return '<div class="foto-thumb" draggable="true" data-idx="'+i+'" style="position:relative;cursor:grab;opacity:1;transition:opacity .15s"'+
+      ' ondragstart="fotoDragStart(event,'+i+')"'+
+      ' ondragover="fotoDragOver(event)"'+
+      ' ondragleave="fotoDragLeave(event)"'+
+      ' ondrop="fotoDrop(event,'+i+')"'+
+      ' ondragend="fotoDragEnd(event)">'+
       (isVid
         ? '<video src="'+f+'" style="width:100%;height:100%;object-fit:cover" muted playsinline></video><div class="video-badge">▶</div>'
         : '<img src="'+f+'" onerror="this.style.display=\'none\'">')+
-      '<button class="foto-del" onclick="delFotoModal('+i+')">✕</button>'+
+      '<button class="foto-del" onclick="event.stopPropagation();delFotoModal('+i+')">✕</button>'+
     '</div>';
   }).join('');
-  // Slot de adicionar: só aparece se tiver menos de MAX_MIDIAS
   if (fotos.length < MAX_MIDIAS) {
     html += '<div class="foto-add" onclick="document.getElementById(\'fotoInputModal\').click()" title="Aceita: JPG, PNG, GIF, MP4, MOV">+</div>';
   }
   document.getElementById('fotosGrid').innerHTML = html;
-  // Atualiza label de contador no modal
   var lbl = document.getElementById('fotosCountLbl');
   if (lbl) lbl.textContent = fotos.filter(function(f){return f!=='__uploading__';}).length + ' / ' + MAX_MIDIAS + ' mídias';
+}
+
+function fotoDragStart(e, i) {
+  _dragFotoIdx = i;
+  e.currentTarget.style.opacity = '0.4';
+  e.dataTransfer.effectAllowed = 'move';
+}
+function fotoDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  e.currentTarget.style.outline = '2px solid #111';
+}
+function fotoDragLeave(e) {
+  e.currentTarget.style.outline = '';
+}
+function fotoDrop(e, toIdx) {
+  e.preventDefault();
+  e.currentTarget.style.outline = '';
+  if (_dragFotoIdx === null || _dragFotoIdx === toIdx) return;
+  var fotos = modalIdx>=0 ? catalogo[modalIdx].fotos : window._novoFotos;
+  var moved = fotos.splice(_dragFotoIdx, 1)[0];
+  fotos.splice(toIdx, 0, moved);
+  _dragFotoIdx = null;
+  renderFotosModal(fotos);
+}
+function fotoDragEnd(e) {
+  e.currentTarget.style.opacity = '1';
+  e.currentTarget.style.outline = '';
+  _dragFotoIdx = null;
 }
 
 function delFotoModal(i) {
