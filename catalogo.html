@@ -1142,7 +1142,7 @@ function rotateBanner(){
 
 // Converte formato do gerenciador/JSON → formato PRODUCTS do catálogo
 function adaptarProdutos(lista){
-  return lista.map(function(p){
+  return lista.filter(function(p){ return p.ativo !== false; }).map(function(p){
     var bg = CAT_BG[p.cat] || '#f0ece8';
     var colors = (p.cores||[]).map(function(c){ return {n:c, c:COR_MAP[c]||'#ccc'}; });
     var semEstoque = (p.estoqueNum !== undefined && p.estoqueNum === 0);
