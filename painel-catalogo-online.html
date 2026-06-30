@@ -333,9 +333,8 @@ body{font-family:-apple-system,sans-serif;background:#f4f4f4;min-height:100vh}
       </div>
       <div class="config-btns">
         <button class="btn btn-dark" onclick="publicarTudo()">🚀 Publicar agora</button>
-        <button class="btn btn-outline" style="color:#111;border-color:#ccc" onclick="sincronizarFotos()" id="btnSincFotos">📸 Subir fotos p/ GitHub</button>
-        <button class="btn btn-outline" style="color:#111;border-color:#ccc" onclick="testarGitHub()">🔍 Testar conexão GitHub</button>
-        <button class="btn btn-outline" style="color:#111;border-color:#ccc" onclick="abrirInstrucoes()">? Como gerar token</button>
+        <button class="btn btn-outline" style="color:#111;border-color:#ccc" onclick="sincronizarFotos()" id="btnSincFotos">📸 Subir fotos</button>
+        <button class="btn btn-outline" style="color:#111;border-color:#ccc" onclick="testarGitHub()">🔍 Testar conexão</button>
       </div>
       <div class="hint" id="hintSincFotos" style="display:none;color:#2e7d32;font-weight:600"></div>
     </div>
@@ -542,18 +541,6 @@ function init() {
   document.getElementById('cfRepo').value  = repo;
   GH_OWNER = owner; GH_REPO = repo;
 
-  // Carregar produtos
-  var saved   = localStorage.getItem('zum-catalogo');
-  var version = localStorage.getItem('zum-catalogo-version');
-  if (saved && version === CATALOGO_VERSION) {
-    try { catalogo = JSON.parse(saved); } catch(e) {}
-  }
-  if (!catalogo.length) {
-    catalogo = JSON.parse(JSON.stringify(PRODUTOS_INICIAIS));
-    salvarLocal();
-    localStorage.setItem('zum-catalogo-version', CATALOGO_VERSION);
-  }
-
   // Carregar banners topo
   var st = localStorage.getItem('zum-banners-topo');
   try { bannersTopo = st ? JSON.parse(st) : []; } catch(e) { bannersTopo = []; }
@@ -569,10 +556,49 @@ function init() {
   try { bannerStories = ss ? JSON.parse(ss) : []; } catch(e) { bannerStories = []; }
   if (!bannerStories.length) bannerStories = [{ativo:false,sku:'',after:4,img:'',layout:'full'}];
 
-  renderGrid();
   renderTopo();
   renderMeio();
   renderStories();
+
+  // Carregar produtos do GitHub (fonte principal)
+  carregarProdutosDoGitHub();
+}
+
+async function carregarProdutosDoGitHub() {
+  var owner = GH_OWNER || 'gugacriacao';
+  var repo  = GH_REPO  || 'zum-catalogo-online';
+  var url   = 'https://raw.githubusercontent.com/'+owner+'/'+repo+'/main/produtos.json?_='+Date.now();
+  try {
+    var r = await fetch(url, {cache:'no-store'});
+    if (r.ok) {
+      var data = await r.json();
+      if (data.produtos && data.produtos.length) {
+        catalogo = data.produtos.map(function(p) {
+          return {
+            sku: p.sku, nome: p.nome||p.name, cat: p.cat,
+            preco: p.preco||p.price, cores: p.cores||[],
+            tamanhos: p.tamanhos||[], stock: p.stock||'',
+            badge: p.badge||'', destaque: p.destaque||'',
+            fotos: p.fotos||[], fotosCores: p.fotosCores||{},
+            estoqueNum: p.estoqueNum||0, ativo: true,
+            ordem: p.ordem||0, syncBadge: false
+          };
+        });
+        salvarLocal();
+        renderGrid();
+        toast('✓ Produtos carregados do GitHub');
+        return;
+      }
+    }
+  } catch(e) {}
+  // Fallback: localStorage
+  var saved = localStorage.getItem('zum-catalogo');
+  if (saved) { try { catalogo = JSON.parse(saved); } catch(e) {} }
+  if (!catalogo.length) {
+    catalogo = JSON.parse(JSON.stringify(PRODUTOS_INICIAIS));
+    salvarLocal();
+  }
+  renderGrid();
 }
 
 function salvarConfig() {
