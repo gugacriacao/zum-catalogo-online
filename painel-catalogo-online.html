@@ -560,20 +560,22 @@ function init() {
   renderMeio();
   renderStories();
 
-  // Carregar produtos do GitHub (fonte principal)
-  carregarProdutosDoGitHub();
+  // Carregar produtos e banners do GitHub (fonte principal)
+  carregarDoGitHub();
 }
 
-async function carregarProdutosDoGitHub() {
+async function carregarDoGitHub() {
   var owner = GH_OWNER || 'gugacriacao';
   var repo  = GH_REPO  || 'zum-catalogo-online';
-  var url   = 'https://raw.githubusercontent.com/'+owner+'/'+repo+'/main/produtos.json?_='+Date.now();
+  var base  = 'https://raw.githubusercontent.com/'+owner+'/'+repo+'/main/';
+
+  // Produtos
   try {
-    var r = await fetch(url, {cache:'no-store'});
-    if (r.ok) {
-      var data = await r.json();
-      if (data.produtos && data.produtos.length) {
-        catalogo = data.produtos.map(function(p) {
+    var rp = await fetch(base+'produtos.json?_='+Date.now(), {cache:'no-store'});
+    if (rp.ok) {
+      var dp = await rp.json();
+      if (dp.produtos && dp.produtos.length) {
+        catalogo = dp.produtos.map(function(p) {
           return {
             sku: p.sku, nome: p.nome||p.name, cat: p.cat,
             preco: p.preco||p.price, cores: p.cores||[],
@@ -586,19 +588,39 @@ async function carregarProdutosDoGitHub() {
         });
         salvarLocal();
         renderGrid();
-        toast('✓ Produtos carregados do GitHub');
-        return;
       }
     }
-  } catch(e) {}
-  // Fallback: localStorage
-  var saved = localStorage.getItem('zum-catalogo');
-  if (saved) { try { catalogo = JSON.parse(saved); } catch(e) {} }
-  if (!catalogo.length) {
-    catalogo = JSON.parse(JSON.stringify(PRODUTOS_INICIAIS));
-    salvarLocal();
+  } catch(e) {
+    // Fallback localStorage
+    var saved = localStorage.getItem('zum-catalogo');
+    if (saved) { try { catalogo = JSON.parse(saved); } catch(e2) {} }
+    if (!catalogo.length) { catalogo = JSON.parse(JSON.stringify(PRODUTOS_INICIAIS)); salvarLocal(); }
+    renderGrid();
   }
-  renderGrid();
+
+  // Banners — tenta URL relativa primeiro (funciona local e no GitHub Pages)
+  try {
+    var rb = await fetch('banners.json?_='+Date.now(), {cache:'no-store'});
+    if (rb.ok) {
+      var db = await rb.json();
+      if (db.topo && db.topo.length) {
+        bannersTopo = db.topo.map(function(b){ return {ativo:b.ativo||false,tag:b.tag||'',titulo:b.titulo||'',sub:b.sub||'',img:b.img||'',pos:b.pos||'50% 50%',zoom:b.zoom||1}; });
+        localStorage.setItem('zum-banners-topo', JSON.stringify(bannersTopo));
+        renderTopo();
+      }
+      if (db.meio && db.meio.length) {
+        bannersMeio = db.meio.map(function(b){ return {ativo:b.ativo||false,sku:b.sku||'',after:b.after||2,img:b.img||'',mk:b.mk||'',mt:b.mt||'',pos:b.pos||'50% 50%',zoom:b.zoom||1}; });
+        localStorage.setItem('zum-banners', JSON.stringify(bannersMeio));
+        renderMeio();
+      }
+      if (db.stories && db.stories.length) {
+        bannerStories = db.stories.map(function(b){ return {ativo:b.ativo||false,sku:b.sku||'',after:b.after||4,img:b.img||'',layout:b.layout||'full',pos:b.pos||'50% 50%',zoom:b.zoom||1}; });
+        localStorage.setItem('zum-banners-stories', JSON.stringify(bannerStories));
+        renderStories();
+      }
+      toast('✓ Carregado do GitHub');
+    }
+  } catch(e) {}
 }
 
 function salvarConfig() {
