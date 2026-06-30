@@ -412,6 +412,11 @@ body{font-family:-apple-system,sans-serif;background:#f4f4f4;min-height:100vh}
         </div>
       </div>
       <div class="mfield">
+        <label>Texto Destaque</label>
+        <input type="text" id="mDestaque" placeholder="Ex: Nova coleção · Exclusivo · Mais vendido">
+        <div style="font-size:10px;color:#999;margin-top:4px">Aparece no botão DESTAQUES quando este produto estiver em foco</div>
+      </div>
+      <div class="mfield">
         <label>Nota de estoque</label>
         <input type="text" id="mEstoque" placeholder="Ex: Poucas unidades em M">
       </div>
@@ -528,8 +533,8 @@ var tabAtual = 'produtos';
 /* ==================== INIT ==================== */
 function init() {
   // Carregar config
-  document.getElementById('cfAsUrl').value   = localStorage.getItem('zum-as-url') || '';
-  document.getElementById('cfToken').value   = localStorage.getItem('zum-api-token') || '';
+  document.getElementById('cfAsUrl').value = localStorage.getItem('zum-as-url') || '';
+  document.getElementById('cfToken').value = localStorage.getItem('zum-api-token') || '';
   document.getElementById('cfGhToken').value = localStorage.getItem('zum-gh-token') || '';
   var owner = localStorage.getItem('zum-gh-owner') || 'gugacriacao';
   var repo  = localStorage.getItem('zum-gh-repo')  || 'zum-catalogo-online';
@@ -733,14 +738,15 @@ function abrirModal(idx) {
   modalIdx = idx;
   var p = catalogo[idx];
   document.getElementById('modalTitle').textContent = p.nome;
-  document.getElementById('mNome').value   = p.nome||'';
+  document.getElementById('mNome').value     = p.nome||'';
   document.getElementById('mSku').value    = p.sku||'';
   document.getElementById('mCat').value    = p.cat||'Vestidos';
   document.getElementById('mPreco').value  = p.preco||'';
   document.getElementById('mCores').value  = (p.cores||[]).join(', ');
   document.getElementById('mTams').value   = (p.tamanhos||[]).join(', ');
-  document.getElementById('mEstoque').value= p.stock||'';
-  document.getElementById('mBadge').value  = p.badge||'';
+  document.getElementById('mEstoque').value  = p.stock||'';
+  document.getElementById('mBadge').value    = p.badge||'';
+  document.getElementById('mDestaque').value = p.destaque||'';
   document.getElementById('btnDeletar').style.display = 'block';
   var semToken = !localStorage.getItem('zum-gh-token');
   document.getElementById('fotoWarning').style.display = semToken ? 'block' : 'none';
@@ -753,7 +759,7 @@ function abrirModalNovo() {
   modalIdx = -1;
   window._novoFotos = [];
   document.getElementById('modalTitle').textContent = 'Novo produto';
-  ['mNome','mSku','mPreco','mCores','mTams','mEstoque','mBadge'].forEach(function(id){ document.getElementById(id).value=''; });
+  ['mNome','mSku','mPreco','mCores','mTams','mEstoque','mBadge','mDestaque'].forEach(function(id){ document.getElementById(id).value=''; });
   document.getElementById('mCat').value = 'Vestidos';
   document.getElementById('btnDeletar').style.display = 'none';
   var semToken = !localStorage.getItem('zum-gh-token');
@@ -979,6 +985,7 @@ function salvarModal() {
     tamanhos: document.getElementById('mTams').value.split(',').map(function(s){return s.trim();}).filter(Boolean),
     stock: document.getElementById('mEstoque').value.trim(),
     badge: document.getElementById('mBadge').value.trim(),
+    destaque: document.getElementById('mDestaque').value.trim(),
     fotos: modalIdx>=0 ? (catalogo[modalIdx].fotos||[]) : (window._novoFotos||[]),
     fotosCores: modalIdx>=0 ? (catalogo[modalIdx].fotosCores||{}) : (window._novoFotosCores||{})
   };
@@ -1798,7 +1805,7 @@ async function publicarTudo() {
         return {
           sku: p.sku, nome: p.nome, cat: p.cat, preco: p.preco,
           cores: p.cores, tamanhos: p.tamanhos,
-          stock: p.stock || 'Em estoque', badge: p.badge || '',
+          stock: p.stock || 'Em estoque', badge: p.badge || '', destaque: p.destaque || '',
           estoqueNum: p.estoqueNum || 0,
           fotos: (p.fotos||[]).filter(function(f){return f && !f.startsWith('data:') && f!=='__uploading__';}).map(function(f,fi){
             // Se já é caminho relativo (FOTOS/...) ou URL: usa como está
@@ -1826,6 +1833,7 @@ async function publicarTudo() {
     var bannersJson = JSON.stringify({
       geradoEm: new Date().toISOString(),
       asUrl: localStorage.getItem('zum-as-url') || '',
+      destaqueLabel: localStorage.getItem('zum-destaque-label') || 'Destaques',
       topo: bannersTopo.filter(function(b){ return b.ativo && (b.img||b.titulo); }).map(function(b){
         return {ativo:true, tag:b.tag||'', titulo:b.titulo||'', sub:b.sub||'', img:b.img||'', pos:b.pos||'50% 50%', zoom:b.zoom||1};
       }),
