@@ -582,7 +582,7 @@ async function carregarDoGitHub() {
             tamanhos: p.tamanhos||[], stock: p.stock||'',
             badge: p.badge||'', destaque: p.destaque||'',
             fotos: p.fotos||[], fotosCores: p.fotosCores||{},
-            estoqueNum: p.estoqueNum||0, ativo: true,
+            estoqueNum: p.estoqueNum||0, ativo: p.ativo !== false,
             ordem: p.ordem||0, syncBadge: false
           };
         });
@@ -1845,16 +1845,15 @@ async function publicarTudo() {
   btn.textContent = '⏳ Publicando...';
 
   try {
-    // 1. Gera produtos.json
-    var ativos = catalogo.filter(function(p){ return p.ativo; });
+    // 1. Gera produtos.json (todos os produtos, ativos e ocultos)
     var produtosJson = JSON.stringify({
       geradoEm: new Date().toISOString(),
-      produtos: ativos.map(function(p, i){
+      produtos: catalogo.map(function(p, i){
         return {
           sku: p.sku, nome: p.nome, cat: p.cat, preco: p.preco,
           cores: p.cores, tamanhos: p.tamanhos,
           stock: p.stock || 'Em estoque', badge: p.badge || '', destaque: p.destaque || '',
-          estoqueNum: p.estoqueNum || 0,
+          estoqueNum: p.estoqueNum || 0, ativo: p.ativo !== false,
           fotos: (p.fotos||[]).filter(function(f){return f && !f.startsWith('data:') && f!=='__uploading__';}).map(function(f,fi){
             // Se já é caminho relativo (FOTOS/...) ou URL: usa como está
             return (f.startsWith('FOTOS')||f.startsWith('http')) ? f : 'FOTOS/'+p.sku+'/midia-0'+(fi+1)+'.jpg';
