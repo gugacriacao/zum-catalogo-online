@@ -44,9 +44,9 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .chips-spacer{display:none}
 .chips-wrap{flex:1;overflow:hidden;position:relative}
 .chips-wrap::after{display:none}
-.chips{display:flex;gap:6px;padding:10px 14px;overflow-x:auto;width:100%}
+.chips{display:flex;gap:4px;padding:8px 10px;overflow:hidden;width:100%}
 .chips::-webkit-scrollbar{display:none}
-.chip{padding:7px 14px;font-size:10px;border:1px solid #ddd;color:#999;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;background:#fff;transition:all .15s;border-radius:0;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:5px}
+.chip{padding:7px 10px;font-size:9px;border:1px solid #ddd;color:#999;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;background:#fff;transition:all .15s;border-radius:0;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:4px;flex-shrink:0}
 .chip.on{background:#111;color:#fff;border-color:#111}
 .chip-ig:hover,.chip-ig:active,.chip-wa:hover,.chip-wa:active{background:#111;color:#fff;border-color:#111}
 /* SEARCH OVERLAY */
@@ -87,6 +87,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .card-name{font-size:14px;color:#444;letter-spacing:3.5px;text-transform:uppercase;margin-bottom:4px;line-height:1.4;font-weight:300;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .card-price{font-size:14px;font-weight:400;color:#111}
 .card-tag{font-size:9px;color:#c0392b;margin-top:3px;letter-spacing:.5px}
+.card-destaque{font-size:9px;color:#999;margin-top:3px;letter-spacing:1.5px;text-transform:uppercase}
 .card-sup,.price-cents{font-size:12px;vertical-align:text-top;font-weight:700;position:relative;top:1px;margin-left:2px;letter-spacing:1px}
 .card-rs,.price-rs{font-size:12px;vertical-align:text-top;font-weight:700;position:relative;top:2px}
 .card-apartir{font-size:8px;color:#666;text-align:left;font-weight:400;letter-spacing:.3px}
@@ -579,6 +580,7 @@ var COR_NOME_TO_COD = {
 };
 /* Banners do meio — preenchido pelo loadBanners() a partir de banners.json */
 var MID_BANNERS = [];
+var DESTAQUE_LABEL = 'Destaques';
 /* Banners stories — formato 9:16 vertical */
 var STORIES_BANNERS = [];
 
@@ -650,7 +652,7 @@ window.addEventListener('beforeunload',function(){
 
 /* ====== CATÁLOGO ====== */
 function renderChips(){
-  var label=currentCat==='Todos'?'Destaques':currentCat;
+  var label=currentCat==='Todos'?DESTAQUE_LABEL:currentCat;
   $('chips').innerHTML=
     '<div class="chip on" onclick="filterCat(\'Todos\')">'+label+'</div>'+
     '<a class="chip chip-ig" href="https://instagram.com/use.zum" target="_blank" rel="noopener">'+
@@ -688,6 +690,7 @@ function renderGrid(){
         '<div class="card-img" style="background:'+p.bg+'">'+(p.badge?'<span class="badge">'+p.badge+'</span>':'')+'<button class="fav-btn'+(FAVS.has(p.sku)?' on':'')+'" onclick="event.stopPropagation();toggleFav(\''+p.sku+'\',this)"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>'+(p.media&&p.media[0]?'<img src="'+p.media[0]+'" loading="lazy" alt="'+p.name+'">':'<span class="ph">ZUM</span>')+'</div>'+
         '<div class="card-info">'+
         '<div class="card-left"><div class="card-name">'+p.name+'</div>'+
+        (p.destaque?'<div class="card-destaque">'+p.destaque+'</div>':'')+
         (p.stock.indexOf('Últim')>=0||p.stock.indexOf('Pouc')>=0?'<div class="card-tag">'+p.stock+'</div>':'')+'</div>'+
         '<div class="card-right"><div class="card-apartir">a partir de</div><div class="card-price">'+moneyCard(p.price)+'</div><div class="card-cada"><img src="'+PIX_ICON+'" alt="PIX" style="display:inline;width:9px;height:9px;vertical-align:middle;margin-right:2px;position:relative;top:-1px"><span style="color:#32BCAD;font-weight:600">no PIX</span> · cada</div></div>'+
         '</div></div>';
@@ -1079,6 +1082,7 @@ async function loadBanners(){
       var data=await r.json();
       // Atualiza URL do ZumAgent se publicado pelo painel
       if(data.asUrl) AS_URL = data.asUrl;
+      if(data.destaqueLabel) DESTAQUE_LABEL = data.destaqueLabel;
       // Banners topo
       var topoAtivos=(data.topo||[]).filter(function(b){return b.ativo;});
       if(topoAtivos.length){renderBanners(topoAtivos);} else {renderBanners(BANNER_DEFAULTS);}
@@ -1147,7 +1151,7 @@ function adaptarProdutos(lista){
       sku: p.sku, cat: p.cat,
       name: p.nome || p.name,
       price: p.preco || p.price,
-      badge: p.badge || '', bg: bg,
+      badge: p.badge || '', bg: bg, destaque: p.destaque || '',
       colors: colors, sizes: sizes,
       stock: p.stock || (semEstoque ? 'Sem estoque' : ''),
       media: p.fotos && p.fotos.length ? p.fotos : [],
