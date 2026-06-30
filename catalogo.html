@@ -29,7 +29,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .bag-count{position:absolute;top:-7px;right:-9px;background:#fff;color:#111;font-size:10px;font-weight:700;min-width:16px;height:16px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 4px}
 
 /* BANNER TOPO */
-.banner-top{position:relative;height:240px;background:#111;overflow:hidden;cursor:pointer;margin-top:50px}
+.banner-top{position:relative;height:240px;background:#111;overflow:hidden;cursor:pointer}
 .banner-top .slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;transition:opacity .6s;background-size:cover;background-position:center}
 .banner-top .slide.on{opacity:1}
 .banner-top .kick{border:1px solid rgba(255,255,255,.4);color:rgba(255,255,255,.7);font-size:9px;letter-spacing:3px;padding:4px 12px;margin-bottom:12px;text-transform:uppercase}
@@ -40,8 +40,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .banner-dots i.on{background:#fff;width:26px}
 
 /* CHIPS */
-.chips-bar{display:flex;align-items:center;border-bottom:1px solid #eee;position:fixed;top:58px;left:0;right:0;background:#fff;z-index:40}
-.chips-spacer{height:50px}
+.chips-bar{display:flex;align-items:center;border-bottom:1px solid #eee;background:#fff;z-index:40}
+.chips-spacer{display:none}
 .chips-wrap{flex:1;overflow:hidden;position:relative}
 .chips-wrap::after{display:none}
 .chips{display:flex;gap:6px;padding:10px 14px;overflow-x:auto;width:100%}
@@ -81,11 +81,11 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .fav-btn{position:absolute;top:8px;right:8px;z-index:3;width:30px;height:30px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.75);border-radius:50%}
 .fav-btn svg{width:16px;height:16px;stroke:#999;fill:none;stroke-width:1.8;transition:all .15s}
 .fav-btn.on svg{stroke:#e74c3c;fill:#e74c3c}
-.card-info{padding:10px 12px 14px 16px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.card-info{padding:10px 12px 14px 12px;display:flex;justify-content:center;align-items:flex-start;gap:8px;text-align:center}
 .card-left{flex:1;min-width:0}
-.card-right{flex-shrink:0;text-align:right}
-.card-name{font-size:11px;color:#444;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px;line-height:1.4;font-weight:500;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.card-price{font-size:17px;font-weight:700;color:#111}
+.card-right{display:none}
+.card-name{font-size:14px;color:#444;letter-spacing:3.5px;text-transform:uppercase;margin-bottom:4px;line-height:1.4;font-weight:300;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.card-price{font-size:14px;font-weight:400;color:#111}
 .card-tag{font-size:9px;color:#c0392b;margin-top:3px;letter-spacing:.5px}
 .card-sup,.price-cents{font-size:12px;vertical-align:text-top;font-weight:700;position:relative;top:1px;margin-left:2px;letter-spacing:1px}
 .card-rs,.price-rs{font-size:12px;vertical-align:text-top;font-weight:700;position:relative;top:2px}
@@ -135,6 +135,9 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .size.on{background:#111;color:#fff;border-color:#111}
 .size.out{opacity:.35;text-decoration:line-through;cursor:not-allowed}
 .stock-note{font-size:10px;color:#666;margin-top:4px;margin-bottom:4px}
+.prod-desc{margin-top:20px;padding-top:16px;border-top:1px solid #eee}
+.prod-desc-title{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#999;margin-bottom:8px}
+.prod-desc-text{font-size:14px;color:#444;font-weight:300;line-height:1.6;letter-spacing:.8px}
 .qty-add{display:flex;gap:8px;align-items:center;margin-bottom:10px}
 .qty{display:flex;align-items:center;border:1px solid #ddd;height:44px}
 .qty button{width:36px;height:44px;font-size:20px;color:#111;display:flex;align-items:center;justify-content:center}
@@ -372,6 +375,11 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
           <button class="btn-add" onclick="addToCart()">Adicionar</button>
         </div>
         <div class="stock-note" id="pStock"></div>
+        <div class="prod-desc">
+          <div class="prod-desc-title">Descrição</div>
+          <div class="prod-desc-text">Tecido Poliamida.</div>
+          <div class="prod-desc-text">Tamanho único: 36 ao 42.</div>
+        </div>
       </div>
     </div>
   </div>
@@ -806,7 +814,7 @@ function openProduct(sku){
   selSize = prod.sizes.findIndex(s=>!s.out);
   $('pName').textContent=prod.name;
   $('pSku').textContent='SKU · '+prod.sku;
-  $('pPrice').innerHTML='<div class="card-apartir" style="text-align:right">a partir de</div><div class="card-price">'+moneyFmt(prod.price)+'</div><div class="card-cada" style="text-align:right"><img src="'+PIX_ICON+'" alt="PIX" style="display:inline;width:9px;height:9px;vertical-align:middle;margin-right:2px;position:relative;top:-1px"><span style="color:#32BCAD;font-weight:600">no PIX</span> · cada</div>';
+  $('pPrice').innerHTML='<div class="card-apartir" style="text-align:right">a partir de</div><div class="card-price">'+moneyFmt(prod.price)+'</div><div class="card-cada" style="text-align:right">cada</div>';
   $('pStock').textContent=prod.stock;
   $('pQty').textContent='1';
   // Galeria: usa fotos da primeira cor se existir, senão fotos gerais
@@ -1263,7 +1271,8 @@ async function carregarCatalogo(){
 }
 
 /* ====== INIT ====== */
-carregarCatalogo();
+renderChips(); renderGrid(); // exibe produtos padrão imediatamente
+carregarCatalogo();          // atualiza com dados reais da rede
 </script>
 </body>
 </html>
