@@ -227,7 +227,7 @@ body{font-family:-apple-system,sans-serif;background:#f4f4f4;min-height:100vh}
   <div class="header-btns">
     <button class="btn btn-outline" onclick="sincronizar()">↻ Sync</button>
     <button class="btn btn-white" onclick="publicarTudo()" id="btnPublicar">🚀 Publicar Tudo</button>
-    <a class="btn btn-outline" id="btnVerCatalogo" href="https://gugacriacao.github.io/zum-catalogo-online/catalogo.html" target="_blank" style="color:#111;border-color:#ccc;text-decoration:none">🛍 Ver Catálogo</a>
+    <a class="btn btn-outline" id="btnVerCatalogo" href="https://gugacriacao.github.io/zum-catalogo-online/catalogo.html" target="_blank" onclick="event.preventDefault();window.open('https://gugacriacao.github.io/zum-catalogo-online/catalogo.html?v='+Date.now(),'_blank')" style="color:#111;border-color:#ccc;text-decoration:none">🛍 Ver Catálogo</a>
   </div>
 </div>
 
@@ -568,12 +568,24 @@ async function carregarDoGitHub() {
   var owner = GH_OWNER || 'gugacriacao';
   var repo  = GH_REPO  || 'zum-catalogo-online';
   var base  = 'https://raw.githubusercontent.com/'+owner+'/'+repo+'/main/';
+  var token = localStorage.getItem('zum-gh-token') || '';
 
-  // Produtos — mescla GitHub com PRODUTOS_INICIAIS para garantir lista completa
+  // Produtos — usa GitHub API (sem cache CDN) se tiver token, senão raw
   try {
-    var rp = await fetch(base+'produtos.json?_='+Date.now(), {cache:'no-store'});
-    if (rp.ok) {
-      var dp = await rp.json();
+    var dp = null;
+    if (token) {
+      var apiUrl = 'https://api.github.com/repos/'+owner+'/'+repo+'/contents/produtos.json';
+      var apiRes = await fetch(apiUrl, {headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json'}});
+      if (apiRes.ok) {
+        var apiData = await apiRes.json();
+        dp = JSON.parse(atob(apiData.content.replace(/\n/g,'')));
+      }
+    }
+    if (!dp) {
+      var rp = await fetch(base+'produtos.json?_='+Date.now(), {cache:'no-store'});
+      if (rp.ok) dp = await rp.json();
+    }
+    if (dp) {
       var ghProds = (dp.produtos||[]).map(function(p) {
         return {
           sku: p.sku, nome: p.nome||p.name, cat: p.cat,
@@ -970,8 +982,7 @@ function uploadFotoCor(input) {
     } else {
       var sku = modalIdx>=0 ? catalogo[modalIdx].sku : document.getElementById('mSku').value.trim().toUpperCase();
       var corSlug = cor.toLowerCase().replace(/\s/g,'-');
-      var idx = fotosCores[cor].length;
-      var path = 'FOTOS/'+sku+'/CORES/'+corSlug+'-0'+(idx+1)+'.'+ext;
+      var path = 'FOTOS/'+sku+'/CORES/'+corSlug+'-'+Date.now()+'.'+ext;
       var placeholder = '__uploading__';
       fotosCores[cor].push(placeholder);
       renderFotosCoresModal(modalIdx>=0?(catalogo[modalIdx].cores||[]):[], fotosCores);
@@ -1035,8 +1046,7 @@ function processarArquivosMidia(files) {
         renderFotosModal(fotos);
         toast('⚠ Mídia salva localmente. Configure o GitHub Token para publicar.');
       } else {
-        var nFoto = fotos.filter(function(f){return f!=='__uploading__'&&!f.startsWith('data:');}).length + 1;
-        var path = 'FOTOS/'+sku+'/midia-0'+nFoto+'.'+ext;
+        var path = 'FOTOS/'+sku+'/midia-'+Date.now()+'.'+ext;
         var fi = fotos.length;
         fotos.push('__uploading__');
         renderFotosModal(fotos);
@@ -1899,10 +1909,7 @@ async function publicarTudo() {
           cores: p.cores, tamanhos: p.tamanhos,
           stock: p.stock || 'Em estoque', badge: p.badge || '', destaque: p.destaque || '',
           estoqueNum: p.estoqueNum || 0, ativo: p.ativo !== false,
-          fotos: (p.fotos||[]).filter(function(f){return f && !f.startsWith('data:') && f!=='__uploading__';}).map(function(f,fi){
-            // Se já é caminho relativo (FOTOS/...) ou URL: usa como está
-            return (f.startsWith('FOTOS')||f.startsWith('http')) ? f : 'FOTOS/'+p.sku+'/midia-0'+(fi+1)+'.jpg';
-          }),
+          fotos: (p.fotos||[]).filter(function(f){return f && !f.startsWith('data:') && f!=='__uploading__';}),
           fotosCores: (function(){
             var fc = p.fotosCores || {};
             var out = {};
