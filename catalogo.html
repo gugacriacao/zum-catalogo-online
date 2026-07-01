@@ -699,11 +699,10 @@ function renderGrid(){
     // banners do meio após este grupo
     MID_BANNERS.forEach(b=>{
       if(!b||!b.img) return;
-      if(currentCat!=='Todos') return;
       // after: mostrar após N produtos (1-based). Se N >= total, mostra após o último.
       var aft = b.after||2;
       var isLastRow = (i + cols >= list.length);
-      var showHere = (aft > i && aft <= i + cols) || (aft > list.length && isLastRow);
+      var showHere = (aft > i && aft <= i + cols) || (isLastRow && aft > i);
       if(!showHere) return;
       var _bpos=b.pos||'50% 50%',_bz=b.zoom||1,_bvid=/\.(mp4|mov|webm)$/i.test(b.img);
       var _bclick=b.sku&&PRODUCTS.some(pp=>pp.sku===b.sku)?' onclick="event.stopPropagation();openProduct(\''+b.sku+'\')" style="cursor:pointer"':'';
@@ -714,10 +713,10 @@ function renderGrid(){
     });
     // banners stories após este grupo
     STORIES_BANNERS.forEach(function(b){
-      if(!b||!b.img||currentCat!=='Todos') return;
+      if(!b||!b.img) return;
       var sAft = b.after||4;
       var sIsLastRow = (i + cols >= list.length);
-      var sShowHere = (sAft > i && sAft <= i + cols) || (sAft > list.length && sIsLastRow);
+      var sShowHere = (sAft > i && sAft <= i + cols) || (sIsLastRow && sAft > i);
       if(!sShowHere) return;
       var isVid=/\.(mp4|mov|webm)$/i.test(b.img);
       var bpos=b.pos||'50% 50%', bz=b.zoom||1;
@@ -726,19 +725,33 @@ function renderGrid(){
         '<div style="position:absolute;inset:0;background-image:url(\''+b.img+'\');background-size:cover;background-position:'+bpos+';transform:scale('+bz+');transform-origin:'+bpos+'"></div>';
       var clickAttr=b.sku?' onclick="event.stopPropagation();openProduct(\''+b.sku+'\')"':'';
       if(b.layout==='half'){
-        var nextProd=PRODUCTS[i+cols]||null;
+        var nextProd=list[i+cols]||null;
         if(nextProd){
           html+='<div class="grid-row stories-half-row" style="grid-template-columns:1fr 1fr">';
           html+='<div class="banner-stories-half"'+clickAttr+' style="cursor:'+(b.sku?'pointer':'default')+'">'+bgEl+'</div>';
           html+='<div class="card" onclick="openProduct(\''+nextProd.sku+'\')" style="background:'+nextProd.bg+'">'+
-            '<div class="card-img"><img src="'+(nextProd.imgs[0]||'')+'"></div>'+
+            '<div class="card-img"><img src="'+(nextProd.media&&nextProd.media[0]||'')+'"></div>'+
             '<div class="card-info"><div class="card-left"><div class="card-name">'+nextProd.name+'</div></div>'+
             '<div class="card-right"><div class="card-apartir">a partir de</div><div class="card-price">'+moneyCard(nextProd.price)+'</div></div></div></div>';
           html+='</div>';
           i+=1;
+        } else {
+          html+='<div class="banner-stories"'+clickAttr+' style="cursor:'+(b.sku?'pointer':'default')+'">'+bgEl+'</div>';
         }
       } else {
-        html+='<div class="banner-stories"'+clickAttr+' style="cursor:'+(b.sku?'pointer':'default')+'">'+bgEl+'</div>';
+        var nextProdFull=list[i+cols]||null;
+        if(nextProdFull){
+          html+='<div class="grid-row stories-half-row" style="grid-template-columns:1fr 1fr">';
+          html+='<div class="banner-stories-half"'+clickAttr+' style="cursor:'+(b.sku?'pointer':'default')+'">'+bgEl+'</div>';
+          html+='<div class="card" onclick="openProduct(\''+nextProdFull.sku+'\')" style="background:'+nextProdFull.bg+'">'+
+            '<div class="card-img"><img src="'+(nextProdFull.media&&nextProdFull.media[0]||'')+'"></div>'+
+            '<div class="card-info"><div class="card-left"><div class="card-name">'+nextProdFull.name+'</div></div>'+
+            '<div class="card-right"><div class="card-apartir">a partir de</div><div class="card-price">'+moneyCard(nextProdFull.price)+'</div></div></div></div>';
+          html+='</div>';
+          i+=1;
+        } else {
+          html+='<div class="banner-stories"'+clickAttr+' style="cursor:'+(b.sku?'pointer':'default')+'">'+bgEl+'</div>';
+        }
       }
     });
     i+=cols; rowIdx++;
