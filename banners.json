@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-01T15:43:46.878Z",
+  "geradoEm": "2026-07-01T15:45:32.594Z",
   "asUrl": "",
   "destaqueLabel": "Destaques",
   "topo": [
@@ -67,7 +67,7 @@
     {
       "ativo": true,
       "sku": "",
-      "after": 2,
+      "after": 1,
       "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/STORIES/stories-01.png",
       "layout": "half",
       "pos": "50% 50%",
@@ -78,16 +78,16 @@
       "sku": "",
       "after": 2,
       "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/STORIES/stories-02.png",
-      "layout": "full",
+      "layout": "half",
       "pos": "50% 50%",
       "zoom": 1
     },
     {
       "ativo": true,
       "sku": "",
-      "after": 2,
+      "after": 4,
       "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/STORIES/stories-03.png",
-      "layout": "full",
+      "layout": "half",
       "pos": "50% 50%",
       "zoom": 1
     },
@@ -96,9 +96,9 @@
       "sku": "",
       "after": 2,
       "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/STORIES/stories-04.mp4",
-      "layout": "full",
+      "layout": "half",
       "pos": "50% 50%",
-      "zoom": 1.1
+      "zoom": 1
     }
   ]
 }
