@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-01T07:23:11.487Z",
+  "geradoEm": "2026-07-01T07:26:16.761Z",
   "produtos": [
     {
       "sku": "ZUM-VDRC-105",
@@ -28,8 +28,7 @@
       ],
       "fotosCores": {
         "Preto": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/CORES/preto-01.jpg",
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/CORES/preto-02.jpg"
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/CORES/preto-01.jpg"
         ],
         "Bordô": [
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/CORES/bordô-01.jpg",
@@ -93,7 +92,8 @@
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/midia-01.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/midia-02.png"
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/midia-02.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/midia-04.png"
       ],
       "fotosCores": {
         "Marrom": [
