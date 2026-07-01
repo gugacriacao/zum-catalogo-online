@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-01T07:27:49.545Z",
+  "geradoEm": "2026-07-01T07:29:07.985Z",
   "asUrl": "https://script.google.com/macros/s/AKfycbwHavGCAgB01Vm3b6kEqN26x1MRA62VVA6P2UWfbeDVFbDxfyQ9PbAhr6B44ElRK_5q/exec",
   "destaqueLabel": "Destaques",
   "topo": [
@@ -37,6 +37,15 @@
       "ativo": true,
       "sku": "ZUM-VDMG-104",
       "after": 3,
+      "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/STORIES/stories-01.png",
+      "layout": "half",
+      "pos": "50% 50%",
+      "zoom": 1
+    },
+    {
+      "ativo": true,
+      "sku": "ZUM-VDMG-104",
+      "after": 3,
       "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/STORIES/stories-02.png",
       "layout": "half",
       "pos": "50% 50%",
@@ -47,7 +56,7 @@
       "sku": "",
       "after": 4,
       "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/STORIES/stories-03.png",
-      "layout": "full",
+      "layout": "half",
       "pos": "50% 50%",
       "zoom": 1
     },
@@ -56,7 +65,7 @@
       "sku": "",
       "after": 2,
       "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/STORIES/stories-04.mp4",
-      "layout": "full",
+      "layout": "half",
       "pos": "50% 50%",
       "zoom": 1
     }
