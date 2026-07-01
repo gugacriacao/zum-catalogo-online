@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-01T14:27:32.391Z",
+  "geradoEm": "2026-06-26T16:44:43.534Z",
   "produtos": [
     {
       "sku": "ZUM-VDRC-105",
@@ -16,15 +16,12 @@
       ],
       "stock": "Em estoque",
       "badge": "",
-      "destaque": "",
       "estoqueNum": 1,
-      "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-01.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-02.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-03.png"
       ],
-      "fotosCores": {},
       "ordem": 1
     },
     {
@@ -44,11 +41,8 @@
       ],
       "stock": "Em estoque",
       "badge": "",
-      "destaque": "",
       "estoqueNum": 9,
-      "ativo": true,
       "fotos": [],
-      "fotosCores": {},
       "ordem": 2
     },
     {
@@ -67,11 +61,8 @@
       ],
       "stock": "Em estoque",
       "badge": "",
-      "destaque": "",
       "estoqueNum": 8,
-      "ativo": true,
       "fotos": [],
-      "fotosCores": {},
       "ordem": 3
     },
     {
@@ -89,15 +80,12 @@
       ],
       "stock": "Em estoque",
       "badge": "",
-      "destaque": "",
       "estoqueNum": 3,
-      "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDBT-102/midia-01.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDBT-102/midia-02.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDBT-102/midia-03.png"
       ],
-      "fotosCores": {},
       "ordem": 4
     },
     {
@@ -115,11 +103,8 @@
       ],
       "stock": "Em estoque",
       "badge": "",
-      "destaque": "",
       "estoqueNum": 5,
-      "ativo": true,
       "fotos": [],
-      "fotosCores": {},
       "ordem": 5
     },
     {
@@ -136,11 +121,8 @@
       ],
       "stock": "Em estoque",
       "badge": "",
-      "destaque": "",
       "estoqueNum": 3,
-      "ativo": true,
       "fotos": [],
-      "fotosCores": {},
       "ordem": 6
     },
     {
@@ -157,97 +139,9 @@
       ],
       "stock": "Em estoque",
       "badge": "",
-      "destaque": "",
       "estoqueNum": 3,
-      "ativo": true,
       "fotos": [],
-      "fotosCores": {},
       "ordem": 7
-    },
-    {
-      "sku": "ZUM-VDDN-103",
-      "nome": "Vestido decote nadador",
-      "cat": "Vestidos",
-      "preco": 179.9,
-      "cores": [
-        "Preto",
-        "Rosa",
-        "Azul",
-        "Verde"
-      ],
-      "tamanhos": [
-        "UN"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "destaque": "",
-      "estoqueNum": 0,
-      "ativo": false,
-      "fotos": [],
-      "fotosCores": {},
-      "ordem": 8
-    },
-    {
-      "sku": "ZUM-VDBA-101",
-      "nome": "Vestido básico",
-      "cat": "Vestidos",
-      "preco": 179.9,
-      "cores": [
-        "Preto",
-        "Marrom"
-      ],
-      "tamanhos": [
-        "UN"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "destaque": "",
-      "estoqueNum": 0,
-      "ativo": false,
-      "fotos": [],
-      "fotosCores": {},
-      "ordem": 9
-    },
-    {
-      "sku": "ZUM-VDALC-100",
-      "nome": "Vestido alça",
-      "cat": "Vestidos",
-      "preco": 179.9,
-      "cores": [
-        "Bordô",
-        "Off-white"
-      ],
-      "tamanhos": [
-        "UN"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "destaque": "",
-      "estoqueNum": 0,
-      "ativo": false,
-      "fotos": [],
-      "fotosCores": {},
-      "ordem": 10
-    },
-    {
-      "sku": "ZUM-CJBC-001",
-      "nome": "Conjunto calça e t-shirt",
-      "cat": "Conjuntos",
-      "preco": 279.9,
-      "cores": [
-        "Marrom"
-      ],
-      "tamanhos": [
-        "UN"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "destaque": "",
-      "estoqueNum": 0,
-      "ativo": false,
-      "fotos": [],
-      "fotosCores": {},
-      "ordem": 11
     }
   ]
 }
