@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-01T07:20:15.413Z",
+  "geradoEm": "2026-07-01T07:21:11.414Z",
   "asUrl": "https://script.google.com/macros/s/AKfycbwHavGCAgB01Vm3b6kEqN26x1MRA62VVA6P2UWfbeDVFbDxfyQ9PbAhr6B44ElRK_5q/exec",
   "destaqueLabel": "Destaques",
   "topo": [
@@ -78,6 +78,15 @@
       "sku": "",
       "after": 4,
       "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/STORIES/stories-03.png",
+      "layout": "half",
+      "pos": "50% 50%",
+      "zoom": 1
+    },
+    {
+      "ativo": true,
+      "sku": "",
+      "after": 2,
+      "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/STORIES/stories-04.mp4",
       "layout": "half",
       "pos": "50% 50%",
       "zoom": 1
