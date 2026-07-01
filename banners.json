@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-01T07:15:31.762Z",
+  "geradoEm": "2026-07-01T07:16:38.940Z",
   "asUrl": "https://script.google.com/macros/s/AKfycbwHavGCAgB01Vm3b6kEqN26x1MRA62VVA6P2UWfbeDVFbDxfyQ9PbAhr6B44ElRK_5q/exec",
   "destaqueLabel": "Destaques",
   "topo": [
@@ -26,7 +26,7 @@
     {
       "ativo": true,
       "sku": "",
-      "after": 2,
+      "after": 1,
       "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/MEIO/banner-meio-01.png",
       "mk": "",
       "mt": "",
