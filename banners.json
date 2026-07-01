@@ -1,38 +1,58 @@
 {
-  "geradoEm": "2026-06-26T23:00:00.000Z",
+  "geradoEm": "2026-07-01T06:31:06.853Z",
   "asUrl": "https://script.google.com/macros/s/AKfycbwHavGCAgB01Vm3b6kEqN26x1MRA62VVA6P2UWfbeDVFbDxfyQ9PbAhr6B44ElRK_5q/exec",
-  "topo": [
-    {
-      "ativo": true,
-      "tag": "",
-      "titulo": "",
-      "sub": "",
-      "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/TOPO/banner-topo-01.jpg",
-      "pos": "7.3% 42.7%",
-      "zoom": 1.05
-    }
-  ],
+  "destaqueLabel": "Destaques",
+  "topo": [],
   "meio": [
     {
       "ativo": true,
       "sku": "",
-      "after": 4,
-      "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/MEIO/banner-meio-01.jpg",
+      "after": 1,
+      "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/MEIO/banner-meio-01.png",
       "mk": "",
       "mt": "",
-      "pos": "53.8% 41.5%",
-      "zoom": 1.35
+      "pos": "50% 50%",
+      "zoom": 1
+    },
+    {
+      "ativo": true,
+      "sku": "ZUM-TSOV-200",
+      "after": 4,
+      "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/MEIO/banner-meio-02.png",
+      "mk": "",
+      "mt": "",
+      "pos": "50% 50%",
+      "zoom": 1
+    },
+    {
+      "ativo": true,
+      "sku": "",
+      "after": 2,
+      "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/MEIO/banner-meio-03.png",
+      "mk": "",
+      "mt": "",
+      "pos": "50% 50%",
+      "zoom": 1
     }
   ],
   "stories": [
     {
       "ativo": true,
-      "sku": "",
+      "sku": "ZUM-VDMG-104",
       "after": 2,
-      "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/STORIES/stories-01.mp4",
+      "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/STORIES/stories-01.png",
       "layout": "full",
       "pos": "50% 50%",
-      "zoom": 1.1
+      "zoom": 1
+    },
+    {
+      "ativo": true,
+      "sku": "ZUM-VDMG-104",
+      "after": 3,
+      "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/STORIES/stories-02.png",
+      "layout": "full",
+      "pos": "50% 50%",
+      "zoom": 1
     }
   ]
 }
