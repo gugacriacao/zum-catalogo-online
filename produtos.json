@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-01T07:39:15.169Z",
+  "geradoEm": "2026-07-01T07:40:28.218Z",
   "produtos": [
     {
       "sku": "ZUM-VDRC-105",
@@ -9,7 +9,8 @@
       "cores": [
         "Preto",
         "Bordô",
-        "Off-white"
+        "Off-white",
+        "Azul"
       ],
       "tamanhos": [
         "UN"
@@ -17,7 +18,7 @@
       "stock": "Em estoque",
       "badge": "",
       "destaque": "Tecido Poliamida. Tamanho único: 36/42",
-      "estoqueNum": 1,
+      "estoqueNum": 2,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-05.png",
@@ -88,7 +89,7 @@
       "stock": "Em estoque",
       "badge": "",
       "destaque": "Tecido Poliamida. Tamanho único: 36/42",
-      "estoqueNum": 5,
+      "estoqueNum": 4,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/midia-01.png",
@@ -163,7 +164,7 @@
       "stock": "Em estoque",
       "badge": "",
       "destaque": "",
-      "estoqueNum": 9,
+      "estoqueNum": 8,
       "ativo": true,
       "fotos": [],
       "fotosCores": {},
@@ -262,7 +263,9 @@
       "preco": 179.9,
       "cores": [
         "Bordô",
-        "Off-white"
+        "Off-white",
+        "Azul",
+        "Marrom"
       ],
       "tamanhos": [
         "UN"
@@ -270,7 +273,7 @@
       "stock": "Em estoque",
       "badge": "",
       "destaque": "",
-      "estoqueNum": 0,
+      "estoqueNum": 2,
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
