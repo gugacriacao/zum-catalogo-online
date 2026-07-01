@@ -621,11 +621,23 @@ async function carregarDoGitHub() {
   }
   renderGrid();
 
-  // Banners — tenta URL relativa primeiro (funciona local e no GitHub Pages)
+  // Banners — sempre do GitHub (API com token, ou raw absoluto como fallback)
   try {
-    var rb = await fetch('banners.json?_='+Date.now(), {cache:'no-store'});
-    if (rb.ok) {
-      var db = await rb.json();
+    var db = null;
+    if (token) {
+      var bApiRes = await fetch('https://api.github.com/repos/'+owner+'/'+repo+'/contents/banners.json', {
+        headers: {'Authorization':'Bearer '+token, 'Accept':'application/vnd.github+json'}
+      });
+      if (bApiRes.ok) {
+        var bApiData = await bApiRes.json();
+        db = JSON.parse(atob(bApiData.content.replace(/\n/g,'')));
+      }
+    }
+    if (!db) {
+      var rb = await fetch('https://raw.githubusercontent.com/'+owner+'/'+repo+'/main/banners.json?_='+Date.now(), {cache:'no-store'});
+      if (rb.ok) db = await rb.json();
+    }
+    if (db) {
       if (db.topo && db.topo.length) {
         bannersTopo = db.topo.map(function(b){ return {ativo:b.ativo||false,tag:b.tag||'',titulo:b.titulo||'',sub:b.sub||'',img:b.img||'',pos:b.pos||'50% 50%',zoom:b.zoom||1}; });
         localStorage.setItem('zum-banners-topo', JSON.stringify(bannersTopo));
