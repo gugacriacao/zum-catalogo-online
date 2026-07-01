@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-01T06:31:05.201Z",
+  "geradoEm": "2026-07-01T06:38:27.583Z",
   "produtos": [
     {
       "sku": "ZUM-VDRC-105",
@@ -40,53 +40,6 @@
       "ordem": 1
     },
     {
-      "sku": "ZUM-TSOV-200",
-      "nome": "T-shirt Over básico",
-      "cat": "T-shirts",
-      "preco": 99,
-      "cores": [
-        "Preto",
-        "Branco",
-        "Marrom",
-        "Azul Marinho"
-      ],
-      "tamanhos": [
-        "P",
-        "G"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "destaque": "",
-      "estoqueNum": 9,
-      "ativo": true,
-      "fotos": [],
-      "fotosCores": {},
-      "ordem": 2
-    },
-    {
-      "sku": "ZUM-CC-400",
-      "nome": "Calça cargo",
-      "cat": "Calças",
-      "preco": 189.9,
-      "cores": [
-        "Preto",
-        "Bege"
-      ],
-      "tamanhos": [
-        "P",
-        "M",
-        "G"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "destaque": "",
-      "estoqueNum": 8,
-      "ativo": true,
-      "fotos": [],
-      "fotosCores": {},
-      "ordem": 3
-    },
-    {
       "sku": "ZUM-VDBT-102",
       "nome": "Vestido busto torcido",
       "cat": "Vestidos",
@@ -110,7 +63,7 @@
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDBT-102/midia-03.png"
       ],
       "fotosCores": {},
-      "ordem": 4
+      "ordem": 2
     },
     {
       "sku": "ZUM-VDMG-104",
@@ -146,6 +99,53 @@
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/CORES/azul-01.jpg"
         ]
       },
+      "ordem": 3
+    },
+    {
+      "sku": "ZUM-TSOV-200",
+      "nome": "T-shirt Over básico",
+      "cat": "T-shirts",
+      "preco": 99,
+      "cores": [
+        "Preto",
+        "Branco",
+        "Marrom",
+        "Azul Marinho"
+      ],
+      "tamanhos": [
+        "P",
+        "G"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "estoqueNum": 9,
+      "ativo": true,
+      "fotos": [],
+      "fotosCores": {},
+      "ordem": 4
+    },
+    {
+      "sku": "ZUM-CC-400",
+      "nome": "Calça cargo",
+      "cat": "Calças",
+      "preco": 189.9,
+      "cores": [
+        "Preto",
+        "Bege"
+      ],
+      "tamanhos": [
+        "P",
+        "M",
+        "G"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "estoqueNum": 8,
+      "ativo": true,
+      "fotos": [],
+      "fotosCores": {},
       "ordem": 5
     },
     {
