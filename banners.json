@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-01T07:16:38.940Z",
+  "geradoEm": "2026-07-01T07:17:09.960Z",
   "asUrl": "https://script.google.com/macros/s/AKfycbwHavGCAgB01Vm3b6kEqN26x1MRA62VVA6P2UWfbeDVFbDxfyQ9PbAhr6B44ElRK_5q/exec",
   "destaqueLabel": "Destaques",
   "topo": [
@@ -18,6 +18,15 @@
       "titulo": "",
       "sub": "",
       "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/TOPO/banner-topo-02.png",
+      "pos": "50% 50%",
+      "zoom": 1
+    },
+    {
+      "ativo": true,
+      "tag": "",
+      "titulo": "",
+      "sub": "",
+      "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/TOPO/banner-topo-03.png",
       "pos": "50% 50%",
       "zoom": 1
     }
