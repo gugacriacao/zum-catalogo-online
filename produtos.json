@@ -8,7 +8,7 @@
       "preco": 179.9,
       "cores": [
         "Preto",
-        "BordÃ´",
+        "Bordô",
         "Off-white"
       ],
       "tamanhos": [
@@ -29,7 +29,7 @@
     },
     {
       "sku": "ZUM-TSOV-200",
-      "nome": "T-shirt Over bÃ¡sico",
+      "nome": "T-shirt Over básico",
       "cat": "T-shirts",
       "preco": 99,
       "cores": [
@@ -53,8 +53,8 @@
     },
     {
       "sku": "ZUM-CC-400",
-      "nome": "CalÃ§a cargo",
-      "cat": "CalÃ§as",
+      "nome": "Calça cargo",
+      "cat": "Calças",
       "preco": 189.9,
       "cores": [
         "Preto",
@@ -82,7 +82,7 @@
       "cores": [
         "Preto",
         "Marrom",
-        "BordÃ´"
+        "Bordô"
       ],
       "tamanhos": [
         "UN"
@@ -124,7 +124,7 @@
     },
     {
       "sku": "ZUM-BDBA-300",
-      "nome": "Body assimÃ©trico",
+      "nome": "Body assimétrico",
       "cat": "Bodies",
       "preco": 60,
       "cores": [
