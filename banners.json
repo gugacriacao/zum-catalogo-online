@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-01T07:12:43.520Z",
+  "geradoEm": "2026-07-01T07:15:31.762Z",
   "asUrl": "https://script.google.com/macros/s/AKfycbwHavGCAgB01Vm3b6kEqN26x1MRA62VVA6P2UWfbeDVFbDxfyQ9PbAhr6B44ElRK_5q/exec",
   "destaqueLabel": "Destaques",
   "topo": [
@@ -26,7 +26,7 @@
     {
       "ativo": true,
       "sku": "",
-      "after": 3,
+      "after": 2,
       "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/MEIO/banner-meio-01.png",
       "mk": "",
       "mt": "",
@@ -36,7 +36,7 @@
     {
       "ativo": true,
       "sku": "ZUM-TSOV-200",
-      "after": 5,
+      "after": 4,
       "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/MEIO/banner-meio-02.png",
       "mk": "",
       "mt": "",
@@ -46,7 +46,7 @@
     {
       "ativo": true,
       "sku": "",
-      "after": 6,
+      "after": 4,
       "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/MEIO/banner-meio-03.png",
       "mk": "",
       "mt": "",
