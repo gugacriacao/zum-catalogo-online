@@ -1,6 +1,6 @@
 {
-  "geradoEm": "2026-07-01T16:26:04.943Z",
-  "asUrl": "",
+  "geradoEm": "2026-07-01T15:00:00.000Z",
+  "asUrl": "https://script.google.com/macros/s/AKfycbwHavGCAgB01Vm3b6kEqN26x1MRA62VVA6P2UWfbeDVFbDxfyQ9PbAhr6B44ElRK_5q/exec",
   "destaqueLabel": "Destaques",
   "topo": [
     {
@@ -69,7 +69,7 @@
       "sku": "",
       "after": 2,
       "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/STORIES/stories-01.png",
-      "layout": "half",
+      "layout": "full",
       "pos": "50% 50%",
       "zoom": 1
     },
@@ -78,7 +78,7 @@
       "sku": "",
       "after": 2,
       "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/STORIES/stories-02.png",
-      "layout": "half",
+      "layout": "full",
       "pos": "50% 50%",
       "zoom": 1
     },
@@ -87,7 +87,7 @@
       "sku": "",
       "after": 2,
       "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/STORIES/stories-03.png",
-      "layout": "half",
+      "layout": "full",
       "pos": "50% 50%",
       "zoom": 1
     },
@@ -96,7 +96,7 @@
       "sku": "",
       "after": 2,
       "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/STORIES/stories-04.mp4",
-      "layout": "half",
+      "layout": "full",
       "pos": "50% 50%",
       "zoom": 1.1
     }
