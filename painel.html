@@ -1971,6 +1971,17 @@ async function publicarTudo() {
       console.warn('Não foi possível publicar catalogo.html automaticamente:', e2);
     }
 
+    // 4. Publica vercel.json (config de hospedagem — raramente muda, mas mantém em sincronia)
+    try {
+      var rvc = await fetch('./vercel.json', {cache:'no-store'});
+      if (rvc.ok) {
+        var vercelJson = await rvc.text();
+        await uploadJsonParaGitHub(vercelJson, 'vercel.json');
+      }
+    } catch(e3) {
+      console.warn('Não foi possível publicar vercel.json automaticamente:', e3);
+    }
+
     var owner = localStorage.getItem('zum-gh-owner') || GH_OWNER;
     var repo  = localStorage.getItem('zum-gh-repo')  || GH_REPO;
     var linkPublico = 'https://'+owner+'.github.io/'+repo+'/catalogo.html';
