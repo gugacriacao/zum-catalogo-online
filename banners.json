@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-01T15:00:00.000Z",
+  "geradoEm": "2026-07-07T23:37:11.689Z",
   "asUrl": "https://script.google.com/macros/s/AKfycbwHavGCAgB01Vm3b6kEqN26x1MRA62VVA6P2UWfbeDVFbDxfyQ9PbAhr6B44ElRK_5q/exec",
   "destaqueLabel": "Destaques",
   "topo": [
@@ -35,17 +35,17 @@
     {
       "ativo": true,
       "sku": "",
-      "after": 50,
+      "after": 3,
       "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/MEIO/banner-meio-01.png",
       "mk": "",
       "mt": "",
       "pos": "53.8% 41.5%",
-      "zoom": 1.35
+      "zoom": 1
     },
     {
       "ativo": true,
       "sku": "",
-      "after": 50,
+      "after": 2,
       "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/MEIO/banner-meio-02.png",
       "mk": "",
       "mt": "",
@@ -55,7 +55,7 @@
     {
       "ativo": true,
       "sku": "",
-      "after": 50,
+      "after": 1,
       "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/MEIO/banner-meio-03.png",
       "mk": "",
       "mt": "",
