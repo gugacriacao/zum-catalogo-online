@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/catalogozumonline", "destination": "/catalogo.html" },
+    { "source": "/catalogozumonline/", "destination": "/catalogo.html" }
+  ]
+}
