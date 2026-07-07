@@ -606,6 +606,10 @@ var SESSION_ID = 'sid-'+Date.now()+'-'+Math.random().toString(36).slice(2,7);
 
 // URL e token do ZumAgent — lidos do localStorage (configurados no gerenciar-catalogo.html)
 var AS_URL    = localStorage.getItem('zum-as-url')    || '';
+// Sempre lê produtos.json/banners.json do site publicado no GitHub Pages —
+// evita mostrar dados desatualizados quando o arquivo é aberto localmente
+// (file://) e a cópia dessa pasta está atrasada em relação ao que foi publicado.
+var REMOTE_BASE = 'https://gugacriacao.github.io/zum-catalogo-online/';
 var API_TOKEN = localStorage.getItem('zum-api-token') || '';
 
 function money(v){return 'R$ '+v.toFixed(2).replace('.',',')}
@@ -1078,7 +1082,7 @@ var bSlides=[],bIdx=0,bTimer=null;
 async function loadBanners(){
   // Tenta banners.json primeiro (publicado pelo admin.html via GitHub)
   try {
-    var r=await fetch('banners.json?_='+Date.now(),{cache:'no-store'});
+    var r=await fetch(REMOTE_BASE+'banners.json?_='+Date.now(),{cache:'no-store'});
     if(r.ok){
       var data=await r.json();
       // Atualiza URL do ZumAgent se publicado pelo painel
@@ -1203,7 +1207,7 @@ async function carregarCatalogo(){
   var fotosMap = {}, ordemMap = {};
   var produtosJsonData = null;
   try{
-    var rp = await fetch('produtos.json',{cache:'no-store'});
+    var rp = await fetch(REMOTE_BASE+'produtos.json?_='+Date.now(),{cache:'no-store'});
     if(rp.ok){
       produtosJsonData = await rp.json();
       if(produtosJsonData.produtos && produtosJsonData.produtos.length){
