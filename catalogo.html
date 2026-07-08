@@ -477,6 +477,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   <div class="btn-bar"><button class="btn-blk" onclick="goPay()">Finalizar e pagar</button></div>
 </section>
 
+
 <!-- ===== TELA 6: PIX ===== -->
 <section class="screen" id="s-pix">
   <header class="brand-hdr">
@@ -523,7 +524,6 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   </div>
   <div class="btn-bar"><button class="btn-blk" onclick="goSuccess()">Pagar</button></div>
 </section>
-
 <!-- ===== TELA 8: SUCESSO ===== -->
 <section class="screen" id="s-success">
   <div class="success">
@@ -825,11 +825,14 @@ function openProduct(sku){
   $('pPrice').innerHTML='<div class="card-apartir" style="text-align:right">a partir de</div><div class="card-price">'+moneyFmt(prod.price)+'</div><div class="card-cada" style="text-align:right">cada</div>';
   $('pStock').textContent=prod.stock;
   $('pQty').textContent='1';
-  // Galeria: usa fotos da primeira cor se existir, senão fotos gerais
+  // Galeria: sempre mostra as fotos gerais primeiro (modelo/lifestyle),
+  // completando com as fotos específicas da primeira cor que ainda não
+  // apareceram — nunca descarta as fotos gerais em favor só da cor.
   var firstColorName = prod.colors.length ? prod.colors[0].n : null;
-  var mediaInicial = (firstColorName && prod.fotosCores[firstColorName] && prod.fotosCores[firstColorName].length)
-    ? prod.fotosCores[firstColorName]
-    : prod.media;
+  var fotosCorInicial = (firstColorName && prod.fotosCores[firstColorName]) ? prod.fotosCores[firstColorName] : [];
+  var mediaGeral = prod.media || [];
+  var mediaInicial = mediaGeral.concat(fotosCorInicial.filter(function(f){ return mediaGeral.indexOf(f) === -1; }));
+  if (!mediaInicial.length) mediaInicial = fotosCorInicial;
   buildGallery(mediaInicial);
   $('pColors').innerHTML=prod.colors.map((c,i)=>'<div class="color'+(i===0?' on':'')+'" style="background:'+c.c+'" onclick="setColor('+i+')"></div>').join('');
   $('pColorName').textContent=prod.colors[0] ? prod.colors[0].n : '';
@@ -850,10 +853,13 @@ function setColor(i){
   selColor=i;
   $('pColorName').textContent=prod.colors[i].n;
   document.querySelectorAll('#pColors .color').forEach((c,x)=>c.classList.toggle('on',x===i));
-  // Troca galeria para as fotos da cor selecionada
+  // Troca galeria: fotos gerais + fotos da cor selecionada, combinadas
+  // (nunca só uma ou só outra — mesmo critério do openProduct)
   var corNome = prod.colors[i].n;
-  var mediasCor = prod.fotosCores[corNome];
-  buildGallery((mediasCor && mediasCor.length) ? mediasCor : prod.media);
+  var mediasCor = prod.fotosCores[corNome] || [];
+  var mediaGeral = prod.media || [];
+  var mediaCombinada = mediaGeral.concat(mediasCor.filter(function(f){ return mediaGeral.indexOf(f) === -1; }));
+  buildGallery(mediaCombinada.length ? mediaCombinada : mediasCor);
 }
 function setSize(i){selSize=i;document.querySelectorAll('#pSizes .size').forEach((s,x)=>s.classList.toggle('on',x===i))}
 function prodQty(d){pQty=Math.max(1,pQty+d);$('pQty').textContent=pQty}
