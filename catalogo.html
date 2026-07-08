@@ -845,6 +845,9 @@ function setMedia(i) {
 /* ====== PRODUTO ====== */
 function openProduct(sku){
   prod=PRODUCTS.find(p=>p.sku===sku); selColor=0; pQty=1;
+  // Recalcula os tamanhos pra primeira cor antes de exibir — evita mostrar
+  // como disponível um tamanho que só tem estoque em outra cor.
+  if (prod.tamanhosBase) prod.sizes = sizesParaCor(prod, prod.colors[0] ? prod.colors[0].n : '');
   selSize = prod.sizes.findIndex(s=>!s.out);
   $('pName').textContent=prod.name;
   $('pSku').textContent='SKU · '+prod.sku;
@@ -880,11 +883,20 @@ function setColor(i){
   var corNome = prod.colors[i].n;
   var mediasCor = prod.fotosCores[corNome];
   buildGallery((mediasCor && mediasCor.length) ? mediasCor : prod.media);
+  // Recalcula os tamanhos disponíveis PARA ESSA COR — antes o estoque de
+  // uma cor "emprestava" disponibilidade pra outra, deixando adicionar à
+  // sacola um tamanho que na cor escolhida estava zerado.
+  prod.sizes = sizesParaCor(prod, corNome);
+  selSize = prod.sizes.findIndex(function(s){ return !s.out; });
+  $('pSizes').innerHTML=prod.sizes.map((s,x)=>'<div class="size'+(s.out?' out':'')+(x===selSize?' on':'')+'" onclick="'+(s.out?'':'setSize('+x+')')+'">'+s.s+'</div>').join('');
 }
 function setSize(i){selSize=i;document.querySelectorAll('#pSizes .size').forEach((s,x)=>s.classList.toggle('on',x===i))}
 function prodQty(d){pQty=Math.max(1,pQty+d);$('pQty').textContent=pQty}
 function addToCart(){
   if(selSize<0){toast('Escolha um tamanho');return}
+  // Trava de segurança: nunca deixa adicionar um tamanho marcado como sem
+  // estoque, mesmo que algo tenha deixado selSize apontar pra ele.
+  if(prod.sizes[selSize].out){toast('Esse tamanho está sem estoque nessa cor');return}
   var color=prod.colors[selColor].n, size=prod.sizes[selSize].s;
   var ex=cart.find(it=>it.sku===prod.sku&&it.color===color&&it.size===size);
   if(ex){ex.qty+=pQty}else{cart.push({sku:prod.sku,name:prod.name,price:prod.price,color:color,size:size,qty:pQty,emoji:prod.emoji})}
@@ -1177,13 +1189,24 @@ function adaptarProdutos(lista){
     var bg = CAT_BG[p.cat] || '#f0ece8';
     var colors = (p.cores||[]).map(function(c){ return {n:c, c:COR_MAP[c]||'#ccc'}; });
     var semEstoque = (p.estoqueNum !== undefined && p.estoqueNum === 0);
-    var sizes = (p.tamanhos||[]).map(function(s){ return semEstoque ? {s:s, out:true} : {s:s}; });
+    var tamanhosBase = p.tamanhos || [];
+    // produtos.json só guarda um número agregado de estoque (sem granularidade
+    // por cor/tamanho) — replica esse valor pra cada combinação, pra usar o
+    // mesmo cálculo (sizesParaCor) do caminho ao vivo da planilha.
+    var estoquePorVariante = {};
+    colors.forEach(function(c){
+      estoquePorVariante[c.n] = {};
+      tamanhosBase.forEach(function(s){ estoquePorVariante[c.n][s] = semEstoque ? 0 : 1; });
+    });
+    var prodTmp = { tamanhosBase: tamanhosBase, estoquePorVariante: estoquePorVariante };
+    var sizes = sizesParaCor(prodTmp, colors[0] ? colors[0].n : '');
     return {
       sku: p.sku, cat: p.cat,
       name: p.nome || p.name,
       price: p.preco || p.price,
       badge: p.badge || '', bg: bg, destaque: p.destaque || '',
       colors: colors, sizes: sizes,
+      tamanhosBase: tamanhosBase, estoquePorVariante: estoquePorVariante,
       stock: p.stock || (semEstoque ? 'Sem estoque' : ''),
       media: p.fotos && p.fotos.length ? p.fotos : [],
       fotosCores: p.fotosCores || {}
@@ -1192,6 +1215,19 @@ function adaptarProdutos(lista){
 }
 
 // Agrupa variantes do ZumAgent (ZUM-VDRC-105-PT-UN) por produto base (ZUM-VDRC-105)
+// Recalcula quais tamanhos estão disponíveis para UMA cor específica —
+// nunca usa o estoque agregado do produto inteiro (era isso que deixava
+// adicionar à sacola um tamanho zerado só porque outra cor/tamanho tinha
+// estoque).
+function sizesParaCor(prod, corNome){
+  var tams = prod.tamanhosBase || [];
+  var porCor = (prod.estoquePorVariante && prod.estoquePorVariante[corNome]) || {};
+  return tams.map(function(s){
+    var qtd = porCor[s] || 0;
+    return qtd > 0 ? {s:s} : {s:s, out:true};
+  });
+}
+
 function adaptarDaPlanilha(rows){
   var COD_COR = {'PT':'Preto','BD':'Bordô','MR':'Marrom','OW':'Off-white','VH':'Vinho',
     'AZ':'Azul','RS':'Rosa','VD':'Verde','BR':'Branco','AN':'Azul Marinho','CZ':'Cinza','BG':'Bege'};
@@ -1201,9 +1237,10 @@ function adaptarDaPlanilha(rows){
     if(!skuFull.startsWith('ZUM-')) return;
     var partes = skuFull.split('-');
     var base = partes.slice(0,3).join('-');
-    if(!agrupado[base]){ agrupado[base]={preco:0,estoque:0,cores:[],tams:[],cat:'',nome:''}; ordem.push(base); }
+    if(!agrupado[base]){ agrupado[base]={preco:0,estoque:0,cores:[],tams:[],cat:'',nome:'',porVariante:{}}; ordem.push(base); }
     var g = agrupado[base];
-    g.estoque += Number(p.estoque)||0;
+    var estoqueItem = Number(p.estoque)||0;
+    g.estoque += estoqueItem;
     if(!g.preco && p.preco) g.preco = Number(p.preco);
     if(!g.cat  && p.categoria) g.cat = p.categoria;
     if(!g.nome && p.descricao) g.nome = p.descricao;
@@ -1211,16 +1248,24 @@ function adaptarDaPlanilha(rows){
     if(corNome && g.cores.indexOf(corNome)<0) g.cores.push(corNome);
     var tam = partes[4]||'UN';
     if(g.tams.indexOf(tam)<0) g.tams.push(tam);
+    // Estoque por combinação de cor+tamanho — é essa granularidade que
+    // decide de verdade se um tamanho pode ser adicionado à sacola.
+    if(!g.porVariante[corNome]) g.porVariante[corNome] = {};
+    g.porVariante[corNome][tam] = (g.porVariante[corNome][tam]||0) + estoqueItem;
   });
   return ordem.map(function(base){
     var g = agrupado[base];
     var cat = g.cat || 'Vestidos';
     var semEstoque = g.estoque === 0;
+    var primeiraCor = g.cores[0] || '';
+    var prodTmp = { tamanhosBase: g.tams, estoquePorVariante: g.porVariante };
     return {
       sku: base, cat: cat, name: g.nome || base, price: g.preco,
       badge: '', bg: CAT_BG[cat]||'#f0ece8',
       colors: g.cores.map(function(c){ return {n:c, c:COR_MAP[c]||'#ccc'}; }),
-      sizes: g.tams.map(function(s){ return semEstoque ? {s:s,out:true} : {s:s}; }),
+      tamanhosBase: g.tams,
+      estoquePorVariante: g.porVariante,
+      sizes: sizesParaCor(prodTmp, primeiraCor),
       stock: semEstoque ? 'Sem estoque' : '',
       media: []
     };
