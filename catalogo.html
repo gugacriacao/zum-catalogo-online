@@ -819,9 +819,22 @@ function showGalItem(i) {
   var m = curGalMedia[i];
   if (!m) { $('galMain').innerHTML='<span class="ph ph-lg">ZUM</span>'; return; }
   var isVid = /\.(mp4|mov|webm)$/i.test(m)||m.startsWith('data:video');
-  $('galMain').innerHTML = isVid
-    ? '<video src="'+m+'" style="width:100%;height:100%;object-fit:cover" autoplay muted loop playsinline controls></video>'
-    : '<img src="'+m+'" style="width:100%;height:100%;object-fit:cover" onerror="this.style.background=\'#eee\'">';
+  if (isVid) {
+    // Sem "controls" — nada de ícone de play/tela escura por cima, só o
+    // vídeo tocando. Chama .play() na mão porque o atributo autoplay
+    // sozinho às vezes não dispara no mobile; se o navegador ainda assim
+    // bloquear, tenta de novo no primeiro toque na tela.
+    $('galMain').innerHTML = '<video src="'+m+'" style="width:100%;height:100%;object-fit:cover" autoplay muted loop playsinline webkit-playsinline></video>';
+    var v = $('galMain').querySelector('video');
+    if (v) {
+      v.play().catch(function(){
+        var tryPlay=function(){v.play().catch(function(){});document.removeEventListener('touchstart',tryPlay);};
+        document.addEventListener('touchstart',tryPlay,{once:true,passive:true});
+      });
+    }
+  } else {
+    $('galMain').innerHTML = '<img src="'+m+'" style="width:100%;height:100%;object-fit:cover" onerror="this.style.background=\'#eee\'">';
+  }
 }
 
 function setMedia(i) {
