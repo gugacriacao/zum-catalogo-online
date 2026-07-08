@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-08T05:51:30.900Z",
+  "geradoEm": "2026-07-08T06:06:50.498Z",
   "asUrl": "https://script.google.com/macros/s/AKfycbwHavGCAgB01Vm3b6kEqN26x1MRA62VVA6P2UWfbeDVFbDxfyQ9PbAhr6B44ElRK_5q/exec",
   "destaqueLabel": "Destaques",
   "topo": [
@@ -35,7 +35,7 @@
     {
       "ativo": true,
       "sku": "ZUM-VDMG-104",
-      "after": 2,
+      "after": 4,
       "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/MEIO/banner-meio-01.png",
       "mk": "",
       "mt": "",
@@ -62,6 +62,15 @@
       "layout": "full",
       "pos": "50% 50%",
       "zoom": 1.1
+    },
+    {
+      "ativo": true,
+      "sku": "ZUM-VDMG-104",
+      "after": 4,
+      "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/STORIES/stories-02.png",
+      "layout": "half",
+      "pos": "50% 50%",
+      "zoom": 1
     }
   ]
 }
