@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-08T06:09:35.637Z",
+  "geradoEm": "2026-07-08T06:11:27.039Z",
   "asUrl": "https://script.google.com/macros/s/AKfycbwHavGCAgB01Vm3b6kEqN26x1MRA62VVA6P2UWfbeDVFbDxfyQ9PbAhr6B44ElRK_5q/exec",
   "destaqueLabel": "Destaques",
   "topo": [
@@ -45,7 +45,7 @@
     {
       "ativo": true,
       "sku": "ZUM-TSOV-200",
-      "after": 3,
+      "after": 2,
       "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/MEIO/banner-meio-02.png",
       "mk": "",
       "mt": "",
