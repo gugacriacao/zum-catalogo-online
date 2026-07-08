@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-08T04:01:28.132Z",
+  "geradoEm": "2026-07-08T04:07:01.346Z",
   "produtos": [
     {
       "sku": "ZUM-VDRC-105",
@@ -10,7 +10,8 @@
         "Preto",
         "Off-white",
         "BordÃ´",
-        "Azul"
+        "Azul",
+        "Bordô"
       ],
       "tamanhos": [
         "UN"
@@ -53,7 +54,8 @@
         "Preto",
         "Marrom",
         "BordÃÂ´",
-        "BordÃ´"
+        "BordÃ´",
+        "Bordô"
       ],
       "tamanhos": [
         "UN"
