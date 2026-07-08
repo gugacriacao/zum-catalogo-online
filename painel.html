@@ -227,7 +227,7 @@ body{font-family:-apple-system,sans-serif;background:#f4f4f4;min-height:100vh}
   <div class="header-btns">
     <button class="btn btn-outline" onclick="sincronizar()">↻ Sync</button>
     <button class="btn btn-white" onclick="publicarTudo()" id="btnPublicar">🚀 Publicar Tudo</button>
-    <a class="btn btn-white" id="btnVerCatalogo" href="https://gugacriacao.github.io/zum-catalogo-online/catalogo.html" target="_blank" onclick="event.preventDefault();window.open('https://gugacriacao.github.io/zum-catalogo-online/catalogo.html?v='+Date.now(),'_blank')" style="text-decoration:none">🛍 Ver Catálogo</a>
+    <a class="btn btn-white" id="btnVerCatalogo" href="https://www.usezum.com.br/catalogozumonline" target="_blank" onclick="event.preventDefault();window.open('https://www.usezum.com.br/catalogozumonline?v='+Date.now(),'_blank')" style="text-decoration:none">🛍 Ver Catálogo</a>
   </div>
 </div>
 
@@ -1960,35 +1960,48 @@ async function publicarTudo() {
     toast('⏳ banners.json OK · Subindo catalogo.html...');
 
     // 3. Publica catalogo.html (o arquivo HTML do catálogo em si)
+    // Isso depende do navegador permitir ler um arquivo local (file://) via
+    // fetch — em alguns navegadores/condições isso falha silenciosamente.
+    // Por isso rastreamos o resultado e avisamos claramente se não subiu,
+    // em vez de deixar passar batido (já causou publicação incompleta antes).
+    var catalogoPublicado = false;
     try {
       var rcat = await fetch('./catalogo.html', {cache:'no-store'});
       if (rcat.ok) {
         var catalogoHtml = await rcat.text();
         await uploadJsonParaGitHub(catalogoHtml, 'catalogo.html');
+        catalogoPublicado = true;
       }
     } catch(e2) {
-      // Se o browser bloqueou o fetch local, ignora — JSONs já foram publicados
       console.warn('Não foi possível publicar catalogo.html automaticamente:', e2);
     }
 
     // 4. Publica vercel.json (config de hospedagem — raramente muda, mas mantém em sincronia)
+    var vercelJsonPublicado = false;
     try {
       var rvc = await fetch('./vercel.json', {cache:'no-store'});
       if (rvc.ok) {
         var vercelJson = await rvc.text();
         await uploadJsonParaGitHub(vercelJson, 'vercel.json');
+        vercelJsonPublicado = true;
       }
     } catch(e3) {
       console.warn('Não foi possível publicar vercel.json automaticamente:', e3);
     }
 
-    var owner = localStorage.getItem('zum-gh-owner') || GH_OWNER;
-    var repo  = localStorage.getItem('zum-gh-repo')  || GH_REPO;
-    var linkPublico = 'https://'+owner+'.github.io/'+repo+'/catalogo.html';
+    var linkPublico = 'https://www.usezum.com.br/catalogozumonline';
 
     btn.disabled = false;
     btn.textContent = '🚀 Publicar Tudo';
-    toast('✓ Publicado! Acesse: '+linkPublico);
+
+    if (!catalogoPublicado || !vercelJsonPublicado) {
+      var faltou = [];
+      if (!catalogoPublicado) faltou.push('catalogo.html');
+      if (!vercelJsonPublicado) faltou.push('vercel.json');
+      toast('⚠ produtos.json e banners.json publicados, mas ' + faltou.join(' e ') + ' NÃO subiram (o navegador bloqueou a leitura do arquivo local). Rode TESTAR-E-PUBLICAR.command pra sincronizar ' + (faltou.length > 1 ? 'esses arquivos' : 'esse arquivo') + '.', 9000);
+    } else {
+      toast('✓ Publicado! Acesse: '+linkPublico);
+    }
   } catch(e) {
     btn.disabled = false;
     btn.textContent = '🚀 Publicar Tudo';
@@ -2001,12 +2014,12 @@ function abrirInstrucoes() { document.getElementById('modalInst').classList.add(
 
 /* ==================== TOAST ==================== */
 var _toastTimer = null;
-function toast(msg) {
+function toast(msg, dur) {
   var t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('on');
   clearTimeout(_toastTimer);
-  _toastTimer = setTimeout(function(){ t.classList.remove('on'); }, 3500);
+  _toastTimer = setTimeout(function(){ t.classList.remove('on'); }, dur || 3500);
 }
 
 /* ==================== SINCRONIZAR FOTOS BASE64 → GITHUB ==================== */
@@ -2079,11 +2092,11 @@ async function sincronizarFotos() {
 function atualizarLinkCatalogo() {
   var owner = (document.getElementById('cfOwner') && document.getElementById('cfOwner').value) || localStorage.getItem('zum-gh-owner') || GH_OWNER;
   var repo  = (document.getElementById('cfRepo')  && document.getElementById('cfRepo').value)  || localStorage.getItem('zum-gh-repo')  || GH_REPO;
-  var link = 'https://'+owner+'.github.io/'+repo+'/catalogo.html';
+  var link = 'https://www.usezum.com.br/catalogozumonline';
   var el = document.getElementById('cfLinkPublico');
   if (el) el.value = link;
   var hint = document.getElementById('hintPages');
-  if (hint) hint.innerHTML = 'Para ativar o link: vá em <b>github.com/'+owner+'/'+repo+'</b> → Settings → Pages → Source → main → / (root) → Save';
+  if (hint) hint.innerHTML = 'Publicado via Vercel, conectado ao repo <b>github.com/'+owner+'/'+repo+'</b> (deploy automático a cada Publicar Tudo).';
 }
 function copiarLinkCatalogo() {
   var el = document.getElementById('cfLinkPublico');
