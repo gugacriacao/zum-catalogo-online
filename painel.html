@@ -349,6 +349,13 @@ body{font-family:-apple-system,sans-serif;background:#f4f4f4;min-height:100vh}
         <input type="text" id="cfRepo" value="zum-catalogo-online" oninput="salvarConfig();atualizarLinkCatalogo()">
       </div>
     </div>
+    <div class="config-group" style="background:#fff3e0;border:1px solid #ffe0b2">
+      <h3>🔧 Corrigir acentos corrompidos</h3>
+      <div class="cfield">
+        <div class="hint" style="margin-bottom:8px">Conserta nomes, cores e textos com acentos quebrados (ex: "BordÃ´" → "Bordô") e mescla cores duplicadas geradas pelo bug. Roda só na sua cópia local — depois é só conferir e Publicar Tudo.</div>
+        <button class="btn btn-outline" onclick="corrigirAcentosCorrompidos()">🔧 Corrigir agora</button>
+      </div>
+    </div>
     <div class="config-group" style="background:#e8f5e9;border:1px solid #c8e6c9">
       <h3>🔗 Link público do catálogo</h3>
       <div class="cfield">
@@ -578,7 +585,7 @@ async function carregarDoGitHub() {
       var apiRes = await fetch(apiUrl, {headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json'}});
       if (apiRes.ok) {
         var apiData = await apiRes.json();
-        dp = JSON.parse(atob(apiData.content.replace(/\n/g,'')));
+        dp = JSON.parse(fromBase64(apiData.content.replace(/\n/g,'')));
       }
     }
     if (!dp) {
@@ -630,7 +637,7 @@ async function carregarDoGitHub() {
       });
       if (bApiRes.ok) {
         var bApiData = await bApiRes.json();
-        db = JSON.parse(atob(bApiData.content.replace(/\n/g,'')));
+        db = JSON.parse(fromBase64(bApiData.content.replace(/\n/g,'')));
       }
     }
     if (!db) {
@@ -1839,6 +1846,17 @@ function toBase64(str) {
   return btoa(binary);
 }
 
+function fromBase64(b64) {
+  // Inverso de toBase64 — atob() sozinho não entende UTF-8 e corrompe
+  // acentos (ô, ã, ç...) toda vez que carrega produtos.json/banners.json
+  // com token pela API do GitHub. Usar sempre esta função pra decodificar
+  // conteúdo de arquivo vindo da API, nunca atob() direto.
+  var binary = atob(b64);
+  var bytes = new Uint8Array(binary.length);
+  for (var i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return new TextDecoder('utf-8').decode(bytes);
+}
+
 async function getShaGitHub(api, token) {
   // Busca SHA sem baixar o conteúdo do arquivo (economiza banda e evita timeout)
   try {
@@ -2020,6 +2038,90 @@ function toast(msg, dur) {
   t.classList.add('on');
   clearTimeout(_toastTimer);
   _toastTimer = setTimeout(function(){ t.classList.remove('on'); }, dur || 3500);
+}
+
+/* ==================== CORRIGIR ACENTOS CORROMPIDOS (mojibake) ==================== */
+function unmojibake(str) {
+  // Desfaz o efeito de UTF-8 lido como Latin-1 (ex: "Bordô" → "BordÃ´").
+  // Roda em até 3 passadas porque o bug antigo do atob() podia corromper
+  // o mesmo texto mais de uma vez em carregamentos sucessivos.
+  if (typeof str !== 'string' || !str) return str;
+  var atual = str;
+  for (var tentativa = 0; tentativa < 3; tentativa++) {
+    if (!/[ÃÂ]/.test(atual)) break; // sem rastro de mojibake, não mexe
+    var bytes = new Uint8Array(atual.length);
+    var ehLatin1 = true;
+    for (var i = 0; i < atual.length; i++) {
+      var code = atual.charCodeAt(i);
+      if (code > 255) { ehLatin1 = false; break; }
+      bytes[i] = code;
+    }
+    if (!ehLatin1) break;
+    try {
+      var corrigido = new TextDecoder('utf-8', {fatal:true}).decode(bytes);
+      if (corrigido === atual) break;
+      atual = corrigido;
+    } catch (e) {
+      break; // não é UTF-8 válido reinterpretado — provavelmente já está certo
+    }
+  }
+  return atual;
+}
+
+function corrigirAcentosCorrompidos() {
+  var totalCampos = 0, totalCoresMescladas = 0, produtosAfetados = [];
+
+  catalogo.forEach(function(p) {
+    var mudou = false;
+
+    ['nome', 'destaque', 'badge', 'stock', 'cat'].forEach(function(campo) {
+      var novo = unmojibake(p[campo]);
+      if (novo !== p[campo]) { p[campo] = novo; mudou = true; totalCampos++; }
+    });
+
+    if (Array.isArray(p.cores) && p.cores.length) {
+      var coresCorrigidas = p.cores.map(unmojibake);
+      var coresFinais = [];
+      var fotosCoresNovo = {};
+      coresCorrigidas.forEach(function(corFixa, i) {
+        var corOriginal = p.cores[i];
+        if (coresFinais.indexOf(corFixa) < 0) coresFinais.push(corFixa);
+        var fotosDaCor = (p.fotosCores && p.fotosCores[corOriginal]) || [];
+        if (fotosDaCor.length) {
+          var jaTem = fotosCoresNovo[corFixa] || [];
+          fotosCoresNovo[corFixa] = jaTem.concat(fotosDaCor.filter(function (f) { return jaTem.indexOf(f) < 0; }));
+        }
+      });
+      var coresMudaram = coresFinais.length !== p.cores.length || coresCorrigidas.some(function (c, i) { return c !== p.cores[i]; });
+      if (coresMudaram) {
+        if (coresFinais.length < coresCorrigidas.length) totalCoresMescladas += (coresCorrigidas.length - coresFinais.length);
+        p.cores = coresFinais;
+        p.fotosCores = fotosCoresNovo;
+        mudou = true;
+      }
+    }
+
+    if (mudou) produtosAfetados.push(p.nome || p.sku);
+  });
+
+  [bannersTopo, bannersMeio, bannerStories].forEach(function (lista) {
+    (lista || []).forEach(function (b) {
+      ['tag', 'titulo', 'sub', 'mk', 'mt'].forEach(function (campo) {
+        if (b[campo]) b[campo] = unmojibake(b[campo]);
+      });
+    });
+  });
+
+  salvarLocal();
+  renderGrid();
+
+  if (produtosAfetados.length) {
+    toast('✓ Corrigido: ' + produtosAfetados.length + ' produto(s), ' + totalCampos + ' campo(s) de texto' +
+      (totalCoresMescladas ? ', ' + totalCoresMescladas + ' cor(es) duplicada(s) mesclada(s)' : '') +
+      '. Confira os produtos e clique em Publicar Tudo.', 9000);
+  } else {
+    toast('Nenhuma correção necessária — dados já estão OK.');
+  }
 }
 
 /* ==================== SINCRONIZAR FOTOS BASE64 → GITHUB ==================== */
