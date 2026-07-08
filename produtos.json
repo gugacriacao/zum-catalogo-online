@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-08T04:56:51.932Z",
+  "geradoEm": "2026-07-08T05:10:48.914Z",
   "produtos": [
     {
       "sku": "ZUM-VDRC-105",
@@ -21,8 +21,8 @@
       "estoqueNum": 0,
       "ativo": true,
       "fotos": [
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-1783477410355.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-1783477624666.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-1783477410355.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-1783477642892.png"
       ],
       "fotosCores": {
@@ -34,9 +34,8 @@
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/CORES/off-white-1783477547567.jpg"
         ],
         "Bordô": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/CORES/bordÃ´-1783477556839.jpg",
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/CORES/bordÃ´-1783477565732.jpg",
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/CORES/bordÃ´-1783477569629.jpg"
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/CORES/bordô-1783487393408.jpg",
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/CORES/bordô-1783487404328.jpg"
         ]
       },
       "ordem": 1
