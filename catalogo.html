@@ -354,6 +354,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
         <div>
           <div class="pname" id="pName"></div>
           <div class="psku" id="pSku"></div>
+          <div class="card-destaque" id="pDestaque" style="margin-top:4px"></div>
         </div>
         <div class="pprice" id="pPrice" style="text-align:right;white-space:nowrap;flex-shrink:0"></div>
       </div>
@@ -695,7 +696,6 @@ function renderGrid(){
         '<div class="card-img" style="background:'+p.bg+'">'+(p.badge?'<span class="badge">'+p.badge+'</span>':'')+'<button class="fav-btn'+(FAVS.has(p.sku)?' on':'')+'" onclick="event.stopPropagation();toggleFav(\''+p.sku+'\',this)"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>'+_cardMediaHtml+'</div>'+
         '<div class="card-info">'+
         '<div class="card-left"><div class="card-name">'+p.name+'</div>'+
-        (p.destaque?'<div class="card-destaque">'+p.destaque+'</div>':'')+
         (p.stock.indexOf('Últim')>=0||p.stock.indexOf('Pouc')>=0?'<div class="card-tag">'+p.stock+'</div>':'')+'</div>'+
         '<div class="card-right"><div class="card-apartir">a partir de</div><div class="card-price">'+moneyCard(p.price)+'</div><div class="card-cada"><img src="'+PIX_ICON+'" alt="PIX" style="display:inline;width:9px;height:9px;vertical-align:middle;margin-right:2px;position:relative;top:-1px"><span style="color:#32BCAD;font-weight:600">no PIX</span> · cada</div></div>'+
         '</div></div>';
@@ -835,6 +835,7 @@ function openProduct(sku){
   selSize = prod.sizes.findIndex(s=>!s.out);
   $('pName').textContent=prod.name;
   $('pSku').textContent='SKU · '+prod.sku;
+  $('pDestaque').textContent=prod.destaque || '';
   $('pPrice').innerHTML='<div class="card-apartir" style="text-align:right">a partir de</div><div class="card-price">'+moneyFmt(prod.price)+'</div><div class="card-cada" style="text-align:right">cada</div>';
   $('pStock').textContent=prod.stock;
   $('pQty').textContent='1';
