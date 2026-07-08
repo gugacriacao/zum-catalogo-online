@@ -690,8 +690,9 @@ function renderGrid(){
     var rowHtml='';
     rowItems.forEach((p,ri)=>{
       var globalIdx=i+ri;
+      var _cardMediaHtml = mediaHtml(p.media && p.media[0]);
       rowHtml+='<div class="card" onclick="openProduct(\''+p.sku+'\')">'+
-        '<div class="card-img" style="background:'+p.bg+'">'+(p.badge?'<span class="badge">'+p.badge+'</span>':'')+'<button class="fav-btn'+(FAVS.has(p.sku)?' on':'')+'" onclick="event.stopPropagation();toggleFav(\''+p.sku+'\',this)"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>'+(p.media&&p.media[0]?'<img src="'+p.media[0]+'" loading="lazy" alt="'+p.name+'">':'<span class="ph">ZUM</span>')+'</div>'+
+        '<div class="card-img" style="background:'+p.bg+'">'+(p.badge?'<span class="badge">'+p.badge+'</span>':'')+'<button class="fav-btn'+(FAVS.has(p.sku)?' on':'')+'" onclick="event.stopPropagation();toggleFav(\''+p.sku+'\',this)"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>'+_cardMediaHtml+'</div>'+
         '<div class="card-info">'+
         '<div class="card-left"><div class="card-name">'+p.name+'</div>'+
         (p.destaque?'<div class="card-destaque">'+p.destaque+'</div>':'')+
@@ -731,10 +732,11 @@ function renderGrid(){
       if(b.layout==='half'){
         var nextProd=list[i+cols]||null;
         if(nextProd){
+          var _npMediaHtml = mediaHtml(nextProd.media && nextProd.media[0]);
           html+='<div class="grid-row stories-half-row" style="grid-template-columns:1fr 1fr">';
           html+='<div class="banner-stories-half"'+clickAttr+' style="cursor:'+(b.sku?'pointer':'default')+'">'+bgEl+'</div>';
           html+='<div class="card" onclick="openProduct(\''+nextProd.sku+'\')" style="background:'+nextProd.bg+'">'+
-            '<div class="card-img"><img src="'+(nextProd.media&&nextProd.media[0]||'')+'"></div>'+
+            '<div class="card-img">'+_npMediaHtml+'</div>'+
             '<div class="card-info"><div class="card-left"><div class="card-name">'+nextProd.name+'</div></div>'+
             '<div class="card-right"><div class="card-apartir">a partir de</div><div class="card-price">'+moneyCard(nextProd.price)+'</div></div></div></div>';
           html+='</div>';
@@ -780,6 +782,17 @@ function renderGrid(){
   }
 }
 function bannerTopClick(){filterCat('Vestidos')}
+
+// Thumb de produto (grade, sugestões etc.) — decide entre <img> e <video>
+// pelo tipo de arquivo, senão vídeo como capa quebra virando <img> de vídeo.
+function mediaHtml(url, style) {
+  if (!url) return '<span class="ph">ZUM</span>';
+  var isVid = /\.(mp4|mov|webm)$/i.test(url);
+  var styleAttr = style ? ' style="'+style+'"' : '';
+  return isVid
+    ? '<video src="'+url+'" autoplay muted loop playsinline'+styleAttr+'></video>'
+    : '<img src="'+url+'" loading="lazy"'+styleAttr+'>';
+}
 
 /* ====== GALERIA DO PRODUTO ====== */
 function buildGallery(mediaArr) {
@@ -838,7 +851,7 @@ function openProduct(sku){
     '<div class="sugest-title">Você também pode gostar</div>'+
     '<div class="sugest-grid">'+outros.map(p=>
       '<div class="sugest-card" onclick="openProduct(\''+p.sku+'\')">'+
-      '<div class="sugest-img">'+(p.media[0]?'<img src="'+p.media[0]+'" style="width:100%;height:100%;object-fit:cover">':'<span class="ph">ZUM</span>')+'</div>'+
+      '<div class="sugest-img">'+mediaHtml(p.media[0], 'width:100%;height:100%;object-fit:cover')+'</div>'+
       '<div class="sugest-name">'+p.name+'</div>'+
       '</div>').join('')+'</div>':'';
   show('s-product');
@@ -876,7 +889,7 @@ function renderCart(){
   }
   $('cartFoot').style.display='block';
   $('cartList').innerHTML=cart.map((it,i)=>
-    (function(){var _p=PRODUCTS.find(function(x){return x.sku===it.sku});var _img=_p&&_p.media&&_p.media[0]?'<img src="'+_p.media[0]+'" alt="'+it.name+'">':'<span class="ph ph-sm">ZUM</span>';return '<div class="cart-item"><div class="ci-img">'+_img+'</div>'})()+'<div class="ci-info">'+
+    (function(){var _p=PRODUCTS.find(function(x){return x.sku===it.sku});var _img=mediaHtml(_p&&_p.media&&_p.media[0]);return '<div class="cart-item"><div class="ci-img">'+_img+'</div>'})()+'<div class="ci-info">'+
     '<div class="ci-name">'+it.name+'</div><div class="ci-var">'+it.color+' · '+it.size+'</div>'+
     '<div class="ci-bottom"><div class="ci-qty"><button onclick="cartQty('+i+',-1)">&minus;</button><span>'+it.qty+'</span><button onclick="cartQty('+i+',1)">+</button></div>'+
     '</div></div>'+
@@ -965,7 +978,7 @@ function validForm(){
 /* ====== CONFIRMAR ====== */
 function renderConfirm(){
   $('confirmList').innerHTML=cart.map(it=>
-    (function(){var _p=PRODUCTS.find(function(x){return x.sku===it.sku});var _img=_p&&_p.media&&_p.media[0]?'<img src="'+_p.media[0]+'" alt="'+it.name+'">':'<span class="ph ph-sm">ZUM</span>';return '<div class="cart-item"><div class="ci-img">'+_img+'</div>'})()+'<div class="ci-info">'+
+    (function(){var _p=PRODUCTS.find(function(x){return x.sku===it.sku});var _img=mediaHtml(_p&&_p.media&&_p.media[0]);return '<div class="cart-item"><div class="ci-img">'+_img+'</div>'})()+'<div class="ci-info">'+
     '<div class="ci-name">'+it.name+'</div><div class="ci-var">'+it.color+' · '+it.size+' · Qtd '+it.qty+'</div>'+
     '</div><div class="ci-right"><div class="ci-price-cart">'+money(it.price*it.qty)+'</div></div></div>').join('');
   var t=cartTotal();
