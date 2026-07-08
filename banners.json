@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-08T06:06:50.498Z",
+  "geradoEm": "2026-07-08T06:09:35.637Z",
   "asUrl": "https://script.google.com/macros/s/AKfycbwHavGCAgB01Vm3b6kEqN26x1MRA62VVA6P2UWfbeDVFbDxfyQ9PbAhr6B44ElRK_5q/exec",
   "destaqueLabel": "Destaques",
   "topo": [
@@ -65,9 +65,9 @@
     },
     {
       "ativo": true,
-      "sku": "ZUM-VDMG-104",
+      "sku": "",
       "after": 4,
-      "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/STORIES/stories-02.png",
+      "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/STORIES/stories-03.png",
       "layout": "half",
       "pos": "50% 50%",
       "zoom": 1
