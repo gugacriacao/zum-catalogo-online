@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-08T03:24:59.596Z",
+  "geradoEm": "2026-07-08T03:59:44.705Z",
   "produtos": [
     {
       "sku": "ZUM-VDRC-105",
@@ -273,11 +273,10 @@
     },
     {
       "sku": "ZUM-VDALC-100",
-      "nome": "Vestido alÃ§a",
+      "nome": "Vestido alça",
       "cat": "Vestidos",
       "preco": 179.9,
       "cores": [
-        "BordÃ´",
         "Off-white",
         "Bordô",
         "Azul",
