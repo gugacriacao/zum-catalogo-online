@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-08T04:16:20.294Z",
+  "geradoEm": "2026-07-01T15:00:00.000Z",
   "asUrl": "https://script.google.com/macros/s/AKfycbwHavGCAgB01Vm3b6kEqN26x1MRA62VVA6P2UWfbeDVFbDxfyQ9PbAhr6B44ElRK_5q/exec",
   "destaqueLabel": "Destaques",
   "topo": [
@@ -34,19 +34,29 @@
   "meio": [
     {
       "ativo": true,
-      "sku": "ZUM-VDMG-104",
-      "after": 2,
+      "sku": "",
+      "after": 50,
       "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/MEIO/banner-meio-01.png",
       "mk": "",
       "mt": "",
       "pos": "53.8% 41.5%",
+      "zoom": 1.35
+    },
+    {
+      "ativo": true,
+      "sku": "",
+      "after": 50,
+      "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/MEIO/banner-meio-02.png",
+      "mk": "",
+      "mt": "",
+      "pos": "50% 50%",
       "zoom": 1
     },
     {
       "ativo": true,
-      "sku": "ZUM-TSOV-200",
-      "after": 1,
-      "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/MEIO/banner-meio-02.png",
+      "sku": "",
+      "after": 50,
+      "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/MEIO/banner-meio-03.png",
       "mk": "",
       "mt": "",
       "pos": "50% 50%",
@@ -56,17 +66,35 @@
   "stories": [
     {
       "ativo": true,
-      "sku": "ZUM-VDMG-104",
+      "sku": "",
       "after": 2,
       "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/STORIES/stories-01.png",
-      "layout": "half",
+      "layout": "full",
       "pos": "50% 50%",
       "zoom": 1
     },
     {
       "ativo": true,
-      "sku": "ZUM-VDRC-105",
-      "after": 1,
+      "sku": "",
+      "after": 2,
+      "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/STORIES/stories-02.png",
+      "layout": "full",
+      "pos": "50% 50%",
+      "zoom": 1
+    },
+    {
+      "ativo": true,
+      "sku": "",
+      "after": 2,
+      "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/STORIES/stories-03.png",
+      "layout": "full",
+      "pos": "50% 50%",
+      "zoom": 1
+    },
+    {
+      "ativo": true,
+      "sku": "",
+      "after": 2,
       "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/STORIES/stories-04.mp4",
       "layout": "full",
       "pos": "50% 50%",
