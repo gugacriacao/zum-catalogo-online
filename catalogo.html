@@ -825,15 +825,10 @@ function openProduct(sku){
   $('pPrice').innerHTML='<div class="card-apartir" style="text-align:right">a partir de</div><div class="card-price">'+moneyFmt(prod.price)+'</div><div class="card-cada" style="text-align:right">cada</div>';
   $('pStock').textContent=prod.stock;
   $('pQty').textContent='1';
-  // Galeria: sempre mostra as fotos gerais primeiro (modelo/lifestyle),
-  // completando com as fotos específicas da primeira cor que ainda não
-  // apareceram — nunca descarta as fotos gerais em favor só da cor.
-  var firstColorName = prod.colors.length ? prod.colors[0].n : null;
-  var fotosCorInicial = (firstColorName && prod.fotosCores[firstColorName]) ? prod.fotosCores[firstColorName] : [];
-  var mediaGeral = prod.media || [];
-  var mediaInicial = mediaGeral.concat(fotosCorInicial.filter(function(f){ return mediaGeral.indexOf(f) === -1; }));
-  if (!mediaInicial.length) mediaInicial = fotosCorInicial;
-  buildGallery(mediaInicial);
+  // Galeria: ao entrar no produto, mostra só as fotos principais (as
+  // cadastradas no campo "principal" do painel) — as fotos de cor só
+  // aparecem quando o cliente clica numa cor (ver setColor).
+  buildGallery(prod.media);
   $('pColors').innerHTML=prod.colors.map((c,i)=>'<div class="color'+(i===0?' on':'')+'" style="background:'+c.c+'" onclick="setColor('+i+')"></div>').join('');
   $('pColorName').textContent=prod.colors[0] ? prod.colors[0].n : '';
   $('pSizes').innerHTML=prod.sizes.map((s,i)=>'<div class="size'+(s.out?' out':'')+(i===selSize?' on':'')+'" onclick="'+(s.out?'':'setSize('+i+')')+'">'+s.s+'</div>').join('');
@@ -853,13 +848,11 @@ function setColor(i){
   selColor=i;
   $('pColorName').textContent=prod.colors[i].n;
   document.querySelectorAll('#pColors .color').forEach((c,x)=>c.classList.toggle('on',x===i));
-  // Troca galeria: fotos gerais + fotos da cor selecionada, combinadas
-  // (nunca só uma ou só outra — mesmo critério do openProduct)
+  // Troca galeria: só as fotos daquela cor (o que foi vinculado a ela no
+  // painel); se a cor não tiver fotos próprias, cai nas fotos principais.
   var corNome = prod.colors[i].n;
-  var mediasCor = prod.fotosCores[corNome] || [];
-  var mediaGeral = prod.media || [];
-  var mediaCombinada = mediaGeral.concat(mediasCor.filter(function(f){ return mediaGeral.indexOf(f) === -1; }));
-  buildGallery(mediaCombinada.length ? mediaCombinada : mediasCor);
+  var mediasCor = prod.fotosCores[corNome];
+  buildGallery((mediasCor && mediasCor.length) ? mediasCor : prod.media);
 }
 function setSize(i){selSize=i;document.querySelectorAll('#pSizes .size').forEach((s,x)=>s.classList.toggle('on',x===i))}
 function prodQty(d){pQty=Math.max(1,pQty+d);$('pQty').textContent=pQty}
