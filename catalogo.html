@@ -1322,6 +1322,21 @@ async function carregarCatalogo(){
     });
   }
 
+  // Se AS_URL não veio do localStorage (é o caso de QUALQUER cliente real —
+  // esse valor só existe no navegador de quem já abriu o painel.html), busca
+  // o endereço da planilha ao vivo dentro do banners.json. Sem isso, todo
+  // visitante comum pulava direto pro produtos.json (estoque só agregado,
+  // sem separar por cor/tamanho) e nunca chegava a tentar o dado ao vivo.
+  if(!AS_URL){
+    try{
+      var rb0 = await fetch(REMOTE_BASE+'banners.json?_='+Date.now(),{cache:'no-store'});
+      if(rb0.ok){
+        var db0 = await rb0.json();
+        if(db0.asUrl) AS_URL = db0.asUrl;
+      }
+    }catch(e){}
+  }
+
   // 1ª opção: ZumAgent ao vivo — preço e estoque em tempo real da planilha
   if(AS_URL){
     try{
