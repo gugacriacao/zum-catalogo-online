@@ -893,7 +893,15 @@ function setColor(i){
 function setSize(i){selSize=i;document.querySelectorAll('#pSizes .size').forEach((s,x)=>s.classList.toggle('on',x===i))}
 function prodQty(d){pQty=Math.max(1,pQty+d);$('pQty').textContent=pQty}
 function addToCart(){
-  if(selSize<0){toast('Escolha um tamanho');return}
+  if(selSize<0){
+    // selSize fica -1 tanto quando o cliente ainda não clicou num tamanho
+    // quanto quando NENHUM tamanho tem estoque nessa cor — nesse segundo
+    // caso "Escolha um tamanho" é uma mensagem confusa (não tem o que
+    // escolher), então avisa que é falta de estoque mesmo.
+    var todosSemEstoque = prod.sizes.length>0 && prod.sizes.every(function(s){return s.out});
+    toast(todosSemEstoque ? 'Sem estoque nessa cor' : 'Escolha um tamanho');
+    return;
+  }
   // Trava de segurança: nunca deixa adicionar um tamanho marcado como sem
   // estoque, mesmo que algo tenha deixado selSize apontar pra ele.
   if(prod.sizes[selSize].out){toast('Esse tamanho está sem estoque nessa cor');return}
