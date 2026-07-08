@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-08T13:46:59.877Z",
+  "geradoEm": "2026-07-08T04:56:54.187Z",
   "asUrl": "https://script.google.com/macros/s/AKfycbwHavGCAgB01Vm3b6kEqN26x1MRA62VVA6P2UWfbeDVFbDxfyQ9PbAhr6B44ElRK_5q/exec",
   "destaqueLabel": "Destaques",
   "topo": [
@@ -31,6 +31,37 @@
       "zoom": 1
     }
   ],
-  "meio": [],
-  "stories": []
+  "meio": [
+    {
+      "ativo": true,
+      "sku": "ZUM-VDMG-104",
+      "after": 2,
+      "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/MEIO/banner-meio-01.png",
+      "mk": "",
+      "mt": "",
+      "pos": "53.8% 41.5%",
+      "zoom": 1
+    },
+    {
+      "ativo": true,
+      "sku": "ZUM-TSOV-200",
+      "after": 1,
+      "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/MEIO/banner-meio-02.png",
+      "mk": "",
+      "mt": "",
+      "pos": "50% 50%",
+      "zoom": 1
+    }
+  ],
+  "stories": [
+    {
+      "ativo": true,
+      "sku": "ZUM-VDRC-105",
+      "after": 1,
+      "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/STORIES/stories-04.mp4",
+      "layout": "full",
+      "pos": "50% 50%",
+      "zoom": 1.1
+    }
+  ]
 }
