@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-08T06:21:24.488Z",
+  "geradoEm": "2026-07-08T06:28:50.182Z",
   "produtos": [
     {
       "sku": "ZUM-VDRC-105",
@@ -241,8 +241,22 @@
       "destaque": "",
       "estoqueNum": 0,
       "ativo": false,
-      "fotos": [],
-      "fotosCores": {},
+      "fotos": [
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDDN-103/midia-1783491981062.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDDN-103/midia-1783491933085.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDDN-103/midia-1783491950284.png"
+      ],
+      "fotosCores": {
+        "Preto": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDDN-103/CORES/preto-1783491942609.jpg"
+        ],
+        "Rosa": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDDN-103/CORES/rosa-1783491960073.jpg"
+        ],
+        "Azul": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDDN-103/CORES/azul-1783491966795.jpg"
+        ]
+      },
       "ordem": 8
     },
     {
@@ -285,7 +299,10 @@
       "destaque": "",
       "estoqueNum": 1,
       "ativo": false,
-      "fotos": [],
+      "fotos": [
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDALC-100/midia-1783492068917.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDALC-100/midia-1783492079703.png"
+      ],
       "fotosCores": {},
       "ordem": 10
     },
