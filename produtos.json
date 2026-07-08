@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-08T04:56:51.932Z",
+  "geradoEm": "2026-07-01T16:26:04.178Z",
   "produtos": [
     {
       "sku": "ZUM-VDRC-105",
@@ -8,38 +8,71 @@
       "preco": 179.9,
       "cores": [
         "Preto",
-        "Off-white",
         "Bordô",
-        "Azul"
+        "Off-white"
       ],
       "tamanhos": [
         "UN"
       ],
       "stock": "Em estoque",
       "badge": "",
-      "destaque": "Tecido Poliamida. Tamanho único: 36/42",
-      "estoqueNum": 0,
+      "destaque": "",
+      "estoqueNum": 1,
       "ativo": true,
       "fotos": [
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-1783477410355.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-1783477624666.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-1783477642892.png"
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-01.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-02.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-03.png"
       ],
-      "fotosCores": {
-        "Preto": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/CORES/preto-1783477618722.jpg"
-        ],
-        "Off-white": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/CORES/off-white-1783477485452.jpg",
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/CORES/off-white-1783477547567.jpg"
-        ],
-        "Bordô": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/CORES/bordÃ´-1783477556839.jpg",
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/CORES/bordÃ´-1783477565732.jpg",
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/CORES/bordÃ´-1783477569629.jpg"
-        ]
-      },
+      "fotosCores": {},
       "ordem": 1
+    },
+    {
+      "sku": "ZUM-TSOV-200",
+      "nome": "T-shirt Over básico",
+      "cat": "T-shirts",
+      "preco": 99,
+      "cores": [
+        "Preto",
+        "Branco",
+        "Marrom",
+        "Azul Marinho"
+      ],
+      "tamanhos": [
+        "P",
+        "G"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "estoqueNum": 9,
+      "ativo": true,
+      "fotos": [],
+      "fotosCores": {},
+      "ordem": 2
+    },
+    {
+      "sku": "ZUM-CC-400",
+      "nome": "Calça cargo",
+      "cat": "Calças",
+      "preco": 189.9,
+      "cores": [
+        "Preto",
+        "Bege"
+      ],
+      "tamanhos": [
+        "P",
+        "M",
+        "G"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "estoqueNum": 8,
+      "ativo": true,
+      "fotos": [],
+      "fotosCores": {},
+      "ordem": 3
     },
     {
       "sku": "ZUM-VDBT-102",
@@ -65,85 +98,6 @@
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDBT-102/midia-03.png"
       ],
       "fotosCores": {},
-      "ordem": 2
-    },
-    {
-      "sku": "ZUM-TSOV-200",
-      "nome": "T-shirt Over básico",
-      "cat": "T-shirts",
-      "preco": 99,
-      "cores": [
-        "Preto",
-        "Branco",
-        "Marrom",
-        "Azul Marinho"
-      ],
-      "tamanhos": [
-        "P",
-        "G"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "destaque": "Algodão",
-      "estoqueNum": 7,
-      "ativo": true,
-      "fotos": [
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783480096799.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783480100247.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783480103971.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783480107596.png"
-      ],
-      "fotosCores": {
-        "Preto": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/CORES/preto-1783480119954.jpg"
-        ],
-        "Branco": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/CORES/branco-1783480123522.jpg"
-        ],
-        "Marrom": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/CORES/marrom-1783480126711.jpg"
-        ],
-        "Azul Marinho": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/CORES/azul-marinho-1783480129579.jpg"
-        ]
-      },
-      "ordem": 3
-    },
-    {
-      "sku": "ZUM-CC-400",
-      "nome": "Calça cargo",
-      "cat": "Calças",
-      "preco": 189.9,
-      "cores": [
-        "Preto",
-        "Bege"
-      ],
-      "tamanhos": [
-        "P",
-        "M",
-        "G"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "destaque": "",
-      "estoqueNum": 7,
-      "ativo": true,
-      "fotos": [
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CC-400/midia-1783478963409.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CC-400/midia-1783479001351.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CC-400/midia-1783479007713.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CC-400/midia-1783479011096.png"
-      ],
-      "fotosCores": {
-        "Preto": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CC-400/CORES/preto-1783479016221.jpg",
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CC-400/CORES/preto-1783479028340.jpg"
-        ],
-        "Bege": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CC-400/CORES/bege-1783479019651.jpg",
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CC-400/CORES/bege-1783479034322.jpg"
-        ]
-      },
       "ordem": 4
     },
     {
@@ -161,24 +115,11 @@
       ],
       "stock": "Em estoque",
       "badge": "",
-      "destaque": "Tecido Poliamida. Tamanho único: 36/42",
-      "estoqueNum": 3,
+      "destaque": "",
+      "estoqueNum": 5,
       "ativo": true,
-      "fotos": [
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/midia-1783480220676.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/midia-1783480241093.png"
-      ],
-      "fotosCores": {
-        "Marrom": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/CORES/marrom-1783480191875.jpg"
-        ],
-        "Preto": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/CORES/preto-1783480202896.jpg"
-        ],
-        "Azul": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/CORES/azul-1783480207656.jpg"
-        ]
-      },
+      "fotos": [],
+      "fotosCores": {},
       "ordem": 5
     },
     {
@@ -196,8 +137,8 @@
       "stock": "Em estoque",
       "badge": "",
       "destaque": "",
-      "estoqueNum": 1,
-      "ativo": false,
+      "estoqueNum": 3,
+      "ativo": true,
       "fotos": [],
       "fotosCores": {},
       "ordem": 6
@@ -218,7 +159,7 @@
       "badge": "",
       "destaque": "",
       "estoqueNum": 3,
-      "ativo": false,
+      "ativo": true,
       "fotos": [],
       "fotosCores": {},
       "ordem": 7
@@ -273,10 +214,8 @@
       "cat": "Vestidos",
       "preco": 179.9,
       "cores": [
-        "Off-white",
         "Bordô",
-        "Azul",
-        "Marrom"
+        "Off-white"
       ],
       "tamanhos": [
         "UN"
@@ -284,7 +223,7 @@
       "stock": "Em estoque",
       "badge": "",
       "destaque": "",
-      "estoqueNum": 1,
+      "estoqueNum": 0,
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
