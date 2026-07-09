@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-09T05:37:11.260Z",
+  "geradoEm": "2026-07-09T12:27:58.629Z",
   "produtos": [
     {
       "sku": "ZUM-VDRC-105",
@@ -20,6 +20,7 @@
       "stock": "Em estoque",
       "badge": "",
       "destaque": "Tecido Poliamida. Tamanho único: 36/42",
+      "descricao": "",
       "estoqueNum": 2,
       "ativo": true,
       "fotos": [
@@ -60,6 +61,7 @@
       "stock": "Em estoque",
       "badge": "",
       "destaque": "Algodão",
+      "descricao": "",
       "estoqueNum": 6,
       "ativo": true,
       "fotos": [
@@ -85,6 +87,7 @@
       "stock": "Em estoque",
       "badge": "",
       "destaque": "",
+      "descricao": "",
       "estoqueNum": 2,
       "ativo": true,
       "fotos": [
@@ -110,6 +113,7 @@
       "stock": "Em estoque",
       "badge": "",
       "destaque": "",
+      "descricao": "",
       "estoqueNum": 7,
       "ativo": true,
       "fotos": [
@@ -148,6 +152,7 @@
       "stock": "Em estoque",
       "badge": "",
       "destaque": "Tecido Poliamida. Tamanho único: 36/42",
+      "descricao": "",
       "estoqueNum": 3,
       "ativo": true,
       "fotos": [
@@ -183,6 +188,7 @@
       "stock": "Em estoque",
       "badge": "",
       "destaque": "",
+      "descricao": "",
       "estoqueNum": 1,
       "ativo": true,
       "fotos": [
@@ -215,6 +221,7 @@
       "stock": "Em estoque",
       "badge": "",
       "destaque": "",
+      "descricao": "",
       "estoqueNum": 4,
       "ativo": true,
       "fotos": [
@@ -250,6 +257,7 @@
       "stock": "Em estoque",
       "badge": "",
       "destaque": "",
+      "descricao": "",
       "estoqueNum": 2,
       "ativo": true,
       "fotos": [],
@@ -271,6 +279,7 @@
       "stock": "Em estoque",
       "badge": "",
       "destaque": "",
+      "descricao": "",
       "estoqueNum": 1,
       "ativo": false,
       "fotos": [],
@@ -292,6 +301,7 @@
       "stock": "Em estoque",
       "badge": "",
       "destaque": "",
+      "descricao": "",
       "estoqueNum": 3,
       "ativo": false,
       "fotos": [],
@@ -315,6 +325,7 @@
       "stock": "Em estoque",
       "badge": "",
       "destaque": "",
+      "descricao": "",
       "estoqueNum": 0,
       "ativo": false,
       "fotos": [],
@@ -336,6 +347,7 @@
       "stock": "Em estoque",
       "badge": "",
       "destaque": "",
+      "descricao": "",
       "estoqueNum": 0,
       "ativo": false,
       "fotos": [],
@@ -356,6 +368,7 @@
       "stock": "SEM ESTOQUE",
       "badge": "",
       "destaque": "",
+      "descricao": "",
       "estoqueNum": 0,
       "ativo": false,
       "fotos": [],
@@ -376,6 +389,7 @@
       "stock": "Em estoque",
       "badge": "",
       "destaque": "",
+      "descricao": "",
       "estoqueNum": 0,
       "ativo": false,
       "fotos": [],
