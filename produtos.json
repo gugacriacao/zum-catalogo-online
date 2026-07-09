@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-09T21:09:40.302Z",
+  "geradoEm": "2026-07-09T23:36:31.486Z",
   "produtos": [
     {
       "sku": "ZUM-VDRC-105",
@@ -250,7 +250,7 @@
     {
       "sku": "ZUM-VDFU-106",
       "nome": "Vestido frente unica",
-      "cat": "Vestido",
+      "cat": "",
       "preco": 185.9,
       "cores": [
         "Bege"
@@ -264,7 +264,12 @@
       "descricao": "",
       "estoqueNum": 2,
       "ativo": true,
-      "fotos": [],
+      "fotos": [
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDFU-106/midia-1783640078311.mp4",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDFU-106/midia-1783640109818.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDFU-106/midia-1783640118611.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDFU-106/midia-1783640125518.png"
+      ],
       "fotosCores": {},
       "ordem": 8
     },
