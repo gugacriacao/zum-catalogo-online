@@ -160,6 +160,14 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .btn-out{display:block;width:100%;padding:15px;background:#fff;color:#111;border:1.5px solid #111;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;transition:all .12s}
 .btn-out:active{background:#111;color:#fff}
 .btn-bar{position:sticky;bottom:0;background:#fff;padding:12px 16px;border-top:1px solid #eee;z-index:30}
+.btn-avise{display:none;width:100%;margin-top:10px;padding:13px;background:#fff;border:1.5px solid #111;color:#111;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;border-radius:2px}
+.btn-avise:active{background:#111;color:#fff}
+.avise-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:250;display:none;align-items:flex-end;justify-content:center}
+.avise-bg.show{display:flex}
+.avise-modal{background:#fff;width:100%;max-width:420px;border-radius:16px 16px 0 0;padding:22px 20px 26px;max-height:85vh;overflow-y:auto}
+.avise-title{font-size:15px;font-weight:700;margin-bottom:4px}
+.avise-sub{font-size:12px;color:#777;margin-bottom:16px}
+.avise-consent{font-size:10px;color:#999;line-height:1.5;margin:12px 0 14px}
 .btn-bar.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 
 /* SUBHEADER */
@@ -295,6 +303,18 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   <div class="small">ZUM<br>Moda feminina · Verão 2026<br>Sofisticação no dia a dia</div>
 </nav>
 
+<!-- ===== AVISE-ME QUANDO CHEGAR ===== -->
+<div class="avise-bg" id="aviseBg" onclick="fecharAviseMe()">
+  <div class="avise-modal" onclick="event.stopPropagation()">
+    <div class="avise-title">Avise-me quando chegar</div>
+    <div class="avise-sub" id="aviseProdInfo"></div>
+    <div class="field"><label>Nome</label><input type="text" id="aviseNome" placeholder="Seu nome"></div>
+    <div class="field"><label>WhatsApp</label><input type="tel" id="aviseWpp" placeholder="(00) 00000-0000"></div>
+    <div class="avise-consent">Ao enviar, você concorda em receber uma mensagem no WhatsApp da ZUM quando este produto voltar ao estoque.</div>
+    <button class="btn-blk" onclick="enviarAvisoEstoque()">Quero ser avisada</button>
+  </div>
+</div>
+
 <!-- ===== BUSCA ===== -->
 <div class="search-ov" id="searchOv">
   <div class="search-top">
@@ -381,6 +401,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
           <button class="btn-add" onclick="addToCart()">Adicionar</button>
         </div>
         <div class="stock-note" id="pStock"></div>
+        <button class="btn-avise" id="pAviseBtn" onclick="abrirAviseMe()">Avise-me quando chegar</button>
         <div class="prod-desc" id="prodDescBox" style="display:none">
           <div class="prod-desc-title">Descrição</div>
           <div class="prod-desc-text" id="pDescText"></div>
@@ -779,7 +800,7 @@ function buildGallery(mediaArr) {
   gThumbs.innerHTML = curGalMedia.map(function(m,i){
     var isVid = /\.(mp4|mov|webm)$/i.test(m)||m.startsWith('data:video');
     return '<div class="thumb'+(i===0?' on':'')+'" onclick="setMedia('+i+')" style="background:#f0ece8">'+
-      (isVid?'<video src="'+m+'" style="width:100%;height:100%;object-fit:cover" muted playsinline></video>':
+      (isVid?'<video src="'+m+'" style="width:100%;height:100%;object-fit:cover" autoplay muted loop playsinline></video>':
               '<img src="'+m+'" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display=\'none\'">')+
     '</div>';
   }).join('');
@@ -835,9 +856,13 @@ function openProduct(sku){
   // cadastradas no campo "principal" do painel) — as fotos de cor só
   // aparecem quando o cliente clica numa cor (ver setColor).
   buildGallery(prod.media);
-  $('pColors').innerHTML=prod.colors.map((c,i)=>'<div class="color'+(i===0?' on':'')+'" style="background:'+c.c+'" onclick="setColor('+i+')"></div>').join('');
+  // title = nome da cor aparece ao passar o mouse/segurar o dedo — sem isso
+  // bolinhas de cor parecida (Bordô/Vinho/Marrom, Azul/Azul Marinho) eram
+  // fáceis de confundir e o cliente clicava numa cor pensando que era outra.
+  $('pColors').innerHTML=prod.colors.map((c,i)=>'<div class="color'+(i===0?' on':'')+'" style="background:'+c.c+'" title="'+c.n+'" onclick="setColor('+i+')"></div>').join('');
   $('pColorName').textContent=prod.colors[0] ? prod.colors[0].n : '';
   $('pSizes').innerHTML=prod.sizes.map((s,i)=>'<div class="size'+(s.out?' out':'')+(i===selSize?' on':'')+'" onclick="'+(s.out?'':'setSize('+i+')')+'">'+s.s+'</div>').join('');
+  atualizaAvisoBtn();
   $('prodPair').style.display='none';
   var outros=PRODUCTS.filter(p=>p.sku!==sku).sort(()=>Math.random()-.5).slice(0,3);
   $('prodSugest').innerHTML=outros.length?
@@ -865,6 +890,35 @@ function setColor(i){
   prod.sizes = sizesParaCor(prod, corNome);
   selSize = prod.sizes.findIndex(function(s){ return !s.out; });
   $('pSizes').innerHTML=prod.sizes.map((s,x)=>'<div class="size'+(s.out?' out':'')+(x===selSize?' on':'')+'" onclick="'+(s.out?'':'setSize('+x+')')+'">'+s.s+'</div>').join('');
+  atualizaAvisoBtn();
+}
+
+// Mostra "Avise-me quando chegar" só quando NENHUM tamanho da cor
+// selecionada tem estoque — mesma condição já usada em addToCart() pra
+// decidir a mensagem de erro certa.
+function atualizaAvisoBtn(){
+  var semEstoque = prod.sizes.length===0 || prod.sizes.every(function(s){ return s.out; });
+  $('pAviseBtn').style.display = semEstoque ? 'block' : 'none';
+}
+
+function abrirAviseMe(){
+  $('aviseProdInfo').textContent = prod.name + (prod.colors[selColor] ? ' · '+prod.colors[selColor].n : '');
+  $('aviseNome').value=''; $('aviseWpp').value='';
+  $('aviseBg').classList.add('show');
+}
+function fecharAviseMe(){ $('aviseBg').classList.remove('show'); }
+
+async function enviarAvisoEstoque(){
+  var nome = $('aviseNome').value.trim();
+  var wpp  = $('aviseWpp').value.trim();
+  if(!nome || !wpp){ toast('Preencha nome e WhatsApp'); return; }
+  var cor = prod.colors[selColor] ? prod.colors[selColor].n : '';
+  var tam = (prod.sizes[selSize] ? prod.sizes[selSize].s : (prod.sizes[0] ? prod.sizes[0].s : ''));
+  await as('registrarAvisoEstoque', {
+    nome: nome, wpp: wpp, sku: prod.sku, produto: prod.name, cor: cor, tamanho: tam
+  });
+  fecharAviseMe();
+  toast('Prontinho! A gente te avisa quando chegar.');
 }
 function setSize(i){selSize=i;document.querySelectorAll('#pSizes .size').forEach((s,x)=>s.classList.toggle('on',x===i))}
 function prodQty(d){pQty=Math.max(1,pQty+d);$('pQty').textContent=pQty}
@@ -1388,6 +1442,7 @@ async function carregarCatalogo(){
     PRODUCTS = adaptarProdutos(produtosJsonData.produtos);
     renderChips(); renderGrid(); updateBag(); loadBanners();
     jaRenderizou = true;
+    abrirProdutoDaUrl();
   }
 
   // ZumAgent ao vivo — estoque/preço exatos por cor e tamanho. Roda por
@@ -1419,6 +1474,27 @@ async function carregarCatalogo(){
 
   // 4ª opção: PRODUCTS hardcoded acima
   renderChips(); renderGrid(); updateBag(); loadBanners();
+  abrirProdutoDaUrl();
+}
+
+// Link direto pra um produto (?produto=SKU&cor=NomeDaCor), usado na
+// mensagem de WhatsApp do "Avise-me quando chegar" — sem isso o cliente
+// caía sempre na home e tinha que procurar o produto de novo.
+var _deepLinkAberto = false;
+function abrirProdutoDaUrl(){
+  if(_deepLinkAberto) return;
+  var params = new URLSearchParams(window.location.search);
+  var sku = params.get('produto');
+  if(!sku) return;
+  var p = PRODUCTS.find(function(x){ return x.sku===sku; });
+  if(!p) return;
+  _deepLinkAberto = true;
+  openProduct(sku);
+  var corParam = params.get('cor');
+  if(corParam){
+    var ci = p.colors.findIndex(function(c){ return c.n.toLowerCase()===corParam.toLowerCase(); });
+    if(ci>=0) setColor(ci);
+  }
 }
 
 /* ====== INIT ====== */
