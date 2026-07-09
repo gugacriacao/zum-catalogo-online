@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-09T03:56:48.651Z",
+  "geradoEm": "2026-07-09T04:04:09.142Z",
   "produtos": [
     {
       "sku": "ZUM-VDRC-105",
@@ -134,11 +134,13 @@
       "fotosCores": {
         "Preto": [
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CC-400/CORES/preto-1783479016221.jpg",
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CC-400/CORES/preto-1783479028340.jpg"
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CC-400/CORES/preto-1783479028340.jpg",
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CC-400/CORES/preto-1783569801325.jpg"
         ],
         "Bege": [
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CC-400/CORES/bege-1783479019651.jpg",
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CC-400/CORES/bege-1783479034322.jpg"
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CC-400/CORES/bege-1783479034322.jpg",
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CC-400/CORES/bege-1783569804849.jpg"
         ]
       },
       "ordem": 4
@@ -268,7 +270,8 @@
         "Off-white",
         "Bordô",
         "Azul",
-        "Marrom"
+        "Marrom",
+        "Preto"
       ],
       "tamanhos": [
         "UN"
@@ -278,8 +281,23 @@
       "destaque": "",
       "estoqueNum": 4,
       "ativo": true,
-      "fotos": [],
-      "fotosCores": {},
+      "fotos": [
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDALC-100/midia-1783569529665.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDALC-100/midia-1783569552373.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDALC-100/midia-1783569600961.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDALC-100/midia-1783569620681.png"
+      ],
+      "fotosCores": {
+        "Bordô": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDALC-100/CORES/bordô-1783569572614.jpg"
+        ],
+        "Azul": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDALC-100/CORES/azul-1783569579457.jpg"
+        ],
+        "Marrom": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDALC-100/CORES/marrom-1783569585843.jpg"
+        ]
+      },
       "ordem": 10
     },
     {
@@ -345,7 +363,7 @@
     {
       "sku": "ZUM-VDPL-107",
       "nome": "Vestido Pala",
-      "cat": "Vestido",
+      "cat": "",
       "preco": 289.9,
       "cores": [
         "Azul"
@@ -358,7 +376,9 @@
       "destaque": "",
       "estoqueNum": 2,
       "ativo": true,
-      "fotos": [],
+      "fotos": [
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/midia-1783569730765.png"
+      ],
       "fotosCores": {},
       "ordem": 14
     }
