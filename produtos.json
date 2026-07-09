@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-09T13:32:12.536Z",
+  "geradoEm": "2026-07-09T14:27:24.530Z",
   "produtos": [
     {
       "sku": "ZUM-VDRC-105",
@@ -268,7 +268,7 @@
       "sku": "ZUM-KMBC-001",
       "nome": "produto teste pagamento checkout",
       "cat": "Kimono",
-      "preco": 0.1,
+      "preco": 1,
       "cores": [
         "Preto"
       ],
