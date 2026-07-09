@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-09T04:54:37.669Z",
+  "geradoEm": "2026-07-09T05:03:22.846Z",
   "produtos": [
     {
       "sku": "ZUM-VDRC-105",
@@ -28,9 +28,6 @@
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-1783477642892.png"
       ],
       "fotosCores": {
-        "Preto": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/CORES/preto-1783477618722.jpg"
-        ],
         "Off-white": [
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/CORES/off-white-1783477485452.jpg",
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/CORES/off-white-1783477547567.jpg"
@@ -38,6 +35,9 @@
         "Bordô": [
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/CORES/bordô-1783533778360.jpg",
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/CORES/bordô-1783533787970.jpg"
+        ],
+        "Marrom": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/CORES/marrom-1783573008321.jpg"
         ]
       },
       "ordem": 1
@@ -181,7 +181,7 @@
         "UN"
       ],
       "stock": "Em estoque",
-      "badge": "últimas unidades",
+      "badge": "",
       "destaque": "",
       "estoqueNum": 1,
       "ativo": true,
