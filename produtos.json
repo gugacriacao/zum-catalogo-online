@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-09T03:47:03.193Z",
+  "geradoEm": "2026-07-09T03:55:31.638Z",
   "produtos": [
     {
       "sku": "ZUM-VDRC-105",
@@ -317,7 +317,7 @@
       "badge": "",
       "destaque": "",
       "estoqueNum": 0,
-      "ativo": true,
+      "ativo": false,
       "fotos": [],
       "fotosCores": {},
       "ordem": 12
