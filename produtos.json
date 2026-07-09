@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-09T23:36:31.486Z",
+  "geradoEm": "2026-07-09T23:39:07.344Z",
   "produtos": [
     {
       "sku": "ZUM-VDRC-105",
@@ -48,59 +48,6 @@
       "ordem": 1
     },
     {
-      "sku": "ZUM-TSOV-200",
-      "nome": "T-shirt Over básico",
-      "cat": "T-shirts",
-      "preco": 99,
-      "cores": [
-        "Preto",
-        "Branco",
-        "Marrom",
-        "Azul Marinho"
-      ],
-      "tamanhos": [
-        "P",
-        "G"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "destaque": "Algodão",
-      "descricao": "",
-      "estoqueNum": 5,
-      "ativo": true,
-      "fotos": [
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783480100247.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783480103971.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783480107596.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783533933777.png"
-      ],
-      "fotosCores": {},
-      "ordem": 2
-    },
-    {
-      "sku": "ZUM-VDPL-107",
-      "nome": "Vestido Pala",
-      "cat": "",
-      "preco": 319.9,
-      "cores": [
-        "Azul"
-      ],
-      "tamanhos": [
-        "UN"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "destaque": "",
-      "descricao": "",
-      "estoqueNum": 2,
-      "ativo": true,
-      "fotos": [
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/midia-1783569730765.png"
-      ],
-      "fotosCores": {},
-      "ordem": 3
-    },
-    {
       "sku": "ZUM-CC-400",
       "nome": "Calça cargo",
       "cat": "Calças",
@@ -138,74 +85,7 @@
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CC-400/CORES/bege-1783569804849.jpg"
         ]
       },
-      "ordem": 4
-    },
-    {
-      "sku": "ZUM-VDMG-104",
-      "nome": "Vestido manga",
-      "cat": "Vestidos",
-      "preco": 179.9,
-      "cores": [
-        "Marrom",
-        "Preto",
-        "Azul"
-      ],
-      "tamanhos": [
-        "UN"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "destaque": "Tecido Poliamida. Tamanho único: 36/42",
-      "descricao": "",
-      "estoqueNum": 3,
-      "ativo": true,
-      "fotos": [
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/midia-1783480220676.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/midia-1783480241093.png"
-      ],
-      "fotosCores": {
-        "Marrom": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/CORES/marrom-1783480191875.jpg"
-        ],
-        "Preto": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/CORES/preto-1783480202896.jpg"
-        ],
-        "Azul": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/CORES/azul-1783480207656.jpg"
-        ]
-      },
-      "ordem": 5
-    },
-    {
-      "sku": "ZUM-VDBT-102",
-      "nome": "Vestido busto torcido",
-      "cat": "Vestidos",
-      "preco": 179.9,
-      "cores": [
-        "Preto",
-        "Marrom",
-        "Bordô"
-      ],
-      "tamanhos": [
-        "UN"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "destaque": "",
-      "descricao": "",
-      "estoqueNum": 1,
-      "ativo": true,
-      "fotos": [
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDBT-102/midia-1783520023133.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDBT-102/midia-03.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDBT-102/midia-02.png"
-      ],
-      "fotosCores": {
-        "Preto": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDBT-102/CORES/preto-1783520039715.jpg"
-        ]
-      },
-      "ordem": 6
+      "ordem": 2
     },
     {
       "sku": "ZUM-VDALC-100",
@@ -243,6 +123,126 @@
         ],
         "Marrom": [
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDALC-100/CORES/marrom-1783569585843.jpg"
+        ]
+      },
+      "ordem": 3
+    },
+    {
+      "sku": "ZUM-TSOV-200",
+      "nome": "T-shirt Over básico",
+      "cat": "T-shirts",
+      "preco": 99,
+      "cores": [
+        "Preto",
+        "Branco",
+        "Marrom",
+        "Azul Marinho"
+      ],
+      "tamanhos": [
+        "P",
+        "G"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "Algodão",
+      "descricao": "",
+      "estoqueNum": 5,
+      "ativo": true,
+      "fotos": [
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783480100247.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783480103971.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783480107596.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783533933777.png"
+      ],
+      "fotosCores": {},
+      "ordem": 4
+    },
+    {
+      "sku": "ZUM-VDPL-107",
+      "nome": "Vestido Pala",
+      "cat": "",
+      "preco": 319.9,
+      "cores": [
+        "Azul"
+      ],
+      "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 2,
+      "ativo": true,
+      "fotos": [
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/midia-1783569730765.png"
+      ],
+      "fotosCores": {},
+      "ordem": 5
+    },
+    {
+      "sku": "ZUM-VDMG-104",
+      "nome": "Vestido manga",
+      "cat": "Vestidos",
+      "preco": 179.9,
+      "cores": [
+        "Marrom",
+        "Preto",
+        "Azul"
+      ],
+      "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "Tecido Poliamida. Tamanho único: 36/42",
+      "descricao": "",
+      "estoqueNum": 3,
+      "ativo": true,
+      "fotos": [
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/midia-1783480220676.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/midia-1783480241093.png"
+      ],
+      "fotosCores": {
+        "Marrom": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/CORES/marrom-1783480191875.jpg"
+        ],
+        "Preto": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/CORES/preto-1783480202896.jpg"
+        ],
+        "Azul": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/CORES/azul-1783480207656.jpg"
+        ]
+      },
+      "ordem": 6
+    },
+    {
+      "sku": "ZUM-VDBT-102",
+      "nome": "Vestido busto torcido",
+      "cat": "Vestidos",
+      "preco": 179.9,
+      "cores": [
+        "Preto",
+        "Marrom",
+        "Bordô"
+      ],
+      "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 1,
+      "ativo": true,
+      "fotos": [
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDBT-102/midia-1783520023133.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDBT-102/midia-03.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDBT-102/midia-02.png"
+      ],
+      "fotosCores": {
+        "Preto": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDBT-102/CORES/preto-1783520039715.jpg"
         ]
       },
       "ordem": 7
