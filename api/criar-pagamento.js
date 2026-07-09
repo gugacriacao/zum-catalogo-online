@@ -47,6 +47,18 @@ module.exports = async function handler(req, res) {
         phone_number: cliente.celular || ''
       };
     }
+    // Manda o endereço que o cliente já preencheu no catalogo.html pra
+    // InfinitePay pré-preencher a etapa "Entrega" do checkout deles — sem
+    // isso o cliente tinha que digitar CEP/número duas vezes (uma no nosso
+    // site, outra na tela da InfinitePay), o que é chato e derruba conversão.
+    var cepLimpo = (cliente.cep || '').toString().replace(/\D/g, '');
+    if (cepLimpo || cliente.numero) {
+      linkBody.address = {
+        cep: cepLimpo,
+        number: cliente.numero || '',
+        complement: cliente.complemento || ''
+      };
+    }
 
     var r = await fetch('https://api.checkout.infinitepay.io/links', {
       method: 'POST',
