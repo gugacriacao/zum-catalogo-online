@@ -210,7 +210,12 @@ body{font-family:-apple-system,sans-serif;background:#f4f4f4;min-height:100vh}
 .aviso-pessoa{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .aviso-pessoa-nome{font-size:12.5px;color:#333}
 .aviso-pessoa-data{color:#aaa;font-size:11px}
-.aviso-wpp-btn{background:#e8f5e9;color:#2e7d32;flex-shrink:0}
+.aviso-wpp-btn{background:#e8f5e9;color:#2e7d32;border:1px solid #c8e6c9;flex-shrink:0}
+.aviso-thumb{width:44px;height:44px;border-radius:8px;background:#f5f5f5;flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.aviso-thumb img,.aviso-thumb video{width:100%;height:100%;object-fit:cover}
+.aviso-thumb-ph{font-size:18px;color:#ccc}
+.aviso-vermais{background:none;border:none;color:#999;font-size:11px;text-decoration:underline;cursor:pointer;padding:2px 0;text-align:left}
+.aviso-preview{margin-top:10px;padding:9px 11px;background:#f7f7f7;border-radius:6px;font-size:11.5px;color:#777;line-height:1.5}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 20px;font-size:12px;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;z-index:300;border-radius:2px;box-shadow:0 4px 12px rgba(0,0,0,.25)}
 .toast.on{opacity:1}
 .tgl-lrg{position:relative;width:36px;height:20px;cursor:pointer;flex-shrink:0}
@@ -765,37 +770,63 @@ async function carregarAvisosEstoque() {
     grupos[chave].pessoas.push(a);
   });
 
+  var MOSTRA_SEMPRE = 2; // quantas pessoas ficam visíveis antes do "Ver todas"
+
   lista.innerHTML = ordem.map(function(chave) {
     var g = grupos[chave];
     var varDesc = g.cor + (g.tamanho && g.tamanho !== 'UN' ? ', tam. ' + g.tamanho : '');
+    var prodCat = (typeof catalogo !== 'undefined') ? catalogo.find(function(c){ return c.sku === g.sku; }) : null;
+    var thumbFoto = prodCat && prodCat.fotos && prodCat.fotos[0];
+    var thumbHtml = thumbFoto
+      ? (isVideoSrc(thumbFoto)
+          ? '<video src="'+thumbFoto+'" muted></video>'
+          : '<img src="'+thumbFoto+'" onerror="this.style.display=\'none\'">')
+      : '<span class="aviso-thumb-ph">📦</span>';
+
     var pessoasHtml = g.pessoas.map(function(p, i) {
       var dias = Math.max(0, Math.floor((Date.now() - new Date(p.data).getTime()) / 86400000));
       var quando = dias === 0 ? 'hoje' : (dias === 1 ? 'há 1 dia' : 'há ' + dias + ' dias');
-      return '<div class="aviso-pessoa">' +
+      var extra = i >= MOSTRA_SEMPRE ? ' aviso-extra" style="display:none' : '';
+      return '<div class="aviso-pessoa' + extra + '">' +
         '<span class="aviso-pessoa-nome">' + p.nome + ' <span class="aviso-pessoa-data">· ' + quando + '</span></span>' +
-        '<button class="btn btn-outline aviso-wpp-btn" onclick=\'chamarWhatsAviso(' + JSON.stringify(p).replace(/'/g, '&apos;') + ')\'>💬 Chamar no WhatsApp</button>' +
+        '<button class="btn aviso-wpp-btn" onclick=\'chamarWhatsAviso(' + JSON.stringify(p).replace(/'/g, '&apos;') + ')\'>💬 Chamar no WhatsApp</button>' +
         '</div>';
     }).join('');
+    var restantes = g.pessoas.length - MOSTRA_SEMPRE;
+    var verTodasHtml = restantes > 0
+      ? '<button class="aviso-vermais" onclick="this.parentElement.querySelectorAll(\'.aviso-extra\').forEach(function(el){el.style.display=\'flex\'});this.remove()">+ ' + restantes + ' pessoa' + (restantes>1?'s':'') + ' · Ver todas</button>'
+      : '';
+
+    // Preview da mensagem já resolvida pra primeira pessoa da lista — só
+    // pra o Tavinho conferir o texto antes de clicar em cada botão.
+    var msgPreview = montarMensagemAviso(g.pessoas[0]);
+
     return '<div class="aviso-card">' +
       '<div class="aviso-card-hd">' +
-        '<div><div class="aviso-produto">' + g.produto + '</div>' +
+        '<div class="aviso-thumb">' + thumbHtml + '</div>' +
+        '<div style="flex:1;min-width:0"><div class="aviso-produto">' + g.produto + '</div>' +
         '<div class="aviso-sku">' + g.sku + ' · ' + varDesc + '</div></div>' +
         '<span class="aviso-count">' + g.pessoas.length + ' esperando</span>' +
       '</div>' +
-      '<div class="aviso-pessoas">' + pessoasHtml + '</div>' +
+      '<div class="aviso-pessoas">' + pessoasHtml + verTodasHtml + '</div>' +
+      '<div class="aviso-preview">Mensagem pronta: "' + msgPreview + '"</div>' +
     '</div>';
   }).join('');
 }
 
-function chamarWhatsAviso(p) {
+function montarMensagemAviso(p) {
   var template = document.getElementById('cfMsgAviso').value || MSG_AVISO_PADRAO;
   var link = CATALOGO_BASE_URL + '?produto=' + encodeURIComponent(p.sku) + (p.cor ? '&cor=' + encodeURIComponent(p.cor) : '');
-  var msg = template
+  return template
     .replace(/{nome}/g, p.nome || '')
     .replace(/{produto}/g, p.produto || '')
     .replace(/{cor}/g, p.cor || '')
     .replace(/{tamanho}/g, p.tamanho || '')
     .replace(/{link}/g, link);
+}
+
+function chamarWhatsAviso(p) {
+  var msg = montarMensagemAviso(p);
   var numero = (p.wpp || '').replace(/\D/g, '');
   if (numero && numero.length <= 11) numero = '55' + numero; // sem DDI = assume Brasil
   window.open('https://wa.me/' + numero + '?text=' + encodeURIComponent(msg), '_blank');
