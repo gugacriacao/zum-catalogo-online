@@ -573,7 +573,15 @@ var AS_URL    = localStorage.getItem('zum-as-url')    || '';
 // domínio oficial e não depende do GitHub Pages ficar ligado (testado:
 // produtos.json e banners.json respondem certo direto daqui).
 var REMOTE_BASE = 'https://www.usezum.com.br/';
-var API_TOKEN = localStorage.getItem('zum-api-token') || '';
+// Bug crítico corrigido em 09/07/2026: o token só existia no localStorage de
+// quem abre o painel.html — todo cliente real (navegador limpo) mandava
+// token vazio e o ZumAgent, com API_TOKEN configurado no Script Properties,
+// rejeitava com "Token inválido." (achado ao reproduzir o erro "Não foi
+// possível registrar o pedido" que aparecia pra qualquer cliente).
+// Fallback abaixo garante que o cliente sempre manda o token público —
+// ele não é secreto de verdade (precisa viajar até o navegador pra
+// funcionar), só evita scraping trivial da API.
+var API_TOKEN = localStorage.getItem('zum-api-token') || 'zum0467';
 
 function money(v){return 'R$ '+v.toFixed(2).replace('.',',')}
 function moneyFmt(v){
@@ -935,12 +943,26 @@ async function goPay(){
     var tam    = i.size || 'UN';
     return { codigo: i.sku+'-'+corCod+'-'+tam, qtd: i.qty };
   });
+  // Endereço completo — vai separado (rua/número/complemento/bairro/CEP) pro
+  // ZumAgent poder gravar formatado na coluna "Endereço" de Cadastros/Clientes.
+  var enderecoCompleto = ($('fRua').value || '') +
+    ($('fNum').value ? ', ' + $('fNum').value : '') +
+    ($('fComp').value ? ' ' + $('fComp').value : '') +
+    ($('fBairro').value ? ' · ' + $('fBairro').value : '') +
+    ($('fCep').value ? ' · CEP ' + $('fCep').value : '');
+
   var cliente = {
-    nome:    $('fNome').value,
-    cpf:     $('fCpf').value,
-    celular: $('fWpp').value,
-    email:   $('fEmail').value,
-    cidade:  $('fCidade').value + ' ' + $('fUf').value
+    nome:      $('fNome').value,
+    cpf:       $('fCpf').value,
+    celular:   $('fWpp').value,
+    email:     $('fEmail').value,
+    cidade:    $('fCidade').value + ' ' + $('fUf').value,
+    endereco:  enderecoCompleto,
+    rua:       $('fRua').value,
+    numero:    $('fNum').value,
+    complemento: $('fComp').value,
+    bairro:    $('fBairro').value,
+    cep:       $('fCep').value
   };
 
   var frete = freteOpcao==='entrega' ? FRETE_VALOR : 0;
