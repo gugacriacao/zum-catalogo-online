@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-08T18:41:21.493Z",
+  "geradoEm": "2026-07-09T03:47:03.193Z",
   "produtos": [
     {
       "sku": "ZUM-VDRC-105",
@@ -10,7 +10,9 @@
         "Preto",
         "Off-white",
         "Bordô",
-        "Azul"
+        "Azul",
+        "Marrom",
+        "Branco"
       ],
       "tamanhos": [
         "UN"
@@ -18,7 +20,7 @@
       "stock": "Em estoque",
       "badge": "",
       "destaque": "Tecido Poliamida. Tamanho único: 36/42",
-      "estoqueNum": 0,
+      "estoqueNum": 2,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-1783533604203.mp4",
@@ -58,7 +60,7 @@
       "stock": "Em estoque",
       "badge": "",
       "destaque": "Algodão",
-      "estoqueNum": 7,
+      "estoqueNum": 6,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783480100247.png",
@@ -157,7 +159,7 @@
       "stock": "Em estoque",
       "badge": "",
       "destaque": "",
-      "estoqueNum": 3,
+      "estoqueNum": 1,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDBT-102/midia-1783520023133.png",
@@ -274,8 +276,8 @@
       "stock": "Em estoque",
       "badge": "",
       "destaque": "",
-      "estoqueNum": 1,
-      "ativo": false,
+      "estoqueNum": 4,
+      "ativo": true,
       "fotos": [],
       "fotosCores": {},
       "ordem": 10
@@ -299,6 +301,66 @@
       "fotos": [],
       "fotosCores": {},
       "ordem": 11
+    },
+    {
+      "sku": "ZUM-CJBC-500",
+      "nome": "Conjunto calça e t-shirt",
+      "cat": "Conjunto",
+      "preco": 279.9,
+      "cores": [
+        "Marrom"
+      ],
+      "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "estoqueNum": 0,
+      "ativo": true,
+      "fotos": [],
+      "fotosCores": {},
+      "ordem": 12
+    },
+    {
+      "sku": "ZUM-VDFU-106",
+      "nome": "Vestido frente unica",
+      "cat": "Vestido",
+      "preco": 185.9,
+      "cores": [
+        "Bege"
+      ],
+      "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "estoqueNum": 2,
+      "ativo": true,
+      "fotos": [],
+      "fotosCores": {},
+      "ordem": 13
+    },
+    {
+      "sku": "ZUM-VDPL-107",
+      "nome": "Vestido Pala",
+      "cat": "Vestido",
+      "preco": 289.9,
+      "cores": [
+        "Azul"
+      ],
+      "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "estoqueNum": 2,
+      "ativo": true,
+      "fotos": [],
+      "fotosCores": {},
+      "ordem": 14
     }
   ]
 }
