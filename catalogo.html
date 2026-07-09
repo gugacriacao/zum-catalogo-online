@@ -1128,12 +1128,26 @@ function toggleFav(sku,el){if(FAVS.has(sku)){FAVS.delete(sku);el.classList.remov
 /* ====== BANNERS — lê banners.json (publicado pelo admin) com fallback localStorage ====== */
 var BANNER_DEFAULTS=[{tag:'Nova coleção',titulo:'Verão 2026',sub:'Conheça os novos vestidos'}];
 var bSlides=[],bIdx=0,bTimer=null;
+// banners.json era buscado até 2x por carregamento (uma vez só pra ler o
+// asUrl dentro de carregarCatalogo, outra vez aqui pra renderizar os
+// banners). Agora é 1 fetch só, compartilhado — memoiza a promise a partir
+// da 1ª chamada, quem chamar depois (carregarCatalogo ou loadBanners) reusa
+// o mesmo resultado em vez de pedir de novo pra rede.
+var _bannersJsonPromise = null;
+function fetchBannersJson(){
+  if(!_bannersJsonPromise){
+    _bannersJsonPromise = fetch(REMOTE_BASE+'banners.json?_='+Date.now(),{cache:'no-store'})
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .catch(function(){ return null; });
+  }
+  return _bannersJsonPromise;
+}
+
 async function loadBanners(){
   // Tenta banners.json primeiro (publicado pelo admin.html via GitHub)
   try {
-    var r=await fetch(REMOTE_BASE+'banners.json?_='+Date.now(),{cache:'no-store'});
-    if(r.ok){
-      var data=await r.json();
+    var data = await fetchBannersJson();
+    if(data){
       // Atualiza URL do ZumAgent se publicado pelo painel
       if(data.asUrl) AS_URL = data.asUrl;
       if(data.destaqueLabel) DESTAQUE_LABEL = data.destaqueLabel;
@@ -1285,21 +1299,30 @@ function adaptarDaPlanilha(rows){
 
 async function carregarCatalogo(){
   // Pré-carrega fotos e ordem definidos no painel admin
-  // Tenta produtos.json (GitHub) ou localStorage como fonte de fotos/posições
+  // Tenta produtos.json (GitHub/Vercel) ou localStorage como fonte de fotos/posições
+  //
+  // 09/07/2026: antes disso aqui e o banners.json (só pra ler o asUrl) eram
+  // buscados um atrás do outro, e só depois o ZumAgent (Apps Script — pode
+  // levar vários segundos) era chamado e a tela ficava travada esperando ele
+  // responder antes de mostrar qualquer produto de verdade. Resultado:
+  // demora perceptível pra aparecer o catálogo. Agora produtos.json e
+  // banners.json saem em paralelo, o catálogo já renderiza assim que
+  // produtos.json chegar (tem fotos/preço/cor — só o estoque é agregado, não
+  // por variante), e o ZumAgent ao vivo só atualiza por cima depois, sem
+  // travar a primeira exibição.
   var fotosMap = {}, ordemMap = {};
-  var produtosJsonData = null;
-  try{
-    var rp = await fetch(REMOTE_BASE+'produtos.json?_='+Date.now(),{cache:'no-store'});
-    if(rp.ok){
-      produtosJsonData = await rp.json();
-      if(produtosJsonData.produtos && produtosJsonData.produtos.length){
-        produtosJsonData.produtos.forEach(function(p,i){
-          fotosMap[p.sku]={fotos:p.fotos||[],fotosCores:p.fotosCores||{}};
-          ordemMap[p.sku]=i;
-        });
-      }
-    }
-  }catch(e){}
+  var pProdutos = fetch(REMOTE_BASE+'produtos.json?_='+Date.now(),{cache:'no-store'})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .catch(function(){ return null; });
+  var pBanners = fetchBannersJson();
+
+  var produtosJsonData = await pProdutos;
+  if(produtosJsonData && produtosJsonData.produtos && produtosJsonData.produtos.length){
+    produtosJsonData.produtos.forEach(function(p,i){
+      fotosMap[p.sku]={fotos:p.fotos||[],fotosCores:p.fotosCores||{}};
+      ordemMap[p.sku]=i;
+    });
+  }
   // Fallback: localStorage do painel (uso offline)
   if(!Object.keys(fotosMap).length){
     try{
@@ -1325,45 +1348,47 @@ async function carregarCatalogo(){
     });
   }
 
-  // Se AS_URL não veio do localStorage (é o caso de QUALQUER cliente real —
-  // esse valor só existe no navegador de quem já abriu o painel.html), busca
-  // o endereço da planilha ao vivo dentro do banners.json. Sem isso, todo
-  // visitante comum pulava direto pro produtos.json (estoque só agregado,
-  // sem separar por cor/tamanho) e nunca chegava a tentar o dado ao vivo.
+  // AS_URL (endereço do ZumAgent) não vem do localStorage pra QUALQUER
+  // cliente real — esse valor só existe no navegador de quem já abriu o
+  // painel.html. Pega do banners.json, que já está sendo buscado em
+  // paralelo desde o início da função (não é uma espera nova).
   if(!AS_URL){
     try{
-      var rb0 = await fetch(REMOTE_BASE+'banners.json?_='+Date.now(),{cache:'no-store'});
-      if(rb0.ok){
-        var db0 = await rb0.json();
-        if(db0.asUrl) AS_URL = db0.asUrl;
-      }
+      var db0 = await pBanners;
+      if(db0 && db0.asUrl) AS_URL = db0.asUrl;
     }catch(e){}
   }
 
-  // 1ª opção: ZumAgent ao vivo — preço e estoque em tempo real da planilha
-  if(AS_URL){
-    try{
-      var apiUrl = AS_URL + '?api=produtos' + (API_TOKEN ? '&token='+encodeURIComponent(API_TOKEN) : '');
-      var r = await fetch(apiUrl, {cache:'no-store'});
-      if(r.ok){
-        var data = await r.json();
-        if(data.ok && data.produtos && data.produtos.length){
-          PRODUCTS = aplicarFotosOrdem(adaptarDaPlanilha(data.produtos));
-          renderChips(); renderGrid(); updateBag(); loadBanners();
-          return;
-        }
-      }
-    }catch(e){}
-  }
+  var jaRenderizou = false;
 
-  // 2ª opção: produtos.json já carregado acima
+  // 1ª opção pra exibir rápido: produtos.json (já chegou, tem fotos/preço/
+  // cor — só o estoque é agregado, não por variante). Renderiza na hora, em
+  // vez de esperar o ZumAgent (Apps Script, pode levar vários segundos).
   if(produtosJsonData && produtosJsonData.produtos && produtosJsonData.produtos.length){
     PRODUCTS = adaptarProdutos(produtosJsonData.produtos);
     renderChips(); renderGrid(); updateBag(); loadBanners();
-    return;
+    jaRenderizou = true;
   }
 
-  // 3ª opção: localStorage do gerenciador (uso local)
+  // ZumAgent ao vivo — estoque/preço exatos por cor e tamanho. Roda por
+  // cima, sem "await" bloqueando a exibição: se/quando responder, atualiza
+  // a tela; se demorar ou falhar, o visitante já está vendo o catálogo.
+  if(AS_URL){
+    var apiUrl = AS_URL + '?api=produtos' + (API_TOKEN ? '&token='+encodeURIComponent(API_TOKEN) : '');
+    fetch(apiUrl, {cache:'no-store'})
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(data){
+        if(data && data.ok && data.produtos && data.produtos.length){
+          PRODUCTS = aplicarFotosOrdem(adaptarDaPlanilha(data.produtos));
+          renderChips(); renderGrid(); updateBag();
+        }
+      })
+      .catch(function(){});
+  }
+
+  if(jaRenderizou) return;
+
+  // 2ª opção: localStorage do gerenciador (uso local, sem produtos.json)
   var saved = localStorage.getItem('zum-catalogo');
   if(saved){
     try{
