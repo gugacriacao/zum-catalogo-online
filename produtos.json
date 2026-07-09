@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-09T05:03:22.846Z",
+  "geradoEm": "2026-07-09T05:28:31.589Z",
   "produtos": [
     {
       "sku": "ZUM-VDRC-105",
@@ -43,6 +43,57 @@
       "ordem": 1
     },
     {
+      "sku": "ZUM-TSOV-200",
+      "nome": "T-shirt Over básico",
+      "cat": "T-shirts",
+      "preco": 99,
+      "cores": [
+        "Preto",
+        "Branco",
+        "Marrom",
+        "Azul Marinho"
+      ],
+      "tamanhos": [
+        "P",
+        "G"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "Algodão",
+      "estoqueNum": 6,
+      "ativo": true,
+      "fotos": [
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783480100247.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783480103971.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783480107596.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783533933777.png"
+      ],
+      "fotosCores": {},
+      "ordem": 2
+    },
+    {
+      "sku": "ZUM-VDPL-107",
+      "nome": "Vestido Pala",
+      "cat": "",
+      "preco": 319.9,
+      "cores": [
+        "Azul"
+      ],
+      "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "estoqueNum": 2,
+      "ativo": true,
+      "fotos": [
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/midia-1783569730765.png"
+      ],
+      "fotosCores": {},
+      "ordem": 3
+    },
+    {
       "sku": "ZUM-CC-400",
       "nome": "Calça cargo",
       "cat": "Calças",
@@ -79,29 +130,7 @@
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CC-400/CORES/bege-1783569804849.jpg"
         ]
       },
-      "ordem": 2
-    },
-    {
-      "sku": "ZUM-VDPL-107",
-      "nome": "Vestido Pala",
-      "cat": "",
-      "preco": 319.9,
-      "cores": [
-        "Azul"
-      ],
-      "tamanhos": [
-        "UN"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "destaque": "",
-      "estoqueNum": 2,
-      "ativo": true,
-      "fotos": [
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/midia-1783569730765.png"
-      ],
-      "fotosCores": {},
-      "ordem": 3
+      "ordem": 4
     },
     {
       "sku": "ZUM-VDMG-104",
@@ -136,35 +165,6 @@
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/CORES/azul-1783480207656.jpg"
         ]
       },
-      "ordem": 4
-    },
-    {
-      "sku": "ZUM-TSOV-200",
-      "nome": "T-shirt Over básico",
-      "cat": "T-shirts",
-      "preco": 99,
-      "cores": [
-        "Preto",
-        "Branco",
-        "Marrom",
-        "Azul Marinho"
-      ],
-      "tamanhos": [
-        "P",
-        "G"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "destaque": "Algodão",
-      "estoqueNum": 6,
-      "ativo": true,
-      "fotos": [
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783480100247.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783480103971.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783480107596.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783533933777.png"
-      ],
-      "fotosCores": {},
       "ordem": 5
     },
     {
