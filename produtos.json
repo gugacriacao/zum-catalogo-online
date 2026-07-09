@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-09T13:24:23.664Z",
+  "geradoEm": "2026-07-09T13:32:12.536Z",
   "produtos": [
     {
       "sku": "ZUM-VDRC-105",
@@ -62,7 +62,7 @@
       "badge": "",
       "destaque": "Algodão",
       "descricao": "",
-      "estoqueNum": 6,
+      "estoqueNum": 5,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783480100247.png",
@@ -265,6 +265,27 @@
       "ordem": 8
     },
     {
+      "sku": "ZUM-KMBC-001",
+      "nome": "produto teste pagamento checkout",
+      "cat": "Kimono",
+      "preco": 0.1,
+      "cores": [
+        "Preto"
+      ],
+      "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 10,
+      "ativo": true,
+      "fotos": [],
+      "fotosCores": {},
+      "ordem": 9
+    },
+    {
       "sku": "ZUM-BDBA-300",
       "nome": "Body assimétrico",
       "cat": "Bodies",
@@ -284,7 +305,7 @@
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
-      "ordem": 9
+      "ordem": 10
     },
     {
       "sku": "ZUM-BDBM-301",
@@ -306,7 +327,7 @@
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
-      "ordem": 10
+      "ordem": 11
     },
     {
       "sku": "ZUM-VDDN-103",
@@ -330,7 +351,7 @@
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
-      "ordem": 11
+      "ordem": 12
     },
     {
       "sku": "ZUM-VDBA-101",
@@ -352,7 +373,7 @@
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
-      "ordem": 12
+      "ordem": 13
     },
     {
       "sku": "ZUM-CJBC-001",
@@ -373,7 +394,7 @@
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
-      "ordem": 13
+      "ordem": 14
     },
     {
       "sku": "ZUM-CJBC-500",
@@ -394,7 +415,7 @@
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
-      "ordem": 14
+      "ordem": 15
     }
   ]
 }
