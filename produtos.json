@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-09T05:28:31.589Z",
+  "geradoEm": "2026-07-09T05:37:11.260Z",
   "produtos": [
     {
       "sku": "ZUM-VDRC-105",
@@ -237,6 +237,26 @@
       "ordem": 7
     },
     {
+      "sku": "ZUM-VDFU-106",
+      "nome": "Vestido frente unica",
+      "cat": "Vestido",
+      "preco": 185.9,
+      "cores": [
+        "Bege"
+      ],
+      "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "estoqueNum": 2,
+      "ativo": true,
+      "fotos": [],
+      "fotosCores": {},
+      "ordem": 8
+    },
+    {
       "sku": "ZUM-BDBA-300",
       "nome": "Body assimétrico",
       "cat": "Bodies",
@@ -255,7 +275,7 @@
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
-      "ordem": 8
+      "ordem": 9
     },
     {
       "sku": "ZUM-BDBM-301",
@@ -276,7 +296,7 @@
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
-      "ordem": 9
+      "ordem": 10
     },
     {
       "sku": "ZUM-VDDN-103",
@@ -299,7 +319,7 @@
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
-      "ordem": 10
+      "ordem": 11
     },
     {
       "sku": "ZUM-VDBA-101",
@@ -320,7 +340,7 @@
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
-      "ordem": 11
+      "ordem": 12
     },
     {
       "sku": "ZUM-CJBC-001",
@@ -340,7 +360,7 @@
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
-      "ordem": 12
+      "ordem": 13
     },
     {
       "sku": "ZUM-CJBC-500",
@@ -358,26 +378,6 @@
       "destaque": "",
       "estoqueNum": 0,
       "ativo": false,
-      "fotos": [],
-      "fotosCores": {},
-      "ordem": 13
-    },
-    {
-      "sku": "ZUM-VDFU-106",
-      "nome": "Vestido frente unica",
-      "cat": "Vestido",
-      "preco": 185.9,
-      "cores": [
-        "Bege"
-      ],
-      "tamanhos": [
-        "UN"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "destaque": "",
-      "estoqueNum": 2,
-      "ativo": true,
       "fotos": [],
       "fotosCores": {},
       "ordem": 14
