@@ -138,7 +138,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .stock-note{font-size:10px;color:#666;margin-top:4px;margin-bottom:4px}
 .prod-desc{margin-top:20px;padding-top:16px;border-top:1px solid #eee}
 .prod-desc-title{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#999;margin-bottom:8px}
-.prod-desc-text{font-size:14px;color:#444;font-weight:300;line-height:1.6;letter-spacing:.8px}
+.prod-desc-text{font-size:14px;color:#444;font-weight:300;line-height:1.6;letter-spacing:.8px;white-space:pre-line}
 .qty-add{display:flex;gap:8px;align-items:center;margin-bottom:10px}
 .qty{display:flex;align-items:center;border:1px solid #ddd;height:44px}
 .qty button{width:36px;height:44px;font-size:20px;color:#111;display:flex;align-items:center;justify-content:center}
@@ -377,10 +377,9 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
           <button class="btn-add" onclick="addToCart()">Adicionar</button>
         </div>
         <div class="stock-note" id="pStock"></div>
-        <div class="prod-desc">
+        <div class="prod-desc" id="prodDescBox" style="display:none">
           <div class="prod-desc-title">Descrição</div>
-          <div class="prod-desc-text">Tecido Poliamida.</div>
-          <div class="prod-desc-text">Tamanho único: 36 ao 42.</div>
+          <div class="prod-desc-text" id="pDescText"></div>
         </div>
       </div>
     </div>
@@ -855,6 +854,12 @@ function openProduct(sku){
   $('pName').textContent=prod.name;
   $('pSku').textContent='SKU · '+prod.sku;
   $('pDestaque').textContent=prod.destaque || '';
+  // Descrição só aparece se o produto realmente tiver algo escrito nesse
+  // campo no painel — antes tinha um texto fixo ("Tecido Poliamida...")
+  // que aparecia igual em todo produto, mesmo sem nada preenchido.
+  var _desc=(prod.descricao||'').trim();
+  $('pDescText').textContent=_desc;
+  $('prodDescBox').style.display=_desc?'':'none';
   $('pPrice').innerHTML='<div class="card-apartir" style="text-align:right">a partir de</div><div class="card-price">'+moneyFmt(prod.price)+'</div><div class="card-cada" style="text-align:right">cada</div>';
   $('pStock').textContent=prod.stock;
   $('pQty').textContent='1';
@@ -1230,6 +1235,7 @@ function adaptarProdutos(lista){
       name: p.nome || p.name,
       price: p.preco || p.price,
       badge: p.badge || '', bg: bg, destaque: p.destaque || '',
+      descricao: p.descricao || '',
       colors: colors, sizes: sizes,
       tamanhosBase: tamanhosBase, estoquePorVariante: estoquePorVariante,
       stock: p.stock || (semEstoque ? 'Sem estoque' : ''),
@@ -1319,7 +1325,7 @@ async function carregarCatalogo(){
   var produtosJsonData = await pProdutos;
   if(produtosJsonData && produtosJsonData.produtos && produtosJsonData.produtos.length){
     produtosJsonData.produtos.forEach(function(p,i){
-      fotosMap[p.sku]={fotos:p.fotos||[],fotosCores:p.fotosCores||{}};
+      fotosMap[p.sku]={fotos:p.fotos||[],fotosCores:p.fotosCores||{},descricao:p.descricao||'',ativo:p.ativo!==false};
       ordemMap[p.sku]=i;
     });
   }
@@ -1327,19 +1333,29 @@ async function carregarCatalogo(){
   if(!Object.keys(fotosMap).length){
     try{
       var _ls=localStorage.getItem('zum-catalogo');
-      if(_ls) JSON.parse(_ls).filter(function(p){return p.ativo;}).forEach(function(p,i){
-        fotosMap[p.sku]={fotos:p.fotos||[],fotosCores:p.fotosCores||{}};
+      if(_ls) JSON.parse(_ls).forEach(function(p,i){
+        fotosMap[p.sku]={fotos:p.fotos||[],fotosCores:p.fotosCores||{},descricao:p.descricao||'',ativo:p.ativo!==false};
         ordemMap[p.sku]=i;
       });
     }catch(e){}
   }
-  // Aplica fotos e ordena conforme posição definida no painel
+  // Aplica fotos e ordena conforme posição definida no painel — e também
+  // esconde produto marcado como OCULTO no painel (ativo:false), mesmo que
+  // a planilha (ZumAgent ao vivo) diga "Sim" pra publicar. O painel manda
+  // na visibilidade; a planilha só manda em estoque/preço. Sem isso, um
+  // produto oculto no painel reaparecia no site assim que a atualização em
+  // segundo plano do estoque ao vivo chegava, porque a leitura direta da
+  // planilha não sabe nada sobre esse "oculto".
   function aplicarFotosOrdem(products){
-    return products.map(function(p){
+    return products.filter(function(p){
+      var f=fotosMap[p.sku];
+      return !f || f.ativo!==false;
+    }).map(function(p){
       var f=fotosMap[p.sku]||{};
       return Object.assign({},p,{
         media:(f.fotos&&f.fotos.length)?f.fotos:p.media,
-        fotosCores:f.fotosCores||p.fotosCores||{}
+        fotosCores:f.fotosCores||p.fotosCores||{},
+        descricao:f.descricao||p.descricao||''
       });
     }).sort(function(a,b){
       var ia=ordemMap[a.sku]!==undefined?ordemMap[a.sku]:9999;
