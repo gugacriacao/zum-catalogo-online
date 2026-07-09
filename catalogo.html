@@ -607,10 +607,13 @@ var SESSION_ID = 'sid-'+Date.now()+'-'+Math.random().toString(36).slice(2,7);
 
 // URL e token do ZumAgent — lidos do localStorage (configurados no gerenciar-catalogo.html)
 var AS_URL    = localStorage.getItem('zum-as-url')    || '';
-// Sempre lê produtos.json/banners.json do site publicado no GitHub Pages —
-// evita mostrar dados desatualizados quando o arquivo é aberto localmente
-// (file://) e a cópia dessa pasta está atrasada em relação ao que foi publicado.
-var REMOTE_BASE = 'https://gugacriacao.github.io/zum-catalogo-online/';
+// Sempre lê produtos.json/banners.json do site publicado — evita mostrar
+// dados desatualizados quando o arquivo é aberto localmente (file://) e a
+// cópia dessa pasta está atrasada em relação ao que foi publicado.
+// Trocado do GitHub Pages pra Vercel em 09/07/2026: www.usezum.com.br é o
+// domínio oficial e não depende do GitHub Pages ficar ligado (testado:
+// produtos.json e banners.json respondem certo direto daqui).
+var REMOTE_BASE = 'https://www.usezum.com.br/';
 var API_TOKEN = localStorage.getItem('zum-api-token') || '';
 
 function money(v){return 'R$ '+v.toFixed(2).replace('.',',')}
