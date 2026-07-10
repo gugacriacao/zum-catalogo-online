@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-09T23:39:07.344Z",
+  "geradoEm": "2026-07-10T00:07:25.066Z",
   "produtos": [
     {
       "sku": "ZUM-VDRC-105",
@@ -10,7 +10,6 @@
         "Preto",
         "Off-white",
         "Bordô",
-        "Azul Marinho",
         "Marrom",
         "Branco",
         "Azul"
@@ -42,7 +41,14 @@
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/CORES/marrom-1783573008321.jpg"
         ],
         "Preto": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/CORES/preto-1783631319410.jpg"
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/CORES/preto-1783641520913.jpg",
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/CORES/preto-1783641531656.jpg"
+        ],
+        "Branco": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/CORES/branco-1783641467033.jpg"
+        ],
+        "Azul": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/CORES/azul-1783641475380.jpg"
         ]
       },
       "ordem": 1
@@ -146,7 +152,7 @@
       "badge": "",
       "destaque": "Algodão",
       "descricao": "",
-      "estoqueNum": 5,
+      "estoqueNum": 3,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783480100247.png",
@@ -201,7 +207,8 @@
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/midia-1783480220676.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/midia-1783480241093.png"
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/midia-1783480241093.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/midia-1783641930539.png"
       ],
       "fotosCores": {
         "Marrom": [
@@ -262,7 +269,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 2,
+      "estoqueNum": 1,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDFU-106/midia-1783640078311.mp4",
@@ -289,7 +296,7 @@
       "destaque": "",
       "descricao": "",
       "estoqueNum": 9,
-      "ativo": true,
+      "ativo": false,
       "fotos": [],
       "fotosCores": {},
       "ordem": 9
