@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-10T01:44:44.787Z",
+  "geradoEm": "2026-07-10T22:42:10.880Z",
   "produtos": [
     {
       "sku": "ZUM-VDPL-107",
@@ -338,7 +338,7 @@
       "destaque": "",
       "descricao": "",
       "estoqueNum": 9,
-      "ativo": false,
+      "ativo": true,
       "fotos": [],
       "fotosCores": {},
       "ordem": 10
