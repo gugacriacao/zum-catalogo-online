@@ -728,7 +728,7 @@ function salvarConfig() {
 
 /* ==================== AVISOS DE ESTOQUE ==================== */
 var MSG_AVISO_PADRAO = 'Oi {nome}! Aqui é da ZUM 💛 o {produto} ({cor}) que você pediu pra te avisar já voltou pro estoque — corre lá antes que acabe de novo: {link}';
-var CATALOGO_BASE_URL = 'https://www.usezum.com.br/catalogozumonline';
+var CATALOGO_BASE_URL = 'https://www.usezum.com.br/catalogo.html';
 
 async function asPainel(action, data) {
   var url   = (localStorage.getItem('zum-as-url')   || '').trim();
@@ -832,7 +832,7 @@ function montarMensagemAviso(p) {
 
 function montarLinkWhatsAviso(p) {
   var msg = montarMensagemAviso(p);
-  var numero = (p.wpp || '').replace(/\D/g, '');
+  var numero = String(p.wpp || '').replace(/\D/g, '');
   if (numero && numero.length <= 11) numero = '55' + numero; // sem DDI = assume Brasil
   return 'https://wa.me/' + numero + '?text=' + encodeURIComponent(msg);
 }
@@ -1869,8 +1869,14 @@ function sincronizar() {
         if (ex) {
           if (g.preco) ex.preco = g.preco;
           ex.estoqueNum = g.estoque;
-          g.cores.forEach(function(c){ if(ex.cores.indexOf(c)<0) ex.cores.push(c); });
-          if (g.tams.length > ex.tamanhos.length) ex.tamanhos = g.tams;
+          // Cor/tamanho passam a refletir EXATAMENTE o que existe na planilha
+          // agora — antes só entrava cor/tamanho novo (nunca saía), então uma
+          // cor descontinuada (sem nenhuma linha na planilha) continuava
+          // aparecendo pra sempre no catálogo, mesmo sem estoque nenhum.
+          // Guarda-chuva: só substitui se a planilha realmente trouxe algo,
+          // pra nunca zerar cores/tamanhos por causa de uma resposta vazia.
+          if (g.cores.length) ex.cores = g.cores;
+          if (g.tams.length) ex.tamanhos = g.tams;
           ex.syncBadge = true;
           atualizados++;
         } else {
