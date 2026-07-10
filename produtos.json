@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-10T00:40:09.191Z",
+  "geradoEm": "2026-07-10T01:08:20.311Z",
   "produtos": [
     {
       "sku": "ZUM-VDRC-105",
@@ -167,7 +167,7 @@
     {
       "sku": "ZUM-VDPL-107",
       "nome": "Vestido Pala",
-      "cat": "",
+      "cat": "Vestidos",
       "preco": 319.9,
       "cores": [
         "Azul",
@@ -184,7 +184,7 @@
       "estoqueNum": 5,
       "ativo": true,
       "fotos": [
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/midia-1783569730765.png"
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/midia-1783645649416.png"
       ],
       "fotosCores": {},
       "ordem": 5
