@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-12T18:37:33.926Z",
+  "geradoEm": "2026-07-12T18:41:05.112Z",
   "produtos": [
     {
       "sku": "ZUM-VDPL-107",
@@ -18,7 +18,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 5,
+      "estoqueNum": 4,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/midia-1783861479458.png",
@@ -47,7 +47,7 @@
       "sku": "ZUM-VDFU-106",
       "nome": "Vestido frente unica",
       "cat": "Vestidos",
-      "preco": 189.9,
+      "preco": 195.9,
       "cores": [
         "Bege"
       ],
@@ -72,7 +72,7 @@
       "sku": "ZUM-VDALC-100",
       "nome": "Vestido alça",
       "cat": "Vestidos",
-      "preco": 179.9,
+      "preco": 189,
       "cores": [
         "Bordô",
         "Off-white",
@@ -86,7 +86,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 4,
+      "estoqueNum": 3,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDALC-100/midia-1783569529665.png",
@@ -125,7 +125,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 7,
+      "estoqueNum": 5,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CC-400/midia-1783478963409.png",
@@ -151,7 +151,7 @@
       "sku": "ZUM-VDMG-104",
       "nome": "Vestido manga",
       "cat": "Vestidos",
-      "preco": 179.9,
+      "preco": 189.9,
       "cores": [
         "Azul",
         "Marrom",
@@ -218,7 +218,7 @@
       "sku": "ZUM-VDRC-105",
       "nome": "Vestido recorte costas",
       "cat": "Vestidos",
-      "preco": 179.9,
+      "preco": 189.9,
       "cores": [
         "Bordô",
         "Off-white",
@@ -271,7 +271,7 @@
       "sku": "ZUM-VDBT-102",
       "nome": "Vestido busto torcido",
       "cat": "Vestidos",
-      "preco": 179.9,
+      "preco": 189.9,
       "cores": [
         "Bordô",
         "Marrom",
@@ -302,7 +302,7 @@
       "sku": "ZUM-VDDN-103",
       "nome": "Vestido decote nadador",
       "cat": "Vestidos",
-      "preco": 179.9,
+      "preco": 189.9,
       "cores": [
         "Azul",
         "Preto",
@@ -365,8 +365,8 @@
       "cat": "Bodies",
       "preco": 60,
       "cores": [
-        "Preto",
-        "Marrom"
+        "Marrom",
+        "Preto"
       ],
       "tamanhos": [
         "UN"
@@ -375,7 +375,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 1,
+      "estoqueNum": 0,
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
@@ -407,7 +407,7 @@
       "sku": "ZUM-VDBA-101",
       "nome": "Vestido básico",
       "cat": "Vestidos",
-      "preco": 179.9,
+      "preco": 189.9,
       "cores": [
         "Marrom",
         "Preto"
