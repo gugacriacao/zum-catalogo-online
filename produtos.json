@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-12T13:59:02.485Z",
+  "geradoEm": "2026-07-12T18:37:33.926Z",
   "produtos": [
     {
       "sku": "ZUM-VDPL-107",
@@ -167,8 +167,8 @@
       "estoqueNum": 3,
       "ativo": true,
       "fotos": [
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/midia-1783480220676.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/midia-1783480241093.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/midia-1783480220676.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/midia-1783641930539.png"
       ],
       "fotosCores": {
