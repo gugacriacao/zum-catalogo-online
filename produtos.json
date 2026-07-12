@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-10T23:02:42.733Z",
+  "geradoEm": "2026-07-12T13:28:32.965Z",
   "produtos": [
     {
       "sku": "ZUM-VDPL-107",
@@ -21,9 +21,26 @@
       "estoqueNum": 5,
       "ativo": true,
       "fotos": [
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/midia-1783645649416.png"
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/midia-1783861463881.mp4",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/midia-1783861479458.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/midia-1783861485974.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/midia-1783862329374.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/midia-1783862381752.png"
       ],
-      "fotosCores": {},
+      "fotosCores": {
+        "Vinho": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/CORES/vinho-1783862847096.jpg",
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/CORES/vinho-1783862851909.jpg"
+        ],
+        "Marrom": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/CORES/marrom-1783861510379.jpg",
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/CORES/marrom-1783861514855.jpg"
+        ],
+        "Azul": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/CORES/azul-1783862858611.jpg",
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/CORES/azul-1783862864413.jpg"
+        ]
+      },
       "ordem": 1
     },
     {
