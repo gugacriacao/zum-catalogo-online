@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-13T07:10:22.973Z",
+  "geradoEm": "2026-07-13T08:00:20.192Z",
   "produtos": [
     {
       "sku": "ZUM-VDPL-107",
@@ -341,7 +341,7 @@
     {
       "sku": "ZUM-KMBC-001",
       "nome": "produto teste pagamento checkout",
-      "cat": "Kimono",
+      "cat": "",
       "preco": 1,
       "cores": [
         "Preto"
@@ -354,8 +354,10 @@
       "destaque": "",
       "descricao": "",
       "estoqueNum": 8,
-      "ativo": false,
-      "fotos": [],
+      "ativo": true,
+      "fotos": [
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-KMBC-001/midia-1783929573801.png"
+      ],
       "fotosCores": {},
       "ordem": 10
     },
