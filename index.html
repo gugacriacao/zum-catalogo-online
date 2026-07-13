@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZUM — Leveza em Movimento</title>
+<meta name="description" content="ZUM — moda feminina autoral de Fortaleza. Vestidos, tops e calças. Catálogo online com Pix e cartão.">
+<link rel="apple-touch-icon" href="assets/logo-preta.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          background: 'var(--background)',
+          foreground: 'var(--foreground)',
+          muted: 'var(--muted)',
+          'muted-foreground': 'var(--muted-foreground)',
+          border: 'var(--border)',
+          lilac: 'var(--lilac)',
+          'lilac-deep': 'var(--lilac-deep)',
+          primary: 'var(--primary)',
+          'primary-foreground': 'var(--primary-foreground)',
+        },
+        fontFamily: {
+          display: ['"Cormorant Garamond"', '"Playfair Display"', 'Georgia', 'serif'],
+          sans: ['"Jost"', '"Montserrat"', '"Helvetica Neue"', 'sans-serif'],
+        }
+      }
+    }
+  }
+</script>
+<style>
+  :root{
+    --background: oklch(0.985 0.003 90);
+    --foreground: oklch(0.15 0 0);
+    --muted: oklch(0.96 0.005 90);
+    --muted-foreground: oklch(0.55 0 0);
+    --border: oklch(0.9 0.005 90);
+    --lilac: oklch(0.92 0.02 310);
+    --lilac-deep: oklch(0.86 0.03 305);
+    --primary: oklch(0.12 0 0);
+    --primary-foreground: oklch(1 0 0);
+  }
+  html,body{background-color:var(--background);color:var(--foreground);font-family:'Jost',sans-serif;-webkit-font-smoothing:antialiased;}
+  h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:400;letter-spacing:-0.01em;}
+  .label-caps{font-family:'Jost',sans-serif;text-transform:uppercase;letter-spacing:0.28em;font-weight:400;font-size:0.72rem;}
+  /* Mesma família/caixa-alta do "Vitrine" do header (.label-caps), só que com
+     tracking mais contido — em nome de produto completo (2-4 palavras) a
+     0.28em original ficava larga demais e prejudicava a leitura. */
+  .font-vitrine{font-family:'Jost',sans-serif;text-transform:uppercase;letter-spacing:0.1em;font-weight:400;}
+  .btn-zum{display:inline-flex;align-items:center;justify-content:center;background-color:var(--primary);color:var(--primary-foreground);text-transform:uppercase;letter-spacing:0.32em;font-size:0.75rem;padding:1rem 2.25rem;transition:opacity .2s ease;border:none;cursor:pointer;font-family:inherit;}
+  .btn-zum:hover{opacity:.82;}
+  .btn-zum[disabled]{opacity:.35;cursor:not-allowed;}
+  .display-huge{font-family:'Cormorant Garamond',serif;font-weight:400;letter-spacing:-0.04em;line-height:.85;}
+  a{color:inherit;}
+  button{font-family:inherit;}
+</style>
+</head>
+<body class="min-h-screen bg-background">
+
+<header class="border-b border-border/60 bg-background">
+  <div class="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-6 md:py-8">
+    <div class="flex w-1/3 items-center gap-4 text-foreground/70">
+      <button aria-label="Menu" id="burger" class="md:hidden">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+      </button>
+      <nav class="hidden gap-8 md:flex">
+        <a href="#/catalogo" class="label-caps hover:text-foreground">Vitrine</a>
+      </nav>
+    </div>
+    <a href="#/" class="flex flex-1 items-center justify-center">
+      <img src="assets/logo-preta.png" alt="ZUM" class="h-8 w-auto md:h-10">
+    </a>
+    <div class="flex w-1/3 items-center justify-end gap-5 text-foreground/70">
+      <button aria-label="Buscar" class="inline-flex" onclick="ZUM.openSearch()">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+      <button aria-label="Minha Conta" id="accountBtn" class="hidden md:inline-flex" onclick="ZUM.openAccount()">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </button>
+      <button aria-label="Sacola" class="relative inline-flex" onclick="ZUM.openCart()">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span id="bagCountWrap" style="display:none;" class="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-foreground text-[9px] text-background"><span id="bagCount">0</span></span>
+      </button>
+    </div>
+  </div>
+  <div id="mobNav" class="hidden border-t border-border/60 px-6 py-4 md:hidden">
+    <nav class="flex flex-col gap-4">
+      <a href="#/catalogo" class="label-caps">Vitrine</a>
+      <button class="label-caps text-left" onclick="ZUM.openAccount()">Minha Conta</button>
+    </nav>
+  </div>
+</header>
+
+<main id="app">
+  <div class="px-6 py-32 text-center text-sm text-muted-foreground">Carregando coleção…</div>
+</main>
+
+<footer class="mt-24 border-t border-border/60 bg-background">
+  <div class="mx-auto max-w-[1400px] px-6 py-16">
+    <div class="grid gap-12 md:grid-cols-4">
+      <div>
+        <img src="assets/logo-preta.png" alt="ZUM" class="h-7 w-auto">
+        <p class="mt-4 max-w-xs text-sm text-muted-foreground">Leveza em movimento. Peças atemporais para quem veste presença.</p>
+      </div>
+      <div>
+        <h4 class="label-caps mb-4">Loja</h4>
+        <ul class="space-y-2 text-sm text-muted-foreground">
+          <li><button class="hover:text-foreground" onclick="ZUM.openCart()">Minha Sacola</button></li>
+          <li><a href="#/catalogo" class="hover:text-foreground">Vitrine</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="label-caps mb-4">Contato</h4>
+        <ul class="space-y-3 text-sm text-muted-foreground">
+          <li><a href="https://wa.me/5585981110467?text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20ZUM%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es." target="_blank" rel="noopener" class="inline-flex items-center gap-2 hover:text-foreground">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+            +55 (85) 98111-0467</a></li>
+          <li><a href="https://www.instagram.com/use.zum/" target="_blank" rel="noopener" class="inline-flex items-center gap-2 hover:text-foreground">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            @use.zum</a></li>
+          <li><a href="mailto:zumstore8@gmail.com?subject=Contato%20via%20site%20ZUM" class="inline-flex items-center gap-2 hover:text-foreground">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            zumstore8@gmail.com</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="label-caps mb-4">Newsletter</h4>
+        <p class="mb-3 text-sm text-muted-foreground">Receba lançamentos e editoriais.</p>
+        <form id="newsForm" class="flex border border-foreground/20">
+          <input type="email" placeholder="seu@email.com" required class="flex-1 bg-transparent px-3 py-2 text-sm outline-none">
+          <button class="bg-foreground px-4 text-xs uppercase tracking-[0.25em] text-background">OK</button>
+        </form>
+        <p id="newsNote" class="mt-2 text-[11px] text-muted-foreground/80"></p>
+      </div>
+    </div>
+    <div class="label-caps mt-12 flex flex-col items-center justify-between gap-2 border-t border-border/60 pt-8 text-muted-foreground md:flex-row">
+      <span>© <span id="yr"></span> ZUM</span>
+      <span>Leveza em movimento</span>
+    </div>
+  </div>
+</footer>
+
+<div class="fixed bottom-6 right-6 z-40 flex flex-col gap-3 md:bottom-8 md:right-8">
+  <a href="https://wa.me/5585981110467?text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20ZUM%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es." target="_blank" rel="noopener" aria-label="Fale conosco no WhatsApp"
+     class="flex h-12 w-12 items-center justify-center border border-foreground/15 bg-background text-foreground shadow-sm transition-all hover:bg-foreground hover:text-background">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+  </a>
+  <a href="https://www.instagram.com/use.zum/" target="_blank" rel="noopener" aria-label="Instagram da ZUM"
+     class="flex h-12 w-12 items-center justify-center border border-foreground/15 bg-background text-foreground shadow-sm transition-all hover:bg-foreground hover:text-background">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+  </a>
+  <a href="mailto:zumstore8@gmail.com" aria-label="Enviar e-mail para a ZUM"
+     class="flex h-12 w-12 items-center justify-center border border-foreground/15 bg-background text-foreground shadow-sm transition-all hover:bg-foreground hover:text-background">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+  </a>
+</div>
+
+<!-- ---------- SACOLA / CHECKOUT (drawer) ---------- -->
+<div id="cartBackdrop" class="fixed inset-0 z-[60] hidden bg-foreground/30" onclick="ZUM.closeCart()"></div>
+<aside id="cartDrawer" class="fixed right-0 top-0 z-[70] flex h-full w-full max-w-md translate-x-full flex-col bg-background shadow-2xl transition-transform duration-300 ease-out">
+  <div class="flex items-center justify-between border-b border-border/60 px-6 py-5">
+    <span class="label-caps" id="cartDrawerTitle">Minha Sacola</span>
+    <button aria-label="Fechar" onclick="ZUM.closeCart()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div id="cartDrawerBody" class="flex-1 overflow-y-auto px-6 py-6"></div>
+</aside>
+
+<!-- ---------- MINHA CONTA (drawer) ---------- -->
+<div id="accountBackdrop" class="fixed inset-0 z-[60] hidden bg-foreground/30" onclick="ZUM.closeAccount()"></div>
+<aside id="accountDrawer" class="fixed right-0 top-0 z-[70] flex h-full w-full max-w-md translate-x-full flex-col bg-background shadow-2xl transition-transform duration-300 ease-out">
+  <div class="flex items-center justify-between border-b border-border/60 px-6 py-5">
+    <span class="label-caps" id="accountDrawerTitle">Minha Conta</span>
+    <button aria-label="Fechar" onclick="ZUM.closeAccount()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div id="accountDrawerBody" class="flex-1 overflow-y-auto px-6 py-6"></div>
+</aside>
+
+<!-- ---------- BUSCA (overlay) ---------- -->
+<div id="searchOverlay" class="fixed inset-0 z-[80] hidden bg-background">
+  <div class="mx-auto max-w-2xl px-6 pt-24">
+    <div class="flex items-center gap-4 border-b border-border pb-4">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="searchInput" type="text" placeholder="Buscar produto…" class="flex-1 bg-transparent text-lg outline-none" oninput="ZUM.onSearchInput()">
+      <button aria-label="Fechar busca" onclick="ZUM.closeSearch()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div id="searchResults" class="mt-8 space-y-1"></div>
+  </div>
+</div>
+
+<!-- ---------- AVISE-ME QUANDO CHEGAR (modal) ---------- -->
+<div id="aviseBackdrop" class="fixed inset-0 z-[90] hidden items-center justify-center bg-foreground/30 p-4" onclick="ZUM.closeAvise()">
+  <div class="w-full max-w-sm bg-background p-6 shadow-2xl" onclick="event.stopPropagation()">
+    <div class="flex items-center justify-between">
+      <span class="label-caps">Avise-me quando chegar</span>
+      <button aria-label="Fechar" onclick="ZUM.closeAvise()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <p id="aviseInfo" class="mt-2 text-xs text-muted-foreground"></p>
+    <div class="mt-5 space-y-4 text-sm" id="aviseFormArea">
+      <div><label class="mb-1 block text-[11px] uppercase tracking-[0.15em] text-muted-foreground">Nome</label>
+        <input type="text" id="aviseNome" placeholder="Seu nome" class="w-full border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground"></div>
+      <div><label class="mb-1 block text-[11px] uppercase tracking-[0.15em] text-muted-foreground">WhatsApp</label>
+        <input type="tel" id="aviseWpp" placeholder="(00) 00000-0000" class="w-full border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground"></div>
+      <p class="text-[11px] text-muted-foreground">Ao enviar, você concorda em receber uma mensagem no WhatsApp da ZUM quando este produto voltar ao estoque.</p>
+      <p id="aviseMsg" class="text-xs text-red-700"></p>
+      <button class="btn-zum w-full" onclick="ZUM.enviarAvise()">Quero ser avisada</button>
+    </div>
+  </div>
+</div>
+
+<script>
+window.ZUM = (function(){
+  "use strict";
+
+  var PRODUTOS_JSON_URL = 'https://www.usezum.com.br/produtos.json';
+  var BANNERS_JSON_URL  = 'https://www.usezum.com.br/banners.json';
+  var ZUMAGENT_URL      = 'https://script.google.com/macros/s/AKfycbwHavGCAgB01Vm3b6kEqN26x1MRA62VVA6P2UWfbeDVFbDxfyQ9PbAhr6B44ElRK_5q/exec';
+  var API_TOKEN         = 'zum0467';
+  var RAW               = 'https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/';
+  var FRETE_VALOR       = 15.00;
+  var COR_NOME_TO_COD = {
+    'Preto':'PT','Bordô':'BD','Marrom':'MR','Off-white':'OW','Vinho':'VH','Azul':'AZ',
+    'Rosa':'RS','Verde':'VD','Branco':'BR','Azul Marinho':'AN','Cinza':'CZ','Bege':'BG'
+  };
+
+  // ============================================================
+  // MINHA CONTA (Supabase Auth) — login/senha reais, e-mail de
+  // confirmação automático (o Supabase manda por padrão; e-mail com
+  // marca própria da ZUM fica pra depois, por decisão do usuário).
+  // Dado de pedido/estoque continua 100% na planilha (ZumAgent) — o
+  // Supabase só guarda conta, senha (nunca em texto puro) e o
+  // consentimento de marketing com data/hora, como o parecer jurídico
+  // exigiu.
+  // ============================================================
+  var SUPABASE_URL = 'https://qbbfqsngenrhoiemjcwh.supabase.co';
+  var SUPABASE_KEY = 'sb_publishable_UM3xo8zHdjawKNLsE_58cw__BlMySkH';
+  var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  var CUSTOMER = null; // linha da tabela public.customers do usuário logado, ou null
+
+  async function refreshCustomer(){
+    var { data: sessionData } = await sb.auth.getSession();
+    var session = sessionData && sessionData.session;
+    if(!session){ CUSTOMER = null; updateAccountIcon(); return null; }
+    var { data: rows } = await sb.from('customers').select('*').eq('id', session.user.id).limit(1);
+    CUSTOMER = (rows && rows[0]) ? Object.assign({email: session.user.email}, rows[0]) : {email: session.user.email};
+    updateAccountIcon();
+    return CUSTOMER;
+  }
+
+  function updateAccountIcon(){
+    var btn = document.getElementById('accountBtn');
+    if(!btn) return;
+    if(CUSTOMER){
+      btn.setAttribute('title', 'Olá, '+(CUSTOMER.nome||CUSTOMER.email));
+      btn.classList.add('text-foreground');
+    } else {
+      btn.removeAttribute('title');
+    }
+  }
+
+  function openAccount(){
+    document.getElementById('accountBackdrop').classList.remove('hidden');
+    document.getElementById('accountDrawer').classList.remove('translate-x-full');
+    renderAccountDrawer();
+  }
+  function closeAccount(){
+    document.getElementById('accountBackdrop').classList.add('hidden');
+    document.getElementById('accountDrawer').classList.add('translate-x-full');
+  }
+
+  var ACCOUNT_TAB = 'login'; // login | cadastro
+
+  function consentFieldHTML(idPrefix){
+    return '<label class="mt-4 flex items-start gap-3 text-[12.5px] leading-snug text-muted-foreground">'+
+      '<input type="checkbox" id="'+idPrefix+'AceitaMkt" class="mt-1">'+
+      '<span>Quero receber por <b>e-mail e WhatsApp</b> novidades, campanhas e avisos de peças novas da ZUM. Posso cancelar quando quiser.</span>'+
+    '</label>';
+  }
+
+  function renderAccountDrawer(){
+    var title = document.getElementById('accountDrawerTitle');
+    var body = document.getElementById('accountDrawerBody');
+
+    if(CUSTOMER){
+      title.textContent = 'Minha Conta';
+      body.innerHTML =
+        '<p class="text-sm">Olá, <b>'+(CUSTOMER.nome||CUSTOMER.email)+'</b></p>'+
+        '<p class="mt-1 text-xs text-muted-foreground">'+CUSTOMER.email+'</p>'+
+        '<div class="mt-6 space-y-3 text-sm">'+
+          '<div class="flex justify-between border-b border-border/50 py-2"><span class="text-muted-foreground">Telefone</span><span>'+(CUSTOMER.telefone||'—')+'</span></div>'+
+          '<div class="flex justify-between border-b border-border/50 py-2"><span class="text-muted-foreground">Endereço</span><span class="text-right">'+(CUSTOMER.rua?CUSTOMER.rua+', '+(CUSTOMER.numero||''):'—')+'</span></div>'+
+          '<div class="flex justify-between border-b border-border/50 py-2"><span class="text-muted-foreground">Cidade</span><span>'+(CUSTOMER.cidade?CUSTOMER.cidade+' '+(CUSTOMER.uf||''):'—')+'</span></div>'+
+          '<div class="flex justify-between border-b border-border/50 py-2"><span class="text-muted-foreground">Novidades por e-mail/WhatsApp</span><span>'+(CUSTOMER.aceita_marketing?'Sim':'Não')+'</span></div>'+
+        '</div>'+
+        '<button class="btn-zum mt-8 w-full" onclick="ZUM.signOut()">Sair da conta</button>';
+      return;
+    }
+
+    title.textContent = ACCOUNT_TAB==='login' ? 'Entrar' : 'Criar Conta';
+    var tabsHtml = '<div class="mb-6 flex gap-8 border-b border-border/60 text-[12px] uppercase tracking-[0.2em]">'+
+      '<button onclick="ZUM.setAccountTab(\'login\')" class="pb-3 '+(ACCOUNT_TAB==='login'?'border-b border-foreground text-foreground':'text-muted-foreground')+'">Entrar</button>'+
+      '<button onclick="ZUM.setAccountTab(\'cadastro\')" class="pb-3 '+(ACCOUNT_TAB==='cadastro'?'border-b border-foreground text-foreground':'text-muted-foreground')+'">Criar Conta</button>'+
+    '</div>';
+
+    if(ACCOUNT_TAB==='login'){
+      body.innerHTML = tabsHtml +
+        '<div class="space-y-4 text-sm">'+
+          field('accEmail','E-mail','email','seu@email.com')+
+          field('accSenha','Senha','password','••••••••')+
+        '</div>'+
+        '<p id="accMsg" class="mt-3 text-xs text-red-700"></p>'+
+        '<button class="btn-zum mt-4 w-full" onclick="ZUM.doLogin()">Entrar</button>';
+    } else {
+      body.innerHTML = tabsHtml +
+        '<div class="space-y-4 text-sm">'+
+          field('accNome','Nome completo','text','Seu nome')+
+          field('accEmail','E-mail','email','seu@email.com')+
+          field('accTelefone','WhatsApp','tel','(00) 00000-0000')+
+          field('accSenha','Senha','password','Mínimo 6 caracteres')+
+        '</div>'+
+        consentFieldHTML('acc')+
+        '<p id="accMsg" class="mt-3 text-xs text-red-700"></p>'+
+        '<button class="btn-zum mt-4 w-full" onclick="ZUM.doSignup()">Criar Conta</button>'+
+        '<p class="mt-3 text-[11px] text-muted-foreground">Vamos mandar um e-mail de confirmação — confirme por lá antes de fazer login.</p>';
+    }
+  }
+  function setAccountTab(tab){ ACCOUNT_TAB = tab; renderAccountDrawer(); }
+
+  async function doSignup(){
+    var nome = $('accNome').value.trim();
+    var email = $('accEmail').value.trim();
+    var telefone = $('accTelefone').value.trim();
+    var senha = $('accSenha').value;
+    var aceitaMkt = $('accAceitaMkt').checked;
+    var msg = $('accMsg');
+    if(!nome || !email || senha.length<6){ msg.textContent='Preencha nome, e-mail e uma senha com pelo menos 6 caracteres.'; return; }
+    msg.textContent = 'Criando conta…';
+    var { error } = await sb.auth.signUp({
+      email: email, password: senha,
+      options: { data: { nome: nome, telefone: telefone, aceita_marketing: aceitaMkt } }
+    });
+    if(error){ msg.textContent = error.message; return; }
+    msg.className = 'mt-3 text-xs text-green-700';
+    msg.textContent = 'Conta criada! Verifique seu e-mail pra confirmar antes de entrar.';
+  }
+
+  async function doLogin(){
+    var email = $('accEmail').value.trim();
+    var senha = $('accSenha').value;
+    var msg = $('accMsg');
+    msg.textContent = 'Entrando…';
+    var { error } = await sb.auth.signInWithPassword({ email: email, password: senha });
+    if(error){ msg.textContent = error.message; return; }
+    await refreshCustomer();
+    renderAccountDrawer();
+  }
+
+  async function signOut(){
+    await sb.auth.signOut();
+    CUSTOMER = null;
+    updateAccountIcon();
+    renderAccountDrawer();
+  }
+
+  // ---------- BUSCA ----------
+  function openSearch(){
+    document.getElementById('searchOverlay').classList.remove('hidden');
+    document.getElementById('searchResults').innerHTML = '<p class="text-sm text-muted-foreground">Digite pra buscar.</p>';
+    setTimeout(function(){ var i=document.getElementById('searchInput'); if(i){ i.value=''; i.focus(); } }, 50);
+  }
+  function closeSearch(){ document.getElementById('searchOverlay').classList.add('hidden'); }
+  function onSearchInput(){
+    var q = document.getElementById('searchInput').value.trim().toLowerCase();
+    var box = document.getElementById('searchResults');
+    if(!q){ box.innerHTML = '<p class="text-sm text-muted-foreground">Digite pra buscar.</p>'; return; }
+    var found = STATE.produtos.filter(function(p){ return p.nome.toLowerCase().indexOf(q)>-1; });
+    if(!found.length){ box.innerHTML = '<p class="text-sm text-muted-foreground">Nada encontrado pra "'+q+'".</p>'; return; }
+    box.innerHTML = found.map(function(p){
+      return '<a href="#/produto/'+p.slug+'" onclick="ZUM.closeSearch()" class="flex items-center gap-4 border-b border-border/50 py-3">'+
+        '<div class="h-16 w-12 flex-shrink-0 overflow-hidden bg-muted">'+mediaTag(p.image,p.nome,'h-full w-full object-cover')+'</div>'+
+        '<div><div class="text-sm">'+p.nome+'</div><div class="text-xs text-muted-foreground">'+money(p.preco)+'</div></div>'+
+      '</a>';
+    }).join('');
+  }
+
+  // ============================================================
+  // MURAL DO INSTAGRAM (@use.zum)
+  // Troque TODO o valor abaixo pelo código de embed que o LightWidget
+  // (ou o serviço que você escolher) te der — normalmente um <iframe ...></iframe>
+  // ou um <div>+<script> juntos. Cole exatamente como veio, sem editar.
+  // Passo a passo completo no chat com o Claude.
+  // ============================================================
+  var IG_EMBED_HTML =
+    '<div class="mx-auto max-w-[900px] border border-border/70 bg-muted/40 px-6 py-16 text-sm text-muted-foreground">'+
+      'Espaço reservado para o mural do Instagram.<br class="hidden md:block">'+
+      'Assim que você gerar o código de embed (LightWidget ou parecido), cole aqui — ver instruções.'+
+    '</div>';
+
+  var COLOR_HEX = {
+    'Preto':'#111111','Branco':'#F5F3EF','Off-white':'#EFE7DA','Bordô':'#5C1F2E','Vinho':'#5C1220',
+    'Marrom':'#4A3226','Azul':'#1F3A5F','Azul Marinho':'#101E38','Bege':'#D9C7A8','Rosa':'#D98CA0',
+    'Verde':'#4B6B4E','Cinza':'#8C8880'
+  };
+  // Categorias vêm direto da planilha (campo "cat" de cada produto, já em
+  // português — Vestidos, Calças, T-shirts, e o que mais o usuário cadastrar).
+  // A lista é calculada dinamicamente a partir dos produtos ativos, então uma
+  // categoria nova na planilha aparece aqui sozinha, sem precisar mexer no código.
+  var CATEGORIES = [ { id:'all', label:'Todos' } ];
+  function computeCategories(){
+    var seen = {}; var list = [ { id:'all', label:'Todos' } ];
+    STATE.produtos.forEach(function(p){
+      var c = p.category;
+      if(!c || seen[c]) return;
+      seen[c] = true;
+      list.push({ id:c, label:c });
+    });
+    CATEGORIES = list;
+  }
+
+  function isVideo(url){ return /\.(mp4|webm|mov)(\?|$)/i.test(url||''); }
+  function money(v){ return v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}); }
+  function slugify(sku){ return sku.toLowerCase(); }
+  function mediaTag(url, alt, cls){
+    cls = cls || '';
+    if(isVideo(url)) return '<video class="'+cls+'" src="'+url+'" autoplay muted loop playsinline></video>';
+    return '<img src="'+url+'" alt="'+(alt||'')+'" loading="lazy" class="'+cls+'">';
+  }
+
+  var STATE = { produtos: [], banners: null, loaded:false };
+
+  function mapProduto(p){
+    return {
+      sku: p.sku, slug: slugify(p.sku), nome: p.nome,
+      category: (p.cat||'Outros').trim(), catOriginal: p.cat,
+      preco: p.preco, cores: p.cores || [],
+      tamanhos: (p.tamanhos && p.tamanhos.length) ? p.tamanhos : ['UN'],
+      estoqueNum: (typeof p.estoqueNum === 'number') ? p.estoqueNum : 1,
+      ativo: p.ativo !== false, fotos: p.fotos || [], fotosCores: p.fotosCores || {},
+      destaque: p.destaque || '', ordem: (typeof p.ordem === 'number') ? p.ordem : 999,
+      image: (p.fotos && p.fotos[0]) || ''
+    };
+  }
+
+  // Tamanhos disponíveis PARA UMA COR ESPECÍFICA de um produto — nunca usa o
+  // estoque agregado do produto inteiro (era isso que deixava adicionar à
+  // sacola uma cor/tamanho sem estoque real, ex: Vestido Alça só tem estoque
+  // de verdade em Bordô, mas outras cores apareciam como disponíveis).
+  // p.estoquePorVariante vem do fetch ao vivo do ZumAgent em carregarDados();
+  // antes dele chegar, não bloqueia nada (fallback otimista), exceto se o
+  // agregado já indicar 0 peças no produto inteiro.
+  function tamanhosDisponiveis(p, cor){
+    if(p.estoqueNum===0) return (p.tamanhos||[]).map(function(t){ return {s:t, out:true}; });
+    var porCor = (p.estoquePorVariante && p.estoquePorVariante[cor]) || null;
+    return (p.tamanhos||[]).map(function(t){
+      if(!porCor) return { s:t, out:false };
+      var qtd = porCor[t] || 0;
+      return { s:t, out: qtd<=0 };
+    });
+  }
+
+  function carregarDados(render){
+    fetch(PRODUTOS_JSON_URL, {cache:'no-store'}).then(function(r){ return r.ok?r.json():null; }).then(function(data){
+      if(data && data.produtos){
+        STATE.produtos = data.produtos.map(mapProduto)
+          .filter(function(p){ return p.ativo && p.fotos.length>0; })
+          .sort(function(a,b){ return a.ordem-b.ordem; });
+        computeCategories();
+      }
+      STATE.loaded = true; render();
+    }).catch(function(){ STATE.loaded = true; render(); });
+
+    fetch(BANNERS_JSON_URL, {cache:'no-store'}).then(function(r){ return r.ok?r.json():null; }).then(function(data){
+      if(data){ STATE.banners = data; render(); }
+    }).catch(function(){});
+
+    // ?api=produtos devolve uma linha POR VARIANTE (SKU completo, tipo
+    // ZUM-VDALC-100-BD-UN, com a cor e o tamanho reais daquela linha da
+    // planilha) — não uma linha por produto. Este bloco tentava casar por
+    // "p.sku" (campo que não existe na resposta — só existe "codigo"), então
+    // nunca batia com nada e o estoque ao vivo nunca chegava a atualizar a
+    // tela. Corrigido: agrupa por SKU base (3 primeiros blocos do código) e
+    // monta o estoque de CADA combinação cor+tamanho — essa granularidade é
+    // que decide de verdade se dá pra adicionar uma cor/tamanho à sacola
+    // (produtos.json só tem um número agregado, que escondia peças sem
+    // estoque numa cor específica, ex: Vestido Alça só tem estoque real em
+    // Bordô, mas as outras cores apareciam como disponíveis).
+    var apiUrl = ZUMAGENT_URL + '?api=produtos' + (API_TOKEN ? '&token='+encodeURIComponent(API_TOKEN) : '');
+    fetch(apiUrl, {cache:'no-store'}).then(function(r){ return r.ok?r.json():null; }).then(function(data){
+      if(!data || !data.ok || !data.produtos) return;
+      var porBase = {};
+      data.produtos.forEach(function(item){
+        var codigo = String(item.codigo||'').trim();
+        if(!codigo) return;
+        var base = codigo.split('-').slice(0,3).join('-');
+        if(!porBase[base]) porBase[base] = { estoqueTotal:0, preco:0, porVariante:{} };
+        var g = porBase[base];
+        var qtd = Number(item.estoque)||0;
+        g.estoqueTotal += qtd;
+        if(!g.preco && item.preco) g.preco = Number(item.preco);
+        var cor = (item.cor||'').trim();
+        var tam = (item.tamanho||'').trim() || 'UN';
+        if(!g.porVariante[cor]) g.porVariante[cor] = {};
+        g.porVariante[cor][tam] = (g.porVariante[cor][tam]||0) + qtd;
+      });
+      STATE.produtos.forEach(function(p){
+        var live = porBase[p.sku];
+        if(live){
+          if(live.preco) p.preco = live.preco;
+          p.estoqueNum = live.estoqueTotal;
+          p.estoquePorVariante = live.porVariante;
+        }
+      });
+      render();
+    }).catch(function(){});
+  }
+
+  // ============================================================
+  // SACOLA + CHECKOUT (real, embutido no site — sem redirecionar pro
+  // catalogo.html). Mesma arquitetura de backend que ele já usava:
+  // 1) registra pedido "Pendente" no ZumAgent (reserva estoque)
+  // 2) chama /api/criar-pagamento (Vercel) que cria o link real na
+  //    InfinitePay (Pix/cartão) e devolve a URL
+  // 3) redireciona a página inteira pra essa URL da InfinitePay — o
+  //    pagamento em si sempre acontece lá, não tem como evitar isso e
+  //    processar cartão/Pix dentro do nosso próprio site.
+  // Ao voltar, a InfinitePay inclui ?order_nsu=... na redirect_url
+  // (configurada pra apontar pra raiz do domínio) — é o que detectamos
+  // no carregamento da página pra mostrar a tela de sucesso.
+  // ============================================================
+  var CART = [];
+  var CART_STEP = 'sacola'; // sacola | dados | confirmar
+  var FRETE_OPCAO = 'entrega';
+  var PEDIDO_FINALIZADO = false;
+
+  function loadCart(){
+    try{ CART = JSON.parse(localStorage.getItem('zum-site-cart')||'[]'); }catch(e){ CART = []; }
+  }
+  function saveCart(){ localStorage.setItem('zum-site-cart', JSON.stringify(CART)); updateBagBadge(); }
+  function cartCount(){ return CART.reduce(function(s,i){return s+i.qty;},0); }
+  function cartTotal(){ return CART.reduce(function(s,i){return s+i.price*i.qty;},0); }
+  function updateBagBadge(){
+    var n = cartCount();
+    var wrap = document.getElementById('bagCountWrap');
+    var num = document.getElementById('bagCount');
+    if(num) num.textContent = n;
+    if(wrap) wrap.style.display = n>0 ? 'flex' : 'none';
+  }
+  function addToCart(p, cor, tamanho, qty){
+    var ex = CART.filter(function(i){return i.sku===p.sku && i.color===cor && i.size===tamanho;})[0];
+    if(ex){ ex.qty += qty; }
+    else{ CART.push({sku:p.sku, name:p.nome, price:p.preco, color:cor, size:tamanho, qty:qty, image:p.image}); }
+    saveCart();
+  }
+  // ---------- AVISE-ME QUANDO CHEGAR ----------
+  // Mesma feature do catalogo.html (aba AvisosEstoque + ação
+  // registrarAvisoEstoque no ZumAgent.gs) — aparece quando a cor/tamanho
+  // escolhida está sem estoque de verdade, captura nome+WhatsApp e a equipe
+  // avisa manualmente quando repor.
+  var AVISE_CTX = null;
+  function abrirAviseMe(p, state){
+    AVISE_CTX = { sku: p.sku, nome: p.nome, cor: state.cor, tamanho: state.tamanho };
+    document.getElementById('aviseInfo').textContent = p.nome + (state.cor ? ' · '+state.cor : '') + (state.tamanho && state.tamanho!=='UN' ? ' · '+state.tamanho : '');
+    document.getElementById('aviseFormArea').innerHTML =
+      '<div><label class="mb-1 block text-[11px] uppercase tracking-[0.15em] text-muted-foreground">Nome</label>'+
+        '<input type="text" id="aviseNome" placeholder="Seu nome" class="w-full border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground"></div>'+
+      '<div><label class="mb-1 block text-[11px] uppercase tracking-[0.15em] text-muted-foreground">WhatsApp</label>'+
+        '<input type="tel" id="aviseWpp" placeholder="(00) 00000-0000" class="w-full border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground"></div>'+
+      '<p class="text-[11px] text-muted-foreground">Ao enviar, você concorda em receber uma mensagem no WhatsApp da ZUM quando este produto voltar ao estoque.</p>'+
+      '<p id="aviseMsg" class="text-xs text-red-700"></p>'+
+      '<button class="btn-zum w-full" onclick="ZUM.enviarAvise()">Quero ser avisada</button>';
+    var backdrop = document.getElementById('aviseBackdrop');
+    backdrop.classList.remove('hidden'); backdrop.classList.add('flex');
+  }
+  function closeAvise(){
+    var backdrop = document.getElementById('aviseBackdrop');
+    backdrop.classList.add('hidden'); backdrop.classList.remove('flex');
+  }
+  async function enviarAvise(){
+    var nomeEl = $('aviseNome'), wppEl = $('aviseWpp'), msg = $('aviseMsg');
+    var nome = nomeEl ? nomeEl.value.trim() : '';
+    var wpp = wppEl ? wppEl.value.trim() : '';
+    if(!nome || !wpp){ if(msg){ msg.textContent = 'Preencha nome e WhatsApp.'; } return; }
+    if(msg){ msg.className = 'text-xs text-muted-foreground'; msg.textContent = 'Enviando…'; }
+    await asCall('registrarAvisoEstoque', {
+      nome: nome, wpp: wpp, sku: AVISE_CTX.sku, produto: AVISE_CTX.nome,
+      cor: AVISE_CTX.cor||'', tamanho: AVISE_CTX.tamanho||''
+    });
+    document.getElementById('aviseFormArea').innerHTML = '<p class="text-sm">Prontinho! A gente te avisa no WhatsApp assim que chegar.</p>';
+  }
+
+  function cartQty(i, d){ CART[i].qty = Math.max(1, CART[i].qty+d); saveCart(); renderCartDrawer(); }
+  function cartDel(i){ CART.splice(i,1); saveCart(); renderCartDrawer(); }
+  function setFrete(op){ FRETE_OPCAO = op; renderCartDrawer(); }
+
+  function openCart(step){
+    CART_STEP = step || 'sacola';
+    renderCartDrawer();
+    document.getElementById('cartBackdrop').classList.remove('hidden');
+    document.getElementById('cartDrawer').classList.remove('translate-x-full');
+  }
+  function closeCart(){
+    document.getElementById('cartBackdrop').classList.add('hidden');
+    document.getElementById('cartDrawer').classList.add('translate-x-full');
+  }
+
+  function drawerItemHTML(it, i, editable){
+    return '<div class="flex gap-3 border-b border-border/50 py-4">'+
+      '<div class="h-20 w-16 flex-shrink-0 overflow-hidden bg-muted">'+mediaTag(it.image, it.name, 'h-full w-full object-cover')+'</div>'+
+      '<div class="flex-1">'+
+        '<div class="text-[13px]">'+it.name+'</div>'+
+        '<div class="text-[12px] text-muted-foreground">'+it.color+(it.size&&it.size!=='UN'?' · '+it.size:'')+'</div>'+
+        '<div class="mt-2 flex items-center justify-between">'+
+          (editable ? '<div class="flex items-center gap-2 text-xs">'+
+            '<button onclick="ZUM.cartQty('+i+',-1)" class="h-6 w-6 border border-border">−</button>'+
+            '<span>'+it.qty+'</span>'+
+            '<button onclick="ZUM.cartQty('+i+',1)" class="h-6 w-6 border border-border">+</button>'+
+          '</div>' : '<span class="text-xs text-muted-foreground">Qtd '+it.qty+'</span>')+
+          '<span class="text-[13px]">'+money(it.price*it.qty)+'</span>'+
+        '</div>'+
+        (editable ? '<button onclick="ZUM.cartDel('+i+')" class="mt-2 text-[11px] uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground">Remover</button>' : '')+
+      '</div>'+
+    '</div>';
+  }
+
+  function totalsHTML(){
+    var t = cartTotal();
+    var fr = FRETE_OPCAO==='entrega' ? FRETE_VALOR : 0;
+    return '<div class="mt-4 space-y-2 text-sm">'+
+      '<div class="flex justify-between text-muted-foreground"><span>Subtotal</span><span>'+money(t)+'</span></div>'+
+      '<div class="flex justify-between text-muted-foreground"><span>Frete</span><span>'+(fr>0?money(fr):'Grátis')+'</span></div>'+
+      '<div class="flex justify-between border-t border-border/60 pt-2 text-base"><span>Total</span><span>'+money(t+fr)+'</span></div>'+
+    '</div>';
+  }
+
+  function renderCartDrawer(){
+    var titleEl = document.getElementById('cartDrawerTitle');
+    var body = document.getElementById('cartDrawerBody');
+    if(!body) return;
+
+    if(CART_STEP==='sacola'){
+      titleEl.textContent = 'Minha Sacola';
+      if(!CART.length){
+        body.innerHTML = '<div class="py-16 text-center text-sm text-muted-foreground">Sua sacola está vazia.<br><a href="#/catalogo" onclick="ZUM.closeCart()" class="mt-4 inline-block underline">Ver produtos</a></div>';
+        return;
+      }
+      body.innerHTML =
+        '<div>'+CART.map(function(it,i){ return drawerItemHTML(it,i,true); }).join('')+'</div>'+
+        '<div class="mt-4 flex gap-2 text-xs">'+
+          '<button onclick="ZUM.setFrete(\'entrega\')" class="flex-1 border px-3 py-3 '+(FRETE_OPCAO==='entrega'?'border-foreground bg-foreground text-background':'border-border')+'">🛵 Entrega<br><span class="opacity-80">'+money(FRETE_VALOR)+'</span></button>'+
+          '<button onclick="ZUM.setFrete(\'retirar\')" class="flex-1 border px-3 py-3 '+(FRETE_OPCAO==='retirar'?'border-foreground bg-foreground text-background':'border-border')+'">🏪 Retirar<br><span class="opacity-80">Grátis</span></button>'+
+        '</div>'+
+        totalsHTML()+
+        '<button class="btn-zum mt-6 w-full" onclick="ZUM.goCheckout()">Finalizar Compra</button>';
+    }
+
+    else if(CART_STEP==='dados'){
+      titleEl.textContent = 'Seus Dados';
+      body.innerHTML =
+        '<div class="mb-5 flex items-center gap-2 text-[11px] uppercase tracking-[0.15em] text-muted-foreground">'+
+          '<button onclick="ZUM.openCart(\'sacola\')" class="underline">← Sacola</button></div>'+
+        (CUSTOMER ? '<p class="mb-4 text-xs text-muted-foreground">Logado como <b>'+(CUSTOMER.nome||CUSTOMER.email)+'</b> — conferimos seus dados salvos, é só ajustar se precisar.</p>' : '')+
+        '<div class="space-y-4 text-sm">'+
+          field('fCpf','CPF','tel','000.000.000-00','oninput="ZUM.onCpf()" maxlength="14"')+
+          (CUSTOMER ? '' : '<p id="cpfHint" class="-mt-3 text-[11px] text-muted-foreground">Já comprou antes? Digite o CPF que preenchemos pra você.</p>')+
+          field('fNome','Nome completo','text','Seu nome','oninput="ZUM.validForm()"')+
+          field('fEmail','E-mail','email','seu@email.com','oninput="ZUM.validForm()"')+
+          field('fWpp','WhatsApp','tel','(00) 00000-0000','oninput="ZUM.validForm()"')+
+          field('fCep','CEP','tel','00000-000','oninput="ZUM.onCep()"')+
+          field('fRua','Rua','text','Rua / Avenida','oninput="ZUM.validForm()"')+
+          '<div class="flex gap-3">'+field('fNum','Número','text','123','oninput="ZUM.validForm()"',true)+field('fComp','Complemento','text','Apto, bloco...','',true)+'</div>'+
+          '<div class="flex gap-3">'+field('fBairro','Bairro','text','Bairro','oninput="ZUM.validForm()"',true)+field('fCidade','Cidade','text','Cidade','oninput="ZUM.validForm()"',true)+'</div>'+
+          field('fUf','Estado','text','CE','oninput="ZUM.validForm()" maxlength="2"')+
+        '</div>'+
+        (CUSTOMER ? '' :
+          '<div class="mt-6 border-t border-border/60 pt-5">'+
+            '<p class="text-[11px] uppercase tracking-[0.15em] text-muted-foreground">Quer salvar esses dados pra próxima compra?</p>'+
+            field('fSenha','Criar uma senha (opcional)','password','Mínimo 6 caracteres')+
+            consentFieldHTML('f')+
+          '</div>'
+        )+
+        '<button class="btn-zum mt-6 w-full" id="btnContinuar" disabled onclick="ZUM.goConfirm()">Continuar</button>';
+      restoreFormValues();
+      validForm();
+    }
+
+    else if(CART_STEP==='confirmar'){
+      titleEl.textContent = 'Confirmar Pedido';
+      var fr = FRETE_OPCAO==='entrega' ? FRETE_VALOR : 0;
+      body.innerHTML =
+        '<div class="mb-5 flex items-center gap-2 text-[11px] uppercase tracking-[0.15em] text-muted-foreground">'+
+          '<button onclick="ZUM.openCart(\'dados\')" class="underline">← Dados</button></div>'+
+        '<div>'+CART.map(function(it,i){ return drawerItemHTML(it,i,false); }).join('')+'</div>'+
+        totalsHTML()+
+        '<p class="mt-4 text-[12px] text-muted-foreground">Entrega para '+($('fCidade')?$('fCidade').value:'')+' '+($('fUf')?$('fUf').value:'')+' · '+(FRETE_OPCAO==='entrega'?'Entrega':'Retirar no local')+'</p>'+
+        '<button class="btn-zum mt-6 w-full" id="btnPagar" onclick="ZUM.goPay()">Pagar com Pix ou Cartão</button>'+
+        '<p class="mt-3 text-[11px] text-muted-foreground">Você será direcionado ao checkout seguro da InfinitePay pra finalizar o pagamento.</p>';
+    }
+  }
+
+  function $(id){ return document.getElementById(id); }
+  function field(id, label, type, placeholder, attrs, half){
+    return '<div'+(half?' class="flex-1"':'')+'><label class="mb-1 block text-[11px] uppercase tracking-[0.15em] text-muted-foreground">'+label+'</label>'+
+      '<input type="'+type+'" id="'+id+'" placeholder="'+placeholder+'" '+(attrs||'')+' class="w-full border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground"></div>';
+  }
+  function restoreFormValues(){
+    if(CUSTOMER){
+      var map = {fCpf:'cpf', fNome:'nome', fEmail:'email', fWpp:'telefone', fCep:'cep', fRua:'rua', fNum:'numero', fComp:'complemento', fBairro:'bairro', fCidade:'cidade', fUf:'uf'};
+      Object.keys(map).forEach(function(id){
+        if(CUSTOMER[map[id]] && $(id)) $(id).value = CUSTOMER[map[id]];
+      });
+      return;
+    }
+    try{
+      var saved = JSON.parse(localStorage.getItem('zum-site-cliente')||'{}');
+      ['fCpf','fNome','fEmail','fWpp','fCep','fRua','fNum','fComp','fBairro','fCidade','fUf'].forEach(function(id){
+        if(saved[id] && $(id)) $(id).value = saved[id];
+      });
+    }catch(e){}
+  }
+  function saveFormValues(){
+    var out = {};
+    ['fCpf','fNome','fEmail','fWpp','fCep','fRua','fNum','fComp','fBairro','fCidade','fUf'].forEach(function(id){
+      if($(id)) out[id] = $(id).value;
+    });
+    localStorage.setItem('zum-site-cliente', JSON.stringify(out));
+  }
+
+  function goCheckout(){
+    if(!CART.length) return;
+    openCart('dados');
+  }
+  async function goConfirm(){
+    saveFormValues();
+    if(!CUSTOMER) await maybeAutoSignup();
+    else await syncCustomerProfile();
+    openCart('confirmar');
+  }
+
+  // Se o cliente marcou "criar senha" no checkout de convidado, cria a conta
+  // Supabase com todos os dados já preenchidos (não bloqueia a compra se falhar).
+  async function maybeAutoSignup(){
+    var senhaEl = $('fSenha');
+    if(!senhaEl || senhaEl.value.length<6) return;
+    var email = $('fEmail') ? $('fEmail').value.trim() : '';
+    if(!email) return;
+    try{
+      var aceitaMkt = $('fAceitaMkt') ? $('fAceitaMkt').checked : false;
+      var r = await sb.auth.signUp({
+        email: email, password: senhaEl.value,
+        options: { data: {
+          nome: $('fNome')?$('fNome').value:'', telefone: $('fWpp')?$('fWpp').value:'',
+          cpf: $('fCpf')?$('fCpf').value:'', cep: $('fCep')?$('fCep').value:'',
+          rua: $('fRua')?$('fRua').value:'', numero: $('fNum')?$('fNum').value:'',
+          complemento: $('fComp')?$('fComp').value:'', bairro: $('fBairro')?$('fBairro').value:'',
+          cidade: $('fCidade')?$('fCidade').value:'', uf: $('fUf')?$('fUf').value:'',
+          aceita_marketing: aceitaMkt
+        } }
+      });
+      if(!r.error) alert('Conta criada! Você recebe um e-mail pra confirmar — na próxima compra já entra logado direto.');
+    }catch(e){}
+  }
+
+  // Cliente já logado — atualiza o perfil com o que ele ajustou no checkout
+  async function syncCustomerProfile(){
+    if(!CUSTOMER) return;
+    try{
+      await sb.from('customers').update({
+        nome: $('fNome')?$('fNome').value:CUSTOMER.nome,
+        telefone: $('fWpp')?$('fWpp').value:CUSTOMER.telefone,
+        cpf: $('fCpf')?$('fCpf').value:CUSTOMER.cpf,
+        cep: $('fCep')?$('fCep').value:CUSTOMER.cep,
+        rua: $('fRua')?$('fRua').value:CUSTOMER.rua,
+        numero: $('fNum')?$('fNum').value:CUSTOMER.numero,
+        complemento: $('fComp')?$('fComp').value:CUSTOMER.complemento,
+        bairro: $('fBairro')?$('fBairro').value:CUSTOMER.bairro,
+        cidade: $('fCidade')?$('fCidade').value:CUSTOMER.cidade,
+        uf: $('fUf')?$('fUf').value:CUSTOMER.uf
+      }).eq('id', CUSTOMER.id);
+    }catch(e){}
+  }
+
+  async function onCpf(){
+    var v = $('fCpf').value.replace(/\D/g,'').slice(0,11);
+    var f = v;
+    if(v.length>9) f=v.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/,'$1.$2.$3-$4');
+    else if(v.length>6) f=v.replace(/(\d{3})(\d{3})(\d{1,3})/,'$1.$2.$3');
+    else if(v.length>3) f=v.replace(/(\d{3})(\d{1,3})/,'$1.$2');
+    $('fCpf').value = f;
+    var hint = $('cpfHint');
+    if(hint){ hint.textContent = 'Já comprou antes? Digite o CPF que preenchemos pra você.'; hint.style.color = ''; }
+    if(v.length===11){
+      try{
+        var r = await asCall('buscarCPF', {cpf:v});
+        if(r && r.ok){
+          if(!$('fNome').value) $('fNome').value = r.nome||'';
+          if(!$('fEmail').value) $('fEmail').value = r.email||'';
+          if(!$('fWpp').value) $('fWpp').value = r.wpp||'';
+          if(!$('fCep').value){
+            $('fCep').value=r.cep||''; $('fRua').value=r.rua||''; $('fNum').value=r.num||'';
+            $('fComp').value=r.comp||''; $('fBairro').value=r.bairro||'';
+            $('fCidade').value=r.cidade||''; $('fUf').value=r.uf||'';
+          }
+          if(hint){ hint.textContent = '✓ Cliente encontrado — dados preenchidos'; hint.style.color = '#1d9e75'; }
+        }
+      }catch(e){}
+    }
+    validForm();
+  }
+  async function onCep(){
+    var v = $('fCep').value.replace(/\D/g,'').slice(0,8);
+    $('fCep').value = v.length>5 ? v.replace(/(\d{5})(\d{1,3})/,'$1-$2') : v;
+    if(v.length===8){
+      try{
+        var r = await fetch('https://viacep.com.br/ws/'+v+'/json/');
+        var d = await r.json();
+        if(!d.erro){
+          $('fRua').value=d.logradouro||''; $('fBairro').value=d.bairro||'';
+          $('fCidade').value=d.localidade||''; $('fUf').value=d.uf||'';
+        }
+      }catch(e){}
+    }
+    validForm();
+  }
+  function validForm(){
+    var req = ['fCpf','fNome','fEmail','fWpp','fCep','fRua','fNum','fBairro','fCidade','fUf'];
+    var ok = req.every(function(id){ return $(id) && $(id).value.trim().length>1; });
+    if($('btnContinuar')) $('btnContinuar').disabled = !ok;
+  }
+
+  function asUrl(){ return (STATE.banners && STATE.banners.asUrl) || ''; }
+  async function asCall(action, data){
+    var url = asUrl();
+    if(!url) return {};
+    try{
+      var body = Object.assign({action:action, token:API_TOKEN}, data);
+      var r = await fetch(url, {method:'POST', body:JSON.stringify(body)});
+      return await r.json();
+    }catch(e){ return {}; }
+  }
+
+  async function goPay(){
+    if(!CART.length) return;
+    var btn = $('btnPagar');
+    if(btn){ btn.disabled = true; btn.textContent = 'Preparando pagamento…'; }
+
+    var itensApi = CART.map(function(i){
+      var corCod = COR_NOME_TO_COD[i.color] || i.color;
+      var tam = i.size || 'UN';
+      return { codigo: i.sku+'-'+corCod+'-'+tam, qtd: i.qty };
+    });
+    var enderecoCompleto = ($('fRua')?$('fRua').value:'') +
+      ($('fNum')&&$('fNum').value ? ', '+$('fNum').value : '') +
+      ($('fComp')&&$('fComp').value ? ' '+$('fComp').value : '') +
+      ($('fBairro')&&$('fBairro').value ? ' · '+$('fBairro').value : '') +
+      ($('fCep')&&$('fCep').value ? ' · CEP '+$('fCep').value : '');
+    var cliente = {
+      nome: $('fNome')?$('fNome').value:'', cpf: $('fCpf')?$('fCpf').value:'',
+      celular: $('fWpp')?$('fWpp').value:'', email: $('fEmail')?$('fEmail').value:'',
+      cidade: ($('fCidade')?$('fCidade').value:'')+' '+($('fUf')?$('fUf').value:''),
+      endereco: enderecoCompleto,
+      rua: $('fRua')?$('fRua').value:'', numero: $('fNum')?$('fNum').value:'',
+      complemento: $('fComp')?$('fComp').value:'', bairro: $('fBairro')?$('fBairro').value:'',
+      cep: $('fCep')?$('fCep').value:''
+    };
+    var frete = FRETE_OPCAO==='entrega' ? FRETE_VALOR : 0;
+
+    try{
+      var r = await asCall('criarPedidoPendente', { cliente: cliente, itens: itensApi, frete: frete });
+      if(!r || !r.ok || !r.pedido){
+        if(btn){ btn.disabled=false; btn.textContent='Pagar com Pix ou Cartão'; }
+        alert('Não foi possível registrar o pedido. Tente novamente.');
+        return;
+      }
+      var pedido = r.pedido;
+      localStorage.setItem('zum-site-pedido-pendente', JSON.stringify({
+        pedido: pedido, qtd: cartCount(), total: cartTotal()+frete,
+        cidade: $('fCidade')?$('fCidade').value:'', uf: $('fUf')?$('fUf').value:'', ts: Date.now()
+      }));
+
+      var itensPagamento = CART.map(function(i){
+        return { qty:i.qty, price:i.price, name:i.name+' ('+i.color+' · '+i.size+')' };
+      });
+      if(frete>0) itensPagamento.push({ qty:1, price:frete, name:'Frete' });
+
+      var resp = await fetch('/api/criar-pagamento', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ pedido: pedido, itens: itensPagamento, cliente: cliente })
+      });
+      var data = await resp.json();
+      if(!data || !data.ok || !data.url){
+        if(btn){ btn.disabled=false; btn.textContent='Pagar com Pix ou Cartão'; }
+        alert('Erro ao gerar o pagamento. Tente novamente.');
+        return;
+      }
+      PEDIDO_FINALIZADO = true;
+      window.location.href = data.url;
+    }catch(e){
+      if(btn){ btn.disabled=false; btn.textContent='Pagar com Pix ou Cartão'; }
+      alert('Erro de conexão. Tente novamente.');
+    }
+  }
+
+  function checarRetornoPagamento(){
+    var params = new URLSearchParams(window.location.search);
+    var pedido = params.get('order_nsu');
+    if(!pedido) return false;
+    var salvoRaw = localStorage.getItem('zum-site-pedido-pendente');
+    var salvo = salvoRaw ? JSON.parse(salvoRaw) : null;
+    var total = salvo && salvo.total!=null ? salvo.total : null;
+    var cidade = salvo ? ((salvo.cidade||'')+' '+(salvo.uf||'')) : '';
+
+    document.getElementById('app').innerHTML =
+      '<div class="mx-auto max-w-lg px-6 py-28 text-center">'+
+        '<div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-foreground text-2xl">✓</div>'+
+        '<h1 class="mt-6 text-4xl">Pagamento recebido!</h1>'+
+        '<p class="mt-4 text-sm text-muted-foreground">Recebemos seu pagamento e estamos confirmando com o banco. Você recebe a confirmação final por e-mail assim que for aprovado.</p>'+
+        '<div class="mt-8 border border-border/60 p-5 text-left text-sm">'+
+          '<div class="flex justify-between font-medium">Pedido<span>'+pedido+'</span></div>'+
+          (cidade.trim() ? '<div class="mt-2 flex justify-between text-muted-foreground"><span>Entrega</span><span>'+cidade+'</span></div>' : '')+
+          (total!=null ? '<div class="mt-2 flex justify-between border-t border-border/60 pt-2"><span>Total</span><span>'+money(total)+'</span></div>' : '')+
+        '</div>'+
+        '<a href="#/" class="btn-zum mt-10 inline-flex">Voltar à loja</a>'+
+      '</div>';
+
+    CART = []; saveCart(); PEDIDO_FINALIZADO = true;
+    localStorage.removeItem('zum-site-pedido-pendente');
+    history.replaceState(null,'',window.location.pathname+window.location.hash);
+    return true;
+  }
+
+  window.addEventListener('beforeunload', function(){
+    if(CART.length>0 && !PEDIDO_FINALIZADO){
+      var url = asUrl();
+      if(url){
+        var payload = JSON.stringify({action:'registrarSacola', itens:CART, total:cartTotal(), token:API_TOKEN,
+          email:($('fEmail')?$('fEmail').value:''), wpp:($('fWpp')?$('fWpp').value:'')});
+        navigator.sendBeacon(url, payload);
+      }
+    }
+  });
+
+  // ---------- ProductCard ----------
+  function productCard(p){
+    var sale = p.originalPrice ? '<span class="absolute left-3 top-3 z-10 bg-foreground px-3 py-1 text-[10px] uppercase tracking-[0.28em] text-background">Sale</span>' : '';
+    return '<a href="#/produto/'+p.slug+'" class="group block">'+
+      '<div class="relative overflow-hidden bg-muted">'+sale+
+        mediaTag(p.image, p.nome, 'aspect-[4/5] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]')+
+      '</div>'+
+      '<div class="pt-4">'+
+        '<h3 class="font-vitrine text-foreground" style="font-size:17px">'+p.nome+'</h3>'+
+        '<div class="font-vitrine mt-1 flex items-center gap-2 text-muted-foreground" style="font-size:16px">'+
+          '<span class="text-foreground">'+money(p.preco)+'</span>'+
+          (p.originalPrice ? '<span class="line-through">'+money(p.originalPrice)+'</span>' : '')+
+        '</div>'+
+      '</div>'+
+    '</a>';
+  }
+  function grid4(list){
+    if(!list.length) return '<p class="col-span-full text-center text-sm text-muted-foreground">'+(STATE.loaded?'Em breve nesta categoria.':'Carregando…')+'</p>';
+    return list.map(productCard).join('');
+  }
+  function seeCollectionBtn(label, extraClass){
+    return '<a href="#/catalogo" class="btn-zum '+(extraClass||'')+'">'+(label||'Ver Coleção')+'</a>';
+  }
+  function tabsHTML(activeId, idPrefix){
+    return '<div class="flex justify-center gap-10 border-b border-transparent" id="'+idPrefix+'">'+
+      CATEGORIES.filter(function(c){return c.id!=='all';}).map(function(c){
+        var active = c.id===activeId;
+        return '<button data-cat="'+c.id+'" class="label-caps relative pb-2 transition-colors '+(active?'text-foreground':'text-muted-foreground hover:text-foreground')+'">'+
+          c.label+(active?'<span class="absolute inset-x-0 -bottom-px h-px bg-foreground"></span>':'')+'</button>';
+      }).join('')+'</div>';
+  }
+  function tabsFullHTML(activeId, containerId){
+    containerId = containerId || 'tabsFull';
+    return '<div class="flex justify-center gap-10 border-b border-transparent" id="'+containerId+'">'+
+      CATEGORIES.map(function(c){
+        var active = c.id===activeId;
+        return '<button data-cat="'+c.id+'" class="label-caps relative pb-2 transition-colors '+(active?'text-foreground':'text-muted-foreground hover:text-foreground')+'">'+
+          c.label+(active?'<span class="absolute inset-x-0 -bottom-px h-px bg-foreground"></span>':'')+'</button>';
+      }).join('')+'</div>';
+  }
+  function wireFullTabs(containerId, gridId){
+    var tabs = document.querySelectorAll('#'+containerId+' button');
+    tabs.forEach(function(btn){
+      btn.addEventListener('click', function(){
+        tabs.forEach(function(b){
+          b.classList.remove('text-foreground'); b.classList.add('text-muted-foreground','hover:text-foreground');
+          var span=b.querySelector('span'); if(span) span.remove();
+        });
+        btn.classList.remove('text-muted-foreground','hover:text-foreground'); btn.classList.add('text-foreground');
+        btn.insertAdjacentHTML('beforeend','<span class="absolute inset-x-0 -bottom-px h-px bg-foreground"></span>');
+        var cat = btn.getAttribute('data-cat');
+        var list = cat==='all' ? STATE.produtos : STATE.produtos.filter(function(p){return p.category===cat;});
+        document.getElementById(gridId).innerHTML = grid4(list);
+      });
+    });
+  }
+  function wireTabs(containerId, gridId, titleFn){
+    var tabs = document.querySelectorAll('#'+containerId+' button');
+    tabs.forEach(function(btn){
+      btn.addEventListener('click', function(){
+        tabs.forEach(function(b){
+          b.classList.remove('text-foreground'); b.classList.add('text-muted-foreground','hover:text-foreground');
+          var span=b.querySelector('span'); if(span) span.remove();
+        });
+        btn.classList.remove('text-muted-foreground','hover:text-foreground'); btn.classList.add('text-foreground');
+        btn.insertAdjacentHTML('beforeend','<span class="absolute inset-x-0 -bottom-px h-px bg-foreground"></span>');
+        var cat = btn.getAttribute('data-cat');
+        var list = cat==='all' ? STATE.produtos : STATE.produtos.filter(function(p){return p.category===cat;});
+        document.getElementById(gridId).innerHTML = grid4(list.slice(0, titleFn?4:999));
+      });
+    });
+  }
+
+  // ---------- HOME ----------
+  function renderHome(){
+    var heroImg = (STATE.banners && STATE.banners.topo && STATE.banners.topo[0] && STATE.banners.topo[0].img) || RAW+'BANNERS/TOPO/banner-topo-01.png';
+    var bannerImg = (STATE.banners && STATE.banners.meio && STATE.banners.meio[1] && STATE.banners.meio[1].img) || RAW+'BANNERS/MEIO/banner-meio-02.png';
+    var bannerSku = (STATE.banners && STATE.banners.meio && STATE.banners.meio[1] && STATE.banners.meio[1].sku) || '';
+    var lookImgs = STATE.produtos.slice(0,3).map(function(p){ return p.fotos[1]||p.fotos[0]; });
+    while(lookImgs.length<3 && STATE.produtos.length){ lookImgs.push(STATE.produtos[lookImgs.length % STATE.produtos.length].fotos[0]); }
+
+    document.getElementById('app').innerHTML =
+      '<div class="min-h-screen bg-background">'+
+        '<section class="px-4 pt-6 md:px-6">'+
+          '<div class="relative mx-auto max-w-[1400px] overflow-hidden bg-lilac">'+
+            '<div class="relative flex items-center justify-center py-10 md:py-16">'+
+              '<span aria-hidden class="display-huge pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 text-center text-[22vw] leading-none text-background/95 md:text-[18vw]">ZUM</span>'+
+              '<img src="'+heroImg+'" alt="Modelo ZUM" width="1600" height="1200" class="relative z-10 h-[60vh] max-h-[720px] w-auto object-contain md:h-[80vh]">'+
+              '<span aria-hidden class="label-caps absolute bottom-10 left-1/2 z-20 -translate-x-1/2 whitespace-nowrap text-background md:bottom-12">Leveza em Movimento</span>'+
+            '</div>'+
+          '</div>'+
+        '</section>'+
+
+        '<section class="px-4 py-20 md:px-6" id="rowA">'+
+          '<div class="mx-auto max-w-[1400px]">'+
+            tabsFullHTML('all','tabsA')+
+            '<div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4" id="gridA">'+
+              grid4(STATE.produtos)+
+            '</div>'+
+          '</div>'+
+        '</section>'+
+        '<div class="flex justify-center py-4">'+seeCollectionBtn()+'</div>'+
+
+        '<section class="mt-16 px-4 md:px-6">'+
+          '<a class="relative mx-auto block max-w-[1400px] overflow-hidden" href="#/produto/'+slugify(bannerSku||'')+'">'+
+            '<img src="'+bannerImg+'" alt="T-shirt Oversized" loading="lazy" width="1920" height="720" class="h-[40vh] w-full object-cover md:h-[52vh]">'+
+            '<div class="absolute inset-0 flex items-center justify-center">'+
+              '<span class="display-huge text-3xl tracking-[0.5em] text-white/95 mix-blend-difference md:text-6xl">T-SHIRT&nbsp;&nbsp;OVERSIZED</span>'+
+            '</div>'+
+            '<div aria-hidden class="display-huge pointer-events-none absolute inset-x-0 top-4 text-center text-[8vw] leading-none text-white/25">ZUM</div>'+
+          '</a>'+
+        '</section>'+
+
+        '<section class="px-4 py-20 md:px-6">'+
+          '<div class="mx-auto max-w-[1400px]">'+
+            '<p class="label-caps text-center text-muted-foreground">Mais Vendidos</p>'+
+            '<div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4" id="gridB">'+
+              grid4(STATE.produtos.slice(0,4))+
+            '</div>'+
+          '</div>'+
+        '</section>'+
+        '<div class="flex justify-center py-4">'+seeCollectionBtn()+'</div>'+
+
+        '<section class="px-4 py-16 md:px-6">'+
+          '<div class="mx-auto grid max-w-[1200px] grid-cols-1 gap-4 md:grid-cols-3">'+
+            lookImgs.filter(Boolean).map(function(src,i){
+              return '<div class="overflow-hidden bg-muted">'+mediaTag(src,'Lookbook ZUM '+(i+1),'aspect-[3/4] w-full object-cover')+'</div>';
+            }).join('')+
+          '</div>'+
+        '</section>'+
+
+        '<section class="px-4 py-24 md:px-6">'+
+          '<div class="mx-auto max-w-[1400px] text-center">'+
+            '<p class="label-caps text-muted-foreground">Siga a gente</p>'+
+            '<h2 class="mt-2 text-4xl md:text-5xl">@use.zum</h2>'+
+            '<div class="mt-10">'+IG_EMBED_HTML+'</div>'+
+            '<a href="https://www.instagram.com/use.zum/" target="_blank" rel="noopener" class="btn-zum mt-10 inline-flex">Seguir no Instagram</a>'+
+          '</div>'+
+        '</section>'+
+      '</div>';
+
+    wireFullTabs('tabsA','gridA');
+  }
+
+  // ---------- CATALOGO ----------
+  function renderCatalogo(){
+    document.getElementById('app').innerHTML =
+      '<div class="min-h-screen bg-background">'+
+        '<section class="px-4 pt-16 md:px-6">'+
+          '<div class="mx-auto max-w-[1400px]">'+
+            '<div class="mb-14 text-center">'+
+              '<h1 class="mt-3 font-sans text-3xl uppercase tracking-[0.35em] text-foreground md:text-4xl" style="font-weight:400;">VITRINE ZUM</h1>'+
+              '<p class="mx-auto mt-4 max-w-xl text-sm text-muted-foreground">Peças pensadas para movimento e presença. Escolha, adicione à sacola e finalize aqui mesmo.</p>'+
+              '<div class="mt-8 flex justify-center"><button class="btn-zum" onclick="ZUM.openCart()">Minha Sacola</button></div>'+
+            '</div>'+
+            tabsFullHTML('all')+
+            '<div class="mt-12 grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-4" id="gridFull">'+grid4(STATE.produtos)+'</div>'+
+          '</div>'+
+        '</section>'+
+      '</div>';
+
+    wireFullTabs('tabsFull','gridFull');
+  }
+
+  // ---------- PRODUTO ----------
+  function renderProduto(slug){
+    var p = STATE.produtos.filter(function(x){return x.slug===slug;})[0];
+    if(!p){
+      document.getElementById('app').innerHTML = '<div class="mx-auto max-w-xl px-6 py-32 text-center">'+
+        '<h1 class="text-4xl">'+(STATE.loaded ? 'Produto não encontrado' : 'Carregando…')+'</h1>'+
+        (STATE.loaded ? '<a href="#/catalogo" class="btn-zum mt-8 inline-flex">Ver Catálogo</a>' : '')+'</div>';
+      return;
+    }
+    var state = { cor: p.cores[0]||'', tamanho: '', mediaIndex: 0 };
+    var availInit = tamanhosDisponiveis(p, state.cor);
+    var firstAvailInit = availInit.filter(function(s){ return !s.out; })[0];
+    state.tamanho = firstAvailInit ? firstAvailInit.s : (p.tamanhos[0]||'UN');
+
+    // Galeria: fotos da cor escolhida (se ela tiver fotos próprias cadastradas
+    // no painel), senão cai nas fotos principais do produto — igual ao
+    // catalogo.html. Antes só o primeiro item aparecia; agora mostra todas,
+    // com a atual em destaque e as outras em miniatura ao lado, clicáveis.
+    function currentGallery(){
+      var arr = p.fotosCores && p.fotosCores[state.cor];
+      if(arr && arr.length) return arr;
+      if(p.fotos && p.fotos.length) return p.fotos;
+      return [p.image];
+    }
+    function currentImg(){ return currentGallery()[state.mediaIndex] || currentGallery()[0] || p.image; }
+    // Tamanhos disponíveis PARA A COR selecionada (não o agregado do produto
+    // inteiro) — mesma lógica do catalogo.html (sizesParaCor), agora usando
+    // p.estoquePorVariante montado em carregarDados() a partir do ZumAgent ao vivo.
+    function availSizes(){ return tamanhosDisponiveis(p, state.cor); }
+    function semEstoqueNaCor(){
+      var avail = availSizes();
+      return avail.length===0 || avail.every(function(s){ return s.out; });
+    }
+    var related = STATE.produtos.filter(function(x){return x.category===p.category && x.slug!==p.slug;}).slice(0,4);
+
+    function thumbsHTML(){
+      var gal = currentGallery();
+      if(gal.length<2) return '';
+      return gal.map(function(url,i){
+        var active = i===state.mediaIndex;
+        return '<button data-idx="'+i+'" class="gal-thumb block overflow-hidden bg-muted border w-16 shrink-0 sm:w-full '+(active?'border-foreground':'border-transparent')+'" style="aspect-ratio:4/5">'+
+          mediaTag(url, p.nome, 'h-full w-full object-cover')+'</button>';
+      }).join('');
+    }
+    function updateGallery(){
+      var img = document.getElementById('produtoImg');
+      if(img) img.innerHTML = mediaTag(currentImg(), p.nome, 'aspect-[4/5] w-full object-cover');
+      var t1 = document.getElementById('galThumbs'); if(t1) t1.innerHTML = thumbsHTML();
+      var t2 = document.getElementById('galThumbsMobile'); if(t2) t2.innerHTML = thumbsHTML();
+      wireGalThumbs();
+    }
+    function wireGalThumbs(){
+      document.querySelectorAll('.gal-thumb').forEach(function(btn){
+        btn.addEventListener('click', function(){
+          state.mediaIndex = parseInt(btn.getAttribute('data-idx'),10) || 0;
+          updateGallery();
+        });
+      });
+    }
+
+    function sizesHTML(){
+      return availSizes().map(function(s){
+        var label = s.s==='UN' ? 'Único' : s.s;
+        if(s.out) return '<button data-tam="'+s.s+'" disabled class="min-w-12 border border-border/40 px-4 py-2 text-xs uppercase tracking-[0.2em] text-muted-foreground/40 line-through">'+label+'</button>';
+        var active = s.s===state.tamanho;
+        return '<button data-tam="'+s.s+'" class="min-w-12 border px-4 py-2 text-xs uppercase tracking-[0.2em] transition-colors '+(active?'border-foreground bg-foreground text-background':'border-border text-foreground hover:border-foreground')+'">'+label+'</button>';
+      }).join('');
+    }
+    function wireSizeButtons(){
+      document.querySelectorAll('#sizes button:not([disabled])').forEach(function(btn){
+        btn.addEventListener('click', function(){
+          state.tamanho = btn.getAttribute('data-tam');
+          document.getElementById('sizes').innerHTML = sizesHTML();
+          wireSizeButtons();
+          refreshCompra();
+        });
+      });
+    }
+
+    // Área de compra: some com o botão "Adicionar à Sacola" e mostra "Avise-me
+    // quando chegar" no lugar quando a cor/tamanho escolhida está sem
+    // estoque real — em vez do antigo travamento só a nível de produto
+    // inteiro (que deixava adicionar cor sem estoque só porque outra cor do
+    // mesmo produto tinha peça).
+    function comprarHTML(){
+      var out = semEstoqueNaCor();
+      var msgHtml = '';
+      if(out){
+        msgHtml = '<p class="mt-4 text-xs text-red-700">Sem estoque nessa cor/tamanho — fale com a gente no WhatsApp ou peça pra te avisar.</p>';
+      } else {
+        var porCor = p.estoquePorVariante && p.estoquePorVariante[state.cor];
+        var qtd = porCor ? (porCor[state.tamanho]!==undefined ? porCor[state.tamanho] : null) : null;
+        if(qtd!==null && qtd<=3) msgHtml = '<p class="mt-4 text-xs text-orange-700">Últimas peças em estoque</p>';
+      }
+      return msgHtml+'<div class="mt-10 flex flex-col gap-3 sm:flex-row">'+
+        (out
+          ? '<button class="btn-zum w-full sm:w-auto" id="aviseBtn">Avise-me quando chegar</button>'
+          : '<button class="btn-zum w-full sm:w-auto" id="buyBtn">Adicionar à Sacola</button>')+
+        '</div>';
+    }
+    function wireCompra(){
+      var buyBtn = document.getElementById('buyBtn');
+      if(buyBtn) buyBtn.addEventListener('click', function(){
+        addToCart(p, state.cor, state.tamanho, 1);
+        openCart('sacola');
+      });
+      var aviseBtn = document.getElementById('aviseBtn');
+      if(aviseBtn) aviseBtn.addEventListener('click', function(){ abrirAviseMe(p, state); });
+    }
+    function refreshCompra(){
+      var el = document.getElementById('compraArea');
+      if(el){ el.innerHTML = comprarHTML(); wireCompra(); }
+    }
+
+    var galInit = currentGallery();
+
+    document.getElementById('app').innerHTML =
+      '<div class="min-h-screen bg-background">'+
+        '<section class="px-4 pt-10 md:px-6">'+
+          '<div class="mx-auto grid max-w-[1400px] gap-10 md:grid-cols-2">'+
+            '<div>'+
+              '<div class="flex gap-3">'+
+                (galInit.length>1 ? '<div class="hidden sm:flex flex-col gap-2 w-16 shrink-0 max-h-[600px] overflow-y-auto" id="galThumbs">'+thumbsHTML()+'</div>' : '')+
+                '<div class="relative flex-1 overflow-hidden bg-muted" id="produtoImg">'+mediaTag(currentImg(), p.nome, 'aspect-[4/5] w-full object-cover')+'</div>'+
+              '</div>'+
+              (galInit.length>1 ? '<div class="mt-3 flex gap-2 overflow-x-auto sm:hidden" id="galThumbsMobile">'+thumbsHTML()+'</div>' : '')+
+            '</div>'+
+            '<div class="flex flex-col justify-center md:pl-8">'+
+              '<p class="label-caps text-muted-foreground">'+p.category+'</p>'+
+              '<h1 class="mt-3 text-4xl md:text-5xl">'+p.nome+'</h1>'+
+              '<div class="mt-4 flex items-center gap-3 text-lg"><span>'+money(p.preco)+'</span></div>'+
+              '<p class="mt-6 max-w-md text-sm leading-relaxed text-muted-foreground">'+(p.destaque||'Peça ZUM — leveza em movimento.')+'</p>'+
+              (p.cores.length ? '<div class="mt-10"><p class="label-caps mb-3 text-muted-foreground">Cor · <span id="corLabel">'+state.cor+'</span></p>'+
+                '<div class="flex gap-3" id="swatches">'+p.cores.map(function(c){
+                  var hex=COLOR_HEX[c]||'#ccc'; var active=c===state.cor;
+                  return '<button data-cor="'+c+'" title="'+c+'" class="h-8 w-8 border transition-all '+(active?'border-foreground ring-1 ring-foreground ring-offset-2 ring-offset-background':'border-border')+'" style="background-color:'+hex+'"></button>';
+                }).join('')+'</div></div>' : '')+
+              '<div class="mt-8"><p class="label-caps mb-3 text-muted-foreground">Tamanho</p>'+
+                '<div class="flex flex-wrap gap-2" id="sizes">'+sizesHTML()+'</div></div>'+
+              '<div id="compraArea">'+comprarHTML()+'</div>'+
+              '<p class="mt-6 text-xs text-muted-foreground">Pagamento por Pix ou cartão · Envio para todo o Brasil</p>'+
+            '</div>'+
+          '</div>'+
+        '</section>'+
+        (related.length ? '<section class="px-4 py-24 md:px-6"><div class="mx-auto max-w-[1400px]">'+
+          '<div class="mb-10 flex items-end justify-between">'+
+            '<h2 class="text-3xl md:text-4xl">Você também vai amar</h2>'+
+            '<a href="#/catalogo" class="label-caps hidden text-muted-foreground hover:text-foreground md:inline">Ver catálogo</a>'+
+          '</div>'+
+          '<div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">'+grid4(related)+'</div>'+
+        '</div></section>' : '')+
+      '</div>';
+
+    wireGalThumbs();
+    wireSizeButtons();
+    wireCompra();
+
+    document.querySelectorAll('#swatches button').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        document.querySelectorAll('#swatches button').forEach(function(b){ b.className = 'h-8 w-8 border transition-all border-border'; });
+        btn.className = 'h-8 w-8 border transition-all border-foreground ring-1 ring-foreground ring-offset-2 ring-offset-background';
+        state.cor = btn.getAttribute('data-cor');
+        document.getElementById('corLabel').textContent = state.cor;
+        state.mediaIndex = 0;
+        updateGallery();
+        var avail = availSizes();
+        var firstAvail = avail.filter(function(s){ return !s.out; })[0];
+        state.tamanho = firstAvail ? firstAvail.s : (p.tamanhos[0]||'UN');
+        document.getElementById('sizes').innerHTML = sizesHTML();
+        wireSizeButtons();
+        refreshCompra();
+      });
+    });
+  }
+
+  // ---------- ROUTER ----------
+  function route(){
+    if(checarRetornoPagamento()) return;
+    var hash = location.hash || '#/';
+    var mob = document.getElementById('mobNav'); if(mob) mob.classList.add('hidden');
+    if(hash.indexOf('#/produto/')===0) renderProduto(hash.replace('#/produto/',''));
+    else if(hash==='#/catalogo') renderCatalogo();
+    else renderHome();
+    window.scrollTo(0,0);
+  }
+
+  window.addEventListener('hashchange', route);
+  window.addEventListener('DOMContentLoaded', function(){
+    loadCart();
+    updateBagBadge();
+    refreshCustomer();
+    sb.auth.onAuthStateChange(function(){ refreshCustomer(); });
+    document.getElementById('burger').addEventListener('click', function(){
+      document.getElementById('mobNav').classList.toggle('hidden');
+    });
+    document.getElementById('newsForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      document.getElementById('newsNote').textContent = 'Obrigada! (formulário ainda não ligado a um serviço de e-mail real.)';
+      this.reset();
+    });
+    document.getElementById('yr').textContent = new Date().getFullYear();
+    carregarDados(route);
+    route();
+  });
+
+  return {
+    openCart: openCart, closeCart: closeCart, cartQty: cartQty, cartDel: cartDel, setFrete: setFrete,
+    goCheckout: goCheckout, goConfirm: goConfirm, goPay: goPay, onCpf: onCpf, onCep: onCep, validForm: validForm,
+    openAccount: openAccount, closeAccount: closeAccount, setAccountTab: setAccountTab,
+    doSignup: doSignup, doLogin: doLogin, signOut: signOut,
+    openSearch: openSearch, closeSearch: closeSearch, onSearchInput: onSearchInput,
+    closeAvise: closeAvise, enviarAvise: enviarAvise
+  };
+})();
+</script>
+</body>
+</html>
