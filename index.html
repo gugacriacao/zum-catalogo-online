@@ -58,40 +58,62 @@
   .display-huge{font-family:'Cormorant Garamond',serif;font-weight:400;letter-spacing:-0.04em;line-height:.85;}
   a{color:inherit;}
   button{font-family:inherit;}
+
+  /* Home: cabeçalho branco sobre o banner principal */
+  #siteHeader{position:relative;z-index:50;transition:background-color .25s ease,color .25s ease,border-color .25s ease;}
+  #siteHeader.home-header{position:absolute;inset:0 0 auto 0;background:transparent!important;border-color:transparent!important;color:#fff;}
+  #siteHeader.home-header .header-tone{color:rgba(255,255,255,.92)!important;}
+  #siteHeader.home-header #accountGreeting{color:rgba(255,255,255,.92)!important;}
+  #siteHeader.home-header #siteLogo{filter:brightness(0) invert(1);}
+  #siteHeader.home-header #bagCountWrap{background:#fff!important;color:#111!important;}
+  #siteHeader.home-header #mobNav{background:rgba(20,20,20,.72);border-color:rgba(255,255,255,.25)!important;backdrop-filter:blur(10px);}
+  #siteHeader.home-header.header-solid{position:fixed;background:var(--background)!important;border-color:var(--border)!important;color:var(--foreground);box-shadow:0 1px 10px rgba(0,0,0,.04);}
+  #siteHeader.home-header.header-solid .header-tone{color:rgba(20,20,20,.72)!important;}
+  #siteHeader.home-header.header-solid #accountGreeting{color:rgba(20,20,20,.72)!important;}
+  #siteHeader.home-header.header-solid #siteLogo{filter:none;}
+  #siteHeader.home-header.header-solid #bagCountWrap{background:var(--foreground)!important;color:var(--background)!important;}
+  #siteHeader.home-header.header-solid #mobNav{background:var(--background);border-color:var(--border)!important;backdrop-filter:none;}
+
+  /* Banner principal rotativo */
+  .hero-slide{position:absolute;inset:0;opacity:0;transition:opacity .8s ease;pointer-events:none;}
+  .hero-slide.is-active{opacity:1;pointer-events:auto;}
+  .hero-slide img,.hero-slide video{width:100%;height:100%;object-fit:cover;}
+  .hero-dot{width:22px;height:2px;background:rgba(255,255,255,.45);transition:background-color .25s ease,width .25s ease;}
+  .hero-dot.is-active{width:38px;background:#fff;}
 </style>
 </head>
 <body class="min-h-screen bg-background">
 
-<header class="border-b border-border/60 bg-background">
+<header id="siteHeader" class="border-b border-border/60 bg-background">
   <div class="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-6 md:py-8">
-    <div class="flex w-1/3 items-center gap-4 text-foreground/70">
+    <div class="header-tone flex w-1/3 items-center gap-4 text-foreground/70">
       <button aria-label="Menu" id="burger" class="md:hidden">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
       </button>
       <nav class="hidden gap-8 md:flex">
-        <a href="#/catalogo" class="label-caps hover:text-foreground" style="font-size:17px">Vitrine</a>
+        <a href="#/catalogo" class="label-caps hover:text-foreground" style="font-size:19px">Vitrine</a>
       </nav>
     </div>
     <a href="#/" class="flex flex-1 items-center justify-center">
-      <img src="assets/logo-preta.png" alt="ZUM" class="h-16 w-auto md:h-20">
+      <img id="siteLogo" src="assets/logo-preta.png" alt="ZUM" class="h-16 w-auto md:h-20">
     </a>
-    <div class="flex w-1/3 items-center justify-end gap-5 text-foreground/70">
+    <div class="header-tone flex w-1/3 items-center justify-end gap-5 text-foreground/70">
       <button aria-label="Buscar" class="inline-flex" onclick="ZUM.openSearch()">
-        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       </button>
       <span id="accountGreeting" class="hidden items-center text-[11px] uppercase tracking-[0.15em] text-foreground/70 md:inline-flex" onclick="ZUM.openAccount()" style="cursor:pointer"></span>
       <button aria-label="Minha Conta" id="accountBtn" class="hidden md:inline-flex" onclick="ZUM.openAccount()">
-        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       </button>
       <button aria-label="Sacola" class="relative inline-flex" onclick="ZUM.openCart()">
-        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
         <span id="bagCountWrap" style="display:none;" class="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-foreground text-[9px] text-background"><span id="bagCount">0</span></span>
       </button>
     </div>
   </div>
   <div id="mobNav" class="hidden border-t border-border/60 px-6 py-4 md:hidden">
     <nav class="flex flex-col gap-4">
-      <a href="#/catalogo" class="label-caps" style="font-size:17px">Vitrine</a>
+      <a href="#/catalogo" class="label-caps" style="font-size:19px">Vitrine</a>
       <button class="label-caps text-left" onclick="ZUM.openAccount()">Minha Conta</button>
     </nav>
   </div>
@@ -1288,37 +1310,105 @@ window.ZUM = (function(){
   }
 
   // ---------- HOME ----------
+  var HERO_TIMER = null;
+  var HERO_INDEX = 0;
+
+  function stopHero(){
+    if(HERO_TIMER){ clearInterval(HERO_TIMER); HERO_TIMER = null; }
+  }
+
+  var HEADER_HOME_MODE = false;
+  var HEADER_HOVERED = false;
+
+  function updateHeaderAppearance(){
+    var header = document.getElementById('siteHeader');
+    if(!header) return;
+    var solid = HEADER_HOME_MODE && (HEADER_HOVERED || window.scrollY > 50);
+    header.classList.toggle('header-solid', solid);
+  }
+
+  function setHeaderHomeMode(isHome){
+    var header = document.getElementById('siteHeader');
+    if(!header) return;
+    HEADER_HOME_MODE = !!isHome;
+    header.classList.toggle('home-header', HEADER_HOME_MODE);
+    if(!HEADER_HOME_MODE) header.classList.remove('header-solid');
+    updateHeaderAppearance();
+  }
+
+  function showHeroSlide(index){
+    var slides = document.querySelectorAll('.hero-slide');
+    var dots = document.querySelectorAll('.hero-dot');
+    if(!slides.length) return;
+    HERO_INDEX = (index + slides.length) % slides.length;
+    slides.forEach(function(slide,i){ slide.classList.toggle('is-active', i===HERO_INDEX); });
+    dots.forEach(function(dot,i){ dot.classList.toggle('is-active', i===HERO_INDEX); });
+  }
+
+  function startHero(){
+    stopHero();
+    var slides = document.querySelectorAll('.hero-slide');
+    if(slides.length<2) return;
+    HERO_TIMER = setInterval(function(){ showHeroSlide(HERO_INDEX+1); }, 5500);
+  }
+
+  function wireHero(){
+    var prev = document.getElementById('heroPrev');
+    var next = document.getElementById('heroNext');
+    if(prev) prev.addEventListener('click', function(){ showHeroSlide(HERO_INDEX-1); startHero(); });
+    if(next) next.addEventListener('click', function(){ showHeroSlide(HERO_INDEX+1); startHero(); });
+    document.querySelectorAll('.hero-dot').forEach(function(dot){
+      dot.addEventListener('click', function(){ showHeroSlide(Number(dot.getAttribute('data-index'))||0); startHero(); });
+    });
+    showHeroSlide(0);
+    startHero();
+  }
+
   function renderHome(){
-    var heroImg = (STATE.banners && STATE.banners.topo && STATE.banners.topo[0] && STATE.banners.topo[0].img) || RAW+'BANNERS/TOPO/banner-topo-01.png';
+    setHeaderHomeMode(true);
+
+    var heroBanners = (STATE.banners && Array.isArray(STATE.banners.topo) && STATE.banners.topo.length)
+      ? STATE.banners.topo.filter(function(b){ return b && b.img; })
+      : [{img:RAW+'BANNERS/TOPO/banner-topo-01.png', sku:''}];
+    if(!heroBanners.length) heroBanners = [{img:RAW+'BANNERS/TOPO/banner-topo-01.png', sku:''}];
+
     var bannerImg = (STATE.banners && STATE.banners.meio && STATE.banners.meio[1] && STATE.banners.meio[1].img) || RAW+'BANNERS/MEIO/banner-meio-02.png';
     var bannerSku = (STATE.banners && STATE.banners.meio && STATE.banners.meio[1] && STATE.banners.meio[1].sku) || '';
     var lookImgs = STATE.produtos.slice(0,3).map(function(p){ return p.fotos[1]||p.fotos[0]; });
     while(lookImgs.length<3 && STATE.produtos.length){ lookImgs.push(STATE.produtos[lookImgs.length % STATE.produtos.length].fotos[0]); }
 
+    var heroSlides = heroBanners.map(function(b,i){
+      var media = isVideo(b.img)
+        ? '<video src="'+b.img+'" autoplay muted loop playsinline></video>'
+        : '<img src="'+b.img+'" alt="Banner ZUM '+(i+1)+'" width="1920" height="1080" '+(i===0?'':'loading="lazy"')+'>';
+      var inner = '<div class="hero-slide '+(i===0?'is-active':'')+'">'+media+'</div>';
+      return b.sku ? '<a href="#/produto/'+slugify(b.sku)+'" class="hero-slide '+(i===0?'is-active':'')+'">'+media+'</a>' : inner;
+    }).join('');
+
+    var heroControls = heroBanners.length>1
+      ? '<button id="heroPrev" aria-label="Banner anterior" class="absolute left-4 top-1/2 z-20 hidden h-11 w-11 -translate-y-1/2 items-center justify-center border border-white/55 text-white md:flex">&#8592;</button>'+ 
+        '<button id="heroNext" aria-label="Próximo banner" class="absolute right-4 top-1/2 z-20 hidden h-11 w-11 -translate-y-1/2 items-center justify-center border border-white/55 text-white md:flex">&#8594;</button>'+ 
+        '<div class="absolute bottom-7 left-1/2 z-20 flex -translate-x-1/2 items-center gap-3">'+heroBanners.map(function(_,i){ return '<button class="hero-dot '+(i===0?'is-active':'')+'" data-index="'+i+'" aria-label="Mostrar banner '+(i+1)+'"></button>'; }).join('')+'</div>'
+      : '';
+
     document.getElementById('app').innerHTML =
       '<div class="min-h-screen bg-background">'+
-        '<section class="px-4 pt-6 md:px-6">'+
-          '<div class="relative mx-auto max-w-[1400px] overflow-hidden bg-lilac">'+
-            '<div class="relative flex items-center justify-center py-10 md:py-16">'+
-              '<span aria-hidden class="display-huge pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 text-center text-[22vw] leading-none text-background/95 md:text-[18vw]">ZUM</span>'+
-              '<img src="'+heroImg+'" alt="Modelo ZUM" width="1600" height="1200" class="relative z-10 h-[60vh] max-h-[720px] w-auto object-contain md:h-[80vh]">'+
-              '<span aria-hidden class="label-caps absolute bottom-10 left-1/2 z-20 -translate-x-1/2 whitespace-nowrap text-background md:bottom-12">Leveza em Movimento</span>'+
-            '</div>'+
-          '</div>'+
+        '<section class="relative h-[82vh] min-h-[560px] w-full overflow-hidden bg-lilac md:h-screen">'+
+          heroSlides+heroControls+
         '</section>'+
 
-        '<section class="px-4 py-20 md:px-6" id="rowA">'+
-          '<div class="mx-auto max-w-[1400px]">'+
+        '<section class="px-2 py-20 md:px-3" id="rowA">'+
+          '<div class="w-full">'+
             tabsFullHTML('all','tabsA')+
-            '<div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4" id="gridA">'+
+            '<div class="mt-10 grid grid-cols-1 gap-x-2 gap-y-10 sm:grid-cols-2 lg:grid-cols-4" id="gridA">'+
               grid4(STATE.produtos)+
             '</div>'+
           '</div>'+
         '</section>'+
         '<div class="flex justify-center py-4">'+seeCollectionBtn()+'</div>'+
 
-        '<section class="mt-16 px-4 md:px-6">'+
-          '<a class="relative mx-auto block max-w-[1400px] overflow-hidden" href="#/produto/'+slugify(bannerSku||'')+'">'+
+        '<section class="mt-16 px-2 md:px-3">'+
+          '<a class="relative block w-full overflow-hidden" href="#/produto/'+slugify(bannerSku||'')+'">'+
             '<img src="'+bannerImg+'" alt="T-shirt Oversized" loading="lazy" width="1920" height="720" class="h-[40vh] w-full object-cover md:h-[52vh]">'+
             '<div class="absolute inset-0 flex items-center justify-center">'+
               '<span class="display-huge text-3xl tracking-[0.5em] text-white/95 mix-blend-difference md:text-6xl">T-SHIRT&nbsp;&nbsp;OVERSIZED</span>'+
@@ -1327,18 +1417,18 @@ window.ZUM = (function(){
           '</a>'+
         '</section>'+
 
-        '<section class="px-4 py-20 md:px-6">'+
-          '<div class="mx-auto max-w-[1400px]">'+
+        '<section class="px-2 py-20 md:px-3">'+
+          '<div class="w-full">'+
             '<p class="label-caps text-center text-muted-foreground" style="font-size:14px">Mais Vendidos</p>'+
-            '<div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4" id="gridB">'+
+            '<div class="mt-10 grid grid-cols-1 gap-x-2 gap-y-10 sm:grid-cols-2 lg:grid-cols-4" id="gridB">'+
               grid4(STATE.produtos.slice(0,4))+
             '</div>'+
           '</div>'+
         '</section>'+
         '<div class="flex justify-center py-4">'+seeCollectionBtn()+'</div>'+
 
-        '<section class="px-4 py-16 md:px-6">'+
-          '<div class="mx-auto grid max-w-[1200px] grid-cols-1 gap-4 md:grid-cols-3">'+
+        '<section class="px-2 py-16 md:px-3">'+
+          '<div class="grid w-full grid-cols-1 gap-2 md:grid-cols-3">'+
             lookImgs.filter(Boolean).map(function(src,i){
               return '<div class="overflow-hidden bg-muted">'+mediaTag(src,'Lookbook ZUM '+(i+1),'aspect-[3/4] w-full object-cover')+'</div>';
             }).join('')+
@@ -1356,208 +1446,7 @@ window.ZUM = (function(){
       '</div>';
 
     wireFullTabs('tabsA','gridA');
-  }
-
-  // ---------- CATALOGO ----------
-  function renderCatalogo(){
-    document.getElementById('app').innerHTML =
-      '<div class="min-h-screen bg-background">'+
-        '<section class="px-4 pt-16 md:px-6">'+
-          '<div class="mx-auto max-w-[1400px]">'+
-            '<div class="mb-14 text-center">'+
-              '<h1 class="mt-3 font-sans text-3xl uppercase tracking-[0.35em] text-foreground md:text-4xl" style="font-weight:400;">VITRINE ZUM</h1>'+
-              '<p class="mx-auto mt-4 max-w-xl text-sm text-muted-foreground">Peças pensadas para movimento e presença. Escolha, adicione à sacola e finalize aqui mesmo.</p>'+
-              '<div class="mt-8 flex justify-center"><button class="btn-zum" onclick="ZUM.openCart()">Minha Sacola</button></div>'+
-            '</div>'+
-            tabsFullHTML('all')+
-            '<div class="mt-12 grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-4" id="gridFull">'+grid4(STATE.produtos)+'</div>'+
-          '</div>'+
-        '</section>'+
-      '</div>';
-
-    wireFullTabs('tabsFull','gridFull');
-  }
-
-  // ---------- PRODUTO ----------
-  function renderProduto(slug){
-    var p = STATE.produtos.filter(function(x){return x.slug===slug;})[0];
-    if(!p){
-      document.getElementById('app').innerHTML = '<div class="mx-auto max-w-xl px-6 py-32 text-center">'+
-        '<h1 class="text-4xl">'+(STATE.loaded ? 'Produto não encontrado' : 'Carregando…')+'</h1>'+
-        (STATE.loaded ? '<a href="#/catalogo" class="btn-zum mt-8 inline-flex">Ver Catálogo</a>' : '')+'</div>';
-      return;
-    }
-    var state = { cor: p.cores[0]||'', tamanho: '', mediaIndex: 0 };
-    var availInit = tamanhosDisponiveis(p, state.cor);
-    var firstAvailInit = availInit.filter(function(s){ return !s.out; })[0];
-    state.tamanho = firstAvailInit ? firstAvailInit.s : (p.tamanhos[0]||'UN');
-
-    // Galeria: fotos da cor escolhida (se ela tiver fotos próprias cadastradas
-    // no painel), senão cai nas fotos principais do produto — igual ao
-    // catalogo.html. Antes só o primeiro item aparecia; agora mostra todas,
-    // com a atual em destaque e as outras em miniatura ao lado, clicáveis.
-    // Galeria = fotos da cor escolhida (se tiver) + fotos gerais do produto,
-    // sem duplicar. Antes, quando uma cor tinha só 1 foto própria cadastrada
-    // (o caso mais comum), a galeria virava só essa 1 foto e escondia as
-    // outras 3-4 fotos gerais do produto — por isso a coluna de miniaturas
-    // sumia (só aparece quando há 2+ fotos) mesmo o produto tendo várias
-    // fotos cadastradas de verdade.
-    function currentGallery(){
-      var corFotos = (p.fotosCores && p.fotosCores[state.cor]) || [];
-      var geral = p.fotos || [];
-      var combined = corFotos.concat(geral.filter(function(u){ return corFotos.indexOf(u)===-1; }));
-      if(combined.length) return combined;
-      return [p.image];
-    }
-    function currentImg(){ return currentGallery()[state.mediaIndex] || currentGallery()[0] || p.image; }
-    // Tamanhos disponíveis PARA A COR selecionada (não o agregado do produto
-    // inteiro) — mesma lógica do catalogo.html (sizesParaCor), agora usando
-    // p.estoquePorVariante montado em carregarDados() a partir do ZumAgent ao vivo.
-    function availSizes(){ return tamanhosDisponiveis(p, state.cor); }
-    function semEstoqueNaCor(){
-      var avail = availSizes();
-      return avail.length===0 || avail.every(function(s){ return s.out; });
-    }
-    var related = STATE.produtos.filter(function(x){return x.category===p.category && x.slug!==p.slug;}).slice(0,4);
-
-    function thumbsHTML(){
-      var gal = currentGallery();
-      if(gal.length<2) return '';
-      return gal.map(function(url,i){
-        var active = i===state.mediaIndex;
-        return '<button data-idx="'+i+'" class="gal-thumb block overflow-hidden bg-muted border w-16 shrink-0 sm:w-full '+(active?'border-foreground':'border-transparent')+'" style="aspect-ratio:4/5">'+
-          mediaTag(url, p.nome, 'h-full w-full object-cover')+'</button>';
-      }).join('');
-    }
-    function updateGallery(){
-      var img = document.getElementById('produtoImg');
-      if(img) img.innerHTML = mediaTag(currentImg(), p.nome, 'aspect-[4/5] w-full object-cover');
-      var t1 = document.getElementById('galThumbs'); if(t1) t1.innerHTML = thumbsHTML();
-      var t2 = document.getElementById('galThumbsMobile'); if(t2) t2.innerHTML = thumbsHTML();
-      wireGalThumbs();
-    }
-    function wireGalThumbs(){
-      document.querySelectorAll('.gal-thumb').forEach(function(btn){
-        btn.addEventListener('click', function(){
-          state.mediaIndex = parseInt(btn.getAttribute('data-idx'),10) || 0;
-          updateGallery();
-        });
-      });
-    }
-
-    function sizesHTML(){
-      return availSizes().map(function(s){
-        var label = s.s==='UN' ? 'Único' : s.s;
-        if(s.out) return '<button data-tam="'+s.s+'" disabled class="min-w-12 border border-border/40 px-4 py-2 text-xs uppercase tracking-[0.2em] text-muted-foreground/40 line-through">'+label+'</button>';
-        var active = s.s===state.tamanho;
-        return '<button data-tam="'+s.s+'" class="min-w-12 border px-4 py-2 text-xs uppercase tracking-[0.2em] transition-colors '+(active?'border-foreground bg-foreground text-background':'border-border text-foreground hover:border-foreground')+'">'+label+'</button>';
-      }).join('');
-    }
-    function wireSizeButtons(){
-      document.querySelectorAll('#sizes button:not([disabled])').forEach(function(btn){
-        btn.addEventListener('click', function(){
-          state.tamanho = btn.getAttribute('data-tam');
-          document.getElementById('sizes').innerHTML = sizesHTML();
-          wireSizeButtons();
-          refreshCompra();
-        });
-      });
-    }
-
-    // Área de compra: some com o botão "Adicionar à Sacola" e mostra "Avise-me
-    // quando chegar" no lugar quando a cor/tamanho escolhida está sem
-    // estoque real — em vez do antigo travamento só a nível de produto
-    // inteiro (que deixava adicionar cor sem estoque só porque outra cor do
-    // mesmo produto tinha peça).
-    function comprarHTML(){
-      var out = semEstoqueNaCor();
-      var msgHtml = '';
-      if(out){
-        msgHtml = '<p class="mt-4 text-xs text-red-700">Sem estoque nessa cor/tamanho — fale com a gente no WhatsApp ou peça pra te avisar.</p>';
-      } else {
-        var porCor = p.estoquePorVariante && p.estoquePorVariante[state.cor];
-        var qtd = porCor ? (porCor[state.tamanho]!==undefined ? porCor[state.tamanho] : null) : null;
-        if(qtd!==null && qtd<=3) msgHtml = '<p class="mt-4 text-xs text-orange-700">Últimas peças em estoque</p>';
-      }
-      return msgHtml+'<div class="mt-10 flex flex-col gap-3 sm:flex-row">'+
-        (out
-          ? '<button class="btn-zum w-full sm:w-auto" id="aviseBtn">Avise-me quando chegar</button>'
-          : '<button class="btn-zum w-full sm:w-auto" id="buyBtn">Adicionar à Sacola</button>')+
-        '</div>';
-    }
-    function wireCompra(){
-      var buyBtn = document.getElementById('buyBtn');
-      if(buyBtn) buyBtn.addEventListener('click', function(){
-        addToCart(p, state.cor, state.tamanho, 1);
-        openCart('sacola');
-      });
-      var aviseBtn = document.getElementById('aviseBtn');
-      if(aviseBtn) aviseBtn.addEventListener('click', function(){ abrirAviseMe(p, state); });
-    }
-    function refreshCompra(){
-      var el = document.getElementById('compraArea');
-      if(el){ el.innerHTML = comprarHTML(); wireCompra(); }
-    }
-
-    var galInit = currentGallery();
-
-    document.getElementById('app').innerHTML =
-      '<div class="min-h-screen bg-background">'+
-        '<section class="px-4 pt-10 md:px-6">'+
-          '<div class="mx-auto grid max-w-[1400px] gap-10 md:grid-cols-2">'+
-            '<div>'+
-              '<div class="flex gap-3">'+
-                (galInit.length>1 ? '<div class="hidden sm:flex flex-col gap-2 w-16 shrink-0 max-h-[600px] overflow-y-auto" id="galThumbs">'+thumbsHTML()+'</div>' : '')+
-                '<div class="relative flex-1 overflow-hidden bg-muted" id="produtoImg">'+mediaTag(currentImg(), p.nome, 'aspect-[4/5] w-full object-cover')+'</div>'+
-              '</div>'+
-              (galInit.length>1 ? '<div class="mt-3 flex gap-2 overflow-x-auto sm:hidden" id="galThumbsMobile">'+thumbsHTML()+'</div>' : '')+
-            '</div>'+
-            '<div class="flex flex-col justify-center md:pl-8">'+
-              '<p class="label-caps text-muted-foreground">'+p.category+'</p>'+
-              '<h1 class="mt-3 text-4xl md:text-5xl">'+p.nome+'</h1>'+
-              '<div class="mt-4 flex items-center gap-3 text-lg"><span>'+money(p.preco)+'</span></div>'+
-              '<p class="mt-6 max-w-md text-sm leading-relaxed text-muted-foreground">'+(p.destaque||'Peça ZUM — leveza em movimento.')+'</p>'+
-              (p.cores.length ? '<div class="mt-10"><p class="label-caps mb-3 text-muted-foreground">Cor · <span id="corLabel">'+state.cor+'</span></p>'+
-                '<div class="flex gap-3" id="swatches">'+p.cores.map(function(c){
-                  var hex=COLOR_HEX[c]||'#ccc'; var active=c===state.cor;
-                  return '<button data-cor="'+c+'" title="'+c+'" class="h-8 w-8 border transition-all '+(active?'border-foreground ring-1 ring-foreground ring-offset-2 ring-offset-background':'border-border')+'" style="background-color:'+hex+'"></button>';
-                }).join('')+'</div></div>' : '')+
-              '<div class="mt-8"><p class="label-caps mb-3 text-muted-foreground">Tamanho</p>'+
-                '<div class="flex flex-wrap gap-2" id="sizes">'+sizesHTML()+'</div></div>'+
-              '<div id="compraArea">'+comprarHTML()+'</div>'+
-              '<p class="mt-6 text-xs text-muted-foreground">Pagamento por Pix ou cartão · Entrega em Fortaleza e Região Metropolitana</p>'+
-            '</div>'+
-          '</div>'+
-        '</section>'+
-        (related.length ? '<section class="px-4 py-24 md:px-6"><div class="mx-auto max-w-[1400px]">'+
-          '<div class="mb-10 flex items-end justify-between">'+
-            '<h2 class="text-3xl md:text-4xl">Você também vai amar</h2>'+
-            '<a href="#/catalogo" class="label-caps hidden text-muted-foreground hover:text-foreground md:inline">Ver catálogo</a>'+
-          '</div>'+
-          '<div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">'+grid4(related)+'</div>'+
-        '</div></section>' : '')+
-      '</div>';
-
-    wireGalThumbs();
-    wireSizeButtons();
-    wireCompra();
-
-    document.querySelectorAll('#swatches button').forEach(function(btn){
-      btn.addEventListener('click', function(){
-        document.querySelectorAll('#swatches button').forEach(function(b){ b.className = 'h-8 w-8 border transition-all border-border'; });
-        btn.className = 'h-8 w-8 border transition-all border-foreground ring-1 ring-foreground ring-offset-2 ring-offset-background';
-        state.cor = btn.getAttribute('data-cor');
-        document.getElementById('corLabel').textContent = state.cor;
-        state.mediaIndex = 0;
-        updateGallery();
-        var avail = availSizes();
-        var firstAvail = avail.filter(function(s){ return !s.out; })[0];
-        state.tamanho = firstAvail ? firstAvail.s : (p.tamanhos[0]||'UN');
-        document.getElementById('sizes').innerHTML = sizesHTML();
-        wireSizeButtons();
-        refreshCompra();
-      });
-    });
+    wireHero();
   }
 
   // ---------- ROUTER ----------
@@ -1565,8 +1454,9 @@ window.ZUM = (function(){
     if(checarRetornoPagamento()) return;
     var hash = location.hash || '#/';
     var mob = document.getElementById('mobNav'); if(mob) mob.classList.add('hidden');
-    if(hash.indexOf('#/produto/')===0) renderProduto(hash.replace('#/produto/',''));
-    else if(hash==='#/catalogo') renderCatalogo();
+    stopHero();
+    if(hash.indexOf('#/produto/')===0){ setHeaderHomeMode(false); renderProduto(hash.replace('#/produto/','')); }
+    else if(hash==='#/catalogo'){ setHeaderHomeMode(false); renderCatalogo(); }
     else renderHome();
     window.scrollTo(0,0);
   }
@@ -1576,6 +1466,12 @@ window.ZUM = (function(){
     loadCart();
     updateBagBadge();
     refreshCustomer();
+    var siteHeader = document.getElementById('siteHeader');
+    if(siteHeader){
+      siteHeader.addEventListener('mouseenter', function(){ HEADER_HOVERED = true; updateHeaderAppearance(); });
+      siteHeader.addEventListener('mouseleave', function(){ HEADER_HOVERED = false; updateHeaderAppearance(); });
+    }
+    window.addEventListener('scroll', updateHeaderAppearance, {passive:true});
     document.getElementById('burger').addEventListener('click', function(){
       document.getElementById('mobNav').classList.toggle('hidden');
     });
