@@ -1,6 +1,27 @@
 {
+  "redirects": [
+    { "source": "/", "destination": "/catalogozumonline", "permanent": false }
+  ],
   "rewrites": [
     { "source": "/catalogozumonline", "destination": "/catalogo.html" },
-    { "source": "/catalogozumonline/", "destination": "/catalogo.html" }
+    { "source": "/catalogozumonline/", "destination": "/catalogo.html" },
+    { "source": "/teste", "destination": "/index.html" },
+    { "source": "/teste/", "destination": "/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/produtos.json",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Cache-Control", "value": "no-store" }
+      ]
+    },
+    {
+      "source": "/banners.json",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Cache-Control", "value": "no-store" }
+      ]
+    }
   ]
 }
