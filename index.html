@@ -986,9 +986,14 @@ window.ZUM = (function(){
       });
       if(frete>0) itensPagamento.push({ qty:1, price:frete, name:'Frete' });
 
+      // Manda a própria URL de volta (origem + caminho atual, ex: /teste)
+      // em vez de depender do endereço fixo do backend — assim o cliente
+      // sempre retorna pra ESTE site depois de pagar, e não pro catalogo.html,
+      // mesmo que a raiz do domínio esteja temporariamente redirecionando
+      // pra lá (como agora, enquanto o index.html só existe em /teste).
       var resp = await fetch('/api/criar-pagamento', {
         method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ pedido: pedido, itens: itensPagamento, cliente: cliente })
+        body: JSON.stringify({ pedido: pedido, itens: itensPagamento, cliente: cliente, redirectUrl: window.location.origin+window.location.pathname })
       });
       var data = await resp.json();
       if(!data || !data.ok || !data.url){
