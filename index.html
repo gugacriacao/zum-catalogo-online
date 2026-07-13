@@ -235,6 +235,19 @@ window.ZUM = (function(){
     'Preto':'PT','Bordô':'BD','Marrom':'MR','Off-white':'OW','Vinho':'VH','Azul':'AZ',
     'Rosa':'RS','Verde':'VD','Branco':'BR','Azul Marinho':'AN','Cinza':'CZ','Bege':'BG'
   };
+  var COR_COD_TO_NOME = {};
+  Object.keys(COR_NOME_TO_COD).forEach(function(nome){ COR_COD_TO_NOME[COR_NOME_TO_COD[nome]] = nome; });
+  // Normaliza nome de cor pra comparar com segurança: a coluna "cor" da
+  // planilha (lida ao vivo pelo ZumAgent) é texto livre, digitado por
+  // humanos — vem tudo maiúsculo e às vezes sem acento (ex: "Bordô" vira
+  // "BORDO", "Off-white" vira "OFF") — bem diferente do nome usado no
+  // produtos.json/cores do produto. Comparar direto (sem normalizar) foi
+  // o motivo do estoque por cor não bloquear nada: a chave nunca batia.
+  function normalizeCor(s){
+    return String(s||'').trim().toUpperCase()
+      .replace(/Á|À|Â|Ã/g,'A').replace(/É|Ê/g,'E').replace(/Í/g,'I')
+      .replace(/Ó|Ô|Õ/g,'O').replace(/Ú/g,'U').replace(/Ç/g,'C');
+  }
 
   // ============================================================
   // MINHA CONTA (Supabase Auth) — login/senha reais, e-mail de
@@ -463,10 +476,10 @@ window.ZUM = (function(){
   // agregado já indicar 0 peças no produto inteiro.
   function tamanhosDisponiveis(p, cor){
     if(p.estoqueNum===0) return (p.tamanhos||[]).map(function(t){ return {s:t, out:true}; });
-    var porCor = (p.estoquePorVariante && p.estoquePorVariante[cor]) || null;
+    var porCor = (p.estoquePorVariante && p.estoquePorVariante[normalizeCor(cor)]) || null;
     return (p.tamanhos||[]).map(function(t){
       if(!porCor) return { s:t, out:false };
-      var qtd = porCor[t] || 0;
+      var qtd = porCor[normalizeCor(t)] || 0;
       return { s:t, out: qtd<=0 };
     });
   }
@@ -510,10 +523,21 @@ window.ZUM = (function(){
         var qtd = Number(item.estoque)||0;
         g.estoqueTotal += qtd;
         if(!g.preco && item.preco) g.preco = Number(item.preco);
-        var cor = (item.cor||'').trim();
-        var tam = (item.tamanho||'').trim() || 'UN';
-        if(!g.porVariante[cor]) g.porVariante[cor] = {};
-        g.porVariante[cor][tam] = (g.porVariante[cor][tam]||0) + qtd;
+        // A coluna "cor" da planilha é texto livre digitado à mão — vem
+        // inconsistente (ex: "Bordô" virou "BORDO", "Off-white" virou "OFF").
+        // O código de 2 letras embutido no SKU (ex: "-OW-") é bem mais
+        // confiável, então prioriza ele (via COR_COD_TO_NOME, mesmo mapa já
+        // usado no checkout) — só cai pro texto da planilha se o código não
+        // for reconhecido. Os dois lados são normalizados (maiúsculo, sem
+        // acento) antes de comparar, senão a chave nunca bate com o nome
+        // usado em produtos.json/cores do produto.
+        var partes = codigo.split('-');
+        var corCodigo = partes[3] || '';
+        var corResolvida = COR_COD_TO_NOME[corCodigo] || item.cor || '';
+        var chaveCor = normalizeCor(corResolvida);
+        var tam = normalizeCor((item.tamanho||'').trim() || 'UN');
+        if(!g.porVariante[chaveCor]) g.porVariante[chaveCor] = {};
+        g.porVariante[chaveCor][tam] = (g.porVariante[chaveCor][tam]||0) + qtd;
       });
       STATE.produtos.forEach(function(p){
         var live = porBase[p.sku];
@@ -1134,10 +1158,17 @@ window.ZUM = (function(){
     // no painel), senão cai nas fotos principais do produto — igual ao
     // catalogo.html. Antes só o primeiro item aparecia; agora mostra todas,
     // com a atual em destaque e as outras em miniatura ao lado, clicáveis.
+    // Galeria = fotos da cor escolhida (se tiver) + fotos gerais do produto,
+    // sem duplicar. Antes, quando uma cor tinha só 1 foto própria cadastrada
+    // (o caso mais comum), a galeria virava só essa 1 foto e escondia as
+    // outras 3-4 fotos gerais do produto — por isso a coluna de miniaturas
+    // sumia (só aparece quando há 2+ fotos) mesmo o produto tendo várias
+    // fotos cadastradas de verdade.
     function currentGallery(){
-      var arr = p.fotosCores && p.fotosCores[state.cor];
-      if(arr && arr.length) return arr;
-      if(p.fotos && p.fotos.length) return p.fotos;
+      var corFotos = (p.fotosCores && p.fotosCores[state.cor]) || [];
+      var geral = p.fotos || [];
+      var combined = corFotos.concat(geral.filter(function(u){ return corFotos.indexOf(u)===-1; }));
+      if(combined.length) return combined;
       return [p.image];
     }
     function currentImg(){ return currentGallery()[state.mediaIndex] || currentGallery()[0] || p.image; }
