@@ -1,7 +1,9 @@
 // Cria um link de pagamento real na InfinitePay (PIX ou cartão) pro pedido
 // já registrado como "Pendente" no ZumAgent (criarPedidoPendente, chamado
-// antes disso pelo próprio catalogo.html). O cliente é redirecionado pra
-// esse link; a confirmação de pagamento chega depois via webhook-infinitepay.
+// antes disso pelo front-end — catalogo.html OU index.html, ambos usam este
+// mesmo endpoint). O cliente é redirecionado pra esse link; a confirmação de
+// pagamento chega depois via webhook-infinitepay. redirect_url aponta pra
+// raiz do domínio (index.html), que detecta o retorno via ?order_nsu=.
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     res.status(405).json({ ok: false, erro: 'Método não permitido' });
@@ -33,11 +35,23 @@ module.exports = async function handler(req, res) {
       };
     });
 
+    // BUG REAL corrigido (13/07/2026): redirect_url era sempre fixo pra raiz
+    // do domínio. Isso quebrava sempre que a raiz apontava pra outro lugar
+    // (ex: enquanto o index.html só existe em /teste e "/" redireciona pro
+    // catalogo.html) — o cliente pagava no site novo e voltava pro catálogo.
+    // Agora o próprio site manda de volta a URL certa (redirectUrl); só aceita
+    // se for do nosso domínio, pra não virar um redirect aberto pra qualquer
+    // site (open redirect).
+    var redirectUrl = 'https://www.usezum.com.br/';
+    if (typeof body.redirectUrl === 'string' && body.redirectUrl.indexOf('https://www.usezum.com.br') === 0) {
+      redirectUrl = body.redirectUrl;
+    }
+
     var linkBody = {
       handle: handle,
       items: items,
       order_nsu: pedido,
-      redirect_url: 'https://www.usezum.com.br/catalogozumonline',
+      redirect_url: redirectUrl,
       webhook_url: 'https://www.usezum.com.br/api/webhook-infinitepay'
     };
     if (cliente.nome || cliente.email || cliente.celular) {
