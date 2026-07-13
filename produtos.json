@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-13T13:14:15.495Z",
+  "geradoEm": "2026-07-13T18:14:37.425Z",
   "produtos": [
     {
       "sku": "ZUM-VDPL-107",
@@ -19,7 +19,7 @@
       "destaque": "",
       "descricao": "",
       "estoqueNum": 4,
-      "ativo": false,
+      "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/midia-1783861479458.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/midia-1783862381752.png",
@@ -59,7 +59,7 @@
       "destaque": "",
       "descricao": "",
       "estoqueNum": 1,
-      "ativo": false,
+      "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDFU-106/midia-1783640125518.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDFU-106/midia-1783640118611.png",
@@ -87,7 +87,7 @@
       "destaque": "",
       "descricao": "",
       "estoqueNum": 3,
-      "ativo": false,
+      "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDALC-100/midia-1783569529665.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDALC-100/midia-1783569552373.png",
@@ -126,7 +126,7 @@
       "destaque": "",
       "descricao": "",
       "estoqueNum": 5,
-      "ativo": false,
+      "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CC-400/midia-1783478963409.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CC-400/midia-1783479001351.png",
@@ -165,7 +165,7 @@
       "destaque": "Tecido Poliamida. Tamanho único: 36/42",
       "descricao": "",
       "estoqueNum": 3,
-      "ativo": false,
+      "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/midia-1783480241093.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/midia-1783480220676.png",
@@ -204,7 +204,7 @@
       "destaque": "Algodão",
       "descricao": "",
       "estoqueNum": 3,
-      "ativo": false,
+      "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783480100247.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783480103971.png",
@@ -235,7 +235,7 @@
       "destaque": "",
       "descricao": "",
       "estoqueNum": 2,
-      "ativo": false,
+      "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-1783864612196.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-1783477624666.png",
@@ -285,7 +285,7 @@
       "destaque": "",
       "descricao": "",
       "estoqueNum": 1,
-      "ativo": false,
+      "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDBT-102/midia-1783520023133.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDBT-102/midia-03.png",
@@ -317,7 +317,7 @@
       "destaque": "",
       "descricao": "",
       "estoqueNum": 0,
-      "ativo": false,
+      "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDDN-103/midia-1783643692817.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDDN-103/midia-1783643800487.png",
