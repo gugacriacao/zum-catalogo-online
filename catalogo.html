@@ -1051,9 +1051,13 @@ async function goPay(){
     if(frete > 0){
       itensPagamento.push({ qty:1, price:frete, name:'Frete' });
     }
+    // Manda a própria URL de volta (origem + caminho atual) em vez de deixar
+    // o backend usar um endereço fixo — assim o cliente sempre retorna pro
+    // MESMO site que iniciou a compra (catalogo.html aqui, index.html lá),
+    // não importa pra onde a raiz do domínio esteja apontando no momento.
     var resp = await fetch('/api/criar-pagamento', {
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ pedido: pedido, itens: itensPagamento, cliente: cliente })
+      body: JSON.stringify({ pedido: pedido, itens: itensPagamento, cliente: cliente, redirectUrl: window.location.origin+window.location.pathname })
     });
     var data = await resp.json();
     if(!data || !data.ok || !data.url){
