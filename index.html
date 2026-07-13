@@ -10,7 +10,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
   tailwind.config = {
     theme: {
@@ -174,6 +173,7 @@
 </aside>
 
 <!-- ---------- MINHA CONTA (drawer) ---------- -->
+<div id="welcomeToast" class="fixed left-1/2 top-6 z-[200] hidden -translate-x-1/2 whitespace-nowrap rounded bg-foreground px-6 py-3 text-sm text-background shadow-lg"></div>
 <div id="accountBackdrop" class="fixed inset-0 z-[60] hidden bg-foreground/30" onclick="ZUM.closeAccount()"></div>
 <aside id="accountDrawer" class="fixed right-0 top-0 z-[70] flex h-full w-full max-w-md translate-x-full flex-col bg-background shadow-2xl transition-transform duration-300 ease-out">
   <div class="flex items-center justify-between border-b border-border/60 px-6 py-5">
@@ -263,27 +263,42 @@ window.ZUM = (function(){
   }
 
   // ============================================================
-  // MINHA CONTA (Supabase Auth) — login/senha reais, e-mail de
-  // confirmação automático (o Supabase manda por padrão; e-mail com
-  // marca própria da ZUM fica pra depois, por decisão do usuário).
-  // Dado de pedido/estoque continua 100% na planilha (ZumAgent) — o
-  // Supabase só guarda conta, senha (nunca em texto puro) e o
-  // consentimento de marketing com data/hora, como o parecer jurídico
-  // exigiu.
+  // MINHA CONTA — cadastro/login próprio da ZUM, gravado direto na
+  // planilha via ZumAgent (aba "ContasSite"). Trocou o Supabase Auth em
+  // 13/07/2026 porque o e-mail de confirmação nunca chegava pros
+  // clientes reais e travava todo cadastro. Não existe mais confirmação
+  // por e-mail: a conta já nasce ativa, a pessoa é logada na hora,
+  // volta pra home e vê "Bem-vindo(a) + primeiro nome". A senha nunca
+  // trafega nem fica salva em texto puro no navegador — só o e-mail e
+  // os dados de perfil ficam numa sessão simples no localStorage
+  // (`zum-site-conta`), do jeito que já era feito com `zum-site-cliente`
+  // pro checkout de convidado.
   // ============================================================
-  var SUPABASE_URL = 'https://qbbfqsngenrhoiemjcwh.supabase.co';
-  var SUPABASE_KEY = 'sb_publishable_UM3xo8zHdjawKNLsE_58cw__BlMySkH';
-  var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-  var CUSTOMER = null; // linha da tabela public.customers do usuário logado, ou null
+  var CUSTOMER = null; // dados da conta logada (sem senha), ou null
 
-  async function refreshCustomer(){
-    var { data: sessionData } = await sb.auth.getSession();
-    var session = sessionData && sessionData.session;
-    if(!session){ CUSTOMER = null; updateAccountIcon(); return null; }
-    var { data: rows } = await sb.from('customers').select('*').eq('id', session.user.id).limit(1);
-    CUSTOMER = (rows && rows[0]) ? Object.assign({email: session.user.email}, rows[0]) : {email: session.user.email};
+  function primeiroNome(nome){
+    return String(nome||'').trim().split(/\s+/)[0] || '';
+  }
+
+  function showToast(msg, ms){
+    var el = document.getElementById('welcomeToast');
+    if(!el) return;
+    el.textContent = msg;
+    el.classList.remove('hidden');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(function(){ el.classList.add('hidden'); }, ms||4000);
+  }
+
+  function refreshCustomer(){
+    try{ CUSTOMER = JSON.parse(localStorage.getItem('zum-site-conta')||'null'); }catch(e){ CUSTOMER = null; }
     updateAccountIcon();
     return CUSTOMER;
+  }
+
+  function salvarSessaoConta(conta){
+    CUSTOMER = conta;
+    localStorage.setItem('zum-site-conta', JSON.stringify(conta));
+    updateAccountIcon();
   }
 
   function updateAccountIcon(){
@@ -329,7 +344,7 @@ window.ZUM = (function(){
           '<div class="flex justify-between border-b border-border/50 py-2"><span class="text-muted-foreground">Telefone</span><span>'+(CUSTOMER.telefone||'—')+'</span></div>'+
           '<div class="flex justify-between border-b border-border/50 py-2"><span class="text-muted-foreground">Endereço</span><span class="text-right">'+(CUSTOMER.rua?CUSTOMER.rua+', '+(CUSTOMER.numero||''):'—')+'</span></div>'+
           '<div class="flex justify-between border-b border-border/50 py-2"><span class="text-muted-foreground">Cidade</span><span>'+(CUSTOMER.cidade?CUSTOMER.cidade+' '+(CUSTOMER.uf||''):'—')+'</span></div>'+
-          '<div class="flex justify-between border-b border-border/50 py-2"><span class="text-muted-foreground">Novidades por e-mail/WhatsApp</span><span>'+(CUSTOMER.aceita_marketing?'Sim':'Não')+'</span></div>'+
+          '<div class="flex justify-between border-b border-border/50 py-2"><span class="text-muted-foreground">Novidades por e-mail/WhatsApp</span><span>'+(CUSTOMER.aceitaMarketing?'Sim':'Não')+'</span></div>'+
         '</div>'+
         '<button class="btn-zum mt-8 w-full" onclick="ZUM.signOut()">Sair da conta</button>';
       return;
@@ -355,15 +370,34 @@ window.ZUM = (function(){
           field('accNome','Nome completo','text','Seu nome')+
           field('accEmail','E-mail','email','seu@email.com')+
           field('accTelefone','WhatsApp','tel','(00) 00000-0000')+
+          field('accCep','CEP','tel','00000-000','oninput="ZUM.onAccCep()"')+
+          field('accRua','Rua','text','Rua / Avenida')+
+          '<div class="flex gap-3">'+field('accNum','Número','text','123','',true)+field('accComp','Complemento','text','Apto, bloco...','',true)+'</div>'+
+          '<div class="flex gap-3">'+field('accBairro','Bairro','text','Bairro','',true)+field('accCidade','Cidade','text','Cidade','',true)+'</div>'+
+          field('accUf','Estado','text','CE','maxlength="2"')+
           field('accSenha','Senha','password','Mínimo 6 caracteres')+
         '</div>'+
         consentFieldHTML('acc')+
         '<p id="accMsg" class="mt-3 text-xs text-red-700"></p>'+
-        '<button class="btn-zum mt-4 w-full" onclick="ZUM.doSignup()">Criar Conta</button>'+
-        '<p class="mt-3 text-[11px] text-muted-foreground">Vamos mandar um e-mail de confirmação — confirme por lá antes de fazer login.</p>';
+        '<button class="btn-zum mt-4 w-full" onclick="ZUM.doSignup()">Criar Conta</button>';
     }
   }
   function setAccountTab(tab){ ACCOUNT_TAB = tab; renderAccountDrawer(); }
+
+  async function onAccCep(){
+    var v = $('accCep').value.replace(/\D/g,'').slice(0,8);
+    $('accCep').value = v.length>5 ? v.replace(/(\d{5})(\d{1,3})/,'$1-$2') : v;
+    if(v.length===8){
+      try{
+        var r = await fetch('https://viacep.com.br/ws/'+v+'/json/');
+        var d = await r.json();
+        if(!d.erro){
+          $('accRua').value=d.logradouro||''; $('accBairro').value=d.bairro||'';
+          $('accCidade').value=d.localidade||''; $('accUf').value=d.uf||'';
+        }
+      }catch(e){}
+    }
+  }
 
   async function doSignup(){
     var nome = $('accNome').value.trim();
@@ -372,30 +406,38 @@ window.ZUM = (function(){
     var senha = $('accSenha').value;
     var aceitaMkt = $('accAceitaMkt').checked;
     var msg = $('accMsg');
-    if(!nome || !email || senha.length<6){ msg.textContent='Preencha nome, e-mail e uma senha com pelo menos 6 caracteres.'; return; }
+    if(!nome || !email || senha.length<6){ msg.className='mt-3 text-xs text-red-700'; msg.textContent='Preencha nome, e-mail e uma senha com pelo menos 6 caracteres.'; return; }
+    msg.className='mt-3 text-xs text-muted-foreground';
     msg.textContent = 'Criando conta…';
-    var { error } = await sb.auth.signUp({
-      email: email, password: senha,
-      options: { data: { nome: nome, telefone: telefone, aceita_marketing: aceitaMkt } }
+    var r = await asCall('criarContaSite', {
+      nome: nome, email: email, senha: senha, telefone: telefone,
+      cep: $('accCep')?$('accCep').value:'', rua: $('accRua')?$('accRua').value:'',
+      numero: $('accNum')?$('accNum').value:'', complemento: $('accComp')?$('accComp').value:'',
+      bairro: $('accBairro')?$('accBairro').value:'', cidade: $('accCidade')?$('accCidade').value:'',
+      uf: $('accUf')?$('accUf').value:'', aceitaMarketing: aceitaMkt
     });
-    if(error){ msg.textContent = error.message; return; }
-    msg.className = 'mt-3 text-xs text-green-700';
-    msg.textContent = 'Conta criada! Verifique seu e-mail pra confirmar antes de entrar.';
+    if(!r || !r.ok){ msg.className='mt-3 text-xs text-red-700'; msg.textContent = (r && r.erro) || 'Não foi possível criar a conta. Tente novamente.'; return; }
+    salvarSessaoConta(r.conta);
+    closeAccount();
+    location.hash = '';
+    route();
+    showToast('Bem-vindo(a), '+primeiroNome(r.conta.nome)+'!');
   }
 
   async function doLogin(){
     var email = $('accEmail').value.trim();
     var senha = $('accSenha').value;
     var msg = $('accMsg');
+    msg.className='mt-3 text-xs text-muted-foreground';
     msg.textContent = 'Entrando…';
-    var { error } = await sb.auth.signInWithPassword({ email: email, password: senha });
-    if(error){ msg.textContent = error.message; return; }
-    await refreshCustomer();
+    var r = await asCall('loginContaSite', { email: email, senha: senha });
+    if(!r || !r.ok){ msg.className='mt-3 text-xs text-red-700'; msg.textContent = (r && r.erro) || 'E-mail ou senha incorretos.'; return; }
+    salvarSessaoConta(r.conta);
     renderAccountDrawer();
   }
 
-  async function signOut(){
-    await sb.auth.signOut();
+  function signOut(){
+    localStorage.removeItem('zum-site-conta');
     CUSTOMER = null;
     updateAccountIcon();
     renderAccountDrawer();
@@ -799,7 +841,10 @@ window.ZUM = (function(){
   }
 
   // Se o cliente marcou "criar senha" no checkout de convidado, cria a conta
-  // Supabase com todos os dados já preenchidos (não bloqueia a compra se falhar).
+  // já na ZumAgent (mesma action da tela "Criar Conta") com todos os dados
+  // do checkout — não bloqueia a compra se falhar. Não interrompe o
+  // checkout com toast/redirect: a pessoa só percebe que já está logada na
+  // próxima vez que abrir "Minha Conta".
   async function maybeAutoSignup(){
     var senhaEl = $('fSenha');
     if(!senhaEl || senhaEl.value.length<6) return;
@@ -807,38 +852,36 @@ window.ZUM = (function(){
     if(!email) return;
     try{
       var aceitaMkt = $('fAceitaMkt') ? $('fAceitaMkt').checked : false;
-      var r = await sb.auth.signUp({
-        email: email, password: senhaEl.value,
-        options: { data: {
-          nome: $('fNome')?$('fNome').value:'', telefone: $('fWpp')?$('fWpp').value:'',
-          cpf: $('fCpf')?$('fCpf').value:'', cep: $('fCep')?$('fCep').value:'',
-          rua: $('fRua')?$('fRua').value:'', numero: $('fNum')?$('fNum').value:'',
-          complemento: $('fComp')?$('fComp').value:'', bairro: $('fBairro')?$('fBairro').value:'',
-          cidade: $('fCidade')?$('fCidade').value:'', uf: $('fUf')?$('fUf').value:'',
-          aceita_marketing: aceitaMkt
-        } }
+      var r = await asCall('criarContaSite', {
+        nome: $('fNome')?$('fNome').value:'', email: email, senha: senhaEl.value,
+        telefone: $('fWpp')?$('fWpp').value:'',
+        cep: $('fCep')?$('fCep').value:'', rua: $('fRua')?$('fRua').value:'',
+        numero: $('fNum')?$('fNum').value:'', complemento: $('fComp')?$('fComp').value:'',
+        bairro: $('fBairro')?$('fBairro').value:'', cidade: $('fCidade')?$('fCidade').value:'',
+        uf: $('fUf')?$('fUf').value:'', aceitaMarketing: aceitaMkt
       });
-      if(!r.error) alert('Conta criada! Você recebe um e-mail pra confirmar — na próxima compra já entra logado direto.');
+      if(r && r.ok) salvarSessaoConta(r.conta);
     }catch(e){}
   }
 
-  // Cliente já logado — atualiza o perfil com o que ele ajustou no checkout
-  async function syncCustomerProfile(){
+  // Cliente já logado — o perfil gravado na ContasSite não muda sozinho a
+  // partir do checkout (evita confundir conta com o cadastro de cliente do
+  // pedido). Só atualiza a cópia local/sessão com o que ele ajustou aqui,
+  // pra essa compra sair com os dados certos.
+  function syncCustomerProfile(){
     if(!CUSTOMER) return;
-    try{
-      await sb.from('customers').update({
-        nome: $('fNome')?$('fNome').value:CUSTOMER.nome,
-        telefone: $('fWpp')?$('fWpp').value:CUSTOMER.telefone,
-        cpf: $('fCpf')?$('fCpf').value:CUSTOMER.cpf,
-        cep: $('fCep')?$('fCep').value:CUSTOMER.cep,
-        rua: $('fRua')?$('fRua').value:CUSTOMER.rua,
-        numero: $('fNum')?$('fNum').value:CUSTOMER.numero,
-        complemento: $('fComp')?$('fComp').value:CUSTOMER.complemento,
-        bairro: $('fBairro')?$('fBairro').value:CUSTOMER.bairro,
-        cidade: $('fCidade')?$('fCidade').value:CUSTOMER.cidade,
-        uf: $('fUf')?$('fUf').value:CUSTOMER.uf
-      }).eq('id', CUSTOMER.id);
-    }catch(e){}
+    var atualizado = Object.assign({}, CUSTOMER, {
+      nome: $('fNome')?$('fNome').value:CUSTOMER.nome,
+      telefone: $('fWpp')?$('fWpp').value:CUSTOMER.telefone,
+      cep: $('fCep')?$('fCep').value:CUSTOMER.cep,
+      rua: $('fRua')?$('fRua').value:CUSTOMER.rua,
+      numero: $('fNum')?$('fNum').value:CUSTOMER.numero,
+      complemento: $('fComp')?$('fComp').value:CUSTOMER.complemento,
+      bairro: $('fBairro')?$('fBairro').value:CUSTOMER.bairro,
+      cidade: $('fCidade')?$('fCidade').value:CUSTOMER.cidade,
+      uf: $('fUf')?$('fUf').value:CUSTOMER.uf
+    });
+    salvarSessaoConta(atualizado);
   }
 
   async function onCpf(){
@@ -1410,7 +1453,6 @@ window.ZUM = (function(){
     loadCart();
     updateBagBadge();
     refreshCustomer();
-    sb.auth.onAuthStateChange(function(){ refreshCustomer(); });
     document.getElementById('burger').addEventListener('click', function(){
       document.getElementById('mobNav').classList.toggle('hidden');
     });
