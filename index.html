@@ -531,11 +531,22 @@ window.ZUM = (function(){
         // for reconhecido. Os dois lados são normalizados (maiúsculo, sem
         // acento) antes de comparar, senão a chave nunca bate com o nome
         // usado em produtos.json/cores do produto.
+        //
+        // BUG REAL corrigido (T-shirt Over, tam P): a resposta de
+        // getProdutosPublicos() no ZumAgent.gs NUNCA inclui um campo
+        // "tamanho" (só codigo/descricao/nome/categoria/cor/preco/estoque/
+        // disponivel) — então todo item caía no fallback 'UN', mesmo quando
+        // o produto tem tamanhos de verdade (G/P/M). Isso juntava o estoque
+        // de todos os tamanhos de uma cor debaixo da mesma chave "UN", que
+        // nunca batia com os botões reais de tamanho (G, P), e tudo aparecia
+        // sem estoque. Corrigido: tamanho também vem do próprio código do
+        // SKU (último bloco, ex: "-PT-P" → tamanho "P"), igual à cor.
         var partes = codigo.split('-');
         var corCodigo = partes[3] || '';
+        var tamCodigo = partes[4] || 'UN';
         var corResolvida = COR_COD_TO_NOME[corCodigo] || item.cor || '';
         var chaveCor = normalizeCor(corResolvida);
-        var tam = normalizeCor((item.tamanho||'').trim() || 'UN');
+        var tam = normalizeCor(tamCodigo);
         if(!g.porVariante[chaveCor]) g.porVariante[chaveCor] = {};
         g.porVariante[chaveCor][tam] = (g.porVariante[chaveCor][tam]||0) + qtd;
       });
