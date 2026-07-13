@@ -916,6 +916,25 @@ window.ZUM = (function(){
     }catch(e){ return {}; }
   }
 
+  // Lê os dados do cliente do localStorage (salvos por saveFormValues() ao
+  // sair da etapa "Seus Dados"), nunca do DOM ao vivo — porque quando o
+  // botão "Pagar" existe (etapa "Confirmar Pedido"), os campos fNome/fRua/
+  // etc. já não estão mais na tela (a etapa anterior foi substituída pelo
+  // resumo do pedido). BUG REAL corrigido: goPay() lia $('fNome').value
+  // direto, que sempre voltava vazio nessa etapa — por isso TODO pedido
+  // real falhava com "Nome do cliente não informado." no ZumAgent, mesmo
+  // com os campos preenchidos direitinho um passo antes.
+  function dadosClienteSalvos(){
+    if(CUSTOMER){
+      return {
+        fNome: CUSTOMER.nome||'', fCpf: CUSTOMER.cpf||'', fWpp: CUSTOMER.telefone||'', fEmail: CUSTOMER.email||'',
+        fCidade: CUSTOMER.cidade||'', fUf: CUSTOMER.uf||'', fRua: CUSTOMER.rua||'', fNum: CUSTOMER.numero||'',
+        fComp: CUSTOMER.complemento||'', fBairro: CUSTOMER.bairro||'', fCep: CUSTOMER.cep||''
+      };
+    }
+    try{ return JSON.parse(localStorage.getItem('zum-site-cliente')||'{}'); }catch(e){ return {}; }
+  }
+
   async function goPay(){
     if(!CART.length) return;
     var btn = $('btnPagar');
@@ -926,33 +945,40 @@ window.ZUM = (function(){
       var tam = i.size || 'UN';
       return { codigo: i.sku+'-'+corCod+'-'+tam, qtd: i.qty };
     });
-    var enderecoCompleto = ($('fRua')?$('fRua').value:'') +
-      ($('fNum')&&$('fNum').value ? ', '+$('fNum').value : '') +
-      ($('fComp')&&$('fComp').value ? ' '+$('fComp').value : '') +
-      ($('fBairro')&&$('fBairro').value ? ' · '+$('fBairro').value : '') +
-      ($('fCep')&&$('fCep').value ? ' · CEP '+$('fCep').value : '');
+    var dados = dadosClienteSalvos();
+    var enderecoCompleto = (dados.fRua||'') +
+      (dados.fNum ? ', '+dados.fNum : '') +
+      (dados.fComp ? ' '+dados.fComp : '') +
+      (dados.fBairro ? ' · '+dados.fBairro : '') +
+      (dados.fCep ? ' · CEP '+dados.fCep : '');
     var cliente = {
-      nome: $('fNome')?$('fNome').value:'', cpf: $('fCpf')?$('fCpf').value:'',
-      celular: $('fWpp')?$('fWpp').value:'', email: $('fEmail')?$('fEmail').value:'',
-      cidade: ($('fCidade')?$('fCidade').value:'')+' '+($('fUf')?$('fUf').value:''),
+      nome: dados.fNome||'', cpf: dados.fCpf||'',
+      celular: dados.fWpp||'', email: dados.fEmail||'',
+      cidade: (dados.fCidade||'')+' '+(dados.fUf||''),
       endereco: enderecoCompleto,
-      rua: $('fRua')?$('fRua').value:'', numero: $('fNum')?$('fNum').value:'',
-      complemento: $('fComp')?$('fComp').value:'', bairro: $('fBairro')?$('fBairro').value:'',
-      cep: $('fCep')?$('fCep').value:''
+      rua: dados.fRua||'', numero: dados.fNum||'',
+      complemento: dados.fComp||'', bairro: dados.fBairro||'',
+      cep: dados.fCep||''
     };
     var frete = FRETE_OPCAO==='entrega' ? FRETE_VALOR : 0;
+
+    if(!cliente.nome){
+      if(btn){ btn.disabled=false; btn.textContent='Pagar com Pix ou Cartão'; }
+      alert('Faltou preencher seus dados. Volte em "← Dados" e confirme nome, endereço e contato antes de pagar.');
+      return;
+    }
 
     try{
       var r = await asCall('criarPedidoPendente', { cliente: cliente, itens: itensApi, frete: frete });
       if(!r || !r.ok || !r.pedido){
         if(btn){ btn.disabled=false; btn.textContent='Pagar com Pix ou Cartão'; }
-        alert('Não foi possível registrar o pedido. Tente novamente.');
+        alert('Não foi possível registrar o pedido'+(r&&r.erro?(': '+r.erro):'')+'. Tente novamente.');
         return;
       }
       var pedido = r.pedido;
       localStorage.setItem('zum-site-pedido-pendente', JSON.stringify({
         pedido: pedido, qtd: cartCount(), total: cartTotal()+frete,
-        cidade: $('fCidade')?$('fCidade').value:'', uf: $('fUf')?$('fUf').value:'', ts: Date.now()
+        cidade: dados.fCidade||'', uf: dados.fUf||'', ts: Date.now()
       }));
 
       var itensPagamento = CART.map(function(i){
