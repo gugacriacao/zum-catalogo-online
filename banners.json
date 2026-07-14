@@ -1,36 +1,8 @@
 {
-  "geradoEm": "2026-07-13T18:14:39.029Z",
+  "geradoEm": "2026-07-14T04:14:06.915Z",
   "asUrl": "https://script.google.com/macros/s/AKfycbwHavGCAgB01Vm3b6kEqN26x1MRA62VVA6P2UWfbeDVFbDxfyQ9PbAhr6B44ElRK_5q/exec",
   "destaqueLabel": "Destaques",
-  "topo": [
-    {
-      "ativo": true,
-      "tag": "",
-      "titulo": "",
-      "sub": "",
-      "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/TOPO/banner-topo-01.png",
-      "pos": "7.3% 42.7%",
-      "zoom": 1.05
-    },
-    {
-      "ativo": true,
-      "tag": "",
-      "titulo": "",
-      "sub": "",
-      "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/TOPO/banner-topo-02.png",
-      "pos": "50% 50%",
-      "zoom": 1
-    },
-    {
-      "ativo": true,
-      "tag": "",
-      "titulo": "",
-      "sub": "",
-      "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/TOPO/banner-topo-03.png",
-      "pos": "50% 50%",
-      "zoom": 1
-    }
-  ],
+  "topo": [],
   "meio": [],
   "stories": []
 }
