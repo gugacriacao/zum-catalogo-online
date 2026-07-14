@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -151,6 +152,8 @@ body{font-family:-apple-system,sans-serif;background:#f4f4f4;min-height:100vh}
 .banner-preview.topo{aspect-ratio:480/240} /* 2:1 */
 .banner-preview.meio{aspect-ratio:480/140;min-height:80px} /* ~3.4:1 */
 .banner-preview.stories{aspect-ratio:9/16;max-height:380px;max-width:calc(380px * 9 / 16);align-self:center} /* 9:16 portrait */
+.banner-preview.home-desktop{aspect-ratio:16/9;width:100%;max-width:620px;align-self:center} /* 16:9 horizontal — hero do site desktop */
+.banner-preview.outdoor-desktop{aspect-ratio:480/180;min-height:90px} /* 8:3 panorâmica — billboard do site desktop */
 .banner-preview img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55}
 .banner-preview .prev-tag{font-size:8px;color:rgba(255,255,255,.7);letter-spacing:2px;text-transform:uppercase;position:relative;z-index:1}
 .banner-preview .prev-titulo{font-size:15px;color:#fff;font-weight:700;letter-spacing:1px;position:relative;z-index:1}
@@ -237,6 +240,8 @@ body{font-family:-apple-system,sans-serif;background:#f4f4f4;min-height:100vh}
     <button class="tab-btn" id="tb-topo" onclick="setTab('topo')">Banners Topo</button>
     <button class="tab-btn" id="tb-meio" onclick="setTab('meio')">Banners Meio</button>
     <button class="tab-btn" id="tb-stories" onclick="setTab('stories')">Stories</button>
+    <button class="tab-btn" id="tb-homeDesktop" onclick="setTab('homeDesktop')">🖥 Home Desktop</button>
+    <button class="tab-btn" id="tb-outdoorDesktop" onclick="setTab('outdoorDesktop')">🖥 Outdoor Desktop</button>
     <button class="tab-btn" id="tb-avisos" onclick="setTab('avisos')">🔔 Avisos<span class="tab-badge" id="avisosBadge" style="display:none"></span></button>
     <button class="tab-btn" id="tb-config" onclick="setTab('config')">⚙ Config</button>
   </div>
@@ -322,6 +327,46 @@ body{font-family:-apple-system,sans-serif;background:#f4f4f4;min-height:100vh}
   </div>
 </div>
 
+<!-- ===== TAB: HOME DESKTOP (hero do site index.html) ===== -->
+<div class="tab-content" id="tab-homeDesktop">
+  <div class="banner-section">
+    <div class="section-hd">
+      <div>
+        <h2>Banner Home (site desktop) · Topo do usezum.com.br</h2>
+        <div class="format-tag">
+          <b>1920 × 1080 px</b> · proporção 16:9 · horizontal · JPG ou PNG recomendado
+          <span class="format-ratio">PNG · JPG · GIF · MP4 · MOV</span>
+        </div>
+        <div class="format-tag" style="margin-top:6px">
+          Só aparece no <b>site desktop</b> (index.html /teste), não no catálogo mobile. Com 2 ou mais ativos, vira um carrossel automático.
+        </div>
+      </div>
+    </div>
+    <div id="listaHomeDesktop"></div>
+    <button class="add-banner-btn" onclick="addBannerHomeDesktop()" id="btnAddHomeDesktop">+ Adicionar banner</button>
+  </div>
+</div>
+
+<!-- ===== TAB: OUTDOOR DESKTOP (billboard entre produtos e Mais Vendidos) ===== -->
+<div class="tab-content" id="tab-outdoorDesktop">
+  <div class="banner-section">
+    <div class="section-hd">
+      <div>
+        <h2>Banner Outdoor (site desktop) · Entre os produtos e "Mais Vendidos"</h2>
+        <div class="format-tag">
+          <b>1920 × 720 px</b> · proporção 8:3 · panorâmica larga (estilo outdoor/billboard)
+          <span class="format-ratio">JPG · PNG · GIF · MP4 · MOV</span>
+        </div>
+        <div class="format-tag" style="margin-top:6px">
+          Só aparece no <b>site desktop</b> (index.html /teste), não no catálogo mobile. Cada banner ativo vira uma faixa — se adicionar vários, aparecem empilhados na ordem da lista abaixo.
+        </div>
+      </div>
+    </div>
+    <div id="listaOutdoorDesktop"></div>
+    <button class="add-banner-btn" onclick="addBannerOutdoorDesktop()" id="btnAddOutdoorDesktop">+ Adicionar banner</button>
+  </div>
+</div>
+
 <!-- ===== TAB: CONFIG ===== -->
 <div class="tab-content" id="tab-config">
   <div class="config-section">
@@ -353,8 +398,8 @@ body{font-family:-apple-system,sans-serif;background:#f4f4f4;min-height:100vh}
         <button class="btn btn-outline" style="color:#111;border-color:#ccc" onclick="document.getElementById('inputPublicarCodigo').click()">💻 Publicar código</button>
         <button class="btn btn-outline" style="color:#111;border-color:#ccc" onclick="testarGitHub()">🔍 Testar conexão</button>
       </div>
-      <input type="file" id="inputPublicarCodigo" accept=".html,.json" multiple style="display:none" onchange="publicarCodigo(this.files)">
-      <div class="hint">💻 Publicar código: selecione catalogo.html e/ou vercel.json quando eles mudarem — sobe direto, sem terminal. produtos.json e banners.json nunca são aceitos aqui (use sempre 🚀 Publicar agora pra esses dois).</div>
+      <input type="file" id="inputPublicarCodigo" accept=".html,.json,.js" multiple style="display:none" onchange="publicarCodigo(this.files)">
+      <div class="hint">💻 Publicar código: selecione catalogo.html, index.html, vercel.json e/ou os arquivos de api/ (criar-pagamento.js, webhook-infinitepay.js) quando eles mudarem — sobe direto, sem terminal. produtos.json e banners.json nunca são aceitos aqui (use sempre 🚀 Publicar agora pra esses dois).</div>
       <div class="hint" id="hintSincFotos" style="display:none;color:#2e7d32;font-weight:600"></div>
     </div>
     <div class="config-group" style="background:#f9f6f0">
@@ -578,6 +623,8 @@ var catalogo = [];
 var bannersTopo = [];
 var bannersMeio = [];
 var bannerStories = [];
+var bannersHomeDesktop = [];    // hero do index.html (site desktop) — 1200x1500, 4:5
+var bannersOutdoorDesktop = []; // billboard do index.html (site desktop) — 1920x720, 8:3
 var filtroTexto = '';
 var filtroTab = 'todos';
 var modalIdx = -1;
@@ -613,9 +660,21 @@ function init() {
   try { bannerStories = ss ? JSON.parse(ss) : []; } catch(e) { bannerStories = []; }
   if (!bannerStories.length) bannerStories = [{ativo:false,sku:'',after:4,img:'',layout:'full'}];
 
+  // Carregar banners Home Desktop (hero do index.html)
+  var shd = localStorage.getItem('zum-banners-home-desktop');
+  try { bannersHomeDesktop = shd ? JSON.parse(shd) : []; } catch(e) { bannersHomeDesktop = []; }
+  if (!bannersHomeDesktop.length) bannersHomeDesktop = [{ativo:false,img:''}];
+
+  // Carregar banners Outdoor Desktop (billboard do index.html)
+  var sod = localStorage.getItem('zum-banners-outdoor-desktop');
+  try { bannersOutdoorDesktop = sod ? JSON.parse(sod) : []; } catch(e) { bannersOutdoorDesktop = []; }
+  if (!bannersOutdoorDesktop.length) bannersOutdoorDesktop = [{ativo:false,sku:'',img:''}];
+
   renderTopo();
   renderMeio();
   renderStories();
+  renderHomeDesktop();
+  renderOutdoorDesktop();
 
   // Carregar produtos e banners do GitHub (fonte principal)
   carregarDoGitHub();
@@ -709,6 +768,16 @@ async function carregarDoGitHub() {
         bannerStories = db.stories.map(function(b){ return {ativo:b.ativo||false,sku:b.sku||'',after:b.after||4,img:b.img||'',layout:b.layout||'full',pos:b.pos||'50% 50%',zoom:b.zoom||1}; });
         localStorage.setItem('zum-banners-stories', JSON.stringify(bannerStories));
         renderStories();
+      }
+      if (db.homeDesktop && db.homeDesktop.length) {
+        bannersHomeDesktop = db.homeDesktop.map(function(b){ return {ativo:b.ativo||false,img:b.img||'',pos:b.pos||'50% 50%',zoom:b.zoom||1}; });
+        localStorage.setItem('zum-banners-home-desktop', JSON.stringify(bannersHomeDesktop));
+        renderHomeDesktop();
+      }
+      if (db.outdoorDesktop && db.outdoorDesktop.length) {
+        bannersOutdoorDesktop = db.outdoorDesktop.map(function(b){ return {ativo:b.ativo||false,sku:b.sku||'',img:b.img||'',pos:b.pos||'50% 50%',zoom:b.zoom||1}; });
+        localStorage.setItem('zum-banners-outdoor-desktop', JSON.stringify(bannersOutdoorDesktop));
+        renderOutdoorDesktop();
       }
       toast('✓ Carregado do GitHub');
     }
@@ -840,7 +909,7 @@ function montarLinkWhatsAviso(p) {
 /* ==================== TABS ==================== */
 function setTab(t) {
   tabAtual = t;
-  ['produtos','topo','meio','stories','avisos','config'].forEach(function(id){
+  ['produtos','topo','meio','stories','homeDesktop','outdoorDesktop','avisos','config'].forEach(function(id){
     document.getElementById('tab-'+id).classList.toggle('on', id===t);
     document.getElementById('tb-'+id).classList.toggle('on', id===t);
   });
@@ -1413,10 +1482,15 @@ function posToXY(pos) {
 }
 
 function getBannerArr(type) {
-  return type==='topo' ? bannersTopo : (type==='meio' ? bannersMeio : bannerStories);
+  if (type==='topo') return bannersTopo;
+  if (type==='meio') return bannersMeio;
+  if (type==='stories') return bannerStories;
+  if (type==='homeDesktop') return bannersHomeDesktop;
+  if (type==='outdoorDesktop') return bannersOutdoorDesktop;
+  return bannerStories;
 }
 function getBannerEl(type, idx) {
-  var prefix = type==='topo'?'topoPrev':(type==='meio'?'meioPrev':'stPrev');
+  var prefix = {topo:'topoPrev',meio:'meioPrev',stories:'stPrev',homeDesktop:'hdPrev',outdoorDesktop:'odPrev'}[type] || 'stPrev';
   return document.getElementById(prefix+idx);
 }
 function getBg(el) { return el ? el.querySelector('.bn-bg') : null; }
@@ -1489,7 +1563,8 @@ function setPosGeneric(type, i, pos) {
   salvarBanners();
   var el = getBannerEl(type, i);
   applyBgPos(getBg(el), pos);
-  var cardId = (type==='topo'?'bctopo':(type==='meio'?'bcmeio':'bcst'))+i;
+  var cardPrefix = {topo:'bctopo',meio:'bcmeio',stories:'bcst',homeDesktop:'bchd',outdoorDesktop:'bcod'}[type] || 'bcst';
+  var cardId = cardPrefix+i;
   var card = document.getElementById(cardId);
   if (card) card.querySelectorAll('.pos-btn').forEach(function(btn){
     btn.classList.toggle('pos-on', btn.title === pos);
@@ -1498,6 +1573,8 @@ function setPosGeneric(type, i, pos) {
 function setPosTopo(i, pos) { setPosGeneric('topo', i, pos); }
 function setPosMeio(i, pos) { setPosGeneric('meio', i, pos); }
 function setPosStories(i, pos) { setPosGeneric('stories', i, pos); }
+function setPosHomeDesktop(i, pos) { setPosGeneric('homeDesktop', i, pos); }
+function setPosOutdoorDesktop(i, pos) { setPosGeneric('outdoorDesktop', i, pos); }
 
 function setBannerZoom(type, idx, val) {
   val = Math.max(0.3, Math.min(3, val));
@@ -1506,7 +1583,7 @@ function setBannerZoom(type, idx, val) {
   var el = getBannerEl(type, idx);
   var bg = getBg(el);
   if (bg) bg.style.transform = 'scale('+val+')';
-  var prefix = type==='topo'?'Topo':(type==='meio'?'Meio':'St');
+  var prefix = {topo:'Topo',meio:'Meio',stories:'St',homeDesktop:'Hd',outdoorDesktop:'Od'}[type] || 'St';
   var lbl = document.getElementById('zlbl'+prefix+idx);
   if (lbl) lbl.textContent = Math.round(val*100)+'%';
 }
@@ -1828,10 +1905,260 @@ function delStories(i) {
   salvarBanners(); renderStories();
 }
 
+/* ==================== BANNERS HOME DESKTOP (hero do index.html) ====================
+   Só é usado pelo site desktop (index.html /teste) — não aparece no catálogo
+   mobile. Com 2+ ativos, o site mostra um carrossel automático. */
+var LIMITE_HOME_DESKTOP = 10;
+
+function renderHomeDesktop() {
+  document.getElementById('listaHomeDesktop').innerHTML = bannersHomeDesktop.map(function(b,i) {
+    return bannerHomeDesktopCard(b, i);
+  }).join('');
+  document.getElementById('btnAddHomeDesktop').style.display = bannersHomeDesktop.length >= LIMITE_HOME_DESKTOP ? 'none' : 'block';
+}
+
+function bannerHomeDesktopCard(b, i) {
+  var imgSrc = b.img || '';
+  return '<div class="banner-card'+(b.ativo?' ativo':'')+'" id="bchd'+i+'">'+
+    '<div class="banner-card-hd">'+
+      '<span class="num">'+(i+1)+'</span>'+
+      '<span class="label">Banner home '+(i+1)+'</span>'+
+      '<button class="mv-btn" onclick="moveBanner(\'homeDesktop\','+i+',-1)" title="Mover pra cima" '+(i===0?'disabled':'')+'>↑</button>'+
+      '<button class="mv-btn" onclick="moveBanner(\'homeDesktop\','+i+',1)" title="Mover pra baixo" '+(i===bannersHomeDesktop.length-1?'disabled':'')+'>↓</button>'+
+      '<label class="tgl-lrg">'+
+        '<input type="checkbox" '+(b.ativo?'checked':'')+' onchange="toggleHomeDesktop('+i+')">'+
+        '<span class="tgl-s"></span>'+
+      '</label>'+
+    '</div>'+
+    '<div class="banner-card-body'+(b.ativo?'':' disabled')+'" id="bchd-body'+i+'">'+
+      '<div class="banner-preview home-desktop'+(imgSrc?' has-img':'')+'" id="hdPrev'+i+'"'+
+        ' onclick="uploadBannerHomeDesktop('+i+')"'+
+        ' onmousedown="startBannerDrag(\'homeDesktop\','+i+',event)"'+
+        ' ondragover="event.preventDefault();this.classList.add(\'drag-over\')"'+
+        ' ondragleave="this.classList.remove(\'drag-over\')"'+
+        ' ondrop="event.preventDefault();this.classList.remove(\'drag-over\');handleDropBannerHomeDesktop('+i+',event.dataTransfer.files)"'+
+        '>'+
+        (imgSrc&&!isVideoSrc(imgSrc)?'<div class="bn-bg" style="position:absolute;inset:0;background-image:url(\''+imgSrc+'\');background-size:contain;background-repeat:no-repeat;background-position:'+(b.pos||'50% 50%')+';transform:scale('+(b.zoom||1)+');transform-origin:'+(b.pos||'50% 50%')+'"></div>':'')+
+        (imgSrc&&isVideoSrc(imgSrc)?'<video class="bn-bg" src="'+imgSrc+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transform:scale('+(b.zoom||1)+');transform-origin:'+(b.pos||'50% 50%')+'" autoplay muted loop playsinline></video>':'')+
+        (imgSrc?'':'<div class="prev-empty">📷 Clique ou arraste imagem/vídeo</div>')+
+        '<div class="upload-hover">'+(imgSrc?'↺ Trocar':'+ Arraste ou clique')+'</div>'+
+      '</div>'+
+      (imgSrc?'<div class="zoom-controls">'+
+        '<span title="Zoom">⊕</span>'+
+        '<input type="range" min="0.3" max="3" step="0.05" value="'+(b.zoom||1)+'" oninput="setBannerZoom(\'homeDesktop\','+i+',+this.value)">'+
+        '<span id="zlblHd'+i+'">'+(Math.round((b.zoom||1)*100))+'%</span>'+
+        '<button class="zoom-reset" onclick="setBannerZoom(\'homeDesktop\','+i+',1);this.closest(\'.zoom-controls\').querySelector(\'input\').value=1">↺</button>'+
+      '</div>':'')+
+      '<input type="file" id="bfHomeDesktop'+i+'" accept="image/jpeg,image/png,image/gif,image/webp,video/mp4,video/quicktime,.mov,.mp4,.gif,.png,.jpg" style="display:none" onchange="processarBannerHomeDesktop('+i+',this)">'+
+      (imgSrc?'<div style="font-size:9px;color:#27ae60;margin-bottom:8px">✓ '+imgSrc+'</div>':'')+
+      '<button class="btn-del-banner" onclick="delBannerHomeDesktop('+i+')">🗑 Remover banner</button>'+
+    '</div>'+
+  '</div>';
+}
+
+function toggleHomeDesktop(i) {
+  bannersHomeDesktop[i].ativo = document.getElementById('bchd'+i).querySelector('input[type=checkbox]').checked;
+  salvarBanners(); renderHomeDesktop();
+}
+
+function uploadBannerHomeDesktop(i) {
+  if (_bDragMoved) { _bDragMoved=false; return; }
+  document.getElementById('bfHomeDesktop'+i).click();
+}
+
+function handleDropBannerHomeDesktop(i, files) {
+  if (!files || !files[0]) return;
+  processarBannerHomeDesktop(i, { files: files });
+}
+
+function processarBannerHomeDesktop(i, input) {
+  var file = input.files[0]; if (!file) return;
+  var token = localStorage.getItem('zum-gh-token');
+  var ext = extFromFile(file);
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var dataUrl = e.target.result;
+    if (!token) {
+      bannersHomeDesktop[i].img = dataUrl;
+      salvarBanners(); renderHomeDesktop();
+      toast('⚠ Banner salvo localmente. Configure o GitHub Token para publicar.');
+    } else {
+      var path = 'BANNERS/HOME-DESKTOP/banner-home-desktop-0'+(i+1)+'.'+ext;
+      toast('⏳ Enviando banner...');
+      uploadParaGitHub(dataUrl, path)
+        .then(function() {
+          var owner = localStorage.getItem('zum-gh-owner') || GH_OWNER;
+          var repo  = localStorage.getItem('zum-gh-repo')  || GH_REPO;
+          bannersHomeDesktop[i].img = 'https://raw.githubusercontent.com/'+owner+'/'+repo+'/main/'+path;
+          salvarBanners(); renderHomeDesktop();
+          toast('✓ Banner publicado!');
+        })
+        .catch(function(err){ toast('❌ '+err.message); });
+    }
+  };
+  reader.readAsDataURL(file);
+  input.value='';
+}
+
+function addBannerHomeDesktop() {
+  if (bannersHomeDesktop.length >= LIMITE_HOME_DESKTOP) return;
+  bannersHomeDesktop.push({ativo:false,img:''});
+  salvarBanners(); renderHomeDesktop();
+}
+
+function delBannerHomeDesktop(i) {
+  if (!confirm('Remover este banner?')) return;
+  bannersHomeDesktop.splice(i,1);
+  if (!bannersHomeDesktop.length) bannersHomeDesktop = [{ativo:false,img:''}];
+  salvarBanners(); renderHomeDesktop();
+}
+
+/* ==================== BANNERS OUTDOOR DESKTOP (billboard do index.html) ====================
+   Só é usado pelo site desktop (index.html /teste), entre a primeira leva de
+   produtos e "Mais Vendidos". Cada banner ativo vira uma faixa própria,
+   empilhadas na ordem desta lista — não é um carrossel como o home. */
+var LIMITE_OUTDOOR_DESKTOP = 10;
+
+function renderOutdoorDesktop() {
+  document.getElementById('listaOutdoorDesktop').innerHTML = bannersOutdoorDesktop.map(function(b,i) {
+    return bannerOutdoorDesktopCard(b, i);
+  }).join('');
+  bannersOutdoorDesktop.forEach(function(b,i){
+    var sel = document.getElementById('odSku'+i);
+    if (sel && b.sku) sel.value = b.sku;
+  });
+  document.getElementById('btnAddOutdoorDesktop').style.display = bannersOutdoorDesktop.length >= LIMITE_OUTDOOR_DESKTOP ? 'none' : 'block';
+}
+
+function bannerOutdoorDesktopCard(b, i) {
+  var imgSrc = b.img || '';
+  var opts = '<option value="">— Sem link —</option>' +
+    catalogo.map(function(p){ return '<option value="'+p.sku+'">'+p.nome+' ('+p.sku+')</option>'; }).join('');
+
+  return '<div class="banner-card'+(b.ativo?' ativo':'')+'" id="bcod'+i+'">'+
+    '<div class="banner-card-hd">'+
+      '<span class="num">'+(i+1)+'</span>'+
+      '<span class="label">Banner outdoor '+(i+1)+'</span>'+
+      '<button class="mv-btn" onclick="moveBanner(\'outdoorDesktop\','+i+',-1)" title="Mover pra cima" '+(i===0?'disabled':'')+'>↑</button>'+
+      '<button class="mv-btn" onclick="moveBanner(\'outdoorDesktop\','+i+',1)" title="Mover pra baixo" '+(i===bannersOutdoorDesktop.length-1?'disabled':'')+'>↓</button>'+
+      '<label class="tgl-lrg">'+
+        '<input type="checkbox" '+(b.ativo?'checked':'')+' onchange="toggleOutdoorDesktop('+i+')">'+
+        '<span class="tgl-s"></span>'+
+      '</label>'+
+    '</div>'+
+    '<div class="banner-card-body'+(b.ativo?'':' disabled')+'" id="bcod-body'+i+'">'+
+      '<div class="banner-preview outdoor-desktop'+(imgSrc?' has-img':'')+'" id="odPrev'+i+'"'+
+        ' onclick="uploadBannerOutdoorDesktop('+i+')"'+
+        ' onmousedown="startBannerDrag(\'outdoorDesktop\','+i+',event)"'+
+        ' ondragover="event.preventDefault();this.classList.add(\'drag-over\')"'+
+        ' ondragleave="this.classList.remove(\'drag-over\')"'+
+        ' ondrop="event.preventDefault();this.classList.remove(\'drag-over\');handleDropBannerOutdoorDesktop('+i+',event.dataTransfer.files)"'+
+        '>'+
+        (imgSrc&&!isVideoSrc(imgSrc)?'<div class="bn-bg" style="position:absolute;inset:0;background-image:url(\''+imgSrc+'\');background-size:cover;background-position:'+(b.pos||'50% 50%')+';transform:scale('+(b.zoom||1)+');transform-origin:'+(b.pos||'50% 50%')+'"></div>':'')+
+        (imgSrc&&isVideoSrc(imgSrc)?'<video class="bn-bg" src="'+imgSrc+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.6;transform:scale('+(b.zoom||1)+');transform-origin:'+(b.pos||'50% 50%')+'" autoplay muted loop playsinline></video>':'')+
+        '<div class="prev-empty" style="'+(imgSrc?'visibility:hidden;':'')+'">📷 Clique ou arraste imagem/vídeo</div>'+
+        '<div class="upload-hover">'+(imgSrc?'↺ Trocar':'+ Arraste ou clique')+'</div>'+
+      '</div>'+
+      (imgSrc?'<div class="pos-controls">'+
+        '<span style="font-size:9px;color:#888;letter-spacing:.5px;text-transform:uppercase">Posição:</span>'+
+        ['top left','top center','top right','center left','center','center right','bottom left','bottom center','bottom right'].map(function(pos){
+          var label={'top left':'↖','top center':'↑','top right':'↗','center left':'←','center':'·','center right':'→','bottom left':'↙','bottom center':'↓','bottom right':'↘'}[pos];
+          return '<button class="pos-btn'+((b.pos||'50% 50%')===pos?' pos-on':'')+'" onclick="setPosOutdoorDesktop('+i+',\''+pos+'\')" title="'+pos+'">'+label+'</button>';
+        }).join('')+
+      '</div>':'')+
+      (imgSrc?'<div class="zoom-controls">'+
+        '<span title="Zoom">⊕</span>'+
+        '<input type="range" min="0.3" max="3" step="0.05" value="'+(b.zoom||1)+'" oninput="setBannerZoom(\'outdoorDesktop\','+i+',+this.value)">'+
+        '<span id="zlblOd'+i+'">'+(Math.round((b.zoom||1)*100))+'%</span>'+
+        '<button class="zoom-reset" onclick="setBannerZoom(\'outdoorDesktop\','+i+',1);this.closest(\'.zoom-controls\').querySelector(\'input\').value=1">↺</button>'+
+      '</div>':'')+
+      '<input type="file" id="bfOutdoorDesktop'+i+'" accept="image/jpeg,image/png,image/gif,image/webp,video/mp4,video/quicktime,.mov,.mp4,.gif,.png,.jpg" style="display:none" onchange="processarBannerOutdoorDesktop('+i+',this)">'+
+      (imgSrc?'<div style="font-size:9px;color:#27ae60;margin-bottom:8px">✓ '+imgSrc+'</div>':'')+
+      '<div class="bfield"><label>Produto vinculado (ao clicar, opcional)</label><select id="odSku'+i+'" onchange="updateOutdoorSku('+i+')">'+opts+'</select></div>'+
+      '<button class="btn-del-banner" onclick="delBannerOutdoorDesktop('+i+')">🗑 Remover banner</button>'+
+    '</div>'+
+  '</div>';
+}
+
+function toggleOutdoorDesktop(i) {
+  bannersOutdoorDesktop[i].ativo = document.getElementById('bcod'+i).querySelector('input[type=checkbox]').checked;
+  salvarBanners(); renderOutdoorDesktop();
+}
+
+function updateOutdoorSku(i) {
+  bannersOutdoorDesktop[i].sku = document.getElementById('odSku'+i).value;
+  salvarBanners();
+}
+
+function uploadBannerOutdoorDesktop(i) {
+  if (_bDragMoved) { _bDragMoved=false; return; }
+  document.getElementById('bfOutdoorDesktop'+i).click();
+}
+
+function handleDropBannerOutdoorDesktop(i, files) {
+  if (!files || !files[0]) return;
+  processarBannerOutdoorDesktop(i, { files: files });
+}
+
+function processarBannerOutdoorDesktop(i, input) {
+  var file = input.files[0]; if (!file) return;
+  var token = localStorage.getItem('zum-gh-token');
+  var ext = extFromFile(file);
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var dataUrl = e.target.result;
+    if (!token) {
+      bannersOutdoorDesktop[i].img = dataUrl;
+      salvarBanners(); renderOutdoorDesktop();
+      toast('⚠ Banner salvo localmente. Configure o GitHub Token para publicar.');
+    } else {
+      var path = 'BANNERS/OUTDOOR-DESKTOP/banner-outdoor-desktop-0'+(i+1)+'.'+ext;
+      toast('⏳ Enviando banner...');
+      uploadParaGitHub(dataUrl, path)
+        .then(function() {
+          var owner = localStorage.getItem('zum-gh-owner') || GH_OWNER;
+          var repo  = localStorage.getItem('zum-gh-repo')  || GH_REPO;
+          bannersOutdoorDesktop[i].img = 'https://raw.githubusercontent.com/'+owner+'/'+repo+'/main/'+path;
+          salvarBanners(); renderOutdoorDesktop();
+          toast('✓ Banner publicado!');
+        })
+        .catch(function(err){ toast('❌ '+err.message); });
+    }
+  };
+  reader.readAsDataURL(file);
+  input.value='';
+}
+
+function addBannerOutdoorDesktop() {
+  if (bannersOutdoorDesktop.length >= LIMITE_OUTDOOR_DESKTOP) return;
+  bannersOutdoorDesktop.push({ativo:false,sku:'',img:''});
+  salvarBanners(); renderOutdoorDesktop();
+}
+
+function delBannerOutdoorDesktop(i) {
+  if (!confirm('Remover este banner?')) return;
+  bannersOutdoorDesktop.splice(i,1);
+  if (!bannersOutdoorDesktop.length) bannersOutdoorDesktop = [{ativo:false,sku:'',img:''}];
+  salvarBanners(); renderOutdoorDesktop();
+}
+
+/* ==================== REORDENAR (Home/Outdoor Desktop) ==================== */
+function moveBanner(type, i, dir) {
+  var arr = getBannerArr(type);
+  var j = i + dir;
+  if (j < 0 || j >= arr.length) return;
+  var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+  salvarBanners();
+  if (type==='homeDesktop') renderHomeDesktop();
+  else if (type==='outdoorDesktop') renderOutdoorDesktop();
+}
+
 function salvarBanners() {
   localStorage.setItem('zum-banners-topo', JSON.stringify(bannersTopo));
   localStorage.setItem('zum-banners', JSON.stringify(bannersMeio));
   localStorage.setItem('zum-banners-stories', JSON.stringify(bannerStories));
+  localStorage.setItem('zum-banners-home-desktop', JSON.stringify(bannersHomeDesktop));
+  localStorage.setItem('zum-banners-outdoor-desktop', JSON.stringify(bannersOutdoorDesktop));
 }
 
 /* ==================== SINCRONIZAR ==================== */
@@ -2100,6 +2427,15 @@ async function uploadJsonParaGitHub(conteudo, path) {
 // (foi exatamente isso que apagou as fotos da cor Bordô em 07/2026).
 var BLOQUEADOS_PUBLICAR_CODIGO = ['produtos.json', 'banners.json'];
 
+// Arquivos que não ficam na raiz do repositório — o seletor de arquivo do
+// Mac só entrega o nome (ex: "criar-pagamento.js"), sem a pasta. Sem esse
+// mapa, esses arquivos seriam publicados no lugar errado (raiz em vez de
+// api/), e a Vercel nunca reconheceria a atualização.
+var CAMINHOS_ESPECIAIS_PUBLICAR_CODIGO = {
+  'criar-pagamento.js': 'api/criar-pagamento.js',
+  'webhook-infinitepay.js': 'api/webhook-infinitepay.js'
+};
+
 async function publicarCodigo(fileList) {
   var token = (localStorage.getItem('zum-gh-token')||'').trim();
   if (!token) { setTab('config'); toast('⚠ Configure o GitHub Token em ⚙ Config'); return; }
@@ -2116,21 +2452,29 @@ async function publicarCodigo(fileList) {
   var ok = [], erro = [];
   for (var i = 0; i < files.length; i++) {
     var file = files[i];
-    toast('⏳ Publicando '+file.name+'...');
+    var caminhoDestino = CAMINHOS_ESPECIAIS_PUBLICAR_CODIGO[file.name] || file.name;
+    toast('⏳ Publicando '+caminhoDestino+'...');
     try {
       var conteudo = await file.text();
-      await uploadJsonParaGitHub(conteudo, file.name);
-      ok.push(file.name);
+      await uploadJsonParaGitHub(conteudo, caminhoDestino);
+      ok.push(caminhoDestino);
     } catch(e) {
-      erro.push(file.name+' ('+e.message+')');
+      erro.push(caminhoDestino+' ('+e.message+')');
     }
   }
 
   document.getElementById('inputPublicarCodigo').value = '';
   if (erro.length) {
-    toast('⚠ Publicado: '+(ok.join(', ')||'nenhum')+' · Erro: '+erro.join(', '));
+    // Antes isso só aparecia num toast de 3.5s — fácil de não ver a tempo,
+    // principalmente com mensagem de erro longa (foi o que aconteceu:
+    // index.html/catalogo.html falharam mas o aviso passou despercebido, e
+    // só criar-pagamento.js (bem menor) publicou). Erro agora usa alert(),
+    // que trava a tela até o usuário ler — não tem como perder.
+    alert('❌ Falha ao publicar:\n\n'+erro.join('\n')+
+      (ok.length ? '\n\n✓ Esses publicaram normalmente: '+ok.join(', ') : '')+
+      '\n\nTente selecionar e publicar de novo só os que falharam.');
   } else {
-    toast('✓ Publicado: '+ok.join(', ')+'. A Vercel atualiza sozinha em instantes.');
+    toast('✓ Publicado: '+ok.join(', ')+'. A Vercel atualiza sozinha em instantes.', 8000);
   }
 }
 
@@ -2395,3 +2739,4 @@ atualizarLinkCatalogo();
 </script>
 </body>
 </html>
+  
