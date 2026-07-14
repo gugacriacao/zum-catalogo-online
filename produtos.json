@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-14T04:24:33.676Z",
+  "geradoEm": "2026-07-14T04:26:05.114Z",
   "produtos": [
     {
       "sku": "ZUM-VDPL-107",
@@ -148,6 +148,30 @@
       "ordem": 4
     },
     {
+      "sku": "ZUM-SKMD-600",
+      "nome": "Saia midi",
+      "cat": "Saia",
+      "preco": 219.9,
+      "cores": [
+        "Azul",
+        "Vinho",
+        "Bege",
+        "Nude"
+      ],
+      "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 5,
+      "ativo": true,
+      "fotos": [],
+      "fotosCores": {},
+      "ordem": 5
+    },
+    {
       "sku": "ZUM-VDMG-104",
       "nome": "Vestido manga",
       "cat": "Vestidos",
@@ -182,7 +206,7 @@
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/CORES/azul-1783480207656.jpg"
         ]
       },
-      "ordem": 5
+      "ordem": 6
     },
     {
       "sku": "ZUM-TSOV-200",
@@ -212,7 +236,7 @@
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783533933777.png"
       ],
       "fotosCores": {},
-      "ordem": 6
+      "ordem": 7
     },
     {
       "sku": "ZUM-VDRC-105",
@@ -265,7 +289,7 @@
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/CORES/azul-1783641475380.jpg"
         ]
       },
-      "ordem": 7
+      "ordem": 8
     },
     {
       "sku": "ZUM-VDBT-102",
@@ -284,7 +308,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 1,
+      "estoqueNum": 0,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDBT-102/midia-1783520023133.png",
@@ -296,7 +320,7 @@
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDBT-102/CORES/preto-1783520039715.jpg"
         ]
       },
-      "ordem": 8
+      "ordem": 9
     },
     {
       "sku": "ZUM-VDDN-103",
@@ -336,7 +360,7 @@
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDDN-103/CORES/azul-1783643841651.jpg"
         ]
       },
-      "ordem": 9
+      "ordem": 10
     },
     {
       "sku": "ZUM-KMBC-001",
@@ -359,7 +383,7 @@
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-KMBC-001/midia-1783929573801.png"
       ],
       "fotosCores": {},
-      "ordem": 10
+      "ordem": 11
     },
     {
       "sku": "ZUM-BDBA-300",
@@ -381,7 +405,7 @@
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
-      "ordem": 11
+      "ordem": 12
     },
     {
       "sku": "ZUM-BDBM-301",
@@ -403,7 +427,7 @@
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
-      "ordem": 12
+      "ordem": 13
     },
     {
       "sku": "ZUM-VDBA-101",
@@ -425,7 +449,7 @@
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
-      "ordem": 13
+      "ordem": 14
     },
     {
       "sku": "ZUM-CJBC-001",
@@ -446,7 +470,7 @@
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
-      "ordem": 14
+      "ordem": 15
     },
     {
       "sku": "ZUM-CJBC-500",
@@ -467,7 +491,7 @@
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
-      "ordem": 15
+      "ordem": 16
     }
   ]
 }
