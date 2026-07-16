@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-15T21:38:03.002Z",
+  "geradoEm": "2026-07-16T17:24:29.971Z",
   "produtos": [
     {
       "sku": "ZUM-VDPL-107",
@@ -150,7 +150,7 @@
     {
       "sku": "ZUM-SKMD-600",
       "nome": "Saia midi",
-      "cat": "Saia",
+      "cat": "",
       "preco": 219.9,
       "cores": [
         "Azul",
@@ -166,9 +166,24 @@
       "destaque": "",
       "descricao": "",
       "estoqueNum": 5,
-      "ativo": false,
-      "fotos": [],
-      "fotosCores": {},
+      "ativo": true,
+      "fotos": [
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/midia-1784222584535.png"
+      ],
+      "fotosCores": {
+        "Vinho": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/CORES/vinho-1784222605817.jpg"
+        ],
+        "Bege": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/CORES/bege-1784222610325.jpg"
+        ],
+        "Nude": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/CORES/nude-1784222615246.jpg"
+        ],
+        "Azul": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/CORES/azul-1784222618548.jpg"
+        ]
+      },
       "ordem": 5
     },
     {
