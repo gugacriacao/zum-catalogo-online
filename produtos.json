@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-16T19:24:31.335Z",
+  "geradoEm": "2026-07-17T15:36:25.119Z",
   "produtos": [
     {
       "sku": "ZUM-VDPL-107",
@@ -89,10 +89,10 @@
       "estoqueNum": 2,
       "ativo": true,
       "fotos": [
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDALC-100/midia-1783569529665.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDALC-100/midia-1783569552373.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDALC-100/midia-1784302086299.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDALC-100/midia-1783569620681.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDALC-100/midia-1783569600961.png"
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDALC-100/midia-1783569600961.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDALC-100/midia-1783569529665.png"
       ],
       "fotosCores": {
         "Bordô": [
@@ -125,7 +125,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 5,
+      "estoqueNum": 4,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CC-400/midia-1783478963409.png",
@@ -150,7 +150,7 @@
     {
       "sku": "ZUM-SKMD-600",
       "nome": "Saia midi",
-      "cat": "",
+      "cat": "Vestidos",
       "preco": 219.9,
       "cores": [
         "Azul",
@@ -168,7 +168,8 @@
       "estoqueNum": 5,
       "ativo": true,
       "fotos": [
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/midia-1784222584535.png"
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/midia-1784302557737.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/midia-1784302489750.png"
       ],
       "fotosCores": {
         "Vinho": [
@@ -242,7 +243,7 @@
       "badge": "",
       "destaque": "Algodão",
       "descricao": "",
-      "estoqueNum": 3,
+      "estoqueNum": 2,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783480100247.png",
