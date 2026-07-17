@@ -110,7 +110,7 @@
         <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       </button>
       <span id="accountGreeting" class="hidden items-center text-[11px] uppercase tracking-[0.15em] text-foreground/70 md:inline-flex" onclick="ZUM.openAccount()" style="cursor:pointer"></span>
-      <button aria-label="Minha Conta" id="accountBtn" class="hidden md:inline-flex" onclick="ZUM.openAccount()">
+      <button aria-label="Minha Conta" id="accountBtn" class="inline-flex" onclick="ZUM.openAccount()">
         <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       </button>
       <button aria-label="Sacola" class="relative inline-flex" onclick="ZUM.openCart()">
@@ -306,6 +306,7 @@ window.ZUM = (function(){
   // pro checkout de convidado.
   // ============================================================
   var CUSTOMER = null; // dados da conta logada (sem senha), ou null
+  var CHECKOUT_AFTER_AUTH = false; // volta automaticamente ao checkout após login/cadastro
 
   function primeiroNome(nome){
     return String(nome||'').trim().split(/\s+/)[0] || '';
@@ -322,6 +323,11 @@ window.ZUM = (function(){
 
   function refreshCustomer(){
     try{ CUSTOMER = JSON.parse(localStorage.getItem('zum-site-conta')||'null'); }catch(e){ CUSTOMER = null; }
+    // Sessões antigas sem token não conseguem consultar histórico com segurança.
+    if(CUSTOMER && (!CUSTOMER.email || !CUSTOMER.token)){
+      localStorage.removeItem('zum-site-conta');
+      CUSTOMER = null;
+    }
     updateAccountIcon();
     return CUSTOMER;
   }
@@ -338,7 +344,7 @@ window.ZUM = (function(){
     var greeting = document.getElementById('accountGreeting');
     if(!btn) return;
     if(CUSTOMER){
-      btn.setAttribute('title', 'Olá, '+(CUSTOMER.nome||CUSTOMER.email));
+      btn.setAttribute('title', 'Olá, '+primeiroNome(CUSTOMER.nome||CUSTOMER.email));
       btn.classList.add('text-foreground');
       if(greeting){
         greeting.textContent = 'Olá, '+primeiroNome(CUSTOMER.nome||CUSTOMER.email);
@@ -368,10 +374,17 @@ window.ZUM = (function(){
   var PEDIDOS_CACHE = null; // null = ainda não buscou; [] = buscou e não tinha pedido
 
   function consentFieldHTML(idPrefix){
+    var onchange = idPrefix==='acc' ? ' onchange="ZUM.validSignupConsent()"' : ' onchange="ZUM.validForm()"';
     return '<label class="mt-4 flex items-start gap-3 text-[12.5px] leading-snug text-muted-foreground">'+
-      '<input type="checkbox" id="'+idPrefix+'AceitaMkt" class="mt-1">'+
-      '<span>Quero receber por <b>e-mail e WhatsApp</b> novidades, campanhas e avisos de peças novas da ZUM. Posso cancelar quando quiser.</span>'+
+      '<input type="checkbox" id="'+idPrefix+'AceitaMkt" class="mt-1"'+onchange+'>'+ 
+      '<span>Autorizo a ZUM a enviar mensagens pelo <b>WhatsApp</b> e por e-mail sobre pedidos, novidades, campanhas e peças novas. Este aceite é obrigatório para criar a conta e continuar a compra.</span>'+ 
     '</label>';
+  }
+
+  function validSignupConsent(){
+    var btn = $('btnCriarConta');
+    var aceitou = $('accAceitaMkt') && $('accAceitaMkt').checked;
+    if(btn) btn.disabled = !aceitou;
   }
 
   function renderAccountDrawer(){
@@ -460,7 +473,8 @@ window.ZUM = (function(){
         '</div>'+
         consentFieldHTML('acc')+
         '<p id="accMsg" class="mt-3 text-xs text-red-700"></p>'+
-        '<button class="btn-zum mt-4 w-full" onclick="ZUM.doSignup()">Criar Conta</button>';
+        '<button class="btn-zum mt-4 w-full" id="btnCriarConta" disabled onclick="ZUM.doSignup()">Criar Conta e continuar</button>';
+      setTimeout(validSignupConsent,0);
     }
   }
   function setAccountTab(tab){ ACCOUNT_TAB = tab; renderAccountDrawer(); }
@@ -487,7 +501,8 @@ window.ZUM = (function(){
     var senha = $('accSenha').value;
     var aceitaMkt = $('accAceitaMkt').checked;
     var msg = $('accMsg');
-    if(!nome || !email || senha.length<6){ msg.className='mt-3 text-xs text-red-700'; msg.textContent='Preencha nome, e-mail e uma senha com pelo menos 6 caracteres.'; return; }
+    if(!nome || !email || !telefone || senha.length<6){ msg.className='mt-3 text-xs text-red-700'; msg.textContent='Preencha nome, e-mail, WhatsApp e uma senha com pelo menos 6 caracteres.'; return; }
+    if(!aceitaMkt){ msg.className='mt-3 text-xs text-red-700'; msg.textContent='É necessário autorizar o contato por WhatsApp e e-mail para criar a conta.'; return; }
     msg.className='mt-3 text-xs text-muted-foreground';
     msg.textContent = 'Criando conta…';
     var r = await asCall('criarContaSite', {
@@ -500,9 +515,14 @@ window.ZUM = (function(){
     if(!r || !r.ok){ msg.className='mt-3 text-xs text-red-700'; msg.textContent = (r && r.erro) || 'Não foi possível criar a conta. Tente novamente.'; return; }
     salvarSessaoConta(r.conta);
     closeAccount();
-    location.hash = '';
-    route();
     showToast('Bem-vindo(a), '+primeiroNome(r.conta.nome)+'!');
+    if(CHECKOUT_AFTER_AUTH){
+      CHECKOUT_AFTER_AUTH = false;
+      openCart('dados');
+    } else {
+      location.hash = '';
+      route();
+    }
   }
 
   async function doLogin(){
@@ -514,7 +534,13 @@ window.ZUM = (function(){
     var r = await asCall('loginContaSite', { email: email, senha: senha });
     if(!r || !r.ok){ msg.className='mt-3 text-xs text-red-700'; msg.textContent = (r && r.erro) || 'E-mail ou senha incorretos.'; return; }
     salvarSessaoConta(r.conta);
-    renderAccountDrawer();
+    if(CHECKOUT_AFTER_AUTH){
+      CHECKOUT_AFTER_AUTH = false;
+      closeAccount();
+      openCart('dados');
+    } else {
+      renderAccountDrawer();
+    }
   }
 
   function signOut(){
@@ -590,9 +616,19 @@ window.ZUM = (function(){
 
   async function carregarPedidos(){
     if(!CUSTOMER) return;
-    var r = await asCall('getPedidosContaSite', { email: CUSTOMER.email, token: CUSTOMER.token });
-    PEDIDOS_CACHE = (r && r.ok) ? r.pedidos : [];
+    var r = await asCall('getPedidosContaSite', {
+      email: CUSTOMER.email,
+      token: CUSTOMER.token,
+      telefone: CUSTOMER.telefone||'',
+      cpf: CUSTOMER.cpf||''
+    });
     var lista = $('pedidosLista');
+    if(!r || !r.ok){
+      PEDIDOS_CACHE = [];
+      if(lista) lista.innerHTML = '<p class="text-sm text-red-700">Não foi possível carregar seus pedidos. Saia da conta, entre novamente e tente outra vez.</p>';
+      return;
+    }
+    PEDIDOS_CACHE = Array.isArray(r.pedidos) ? r.pedidos : [];
     if(lista) lista.innerHTML = pedidosHTML();
   }
 
@@ -928,13 +964,9 @@ window.ZUM = (function(){
           field('fUf','Estado','text','CE','oninput="ZUM.validForm()" maxlength="2"')+
         '</div>'+
         '<p id="entregaAviso" class="mt-3 hidden text-[12px] leading-snug text-orange-700"></p>'+
-        (CUSTOMER ? '' :
-          '<div class="mt-6 border-t border-border/60 pt-5">'+
-            '<p class="text-[11px] uppercase tracking-[0.15em] text-muted-foreground">Quer salvar esses dados pra próxima compra?</p>'+
-            field('fSenha','Criar uma senha (opcional)','password','Mínimo 6 caracteres')+
-            consentFieldHTML('f')+
-          '</div>'
-        )+
+        '<div class="mt-6 border-t border-border/60 pt-5">'+
+          consentFieldHTML('f')+
+        '</div>'+
         '<button class="btn-zum mt-6 w-full" id="btnContinuar" disabled onclick="ZUM.goConfirm()">Continuar</button>';
       restoreFormValues();
       validForm();
@@ -965,6 +997,7 @@ window.ZUM = (function(){
       Object.keys(map).forEach(function(id){
         if(CUSTOMER[map[id]] && $(id)) $(id).value = CUSTOMER[map[id]];
       });
+      if($('fAceitaMkt')) $('fAceitaMkt').checked = CUSTOMER.aceitaMarketing === true;
       return;
     }
     try{
@@ -984,12 +1017,23 @@ window.ZUM = (function(){
 
   function goCheckout(){
     if(!CART.length) return;
+    if(!CUSTOMER){
+      CHECKOUT_AFTER_AUTH = true;
+      ACCOUNT_TAB = 'cadastro';
+      openAccount();
+      showToast('Crie sua conta ou entre para continuar a compra.');
+      return;
+    }
     openCart('dados');
   }
   async function goConfirm(){
+    if(!CUSTOMER){ goCheckout(); return; }
+    if(!$('fAceitaMkt') || !$('fAceitaMkt').checked){
+      alert('Para continuar, autorize o recebimento de mensagens pelo WhatsApp e por e-mail.');
+      return;
+    }
     saveFormValues();
-    if(!CUSTOMER) await maybeAutoSignup();
-    else await syncCustomerProfile();
+    await syncCustomerProfile(true);
     openCart('confirmar');
   }
 
@@ -1021,10 +1065,11 @@ window.ZUM = (function(){
   // partir do checkout (evita confundir conta com o cadastro de cliente do
   // pedido). Só atualiza a cópia local/sessão com o que ele ajustou aqui,
   // pra essa compra sair com os dados certos.
-  function syncCustomerProfile(){
-    if(!CUSTOMER) return;
+  async function syncCustomerProfile(aceitaMarketing){
+    if(!CUSTOMER) return false;
     var atualizado = Object.assign({}, CUSTOMER, {
       nome: $('fNome')?$('fNome').value:CUSTOMER.nome,
+      cpf: $('fCpf')?$('fCpf').value:CUSTOMER.cpf,
       telefone: $('fWpp')?$('fWpp').value:CUSTOMER.telefone,
       cep: $('fCep')?$('fCep').value:CUSTOMER.cep,
       rua: $('fRua')?$('fRua').value:CUSTOMER.rua,
@@ -1032,9 +1077,22 @@ window.ZUM = (function(){
       complemento: $('fComp')?$('fComp').value:CUSTOMER.complemento,
       bairro: $('fBairro')?$('fBairro').value:CUSTOMER.bairro,
       cidade: $('fCidade')?$('fCidade').value:CUSTOMER.cidade,
-      uf: $('fUf')?$('fUf').value:CUSTOMER.uf
+      uf: $('fUf')?$('fUf').value:CUSTOMER.uf,
+      aceitaMarketing: aceitaMarketing === true || CUSTOMER.aceitaMarketing === true
     });
     salvarSessaoConta(atualizado);
+    // Mantém o cadastro do servidor alinhado com os dados usados na compra.
+    try{
+      var r = await asCall('atualizarContaSite', {
+        email: atualizado.email, token: atualizado.token, nome: atualizado.nome,
+        cpf: atualizado.cpf||'', telefone: atualizado.telefone||'', cep: atualizado.cep||'',
+        rua: atualizado.rua||'', numero: atualizado.numero||'', complemento: atualizado.complemento||'',
+        bairro: atualizado.bairro||'', cidade: atualizado.cidade||'', uf: atualizado.uf||'',
+        aceitaMarketing: atualizado.aceitaMarketing
+      });
+      if(r && r.ok && r.conta) salvarSessaoConta(r.conta);
+    }catch(e){}
+    return true;
   }
 
   async function onCpf(){
@@ -1082,6 +1140,8 @@ window.ZUM = (function(){
   function validForm(){
     var req = ['fCpf','fNome','fEmail','fWpp','fCep','fRua','fNum','fBairro','fCidade','fUf'];
     var ok = req.every(function(id){ return $(id) && $(id).value.trim().length>1; });
+    var aceitouContato = $('fAceitaMkt') && $('fAceitaMkt').checked;
+    ok = ok && !!CUSTOMER && !!aceitouContato;
     if($('btnContinuar')) $('btnContinuar').disabled = !ok;
 
     // Aviso de área de entrega: hoje só cobrimos Fortaleza e Região
@@ -1165,7 +1225,12 @@ window.ZUM = (function(){
     }
 
     try{
-      var r = await asCall('criarPedidoPendente', { cliente: cliente, itens: itensApi, frete: frete });
+      var r = await asCall('criarPedidoPendente', {
+        cliente: cliente, itens: itensApi, frete: frete,
+        contaEmail: CUSTOMER ? CUSTOMER.email : '',
+        contaToken: CUSTOMER ? CUSTOMER.token : '',
+        contaTelefone: CUSTOMER ? CUSTOMER.telefone : ''
+      });
       if(!r || !r.ok || !r.pedido){
         if(btn){ btn.disabled=false; btn.textContent='Pagar com Pix ou Cartão'; }
         alert('Não foi possível registrar o pedido'+(r&&r.erro?(': '+r.erro):'')+'. Tente novamente.');
@@ -1707,7 +1772,7 @@ window.ZUM = (function(){
     openCart: openCart, closeCart: closeCart, cartQty: cartQty, cartDel: cartDel, setFrete: setFrete,
     goCheckout: goCheckout, goConfirm: goConfirm, goPay: goPay, onCpf: onCpf, onCep: onCep, validForm: validForm,
     openAccount: openAccount, closeAccount: closeAccount, setAccountTab: setAccountTab,
-    doSignup: doSignup, doLogin: doLogin, signOut: signOut,
+    doSignup: doSignup, doLogin: doLogin, signOut: signOut, validSignupConsent: validSignupConsent,
     setAccountView: setAccountView, onEditCep: onEditCep, salvarEdicaoConta: salvarEdicaoConta,
     openSearch: openSearch, closeSearch: closeSearch, onSearchInput: onSearchInput,
     closeAvise: closeAvise, enviarAvise: enviarAvise
