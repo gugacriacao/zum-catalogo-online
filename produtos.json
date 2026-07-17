@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-17T17:44:20.201Z",
+  "geradoEm": "2026-07-17T18:49:15.868Z",
   "produtos": [
     {
       "sku": "ZUM-VDPL-107",
@@ -154,9 +154,9 @@
       "preco": 219.9,
       "cores": [
         "Azul",
-        "Vinho",
-        "Bege",
-        "Nude"
+        "Beterraba",
+        "Areia",
+        "Off"
       ],
       "tamanhos": [
         "UN"
@@ -508,6 +508,117 @@
       "fotos": [],
       "fotosCores": {},
       "ordem": 16
+    },
+    {
+      "sku": "ZUM-BLPO-700",
+      "nome": "Blusa poa",
+      "cat": "Blusa",
+      "preco": 200,
+      "cores": [
+        "Rosa"
+      ],
+      "tamanhos": [
+        "M"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 2,
+      "ativo": true,
+      "fotos": [],
+      "fotosCores": {},
+      "ordem": 17
+    },
+    {
+      "sku": "ZUM-RGRE-800",
+      "nome": "Regata renda",
+      "cat": "Regata",
+      "preco": 84.9,
+      "cores": [
+        "Off"
+      ],
+      "tamanhos": [
+        "P",
+        "M"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 2,
+      "ativo": true,
+      "fotos": [],
+      "fotosCores": {},
+      "ordem": 18
+    },
+    {
+      "sku": "ZUM-CMLS-900",
+      "nome": "Camisaria",
+      "cat": "Camisaria",
+      "preco": 114.9,
+      "cores": [
+        "Branco"
+      ],
+      "tamanhos": [
+        "P",
+        "M",
+        "G"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 3,
+      "ativo": true,
+      "fotos": [],
+      "fotosCores": {},
+      "ordem": 19
+    },
+    {
+      "sku": "ZUM-CLCN-401",
+      "nome": "Calça cenoura",
+      "cat": "Calça",
+      "preco": 129.9,
+      "cores": [
+        "Amarela"
+      ],
+      "tamanhos": [
+        "M",
+        "G"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 2,
+      "ativo": true,
+      "fotos": [],
+      "fotosCores": {},
+      "ordem": 20
+    },
+    {
+      "sku": "ZUM-CLPO-402",
+      "nome": "Calça poa",
+      "cat": "Calça",
+      "preco": 149.9,
+      "cores": [
+        "Rosa",
+        "Off"
+      ],
+      "tamanhos": [
+        "M",
+        "G"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 4,
+      "ativo": true,
+      "fotos": [],
+      "fotosCores": {},
+      "ordem": 21
     }
   ]
 }
