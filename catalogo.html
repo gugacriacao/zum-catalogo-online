@@ -362,7 +362,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 
   <footer style="padding:30px 20px;text-align:center;border-top:1px solid #eee;margin-top:8px">
     <div style="font-size:11px;letter-spacing:3px;color:#999;text-transform:uppercase">ZUM</div>
-    <div style="font-size:10px;color:#ccc;margin-top:6px">Sofisticação no dia a dia</div><div style="font-size:8px;color:#ddd;margin-top:8px">CATÁLOGO CONSULTA V3</div>
+    <div style="font-size:10px;color:#ccc;margin-top:6px">Sofisticação no dia a dia</div><div style="font-size:7px;color:#eee;margin-top:8px">CATÁLOGO CONSULTA V4</div><div style="font-size:8px;color:#ddd;margin-top:8px">CATÁLOGO CONSULTA V3</div>
   </footer>
 </section>
 
@@ -832,7 +832,14 @@ function setMedia(i) {
 
 /* ====== PRODUTO ====== */
 function openProduct(sku){
-  prod=PRODUCTS.find(p=>p.sku===sku); selColor=0; pQty=1;
+  var skuNormalizado=String(sku==null?'':sku).trim();
+  prod=PRODUCTS.find(function(p){ return String(p.sku==null?'':p.sku).trim()===skuNormalizado; });
+  if(!prod){
+    console.error('Produto não encontrado para o SKU:', sku, PRODUCTS);
+    toast('Não foi possível abrir este produto');
+    return;
+  }
+  selColor=0; pQty=1;
   // Recalcula os tamanhos pra primeira cor antes de exibir — evita mostrar
   // como disponível um tamanho que só tem estoque em outra cor.
   if (prod.tamanhosBase) prod.sizes = sizesParaCor(prod, prod.colors[0] ? prod.colors[0].n : '');
@@ -1491,7 +1498,7 @@ function abrirProdutoDaUrl(){
   var params = new URLSearchParams(window.location.search);
   var sku = params.get('produto');
   if(!sku) return;
-  var p = PRODUCTS.find(function(x){ return x.sku===sku; });
+  var p = PRODUCTS.find(function(x){ return String(x.sku==null?'':x.sku).trim()===String(sku==null?'':sku).trim(); });
   if(!p) return;
   _deepLinkAberto = true;
   openProduct(sku);
@@ -1509,7 +1516,8 @@ function abrirCardPorEvento(event){
   var card = alvo && alvo.closest ? alvo.closest('.card[data-sku]') : null;
   if(card && card.dataset.sku){
     event.preventDefault();
-    openProduct(card.dataset.sku);
+    event.stopPropagation();
+    openProduct(String(card.dataset.sku));
   }
 }
 document.addEventListener('click', abrirCardPorEvento, true);
