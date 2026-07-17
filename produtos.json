@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-17T18:49:15.868Z",
+  "geradoEm": "2026-07-17T19:06:01.205Z",
   "produtos": [
     {
       "sku": "ZUM-VDPL-107",
@@ -183,6 +183,15 @@
         ],
         "Azul": [
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/CORES/azul-1784222618548.jpg"
+        ],
+        "Beterraba": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/CORES/beterraba-1784314180737.jpg"
+        ],
+        "Areia": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/CORES/areia-1784314193680.jpg"
+        ],
+        "Off": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/CORES/off-1784314199229.jpg"
         ]
       },
       "ordem": 5
@@ -525,7 +534,7 @@
       "destaque": "",
       "descricao": "",
       "estoqueNum": 2,
-      "ativo": true,
+      "ativo": false,
       "fotos": [],
       "fotosCores": {},
       "ordem": 17
@@ -547,7 +556,7 @@
       "destaque": "",
       "descricao": "",
       "estoqueNum": 2,
-      "ativo": true,
+      "ativo": false,
       "fotos": [],
       "fotosCores": {},
       "ordem": 18
@@ -570,7 +579,7 @@
       "destaque": "",
       "descricao": "",
       "estoqueNum": 3,
-      "ativo": true,
+      "ativo": false,
       "fotos": [],
       "fotosCores": {},
       "ordem": 19
@@ -592,7 +601,7 @@
       "destaque": "",
       "descricao": "",
       "estoqueNum": 2,
-      "ativo": true,
+      "ativo": false,
       "fotos": [],
       "fotosCores": {},
       "ordem": 20
@@ -615,7 +624,7 @@
       "destaque": "",
       "descricao": "",
       "estoqueNum": 4,
-      "ativo": true,
+      "ativo": false,
       "fotos": [],
       "fotosCores": {},
       "ordem": 21
