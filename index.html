@@ -695,7 +695,7 @@ window.ZUM = (function(){
       STATE.loaded = true; render();
     }).catch(function(){ STATE.loaded = true; render(); });
 
-    fetch(BANNERS_JSON_URL, {cache:'no-store'}).then(function(r){ return r.ok?r.json():null; }).then(function(data){
+    fetch(BANNERS_JSON_URL+'?_='+Date.now(), {cache:'no-store'}).then(function(r){ return r.ok?r.json():null; }).then(function(data){
       if(data){ STATE.banners = data; render(); }
     }).catch(function(){});
 
@@ -1367,13 +1367,21 @@ window.ZUM = (function(){
   function renderHome(){
     setHeaderHomeMode(true);
 
-    var heroBanners = (STATE.banners && Array.isArray(STATE.banners.topo) && STATE.banners.topo.length)
-      ? STATE.banners.topo.filter(function(b){ return b && b.img; })
-      : [{img:RAW+'BANNERS/TOPO/banner-topo-01.png', sku:''}];
+    // Banners exclusivos do site editorial. Mantém fallback nos grupos antigos
+    // para não deixar a home vazia enquanto o novo banners.json não for publicado.
+    var heroBanners = (STATE.banners && Array.isArray(STATE.banners.homeDesktop) && STATE.banners.homeDesktop.length)
+      ? STATE.banners.homeDesktop.filter(function(b){ return b && b.ativo!==false && b.img; })
+      : ((STATE.banners && Array.isArray(STATE.banners.topo))
+          ? STATE.banners.topo.filter(function(b){ return b && b.img; }) : []);
     if(!heroBanners.length) heroBanners = [{img:RAW+'BANNERS/TOPO/banner-topo-01.png', sku:''}];
 
-    var bannerImg = (STATE.banners && STATE.banners.meio && STATE.banners.meio[1] && STATE.banners.meio[1].img) || RAW+'BANNERS/MEIO/banner-meio-02.png';
-    var bannerSku = (STATE.banners && STATE.banners.meio && STATE.banners.meio[1] && STATE.banners.meio[1].sku) || '';
+    var outdoorBanners = (STATE.banners && Array.isArray(STATE.banners.outdoorDesktop) && STATE.banners.outdoorDesktop.length)
+      ? STATE.banners.outdoorDesktop.filter(function(b){ return b && b.ativo!==false && b.img; })
+      : [];
+    if(!outdoorBanners.length){
+      var antigo = STATE.banners && STATE.banners.meio && STATE.banners.meio[1];
+      outdoorBanners = [{img:(antigo&&antigo.img)||RAW+'BANNERS/MEIO/banner-meio-02.png', sku:(antigo&&antigo.sku)||''}];
+    }
     var lookImgs = STATE.produtos.slice(0,3).map(function(p){ return p.fotos[1]||p.fotos[0]; });
     while(lookImgs.length<3 && STATE.produtos.length){ lookImgs.push(STATE.produtos[lookImgs.length % STATE.produtos.length].fotos[0]); }
 
@@ -1407,15 +1415,15 @@ window.ZUM = (function(){
         '</section>'+
         '<div class="flex justify-center py-4">'+seeCollectionBtn()+'</div>'+
 
-        '<section class="mt-16 px-2 md:px-3">'+
-          '<a class="relative block w-full overflow-hidden" href="#/produto/'+slugify(bannerSku||'')+'">'+
-            '<img src="'+bannerImg+'" alt="T-shirt Oversized" loading="lazy" width="1920" height="720" class="h-[40vh] w-full object-cover md:h-[52vh]">'+
-            '<div class="absolute inset-0 flex items-center justify-center">'+
-              '<span class="display-huge text-3xl tracking-[0.5em] text-white/95 mix-blend-difference md:text-6xl">T-SHIRT&nbsp;&nbsp;OVERSIZED</span>'+
-            '</div>'+
-            '<div aria-hidden class="display-huge pointer-events-none absolute inset-x-0 top-4 text-center text-[8vw] leading-none text-white/25">ZUM</div>'+
-          '</a>'+
-        '</section>'+
+        outdoorBanners.map(function(b,i){
+          var href = b.sku ? '#/produto/'+slugify(b.sku) : '#/catalogo';
+          var media = isVideo(b.img)
+            ? '<video src="'+b.img+'" autoplay muted loop playsinline class="h-[40vh] w-full object-cover md:h-[52vh]"></video>'
+            : '<img src="'+b.img+'" alt="Banner outdoor ZUM '+(i+1)+'" loading="lazy" width="1920" height="720" class="h-[40vh] w-full object-cover md:h-[52vh]">';
+          return '<section class="mt-16 px-2 md:px-3">'+
+            '<a class="relative block w-full overflow-hidden" href="'+href+'">'+media+'</a>'+
+          '</section>';
+        }).join('')+
 
         '<section class="px-2 py-20 md:px-3">'+
           '<div class="w-full">'+
