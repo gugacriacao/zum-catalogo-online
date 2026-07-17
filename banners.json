@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-17T16:31:24.550Z",
+  "geradoEm": "2026-07-17T16:33:49.417Z",
   "asUrl": "https://script.google.com/macros/s/AKfycbwHavGCAgB01Vm3b6kEqN26x1MRA62VVA6P2UWfbeDVFbDxfyQ9PbAhr6B44ElRK_5q/exec",
   "destaqueLabel": "Destaques",
   "topo": [
@@ -14,5 +14,22 @@
     }
   ],
   "meio": [],
-  "stories": []
+  "stories": [],
+  "homeDesktop": [
+    {
+      "ativo": true,
+      "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/HOME-DESKTOP/banner-home-desktop-01.png",
+      "pos": "50% 50%",
+      "zoom": 1
+    }
+  ],
+  "outdoorDesktop": [
+    {
+      "ativo": true,
+      "sku": "",
+      "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/OUTDOOR-DESKTOP/banner-outdoor-desktop-01.png",
+      "pos": "50% 50%",
+      "zoom": 1
+    }
+  ]
 }
