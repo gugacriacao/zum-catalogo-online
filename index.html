@@ -74,6 +74,14 @@
   #siteHeader.home-header.header-solid #bagCountWrap{background:var(--foreground)!important;color:var(--background)!important;}
   #siteHeader.home-header.header-solid #mobNav{background:var(--background);border-color:var(--border)!important;backdrop-filter:none;}
 
+  /* Logo responsiva: preserva a proporção original no mobile.
+     O max-width padrão do Tailwind comprimía a largura dentro do terço central
+     do header enquanto a altura continuava fixa, deixando a marca achatada. */
+  #siteLogo{display:block;width:auto;height:5rem;max-width:none;object-fit:contain;flex-shrink:0;}
+  @media (max-width:767px){
+    #siteLogo{width:min(120px,31vw);height:auto;max-width:120px;max-height:56px;}
+  }
+
   /* Banner principal rotativo */
   .hero-slide{position:absolute;inset:0;opacity:0;transition:opacity .8s ease;pointer-events:none;}
   .hero-slide.is-active{opacity:1;pointer-events:auto;}
@@ -95,7 +103,7 @@
       </nav>
     </div>
     <a href="#/" class="flex flex-1 items-center justify-center">
-      <img id="siteLogo" src="assets/logo-preta.png" alt="ZUM" class="h-16 w-auto md:h-20">
+      <img id="siteLogo" src="assets/logo-preta.png" alt="ZUM" class="w-auto">
     </a>
     <div class="header-tone flex w-1/3 items-center justify-end gap-5 text-foreground/70">
       <button aria-label="Buscar" class="inline-flex" onclick="ZUM.openSearch()">
