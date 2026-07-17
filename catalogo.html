@@ -867,7 +867,7 @@ function openProduct(sku){
   $('pColorName').textContent=prod.colors[0] ? prod.colors[0].n : '';
   $('pSizes').innerHTML=prod.sizes.map((s,i)=>'<div class="size'+(s.out?' out':'')+(i===selSize?' on':'')+'" onclick="'+(s.out?'':'setSize('+i+')')+'">'+s.s+'</div>').join('');
   atualizaAvisoBtn();
-  $('prodPair').style.display='none';
+  if ($('prodPair')) $('prodPair').style.display='none';
   var outros=PRODUCTS.filter(p=>p.sku!==sku).sort(()=>Math.random()-.5).slice(0,3);
   $('prodSugest').innerHTML=outros.length?
     '<div class="sugest-title">Você também pode gostar</div>'+
