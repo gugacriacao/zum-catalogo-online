@@ -1332,8 +1332,9 @@ function sizesParaCor(prod, corNome){
 }
 
 function adaptarDaPlanilha(rows){
-  var COD_COR = {'PT':'Preto','BD':'Bordô','MR':'Marrom','OW':'Off-white','VH':'Vinho',
-    'AZ':'Azul','RS':'Rosa','VD':'Verde','BR':'Branco','AN':'Azul Marinho','CZ':'Cinza','BG':'Bege'};
+  var COD_COR = {'PT':'Preto','BD':'Bordô','MR':'Marrom','OW':'Off White','VH':'Vinho',
+    'AZ':'Azul','RS':'Rosa','VD':'Verde','BR':'Branco','AN':'Azul Marinho','CZ':'Cinza','BG':'Bege',
+    'AR':'Areia','BT':'Beterraba'};
   var agrupado = {}, ordem = [];
   rows.forEach(function(p){
     var skuFull = String(p.codigo||'').trim();
@@ -1468,7 +1469,25 @@ async function carregarCatalogo(){
       .then(function(r){ return r.ok ? r.json() : null; })
       .then(function(data){
         if(data && data.ok && data.produtos && data.produtos.length){
-          PRODUCTS = aplicarFotosOrdem(adaptarDaPlanilha(data.produtos));
+          var liveProducts = adaptarDaPlanilha(data.produtos);
+          var livePorSku = {};
+          liveProducts.forEach(function(lp){ livePorSku[lp.sku] = lp; });
+
+          PRODUCTS = PRODUCTS.map(function(p){
+            var live = livePorSku[p.sku];
+            if(!live) return p;
+            return Object.assign({}, p, {
+              price: live.price || p.price,
+              stock: live.stock,
+              tamanhosBase: live.tamanhosBase && live.tamanhosBase.length ? live.tamanhosBase : p.tamanhosBase,
+              estoquePorVariante: live.estoquePorVariante || p.estoquePorVariante,
+              sizes: sizesParaCor({
+                tamanhosBase: live.tamanhosBase && live.tamanhosBase.length ? live.tamanhosBase : p.tamanhosBase,
+                estoquePorVariante: live.estoquePorVariante || p.estoquePorVariante
+              }, p.colors && p.colors[0] ? p.colors[0].n : '')
+            });
+          });
+
           renderChips(); renderGrid(); updateBag();
         }
       })
