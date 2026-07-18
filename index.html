@@ -79,6 +79,19 @@
      do header enquanto a altura continuava fixa, deixando a marca achatada. */
   #siteLogo{display:block;width:auto;height:5rem;max-width:none;object-fit:contain;flex-shrink:0;}
   @media (max-width:767px){
+    /* Mantém a saudação visível apenas no desktop, mesmo após o login. */
+    #accountGreeting{
+      display:none !important;
+    }
+
+    /* Evita o zoom automático do Safari/iPhone ao focar campos do login,
+       cadastro e checkout. */
+    input,
+    select,
+    textarea{
+      font-size:16px !important;
+    }
+
     #siteHeader > div:first-child{
       position:relative;
       display:flex;
