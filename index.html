@@ -489,39 +489,19 @@ window.ZUM = (function(){
       return;
     }
 
-    title.textContent = ACCOUNT_TAB==='login' ? 'Entrar' : 'Criar Conta';
-    var tabsHtml = '<div class="mb-6 flex gap-8 border-b border-border/60 text-[12px] uppercase tracking-[0.2em]">'+
-      '<button onclick="ZUM.setAccountTab(\'login\')" class="pb-3 '+(ACCOUNT_TAB==='login'?'border-b border-foreground text-foreground':'text-muted-foreground')+'">Entrar</button>'+
-      '<button onclick="ZUM.setAccountTab(\'cadastro\')" class="pb-3 '+(ACCOUNT_TAB==='cadastro'?'border-b border-foreground text-foreground':'text-muted-foreground')+'">Criar Conta</button>'+
-    '</div>';
-
-    if(ACCOUNT_TAB==='login'){
-      body.innerHTML = tabsHtml +
-        '<div class="space-y-4 text-sm">'+
-          field('accEmail','E-mail','email','seu@email.com')+
-          field('accSenha','Senha','password','••••••••')+
-        '</div>'+
-        '<p id="accMsg" class="mt-3 text-xs text-red-700"></p>'+
-        '<button class="btn-zum mt-4 w-full" onclick="ZUM.doLogin()">Entrar</button>';
-    } else {
-      body.innerHTML = tabsHtml +
-        '<div class="space-y-4 text-sm">'+
-          field('accNome','Nome completo','text','Seu nome')+
-          field('accEmail','E-mail','email','seu@email.com')+
-          field('accTelefone','WhatsApp','tel','(00) 00000-0000')+
-          field('accCep','CEP','tel','00000-000','oninput="ZUM.onAccCep()"')+
-          field('accRua','Rua','text','Rua / Avenida')+
-          '<div class="flex gap-3">'+field('accNum','Número','text','123','',true)+field('accComp','Complemento','text','Apto, bloco...','',true)+'</div>'+
-          '<div class="flex gap-3">'+field('accBairro','Bairro','text','Bairro','',true)+field('accCidade','Cidade','text','Cidade','',true)+'</div>'+
-          field('accUf','Estado','text','CE','maxlength="2"')+
-          field('accSenha','Senha','password','Mínimo 6 caracteres')+
-        '</div>'+
-        consentFieldHTML('acc')+
-        '<p id="accMsg" class="mt-3 text-xs text-red-700"></p>'+
-        '<button class="btn-zum mt-4 w-full" onclick="ZUM.doSignup()">Criar Conta</button>';
-    }
+    // Cadastro livre removido: pela Minha Conta o cliente apenas entra.
+    // Uma nova conta é criada exclusivamente durante o checkout.
+    title.textContent = 'Entrar';
+    body.innerHTML =
+      '<div class="space-y-4 text-sm">'+
+        field('accEmail','E-mail','email','seu@email.com')+
+        field('accSenha','Senha','password','••••••••')+
+      '</div>'+
+      '<p id="accMsg" class="mt-3 text-xs text-red-700"></p>'+
+      '<button class="btn-zum mt-4 w-full" onclick="ZUM.doLogin()">Entrar</button>'+
+      '<p class="mt-5 text-center text-[11px] leading-relaxed text-muted-foreground">Ainda não tem conta? Ela será criada automaticamente ao finalizar sua primeira compra.</p>';
   }
-  function setAccountTab(tab){ ACCOUNT_TAB = tab; renderAccountDrawer(); }
+  function setAccountTab(tab){ ACCOUNT_TAB = 'login'; renderAccountDrawer(); }
 
   async function onAccCep(){
     var v = $('accCep').value.replace(/\D/g,'').slice(0,8);
