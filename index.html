@@ -80,17 +80,18 @@
   #siteLogo{display:block;width:auto;height:5rem;max-width:none;object-fit:contain;flex-shrink:0;}
   @media (max-width:767px){
     #siteHeader > div:first-child{
-      display:grid;
-      grid-template-columns:1fr auto;
+      position:relative;
+      display:flex;
       align-items:center;
-      gap:1rem;
+      justify-content:center;
+      min-height:84px;
       padding:1rem 1.25rem;
     }
 
     #mobileBrand{
+      position:static;
       display:flex;
-      flex-direction:column;
-      align-items:flex-start;
+      align-items:center;
       justify-content:center;
       min-width:0;
     }
@@ -98,7 +99,7 @@
     #mobileBrand > a:first-child{
       display:flex;
       align-items:center;
-      justify-content:flex-start;
+      justify-content:center;
       width:auto;
       flex:none;
     }
@@ -111,12 +112,16 @@
     }
 
     #mobileVitrine{
+      position:absolute;
+      left:1.25rem;
+      top:50%;
+      transform:translateY(-50%);
       display:block;
-      margin-top:.35rem;
+      margin:0;
       font-family:'Jost',sans-serif;
-      font-size:.68rem;
+      font-size:.74rem;
       font-weight:400;
-      letter-spacing:.28em;
+      letter-spacing:.22em;
       line-height:1;
       text-transform:uppercase;
       text-decoration:none;
@@ -124,8 +129,41 @@
     }
 
     #mobileHeaderActions{
+      position:absolute;
+      right:1.25rem;
+      top:50%;
+      transform:translateY(-50%);
       width:auto;
-      gap:1rem;
+      gap:.85rem;
+    }
+
+    /* Mobile: topo branco fixo, e o banner começa abaixo dele.
+       O desktop continua com o cabeçalho transparente sobre o banner. */
+    #siteHeader.home-header{
+      position:fixed;
+      inset:0 0 auto 0;
+      background:var(--background)!important;
+      border-color:var(--border)!important;
+      color:var(--foreground);
+      box-shadow:0 1px 10px rgba(0,0,0,.04);
+    }
+
+    #siteHeader.home-header .header-tone,
+    #siteHeader.home-header #accountGreeting{
+      color:rgba(20,20,20,.72)!important;
+    }
+
+    #siteHeader.home-header #siteLogo{
+      filter:none;
+    }
+
+    #siteHeader.home-header #bagCountWrap{
+      background:var(--foreground)!important;
+      color:var(--background)!important;
+    }
+
+    #siteHeader.home-header + #app{
+      padding-top:var(--mobile-header-height, 92px);
     }
   }
 
@@ -1445,6 +1483,12 @@ window.ZUM = (function(){
     header.classList.toggle('header-solid', solid);
   }
 
+  function syncMobileHeaderHeight(){
+    var header = document.getElementById('siteHeader');
+    if(!header) return;
+    document.documentElement.style.setProperty('--mobile-header-height', header.offsetHeight+'px');
+  }
+
   function setHeaderHomeMode(isHome){
     var header = document.getElementById('siteHeader');
     if(!header) return;
@@ -1452,6 +1496,7 @@ window.ZUM = (function(){
     header.classList.toggle('home-header', HEADER_HOME_MODE);
     if(!HEADER_HOME_MODE) header.classList.remove('header-solid');
     updateHeaderAppearance();
+    requestAnimationFrame(syncMobileHeaderHeight);
   }
 
   function showHeroSlide(index){
@@ -1796,6 +1841,8 @@ window.ZUM = (function(){
       siteHeader.addEventListener('mouseleave', function(){ HEADER_HOVERED = false; updateHeaderAppearance(); });
     }
     window.addEventListener('scroll', updateHeaderAppearance, {passive:true});
+    window.addEventListener('resize', syncMobileHeaderHeight, {passive:true});
+    syncMobileHeaderHeight();
 document.getElementById('newsForm').addEventListener('submit', function(e){
       e.preventDefault();
       document.getElementById('newsNote').textContent = 'Obrigada! (formulário ainda não ligado a um serviço de e-mail real.)';
