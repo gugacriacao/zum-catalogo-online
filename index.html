@@ -1513,13 +1513,11 @@ window.ZUM = (function(){
       ? STATE.banners.homeDesktop.filter(function(b){ return b && b.ativo!==false && b.img; })
       : [];
 
-    var outdoorBanners = (STATE.banners && Array.isArray(STATE.banners.outdoorDesktop) && STATE.banners.outdoorDesktop.length)
+    // A home usa exclusivamente os banners cadastrados em outdoorDesktop.
+    // Não existe fallback para grupos antigos do catálogo, como "meio".
+    var outdoorBanners = (STATE.banners && Array.isArray(STATE.banners.outdoorDesktop))
       ? STATE.banners.outdoorDesktop.filter(function(b){ return b && b.ativo!==false && b.img; })
       : [];
-    if(!outdoorBanners.length){
-      var antigo = STATE.banners && STATE.banners.meio && STATE.banners.meio[1];
-      outdoorBanners = [{img:(antigo&&antigo.img)||RAW+'BANNERS/MEIO/banner-meio-02.png', sku:(antigo&&antigo.sku)||''}];
-    }
     var lookImgs = STATE.produtos.slice(0,3).map(function(p){ return p.fotos[1]||p.fotos[0]; });
     while(lookImgs.length<3 && STATE.produtos.length){ lookImgs.push(STATE.produtos[lookImgs.length % STATE.produtos.length].fotos[0]); }
 
