@@ -1,10 +1,10 @@
 {
-  "geradoEm": "2026-07-18T15:13:37.867Z",
+  "geradoEm": "2026-07-18T15:18:31.821Z",
   "produtos": [
     {
       "sku": "ZUM-BLPO-700",
       "nome": "Blusa poa",
-      "cat": "Blusas",
+      "cat": "Outros",
       "preco": 249,
       "cores": [
         "Rosa"
