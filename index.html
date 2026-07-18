@@ -764,10 +764,19 @@ window.ZUM = (function(){
 
   function mapProduto(p){
     var categoria = categoriaCanonica(p);
+    var coresProduto = p.cores || [];
+
+    // Regra de segurança da Saia midi: impede que versões antigas, cache ou
+    // dados herdados voltem a trocar Beterraba, Areia e Off White por Cinza.
+    // Mantém exatamente as cores oficiais cadastradas para este SKU.
+    if(String(p.sku||'').trim().toUpperCase()==='ZUM-SKMD-600'){
+      coresProduto = ['Azul','Beterraba','Areia','Off White'];
+    }
+
     return {
       sku: p.sku, slug: slugify(p.sku), nome: p.nome,
       category: categoria, catOriginal: p.cat,
-      preco: p.preco, cores: p.cores || [],
+      preco: p.preco, cores: coresProduto,
       tamanhos: (p.tamanhos && p.tamanhos.length) ? p.tamanhos : ['UN'],
       estoqueNum: (typeof p.estoqueNum === 'number') ? p.estoqueNum : 1,
       ativo: p.ativo !== false, fotos: p.fotos || [], fotosCores: p.fotosCores || {},
