@@ -672,10 +672,34 @@ window.ZUM = (function(){
 
   var STATE = { produtos: [], banners: null, loaded:false };
 
+  function categoriaCanonica(p){
+    var sku = String(p.sku||'').trim().toUpperCase();
+    var nome = String(p.nome||'').trim();
+    var cat = String(p.cat||'').trim();
+
+    // Regra de segurança: a família SK e qualquer produto cujo nome comece
+    // por "Saia" sempre pertencem a "Saias". Assim uma categoria antiga da
+    // planilha ou do cache nunca volta a exibir "Vestidos" nesse produto.
+    if(/^ZUM-SK/.test(sku) || /^saia\b/i.test(nome)) return 'Saias';
+
+    var normal = cat.toLowerCase();
+    if(normal==='saia' || normal==='saias') return 'Saias';
+    if(normal==='calça' || normal==='calcas' || normal==='calças') return 'Calças';
+    if(normal==='blusa' || normal==='blusas') return 'Blusas';
+    if(normal==='vestido' || normal==='vestidos') return 'Vestidos';
+    if(normal==='conjunto' || normal==='conjuntos') return 'Conjuntos';
+    if(normal==='body' || normal==='bodies') return 'Bodies';
+    if(normal==='t-shirt' || normal==='t-shirts' || normal==='tshirt') return 'T-shirts';
+    if(normal==='camisaria') return 'Camisaria';
+    if(normal==='regata' || normal==='regatas') return 'Regatas';
+    return cat || 'Outros';
+  }
+
   function mapProduto(p){
+    var categoria = categoriaCanonica(p);
     return {
       sku: p.sku, slug: slugify(p.sku), nome: p.nome,
-      category: (p.cat||'Outros').trim(), catOriginal: p.cat,
+      category: categoria, catOriginal: p.cat,
       preco: p.preco, cores: p.cores || [],
       tamanhos: (p.tamanhos && p.tamanhos.length) ? p.tamanhos : ['UN'],
       estoqueNum: (typeof p.estoqueNum === 'number') ? p.estoqueNum : 1,
