@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -2488,6 +2487,25 @@ async function publicarTudo() {
   btn.textContent = '⏳ Publicando...';
 
   try {
+    // Padroniza categorias antes de publicar. Isso impede que o Sync da
+    // planilha ou um cadastro antigo devolva a Saia midi para "Vestidos".
+    catalogo.forEach(function(p){
+      var sku = String(p.sku||'').trim().toUpperCase();
+      var nome = String(p.nome||'').trim();
+      var cat = String(p.cat||'').trim().toLowerCase();
+
+      if(/^ZUM-SK/.test(sku) || /^saia\b/i.test(nome) || cat==='saia' || cat==='saias') p.cat='Saias';
+      else if(cat==='calça' || cat==='calcas' || cat==='calças') p.cat='Calças';
+      else if(cat==='blusa' || cat==='blusas') p.cat='Blusas';
+      else if(cat==='vestido' || cat==='vestidos') p.cat='Vestidos';
+      else if(cat==='conjunto' || cat==='conjuntos') p.cat='Conjuntos';
+      else if(cat==='body' || cat==='bodies') p.cat='Bodies';
+      else if(cat==='t-shirt' || cat==='t-shirts' || cat==='tshirt') p.cat='T-shirts';
+      else if(cat==='regata' || cat==='regatas') p.cat='Regatas';
+      else if(cat==='camisaria') p.cat='Camisaria';
+    });
+    salvarLocal();
+
     // 1. Gera produtos.json (todos os produtos, ativos e ocultos)
     var produtosJson = JSON.stringify({
       geradoEm: new Date().toISOString(),
@@ -2529,6 +2547,14 @@ async function publicarTudo() {
       }),
       stories: bannerStories.filter(function(b){ return b.ativo && b.img; }).map(function(b){
         return {ativo:true, sku:b.sku||'', after:b.after||4, img:b.img, layout:b.layout||'full', pos:b.pos||'50% 50%', zoom:b.zoom||1};
+      }),
+      // Exclusivos do site editorial (index.html). O catálogo mobile ignora
+      // estas duas chaves e continua usando somente topo/meio/stories.
+      homeDesktop: bannersHomeDesktop.filter(function(b){ return b.ativo && b.img; }).map(function(b){
+        return {ativo:true, img:b.img, pos:b.pos||'50% 50%', zoom:b.zoom||1};
+      }),
+      outdoorDesktop: bannersOutdoorDesktop.filter(function(b){ return b.ativo && b.img; }).map(function(b){
+        return {ativo:true, sku:b.sku||'', img:b.img, pos:b.pos||'50% 50%', zoom:b.zoom||1};
       })
     }, null, 2);
 
@@ -2739,4 +2765,3 @@ atualizarLinkCatalogo();
 </script>
 </body>
 </html>
-  
