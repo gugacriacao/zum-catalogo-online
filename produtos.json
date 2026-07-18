@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-18T02:22:15.426Z",
+  "geradoEm": "2026-07-18T05:07:31.983Z",
   "produtos": [
     {
       "sku": "ZUM-VDPL-107",
@@ -150,7 +150,7 @@
     {
       "sku": "ZUM-SKMD-600",
       "nome": "Saia midi",
-      "cat": "Vestidos",
+      "cat": "Saias",
       "preco": 219.9,
       "cores": [
         "Azul",
@@ -500,7 +500,7 @@
     {
       "sku": "ZUM-CJBC-500",
       "nome": "Conjunto calça e t-shirt",
-      "cat": "Conjunto",
+      "cat": "Conjuntos",
       "preco": 279.9,
       "cores": [
         "Marrom"
@@ -521,8 +521,8 @@
     {
       "sku": "ZUM-BLPO-700",
       "nome": "Blusa poa",
-      "cat": "Blusa",
-      "preco": 200,
+      "cat": "Blusas",
+      "preco": 249,
       "cores": [
         "Rosa"
       ],
@@ -542,8 +542,8 @@
     {
       "sku": "ZUM-RGRE-800",
       "nome": "Regata renda",
-      "cat": "Regata",
-      "preco": 84.9,
+      "cat": "Regatas",
+      "preco": 189,
       "cores": [
         "Off"
       ],
@@ -565,7 +565,7 @@
       "sku": "ZUM-CMLS-900",
       "nome": "Camisaria",
       "cat": "Camisaria",
-      "preco": 114.9,
+      "preco": 289,
       "cores": [
         "Branco"
       ],
@@ -587,8 +587,8 @@
     {
       "sku": "ZUM-CLCN-401",
       "nome": "Calça cenoura",
-      "cat": "Calça",
-      "preco": 129.9,
+      "cat": "Calças",
+      "preco": 319,
       "cores": [
         "Amarela"
       ],
@@ -609,8 +609,8 @@
     {
       "sku": "ZUM-CLPO-402",
       "nome": "Calça poa",
-      "cat": "Calça",
-      "preco": 149.9,
+      "cat": "Calças",
+      "preco": 349,
       "cores": [
         "Rosa",
         "Off"
