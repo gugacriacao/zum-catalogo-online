@@ -1,10 +1,10 @@
 {
-  "geradoEm": "2026-07-18T15:18:31.821Z",
+  "geradoEm": "2026-07-18T15:24:20.021Z",
   "produtos": [
     {
       "sku": "ZUM-BLPO-700",
       "nome": "Blusa poa",
-      "cat": "Outros",
+      "cat": "Blusas",
       "preco": 249,
       "cores": [
         "Rosa"
@@ -71,7 +71,7 @@
       "sku": "ZUM-CLPO-402",
       "nome": "Calça poa",
       "cat": "Calças",
-      "preco": 349,
+      "preco": 329,
       "cores": [
         "Rosa",
         "Off"
