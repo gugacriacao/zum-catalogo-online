@@ -271,8 +271,11 @@ window.ZUM = (function(){
     'Rosa':'RS','Verde':'VD','Branco':'BR','Azul Marinho':'AN','Cinza':'CZ','Bege':'BG',
     'Areia':'AR','Beterraba':'BT'
   };
-  var COR_COD_TO_NOME = {};
-  Object.keys(COR_NOME_TO_COD).forEach(function(nome){ COR_COD_TO_NOME[COR_NOME_TO_COD[nome]] = nome; });
+  var COR_COD_TO_NOME = {
+    'PT':'Preto','BD':'Bordô','MR':'Marrom','OW':'Off White','VH':'Vinho',
+    'AZ':'Azul','RS':'Rosa','VD':'Verde','BR':'Branco','AN':'Azul Marinho',
+    'CZ':'Cinza','BG':'Bege','AR':'Areia','BT':'Beterraba'
+  };
 
   // Entrega hoje só cobre Fortaleza e Região Metropolitana (RMF) — o site
   // dizia "Envio para todo o Brasil", o que não é real ainda e criava risco
@@ -698,7 +701,7 @@ window.ZUM = (function(){
   }
 
   function carregarDados(render){
-    fetch(PRODUTOS_JSON_URL, {cache:'no-store'}).then(function(r){ return r.ok?r.json():null; }).then(function(data){
+    fetch(PRODUTOS_JSON_URL+'?_='+Date.now(), {cache:'no-store'}).then(function(r){ return r.ok?r.json():null; }).then(function(data){
       if(data && data.produtos){
         STATE.produtos = data.produtos.map(mapProduto)
           .filter(function(p){ return p.ativo && p.fotos.length>0; })
