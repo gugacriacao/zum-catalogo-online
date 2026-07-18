@@ -476,8 +476,9 @@ body{font-family:-apple-system,sans-serif;background:#f4f4f4;min-height:100vh}
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
         <div class="mfield">
           <label>Categoria</label>
-          <input id="mCat" list="mCatLista" placeholder="Selecione ou digite uma categoria">
-          <datalist id="mCatLista"></datalist>
+          <select id="mCat" onchange="verificarNovaCategoria(this)">
+            <option value="">— selecione —</option>
+          </select>
         </div>
         <div class="mfield">
           <label>Preço (R$)</label>
@@ -1048,27 +1049,59 @@ function extFromFile(file) {
   return 'jpg';
 }
 
-/* ==================== CATEGORIAS DOS PRODUTOS ==================== */
-function atualizarListaCategorias(categoriaSelecionada) {
-  var input = document.getElementById('mCat');
-  var lista = document.getElementById('mCatLista');
-  if (!input || !lista) return;
+/* ==================== CATEGORIAS DO CATÁLOGO ==================== */
+function preencherCategorias(categoriaAtual) {
+  var select = document.getElementById('mCat');
+  if (!select) return;
 
-  var mapa = {};
+  var unicas = {};
   (catalogo || []).forEach(function(produto) {
-    var categoria = String(produto.cat || '').trim();
-    if (categoria) mapa[categoria.toLocaleLowerCase('pt-BR')] = categoria;
+    var categoria = String((produto && produto.cat) || '').trim();
+    if (categoria) unicas[categoria.toLowerCase()] = categoria;
   });
 
-  var categorias = Object.keys(mapa)
-    .map(function(chave) { return mapa[chave]; })
-    .sort(function(a, b) { return a.localeCompare(b, 'pt-BR'); });
+  categoriaAtual = String(categoriaAtual || '').trim();
+  if (categoriaAtual) unicas[categoriaAtual.toLowerCase()] = categoriaAtual;
 
-  lista.innerHTML = categorias.map(function(categoria) {
-    return '<option value="' + esc(categoria) + '"></option>';
-  }).join('');
+  var categorias = Object.keys(unicas).map(function(chave) {
+    return unicas[chave];
+  }).sort(function(a, b) {
+    return a.localeCompare(b, 'pt-BR');
+  });
 
-  input.value = String(categoriaSelecionada || '').trim();
+  select.innerHTML = '<option value="">— selecione —</option>';
+
+  categorias.forEach(function(categoria) {
+    var option = document.createElement('option');
+    option.value = categoria;
+    option.textContent = categoria;
+    select.appendChild(option);
+  });
+
+  var nova = document.createElement('option');
+  nova.value = '__nova_categoria__';
+  nova.textContent = '+ Nova categoria...';
+  select.appendChild(nova);
+
+  select.value = categoriaAtual || '';
+}
+
+function verificarNovaCategoria(select) {
+  if (select.value !== '__nova_categoria__') return;
+
+  var novaCategoria = prompt('Digite o nome da nova categoria:');
+  novaCategoria = String(novaCategoria || '').trim();
+
+  if (!novaCategoria) {
+    select.value = '';
+    return;
+  }
+
+  var option = document.createElement('option');
+  option.value = novaCategoria;
+  option.textContent = novaCategoria;
+  select.insertBefore(option, select.lastElementChild);
+  select.value = novaCategoria;
 }
 
 /* ==================== MODAL PRODUTO ==================== */
@@ -1078,7 +1111,7 @@ function abrirModal(idx) {
   document.getElementById('modalTitle').textContent = p.nome;
   document.getElementById('mNome').value     = p.nome||'';
   document.getElementById('mSku').value    = p.sku||'';
-  atualizarListaCategorias(p.cat||'');
+  preencherCategorias(p.cat||'');
   document.getElementById('mPreco').value  = p.preco||'';
   document.getElementById('mCores').value  = (p.cores||[]).join(', ');
   document.getElementById('mTams').value   = (p.tamanhos||[]).join(', ');
@@ -1099,7 +1132,7 @@ function abrirModalNovo() {
   window._novoFotos = [];
   document.getElementById('modalTitle').textContent = 'Novo produto';
   ['mNome','mSku','mPreco','mCores','mTams','mEstoque','mBadge','mDestaque','mDescricao'].forEach(function(id){ document.getElementById(id).value=''; });
-  atualizarListaCategorias('');
+  preencherCategorias('');
   document.getElementById('btnDeletar').style.display = 'none';
   var semToken = !localStorage.getItem('zum-gh-token');
   document.getElementById('fotoWarning').style.display = semToken ? 'block' : 'none';
@@ -1347,12 +1380,10 @@ function uploadFotosModal(input) {
 function salvarModal() {
   var nome = document.getElementById('mNome').value.trim();
   var sku  = document.getElementById('mSku').value.trim().toUpperCase();
-  var categoria = document.getElementById('mCat').value.trim();
   if (!nome||!sku) { toast('⚠ Preencha nome e SKU'); return; }
-  if (!categoria) { toast('⚠ Selecione uma categoria'); return; }
   var prod = {
     nome:nome, sku:sku,
-    cat: categoria,
+    cat: document.getElementById('mCat').value,
     preco: parseFloat(document.getElementById('mPreco').value)||0,
     cores: document.getElementById('mCores').value.split(',').map(function(c){return c.trim();}).filter(Boolean),
     tamanhos: document.getElementById('mTams').value.split(',').map(function(s){return s.trim();}).filter(Boolean),
