@@ -1542,7 +1542,7 @@ function abrirCardPorEvento(event){
   }
 }
 document.addEventListener('click', abrirCardPorEvento, true);
-document.addEventListener('touchend', abrirCardPorEvento, {capture:true,passive:false});
+// Removido: touchend global abria um produto ao terminar uma rolagem no celular.
 // Também garante navegação pelo teclado.
 document.addEventListener('keydown', function(event){
   if(event.key!=='Enter' && event.key!==' ') return;
