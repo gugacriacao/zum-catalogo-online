@@ -92,6 +92,8 @@
   }
   .hero-dot{width:22px;height:2px;background:rgba(255,255,255,.45);transition:background-color .25s ease,width .25s ease;}
   .hero-dot.is-active{width:38px;background:#fff;}
+
+  .overflow-x-auto::-webkit-scrollbar{display:none}
 </style>
 </head>
 <body class="min-h-screen bg-background">
@@ -1276,21 +1278,23 @@ window.ZUM = (function(){
     return '<a href="#/catalogo" class="btn-zum '+(extraClass||'')+'">'+(label||'Ver Coleção')+'</a>';
   }
   function tabsHTML(activeId, idPrefix){
-    return '<div class="flex justify-center gap-10 border-b border-transparent" id="'+idPrefix+'">'+
+    return '<div class="-mx-6 overflow-x-auto px-6 pb-1 md:mx-0 md:px-0" style="-webkit-overflow-scrolling:touch;scrollbar-width:none">'+
+      '<div class="flex w-max min-w-full items-center justify-start gap-8 border-b border-transparent md:justify-center md:gap-10" id="'+idPrefix+'">'+
       CATEGORIES.filter(function(c){return c.id!=='all';}).map(function(c){
         var active = c.id===activeId;
-        return '<button data-cat="'+c.id+'" class="label-caps relative pb-2 transition-colors '+(active?'text-foreground':'text-muted-foreground hover:text-foreground')+'" style="font-size:14px">'+
+        return '<button data-cat="'+c.id+'" class="label-caps relative shrink-0 whitespace-nowrap pb-2 transition-colors '+(active?'text-foreground':'text-muted-foreground hover:text-foreground')+'" style="font-size:13px">'+
           c.label+(active?'<span class="absolute inset-x-0 -bottom-px h-px bg-foreground"></span>':'')+'</button>';
-      }).join('')+'</div>';
+      }).join('')+'</div></div>';
   }
   function tabsFullHTML(activeId, containerId){
     containerId = containerId || 'tabsFull';
-    return '<div class="flex justify-center gap-10 border-b border-transparent" id="'+containerId+'">'+
+    return '<div class="-mx-6 overflow-x-auto px-6 pb-1 md:mx-0 md:px-0" style="-webkit-overflow-scrolling:touch;scrollbar-width:none">'+
+      '<div class="flex w-max min-w-full items-center justify-start gap-8 border-b border-transparent md:justify-center md:gap-10" id="'+containerId+'">'+
       CATEGORIES.map(function(c){
         var active = c.id===activeId;
-        return '<button data-cat="'+c.id+'" class="label-caps relative pb-2 transition-colors '+(active?'text-foreground':'text-muted-foreground hover:text-foreground')+'" style="font-size:14px">'+
+        return '<button data-cat="'+c.id+'" class="label-caps relative shrink-0 whitespace-nowrap pb-2 transition-colors '+(active?'text-foreground':'text-muted-foreground hover:text-foreground')+'" style="font-size:13px">'+
           c.label+(active?'<span class="absolute inset-x-0 -bottom-px h-px bg-foreground"></span>':'')+'</button>';
-      }).join('')+'</div>';
+      }).join('')+'</div></div>';
   }
   function wireFullTabs(containerId, gridId){
     var tabs = document.querySelectorAll('#'+containerId+' button');
