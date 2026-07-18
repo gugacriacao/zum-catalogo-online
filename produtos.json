@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-18T17:15:01.854Z",
+  "geradoEm": "2026-07-18T23:26:18.431Z",
   "produtos": [
     {
       "sku": "ZUM-BLPO-700",
@@ -25,48 +25,6 @@
       ],
       "fotosCores": {},
       "ordem": 1
-    },
-    {
-      "sku": "ZUM-VDPL-107",
-      "nome": "Vestido Pala",
-      "cat": "Vestidos",
-      "preco": 295.9,
-      "cores": [
-        "Azul",
-        "Vinho",
-        "Marrom"
-      ],
-      "tamanhos": [
-        "UN"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "destaque": "",
-      "descricao": "",
-      "estoqueNum": 5,
-      "ativo": true,
-      "fotos": [
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/midia-1783861479458.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/midia-1783862381752.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/midia-1783862329374.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/midia-1783861485974.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/midia-1783864139580.png"
-      ],
-      "fotosCores": {
-        "Vinho": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/CORES/vinho-1783862847096.jpg",
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/CORES/vinho-1783862851909.jpg"
-        ],
-        "Marrom": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/CORES/marrom-1783861510379.jpg",
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/CORES/marrom-1783861514855.jpg"
-        ],
-        "Azul": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/CORES/azul-1783862858611.jpg",
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/CORES/azul-1783862864413.jpg"
-        ]
-      },
-      "ordem": 2
     },
     {
       "sku": "ZUM-CLPO-402",
@@ -100,7 +58,95 @@
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CLPO-402/CORES/off-1784385172468.jpg"
         ]
       },
+      "ordem": 2
+    },
+    {
+      "sku": "ZUM-VDPL-107",
+      "nome": "Vestido Pala",
+      "cat": "Vestidos",
+      "preco": 295.9,
+      "cores": [
+        "Azul",
+        "Vinho",
+        "Marrom"
+      ],
+      "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 5,
+      "ativo": true,
+      "fotos": [
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/midia-1783861479458.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/midia-1783862381752.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/midia-1783862329374.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/midia-1783861485974.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/midia-1783864139580.png"
+      ],
+      "fotosCores": {
+        "Vinho": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/CORES/vinho-1783862847096.jpg"
+        ],
+        "Marrom": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/CORES/marrom-1783861510379.jpg"
+        ],
+        "Azul": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/CORES/azul-1783862858611.jpg"
+        ]
+      },
       "ordem": 3
+    },
+    {
+      "sku": "ZUM-SKMD-600",
+      "nome": "Saia midi",
+      "cat": "Saias",
+      "preco": 219.9,
+      "cores": [
+        "Azul",
+        "Beterraba",
+        "Areia",
+        "Off"
+      ],
+      "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 5,
+      "ativo": true,
+      "fotos": [
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/midia-1784302557737.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/midia-1784302489750.png"
+      ],
+      "fotosCores": {
+        "Vinho": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/CORES/vinho-1784302745573.jpg"
+        ],
+        "Bege": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/CORES/bege-1784302750612.jpg"
+        ],
+        "Nude": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/CORES/nude-1784302755723.jpg"
+        ],
+        "Azul": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/CORES/azul-1784222618548.jpg"
+        ],
+        "Beterraba": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/CORES/beterraba-1784314180737.jpg"
+        ],
+        "Areia": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/CORES/areia-1784314193680.jpg"
+        ],
+        "Off": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/CORES/off-1784314199229.jpg"
+        ]
+      },
+      "ordem": 4
     },
     {
       "sku": "ZUM-VDALC-100",
@@ -139,7 +185,7 @@
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDALC-100/CORES/marrom-1783569585843.jpg"
         ]
       },
-      "ordem": 4
+      "ordem": 5
     },
     {
       "sku": "ZUM-VDRC-105",
@@ -192,7 +238,7 @@
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/CORES/azul-1783641475380.jpg"
         ]
       },
-      "ordem": 5
+      "ordem": 6
     },
     {
       "sku": "ZUM-CC-400",
@@ -230,55 +276,6 @@
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CC-400/CORES/bege-1783479019651.jpg",
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CC-400/CORES/bege-1783479034322.jpg",
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CC-400/CORES/bege-1783569804849.jpg"
-        ]
-      },
-      "ordem": 6
-    },
-    {
-      "sku": "ZUM-SKMD-600",
-      "nome": "Saia midi",
-      "cat": "Saias",
-      "preco": 219.9,
-      "cores": [
-        "Azul",
-        "Beterraba",
-        "Areia",
-        "Off"
-      ],
-      "tamanhos": [
-        "UN"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "destaque": "",
-      "descricao": "",
-      "estoqueNum": 5,
-      "ativo": true,
-      "fotos": [
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/midia-1784302557737.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/midia-1784302489750.png"
-      ],
-      "fotosCores": {
-        "Vinho": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/CORES/vinho-1784302745573.jpg"
-        ],
-        "Bege": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/CORES/bege-1784302750612.jpg"
-        ],
-        "Nude": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/CORES/nude-1784302755723.jpg"
-        ],
-        "Azul": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/CORES/azul-1784222618548.jpg"
-        ],
-        "Beterraba": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/CORES/beterraba-1784314180737.jpg"
-        ],
-        "Areia": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/CORES/areia-1784314193680.jpg"
-        ],
-        "Off": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/CORES/off-1784314199229.jpg"
         ]
       },
       "ordem": 7
@@ -346,36 +343,6 @@
       "ordem": 9
     },
     {
-      "sku": "ZUM-TSOV-200",
-      "nome": "T-shirt Over básico",
-      "cat": "T-shirts",
-      "preco": 99,
-      "cores": [
-        "Azul Marinho",
-        "Branco",
-        "Marrom",
-        "Preto"
-      ],
-      "tamanhos": [
-        "G",
-        "P"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "destaque": "Algodão",
-      "descricao": "",
-      "estoqueNum": 2,
-      "ativo": true,
-      "fotos": [
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783480100247.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783480103971.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783480107596.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783533933777.png"
-      ],
-      "fotosCores": {},
-      "ordem": 10
-    },
-    {
       "sku": "ZUM-VDBT-102",
       "nome": "Vestido busto torcido",
       "cat": "Vestidos",
@@ -404,6 +371,36 @@
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDBT-102/CORES/preto-1783520039715.jpg"
         ]
       },
+      "ordem": 10
+    },
+    {
+      "sku": "ZUM-TSOV-200",
+      "nome": "T-shirt Over básico",
+      "cat": "T-shirts",
+      "preco": 99,
+      "cores": [
+        "Azul Marinho",
+        "Branco",
+        "Marrom",
+        "Preto"
+      ],
+      "tamanhos": [
+        "G",
+        "P"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "Algodão",
+      "descricao": "",
+      "estoqueNum": 2,
+      "ativo": true,
+      "fotos": [
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783480100247.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783480103971.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783480107596.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783533933777.png"
+      ],
+      "fotosCores": {},
       "ordem": 11
     },
     {
