@@ -116,7 +116,7 @@
         <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       </button>
       <span id="accountGreeting" class="hidden items-center text-[11px] uppercase tracking-[0.15em] text-foreground/70 md:inline-flex" onclick="ZUM.openAccount()" style="cursor:pointer"></span>
-      <button aria-label="Minha Conta" id="accountBtn" class="hidden md:inline-flex" onclick="ZUM.openAccount()">
+      <button aria-label="Minha Conta" id="accountBtn" class="inline-flex" onclick="ZUM.openAccount()">
         <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       </button>
       <button aria-label="Sacola" class="relative inline-flex" onclick="ZUM.openCart()">
@@ -378,9 +378,10 @@ window.ZUM = (function(){
   var PEDIDOS_CACHE = null; // null = ainda não buscou; [] = buscou e não tinha pedido
 
   function consentFieldHTML(idPrefix){
+    var onchange = idPrefix==='f' ? ' onchange="ZUM.validForm()"' : '';
     return '<label class="mt-4 flex items-start gap-3 text-[12.5px] leading-snug text-muted-foreground">'+
-      '<input type="checkbox" id="'+idPrefix+'AceitaMkt" class="mt-1">'+
-      '<span>Quero receber por <b>e-mail e WhatsApp</b> novidades, campanhas e avisos de peças novas da ZUM. Posso cancelar quando quiser.</span>'+
+      '<input type="checkbox" id="'+idPrefix+'AceitaMkt" class="mt-1"'+onchange+'>'+
+      '<span><b>Obrigatório:</b> concordo em receber por <b>e-mail e WhatsApp</b> novidades, campanhas e avisos de peças novas da ZUM. Posso cancelar quando quiser.</span>'+
     '</label>';
   }
 
@@ -498,6 +499,7 @@ window.ZUM = (function(){
     var aceitaMkt = $('accAceitaMkt').checked;
     var msg = $('accMsg');
     if(!nome || !email || senha.length<6){ msg.className='mt-3 text-xs text-red-700'; msg.textContent='Preencha nome, e-mail e uma senha com pelo menos 6 caracteres.'; return; }
+    if(!aceitaMkt){ msg.className='mt-3 text-xs text-red-700'; msg.textContent='Para criar a conta, marque a opção de concordância para receber comunicações por e-mail e WhatsApp.'; return; }
     msg.className='mt-3 text-xs text-muted-foreground';
     msg.textContent = 'Criando conta…';
     var r = await asCall('criarContaSite', {
@@ -964,9 +966,11 @@ window.ZUM = (function(){
         '<p id="entregaAviso" class="mt-3 hidden text-[12px] leading-snug text-orange-700"></p>'+
         (CUSTOMER ? '' :
           '<div class="mt-6 border-t border-border/60 pt-5">'+
-            '<p class="text-[11px] uppercase tracking-[0.15em] text-muted-foreground">Quer salvar esses dados pra próxima compra?</p>'+
-            field('fSenha','Criar uma senha (opcional)','password','Mínimo 6 caracteres')+
+            '<p class="text-[11px] uppercase tracking-[0.15em] text-muted-foreground">Cadastro obrigatório para finalizar a compra</p>'+
+            '<p class="mt-2 text-[12px] leading-snug text-muted-foreground">Crie sua senha para abrir a conta ZUM. A compra só poderá continuar depois que o cadastro for concluído.</p>'+
+            field('fSenha','Criar senha','password','Mínimo 6 caracteres','oninput="ZUM.validForm()"')+
             consentFieldHTML('f')+
+            '<p id="checkoutContaMsg" class="mt-3 text-xs text-red-700"></p>'+
           '</div>'
         )+
         '<button class="btn-zum mt-6 w-full" id="btnContinuar" disabled onclick="ZUM.goConfirm()">Continuar</button>';
@@ -1022,33 +1026,76 @@ window.ZUM = (function(){
   }
   async function goConfirm(){
     saveFormValues();
-    if(!CUSTOMER) await maybeAutoSignup();
-    else await syncCustomerProfile();
+
+    if(!CUSTOMER){
+      var criada = await criarContaObrigatoriaCheckout();
+      if(!criada) return;
+    } else {
+      await syncCustomerProfile();
+    }
+
     openCart('confirmar');
   }
 
-  // Se o cliente marcou "criar senha" no checkout de convidado, cria a conta
-  // já na ZumAgent (mesma action da tela "Criar Conta") com todos os dados
-  // do checkout — não bloqueia a compra se falhar. Não interrompe o
-  // checkout com toast/redirect: a pessoa só percebe que já está logada na
-  // próxima vez que abrir "Minha Conta".
-  async function maybeAutoSignup(){
+  // Não existe checkout como convidado. A conta precisa ser criada e salva
+  // com sucesso no ZumAgent antes de avançar para a confirmação do pedido.
+  async function criarContaObrigatoriaCheckout(){
+    var msg = $('checkoutContaMsg');
     var senhaEl = $('fSenha');
-    if(!senhaEl || senhaEl.value.length<6) return;
-    var email = $('fEmail') ? $('fEmail').value.trim() : '';
-    if(!email) return;
+    var aceita = $('fAceitaMkt') && $('fAceitaMkt').checked;
+
+    if(!senhaEl || senhaEl.value.length<6){
+      if(msg) msg.textContent = 'Crie uma senha com pelo menos 6 caracteres.';
+      return false;
+    }
+    if(!aceita){
+      if(msg) msg.textContent = 'Marque a concordância para criar sua conta.';
+      return false;
+    }
+
+    if(msg){
+      msg.className = 'mt-3 text-xs text-muted-foreground';
+      msg.textContent = 'Criando sua conta…';
+    }
+    if($('btnContinuar')) $('btnContinuar').disabled = true;
+
     try{
-      var aceitaMkt = $('fAceitaMkt') ? $('fAceitaMkt').checked : false;
       var r = await asCall('criarContaSite', {
-        nome: $('fNome')?$('fNome').value:'', email: email, senha: senhaEl.value,
+        nome: $('fNome')?$('fNome').value:'',
+        email: $('fEmail')?$('fEmail').value.trim():'',
+        senha: senhaEl.value,
+        cpf: $('fCpf')?$('fCpf').value:'',
         telefone: $('fWpp')?$('fWpp').value:'',
-        cep: $('fCep')?$('fCep').value:'', rua: $('fRua')?$('fRua').value:'',
-        numero: $('fNum')?$('fNum').value:'', complemento: $('fComp')?$('fComp').value:'',
-        bairro: $('fBairro')?$('fBairro').value:'', cidade: $('fCidade')?$('fCidade').value:'',
-        uf: $('fUf')?$('fUf').value:'', aceitaMarketing: aceitaMkt
+        cep: $('fCep')?$('fCep').value:'',
+        rua: $('fRua')?$('fRua').value:'',
+        numero: $('fNum')?$('fNum').value:'',
+        complemento: $('fComp')?$('fComp').value:'',
+        bairro: $('fBairro')?$('fBairro').value:'',
+        cidade: $('fCidade')?$('fCidade').value:'',
+        uf: $('fUf')?$('fUf').value:'',
+        aceitaMarketing: true
       });
-      if(r && r.ok) salvarSessaoConta(r.conta);
-    }catch(e){}
+
+      if(!r || !r.ok || !r.conta){
+        if(msg){
+          msg.className = 'mt-3 text-xs text-red-700';
+          msg.textContent = (r && r.erro) ? r.erro : 'Não foi possível criar a conta. Confira os dados ou entre em uma conta já existente.';
+        }
+        validForm();
+        return false;
+      }
+
+      salvarSessaoConta(r.conta);
+      if(msg) msg.textContent = '';
+      return true;
+    }catch(e){
+      if(msg){
+        msg.className = 'mt-3 text-xs text-red-700';
+        msg.textContent = 'Falha ao criar a conta. Tente novamente.';
+      }
+      validForm();
+      return false;
+    }
   }
 
   // Cliente já logado — o perfil gravado na ContasSite não muda sozinho a
@@ -1116,6 +1163,14 @@ window.ZUM = (function(){
   function validForm(){
     var req = ['fCpf','fNome','fEmail','fWpp','fCep','fRua','fNum','fBairro','fCidade','fUf'];
     var ok = req.every(function(id){ return $(id) && $(id).value.trim().length>1; });
+
+    // Compra somente com cadastro: quando não há cliente logado, senha e
+    // concordância são obrigatórias para liberar a continuação.
+    if(!CUSTOMER){
+      var senhaConta = $('fSenha') ? $('fSenha').value : '';
+      ok = ok && senhaConta.length>=6 && $('fAceitaMkt') && $('fAceitaMkt').checked;
+    }
+
     if($('btnContinuar')) $('btnContinuar').disabled = !ok;
 
     // Aviso de área de entrega: hoje só cobrimos Fortaleza e Região
@@ -1166,6 +1221,11 @@ window.ZUM = (function(){
   }
 
   async function goPay(){
+    if(!CUSTOMER){
+      toast('Entre ou crie sua conta para finalizar a compra.');
+      openAccount('login');
+      return;
+    }
     if(!CART.length) return;
     var btn = $('btnPagar');
     if(btn){ btn.disabled = true; btn.textContent = 'Preparando pagamento…'; }
