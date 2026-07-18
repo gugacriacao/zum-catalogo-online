@@ -79,7 +79,58 @@
      do header enquanto a altura continuava fixa, deixando a marca achatada. */
   #siteLogo{display:block;width:auto;height:5rem;max-width:none;object-fit:contain;flex-shrink:0;}
   @media (max-width:767px){
-    #siteLogo{width:min(120px,31vw);height:auto;max-width:120px;max-height:56px;}
+    #siteHeader > div:first-child{
+      display:grid;
+      grid-template-columns:1fr auto;
+      align-items:center;
+      gap:1rem;
+      padding:1rem 1.25rem;
+    }
+
+    #mobileBrand{
+      display:flex;
+      flex-direction:column;
+      align-items:flex-start;
+      justify-content:center;
+      min-width:0;
+    }
+
+    #mobileBrand > a:first-child{
+      display:flex;
+      align-items:center;
+      justify-content:flex-start;
+      width:auto;
+      flex:none;
+    }
+
+    #siteLogo{
+      width:min(118px,30vw);
+      height:auto;
+      max-width:118px;
+      max-height:52px;
+    }
+
+    #mobileVitrine{
+      display:block;
+      margin-top:.35rem;
+      font-family:'Jost',sans-serif;
+      font-size:.68rem;
+      font-weight:400;
+      letter-spacing:.28em;
+      line-height:1;
+      text-transform:uppercase;
+      text-decoration:none;
+      white-space:nowrap;
+    }
+
+    #mobileHeaderActions{
+      width:auto;
+      gap:1rem;
+    }
+  }
+
+  @media (min-width:768px){
+    #mobileVitrine{display:none;}
   }
 
   /* Banner principal rotativo */
@@ -100,18 +151,20 @@
 
 <header id="siteHeader" class="border-b border-border/60 bg-background">
   <div class="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-6 md:py-8">
-    <div class="header-tone flex w-1/3 items-center gap-4 text-foreground/70">
-      <button aria-label="Menu" id="burger" class="md:hidden">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
-      </button>
-      <nav class="hidden gap-8 md:flex">
+    <div class="header-tone hidden w-1/3 items-center gap-4 text-foreground/70 md:flex">
+      <nav class="flex gap-8">
         <a href="#/catalogo" class="label-caps hover:text-foreground" style="font-size:19px">Vitrine</a>
       </nav>
     </div>
-    <a href="#/" class="flex flex-1 items-center justify-center">
-      <img id="siteLogo" src="assets/logo-preta.png" alt="ZUM" class="w-auto">
-    </a>
-    <div class="header-tone flex w-1/3 items-center justify-end gap-5 text-foreground/70">
+
+    <div id="mobileBrand" class="flex flex-1 items-center justify-center">
+      <a href="#/" class="flex flex-1 items-center justify-center">
+        <img id="siteLogo" src="assets/logo-preta.png" alt="ZUM" class="w-auto">
+      </a>
+      <a id="mobileVitrine" href="#/catalogo">Vitrine</a>
+    </div>
+
+    <div id="mobileHeaderActions" class="header-tone flex w-1/3 items-center justify-end gap-5 text-foreground/70">
       <button aria-label="Buscar" class="inline-flex" onclick="ZUM.openSearch()">
         <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       </button>
@@ -124,12 +177,6 @@
         <span id="bagCountWrap" style="display:none;" class="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-foreground text-[9px] text-background"><span id="bagCount">0</span></span>
       </button>
     </div>
-  </div>
-  <div id="mobNav" class="hidden border-t border-border/60 px-6 py-4 md:hidden">
-    <nav class="flex flex-col gap-4">
-      <a href="#/catalogo" class="label-caps" style="font-size:19px">Vitrine</a>
-      <button class="label-caps text-left" onclick="ZUM.openAccount()">Minha Conta</button>
-    </nav>
   </div>
 </header>
 
@@ -1473,11 +1520,11 @@ window.ZUM = (function(){
 
     // Banners exclusivos do site editorial. Mantém fallback nos grupos antigos
     // para não deixar a home vazia enquanto o novo banners.json não for publicado.
-    var heroBanners = (STATE.banners && Array.isArray(STATE.banners.homeDesktop) && STATE.banners.homeDesktop.length)
+    // Usa exclusivamente os banners de homeDesktop.
+    // Enquanto o banners.json não carrega, nenhum banner antigo é exibido.
+    var heroBanners = (STATE.banners && Array.isArray(STATE.banners.homeDesktop))
       ? STATE.banners.homeDesktop.filter(function(b){ return b && b.ativo!==false && b.img; })
-      : ((STATE.banners && Array.isArray(STATE.banners.topo))
-          ? STATE.banners.topo.filter(function(b){ return b && b.img; }) : []);
-    if(!heroBanners.length) heroBanners = [{img:RAW+'BANNERS/TOPO/banner-topo-01.png', sku:''}];
+      : [];
 
     var outdoorBanners = (STATE.banners && Array.isArray(STATE.banners.outdoorDesktop) && STATE.banners.outdoorDesktop.length)
       ? STATE.banners.outdoorDesktop.filter(function(b){ return b && b.ativo!==false && b.img; })
@@ -1506,7 +1553,7 @@ window.ZUM = (function(){
     document.getElementById('app').innerHTML =
       '<div class="min-h-screen bg-background">'+
         '<section class="relative aspect-[16/9] w-full overflow-hidden bg-[#111] md:h-screen md:aspect-auto md:bg-lilac">'+
-          heroSlides+heroControls+
+          (heroBanners.length ? heroSlides+heroControls : '')+
         '</section>'+
 
         '<section class="px-6 py-20 md:px-3" id="rowA">'+
@@ -1767,7 +1814,6 @@ window.ZUM = (function(){
   function route(){
     if(checarRetornoPagamento()) return;
     var hash = location.hash || '#/';
-    var mob = document.getElementById('mobNav'); if(mob) mob.classList.add('hidden');
     stopHero();
     if(hash.indexOf('#/produto/')===0){ setHeaderHomeMode(false); renderProduto(hash.replace('#/produto/','')); }
     else if(hash==='#/catalogo'){ setHeaderHomeMode(false); renderCatalogo(); }
@@ -1786,10 +1832,7 @@ window.ZUM = (function(){
       siteHeader.addEventListener('mouseleave', function(){ HEADER_HOVERED = false; updateHeaderAppearance(); });
     }
     window.addEventListener('scroll', updateHeaderAppearance, {passive:true});
-    document.getElementById('burger').addEventListener('click', function(){
-      document.getElementById('mobNav').classList.toggle('hidden');
-    });
-    document.getElementById('newsForm').addEventListener('submit', function(e){
+document.getElementById('newsForm').addEventListener('submit', function(e){
       e.preventDefault();
       document.getElementById('newsNote').textContent = 'Obrigada! (formulário ainda não ligado a um serviço de e-mail real.)';
       this.reset();
