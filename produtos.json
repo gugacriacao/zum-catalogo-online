@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-18T23:44:57.530Z",
+  "geradoEm": "2026-07-18T23:48:39.402Z",
   "produtos": [
     {
       "sku": "ZUM-BLPO-700",
@@ -157,6 +157,7 @@
         "Amarela"
       ],
       "tamanhos": [
+        "P",
         "M",
         "G"
       ],
@@ -164,7 +165,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 2,
+      "estoqueNum": 3,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CLCN-401/midia-1784417417779.png",
@@ -451,13 +452,10 @@
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDDN-103/midia-1783643692817.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDDN-103/midia-1783643800487.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDDN-103/midia-1783643726392.png"
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDDN-103/midia-1783643800487.png"
       ],
       "fotosCores": {
         "Preto": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDDN-103/CORES/preto-1783643857986.jpg",
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDDN-103/CORES/preto-1783643867393.jpg",
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDDN-103/CORES/preto-1783643871683.jpg"
         ],
         "Rosa": [
