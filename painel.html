@@ -2034,7 +2034,7 @@ function processarBannerHomeDesktop(i, input) {
       salvarBanners(); renderHomeDesktop();
       toast('⚠ Banner salvo localmente. Configure o GitHub Token para publicar.');
     } else {
-      var path = 'BANNERS/HOME-DESKTOP/banner-home-desktop-0'+(i+1)+'.'+ext;
+      var path = 'BANNERS/HOME-DESKTOP/banner-home-desktop-'+Date.now()+'.'+ext;
       toast('⏳ Enviando banner...');
       uploadParaGitHub(dataUrl, path)
         .then(function() {
