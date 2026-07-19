@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-19T01:24:54.576Z",
+  "geradoEm": "2026-07-19T01:46:01.685Z",
   "asUrl": "https://script.google.com/macros/s/AKfycbwHavGCAgB01Vm3b6kEqN26x1MRA62VVA6P2UWfbeDVFbDxfyQ9PbAhr6B44ElRK_5q/exec",
   "destaqueLabel": "Destaques",
   "topo": [
@@ -16,6 +16,12 @@
   "meio": [],
   "stories": [],
   "homeDesktop": [
+    {
+      "ativo": true,
+      "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/HOME-DESKTOP/banner-home-desktop-02.png",
+      "pos": "50% 50%",
+      "zoom": 1
+    },
     {
       "ativo": true,
       "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/HOME-DESKTOP/banner-home-desktop-02.png",
