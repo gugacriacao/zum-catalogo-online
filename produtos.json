@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-23T19:59:46.028Z",
+  "geradoEm": "2026-07-23T22:53:10.680Z",
   "produtos": [
     {
       "sku": "ZUM-BLPO-700",
@@ -462,7 +462,6 @@
       "cat": "Vestidos",
       "preco": 189.9,
       "cores": [
-        "Azul",
         "Preto",
         "Rosa",
         "Verde"
