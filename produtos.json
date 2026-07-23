@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-19T02:23:45.032Z",
+  "geradoEm": "2026-07-23T18:26:38.256Z",
   "produtos": [
     {
       "sku": "ZUM-BLPO-700",
@@ -107,8 +107,8 @@
       "cores": [
         "Azul",
         "Beterraba",
-        "Areia",
-        "Off"
+        "Caqui",
+        "Areia"
       ],
       "tamanhos": [
         "UN"
@@ -117,7 +117,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 5,
+      "estoqueNum": 4,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/midia-1784302557737.png",
@@ -195,7 +195,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 5,
+      "estoqueNum": 0,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-1783864612196.png",
@@ -244,7 +244,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 2,
+      "estoqueNum": 1,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-RGRE-800/midia-1784424275899.png",
@@ -405,7 +405,7 @@
       "badge": "",
       "destaque": "Algodão",
       "descricao": "",
-      "estoqueNum": 2,
+      "estoqueNum": 1,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783480100247.png",
@@ -434,7 +434,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 4,
+      "estoqueNum": 3,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CC-400/midia-1783478963409.png",
@@ -474,7 +474,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 0,
+      "estoqueNum": 4,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDDN-103/midia-1783643692817.png",
@@ -641,7 +641,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 3,
+      "estoqueNum": 2,
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
