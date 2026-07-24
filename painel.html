@@ -213,6 +213,9 @@ body{font-family:-apple-system,sans-serif;background:#f4f4f4;min-height:100vh}
 .aviso-pessoa-nome{font-size:12.5px;color:#333}
 .aviso-pessoa-data{color:#aaa;font-size:11px}
 .aviso-wpp-btn{background:#e8f5e9;color:#2e7d32;border:1px solid #c8e6c9;flex-shrink:0;text-decoration:none;display:inline-flex;align-items:center}
+.aviso-x-btn{flex-shrink:0;width:24px;height:24px;line-height:1;border:1px solid #ddd;border-radius:50%;background:#fff;color:#999;font-size:12px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;padding:0}
+.aviso-x-btn:hover{background:#fdecea;color:#c62828;border-color:#f5b5ae}
+.aviso-x-btn:disabled{opacity:.5;cursor:default}
 .aviso-thumb{width:44px;height:44px;border-radius:8px;background:#f5f5f5;flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center}
 .aviso-thumb img,.aviso-thumb video{width:100%;height:100%;object-fit:cover}
 .aviso-thumb-ph{font-size:18px;color:#ccc}
@@ -859,6 +862,7 @@ async function carregarAvisosEstoque() {
       return '<div class="aviso-pessoa' + extra + '">' +
         '<span class="aviso-pessoa-nome">' + p.nome + ' <span class="aviso-pessoa-data">· ' + quando + '</span></span>' +
         '<a class="btn aviso-wpp-btn" href="' + montarLinkWhatsAviso(p) + '" target="_blank" rel="noopener">💬 Chamar no WhatsApp</a>' +
+        '<button type="button" class="aviso-x-btn" title="Já avisei — tirar da lista" onclick="excluirAvisoPessoa(' + p.linha + ', this)">✕</button>' +
         '</div>';
     }).join('');
     var restantes = g.pessoas.length - MOSTRA_SEMPRE;
@@ -899,6 +903,22 @@ function montarLinkWhatsAviso(p) {
   var numero = String(p.wpp || '').replace(/\D/g, '');
   if (numero && numero.length <= 11) numero = '55' + numero; // sem DDI = assume Brasil
   return 'https://wa.me/' + numero + '?text=' + encodeURIComponent(msg);
+}
+
+// X em cada pessoa da lista de espera — marca como "Notificado" na aba
+// AvisosEstoque (não apaga a linha, só sai da lista) e recarrega a seção.
+// Pedido do Tavinho: depois de já ter chamado no WhatsApp, tirar a pessoa
+// da tela pra não se confundir com quem ainda falta avisar.
+async function excluirAvisoPessoa(linha, btnEl) {
+  if (btnEl) { btnEl.disabled = true; btnEl.textContent = '…'; }
+  try {
+    var r = await asPainel('marcarAvisoNotificado', { linha: linha });
+    if (!r || !r.ok) { toast('❌ Não consegui tirar da lista. Tenta de novo.'); if (btnEl) { btnEl.disabled = false; btnEl.textContent = '✕'; } return; }
+    carregarAvisosEstoque();
+  } catch (e) {
+    toast('❌ Erro ao tirar da lista: ' + e.message);
+    if (btnEl) { btnEl.disabled = false; btnEl.textContent = '✕'; }
+  }
 }
 
 /* ==================== TABS ==================== */
