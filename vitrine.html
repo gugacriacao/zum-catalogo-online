@@ -737,6 +737,24 @@ window.ZUM = (function(){
     });
   }
 
+  // Cores do produto, reordenadas: quem tem estoque real (em qualquer
+  // tamanho) vem primeiro, na ordem original; quem está sem estoque vai
+  // pro final. Antes a ordem vinha crua do produtos.json (alfabética),
+  // então uma cor esgotada podia aparecer antes da única cor disponível
+  // (ex: T-shirt Over só tem PRETO em estoque, mas aparecia por último) —
+  // o cliente via as amostras sem estoque primeiro e desistia antes de
+  // chegar na que tinha peça. Usa o mesmo estoquePorVariante ao vivo de
+  // tamanhosDisponiveis(); antes dele chegar (fallback otimista), não
+  // reordena — e se corrige sozinho quando o estoque real chega e a
+  // página é re-renderizada (ver carregarDados).
+  function coresOrdenadas(p){
+    var cores = (p.cores || []).slice();
+    function temEstoque(c){
+      return tamanhosDisponiveis(p, c).some(function(s){ return !s.out; });
+    }
+    return cores.filter(temEstoque).concat(cores.filter(function(c){ return !temEstoque(c); }));
+  }
+
   function carregarDados(render){
     fetch(PRODUTOS_JSON_URL+'?_='+Date.now(), {cache:'no-store'}).then(function(r){ return r.ok?r.json():null; }).then(function(data){
       if(data && data.produtos){
@@ -1602,7 +1620,8 @@ window.ZUM = (function(){
         (STATE.loaded ? '<a href="#/catalogo" class="btn-zum mt-8 inline-flex">Ver Catálogo</a>' : '')+'</div>';
       return;
     }
-    var state = { cor: p.cores[0]||'', tamanho: '', mediaIndex: 0 };
+    var coresOrd = coresOrdenadas(p);
+    var state = { cor: coresOrd[0]||'', tamanho: '', mediaIndex: 0 };
     var availInit = tamanhosDisponiveis(p, state.cor);
     var firstAvailInit = availInit.filter(function(s){ return !s.out; })[0];
     state.tamanho = firstAvailInit ? firstAvailInit.s : (p.tamanhos[0]||'UN');
@@ -1726,8 +1745,8 @@ window.ZUM = (function(){
               '<h1 class="mt-3 text-4xl md:text-5xl">'+p.nome+'</h1>'+
               '<div class="mt-4 flex items-center gap-3 text-lg"><span>'+money(p.preco)+'</span></div>'+
               '<p class="mt-6 max-w-md text-sm leading-relaxed text-muted-foreground">'+(p.destaque||'Peça ZUM — leveza em movimento.')+'</p>'+
-              (p.cores.length ? '<div class="mt-10"><p class="label-caps mb-3 text-muted-foreground">Cor · <span id="corLabel">'+state.cor+'</span></p>'+
-                '<div class="flex gap-3" id="swatches">'+p.cores.map(function(c){
+              (coresOrd.length ? '<div class="mt-10"><p class="label-caps mb-3 text-muted-foreground">Cor · <span id="corLabel">'+state.cor+'</span></p>'+
+                '<div class="flex gap-3" id="swatches">'+coresOrd.map(function(c){
                   var hex=COLOR_HEX[c]||'#ccc'; var active=c===state.cor;
                   return '<button data-cor="'+c+'" title="'+c+'" class="h-8 w-8 border transition-all '+(active?'border-foreground ring-1 ring-foreground ring-offset-2 ring-offset-background':'border-border')+'" style="background-color:'+hex+'"></button>';
                 }).join('')+'</div></div>' : '')+
