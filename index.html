@@ -710,7 +710,7 @@ window.ZUM = (function(){
   var COLOR_HEX = {
     'Preto':'#111111','Branco':'#F5F3EF','Off-white':'#E8E5DF','Off White':'#E8E5DF','Offwhite':'#E8E5DF','Off':'#E8E5DF','Bordô':'#5C1F2E','Vinho':'#5C1220',
     'Marrom':'#4A3226','Azul':'#1F3A5F','Azul Marinho':'#101E38','Bege':'#D9C7A8','Amarelo':'#E8D8B0','Amarela':'#E8D8B0','Rosa':'#D98CA0',
-    'Verde':'#4B6B4E','Cinza':'#8C8880','Areia':'#C5BCAE','Beterraba':'#5E2E3E','Caqui':'#8C7B4F'
+    'Verde':'#4B6B4E','Cinza':'#8C8880','Areia':'#8C7B4F','Beterraba':'#5E2E3E','Caqui':'#C5BCAE'
   };
   // Categorias vêm direto da planilha (campo "cat" de cada produto, já em
   // português — Vestidos, Calças, T-shirts, e o que mais o usuário cadastrar).
@@ -967,8 +967,10 @@ window.ZUM = (function(){
   function cartDel(i){ CART.splice(i,1); saveCart(); renderCartDrawer(); }
   function setFrete(op){ FRETE_OPCAO = op; renderCartDrawer(); }
 
+  var ETAPA_FUNIL_POR_STEP = { sacola:'sacola', dados:'checkout', confirmar:'confirmar' };
   function openCart(step){
     CART_STEP = step || 'sacola';
+    trackFunil(ETAPA_FUNIL_POR_STEP[CART_STEP] || 'sacola');
     renderCartDrawer();
     document.getElementById('cartBackdrop').classList.remove('hidden');
     document.getElementById('cartDrawer').classList.remove('translate-x-full');
@@ -1118,6 +1120,15 @@ window.ZUM = (function(){
     }
 
     openCart('confirmar');
+
+    // Lead — portado do catalogo.html (goConfirm() de lá fazia o mesmo).
+    // dadosClienteSalvos() (não o DOM) porque a etapa "confirmar" já
+    // substituiu os campos fNome/fCpf/etc. pelo resumo do pedido.
+    var dadosLead = dadosClienteSalvos();
+    asCall('registrarLead', {
+      cpf: dadosLead.fCpf||'', nome: dadosLead.fNome||'', email: dadosLead.fEmail||'',
+      wpp: dadosLead.fWpp||'', cep: dadosLead.fCep||'', cidade: dadosLead.fCidade||'', uf: dadosLead.fUf||''
+    });
   }
 
   // Não existe checkout como convidado. A conta precisa ser criada e salva
@@ -1284,6 +1295,37 @@ window.ZUM = (function(){
     }catch(e){ return {}; }
   }
 
+  // ============================================================
+  // FUNIL DE VENDAS — portado do catalogo.html em 27/07/2026. Até aqui o
+  // index.html (o site atual) nunca registrava etapa nenhuma do funil nem
+  // lead nenhum: registrarFunil/registrarLead só existiam no catalogo.html
+  // (site antigo). Isso fazia o Funil de Vendas do WebApp medir só o
+  // tráfego do site antigo, mesmo depois do index.html virar o principal.
+  // Mesmo padrão do catalogo.html: 1 sessionId por carregamento de página
+  // (não persiste entre visitas — cada visita é uma sessão nova, de
+  // propósito, pra medir sessões de verdade), dedupe por etapa+sku pra não
+  // contar a mesma etapa duas vezes na mesma sessão (ex: reabrir a sacola).
+  // ============================================================
+  var SESSION_ID = 'sid-'+Date.now()+'-'+Math.random().toString(36).slice(2,7);
+  var _funilRegistrado = {};
+  function trackFunil(etapa, sku){
+    var chave = etapa+(sku||'');
+    if(_funilRegistrado[chave]) return;
+    _funilRegistrado[chave] = true;
+    var params = { sessionId: SESSION_ID, etapa: etapa, sku: sku||'', ref: document.referrer||'' };
+    // Quando a pessoa já está logada (CUSTOMER preenchido via refreshCustomer(),
+    // que roda antes de qualquer rota), manda nome/whatsapp/e-mail junto em
+    // TODA etapa — não só na confirmação. É o que permite saber quem entrou
+    // na sacola/checkout e não comprou, não só quem chegou a virar Lead.
+    // Quem nunca fez login continua anônimo (não tem contato pra mandar).
+    if(CUSTOMER){
+      params.nome = CUSTOMER.nome||'';
+      params.wpp = CUSTOMER.telefone||'';
+      params.email = CUSTOMER.email||'';
+    }
+    asCall('registrarFunil', params);
+  }
+
   // Lê os dados do cliente do localStorage (salvos por saveFormValues() ao
   // sair da etapa "Seus Dados"), nunca do DOM ao vivo — porque quando o
   // botão "Pagar" existe (etapa "Confirmar Pedido"), os campos fNome/fRua/
@@ -1353,9 +1395,12 @@ window.ZUM = (function(){
         return;
       }
       var pedido = r.pedido;
+      // sessionId salvo junto pra "sucesso" continuar contando na MESMA
+      // sessão do funil, não numa nova (a volta da InfinitePay é um reload
+      // de página de verdade, então o SESSION_ID em memória se perderia).
       localStorage.setItem('zum-site-pedido-pendente', JSON.stringify({
         pedido: pedido, qtd: cartCount(), total: cartTotal()+frete,
-        cidade: dados.fCidade||'', uf: dados.fUf||'', ts: Date.now()
+        cidade: dados.fCidade||'', uf: dados.fUf||'', ts: Date.now(), sessionId: SESSION_ID
       }));
 
       var itensPagamento = CART.map(function(i){
@@ -1394,6 +1439,11 @@ window.ZUM = (function(){
     var salvo = salvoRaw ? JSON.parse(salvoRaw) : null;
     var total = salvo && salvo.total!=null ? salvo.total : null;
     var cidade = salvo ? ((salvo.cidade||'')+' '+(salvo.uf||'')) : '';
+    // Reusa o sessionId de antes do redirect pra InfinitePay (se tiver
+    // sido salvo) — sem isso "sucesso" viraria sempre uma sessão nova,
+    // desconectada das etapas anteriores da mesma pessoa (ver goPay()).
+    if(salvo && salvo.sessionId) SESSION_ID = salvo.sessionId;
+    trackFunil('sucesso');
 
     document.getElementById('app').innerHTML =
       '<div class="mx-auto max-w-lg px-6 py-28 text-center">'+
@@ -1563,6 +1613,7 @@ window.ZUM = (function(){
   }
 
   function renderHome(){
+    trackFunil('home');
     setHeaderHomeMode(true);
 
     // Banners exclusivos do site editorial. Mantém fallback nos grupos antigos
@@ -1654,6 +1705,7 @@ window.ZUM = (function(){
 
   // ---------- CATALOGO ----------
   function renderCatalogo(){
+    trackFunil('home');
     document.getElementById('app').innerHTML =
       '<div class="min-h-screen bg-background">'+
         '<section class="px-6 pt-16 md:px-6">'+
@@ -1681,6 +1733,7 @@ window.ZUM = (function(){
         (STATE.loaded ? '<a href="#/catalogo" class="btn-zum mt-8 inline-flex">Ver Catálogo</a>' : '')+'</div>';
       return;
     }
+    trackFunil('produto', p.sku);
     var coresOrd = coresOrdenadas(p);
     var state = { cor: coresOrd[0]||'', tamanho: '', mediaIndex: 0 };
     var availInit = tamanhosDisponiveis(p, state.cor);
