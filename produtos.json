@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-27T15:10:50.413Z",
+  "geradoEm": "2026-07-27T15:20:02.475Z",
   "produtos": [
     {
       "sku": "ZUM-BLPO-700",
@@ -492,6 +492,29 @@
       "ordem": 14
     },
     {
+      "sku": "ZUM-TSBC-201",
+      "nome": "T-shirt basica",
+      "cat": "T-shirts",
+      "preco": 99,
+      "cores": [
+        "Rosa",
+        "Capuccino"
+      ],
+      "tamanhos": [
+        "G",
+        "M"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 2,
+      "ativo": false,
+      "fotos": [],
+      "fotosCores": {},
+      "ordem": 15
+    },
+    {
       "sku": "ZUM-KMBC-001",
       "nome": "produto teste pagamento checkout",
       "cat": "",
@@ -512,7 +535,7 @@
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-KMBC-001/midia-1783929573801.png"
       ],
       "fotosCores": {},
-      "ordem": 15
+      "ordem": 16
     },
     {
       "sku": "ZUM-BDBA-300",
@@ -534,7 +557,7 @@
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
-      "ordem": 16
+      "ordem": 17
     },
     {
       "sku": "ZUM-BDBM-301",
@@ -556,7 +579,7 @@
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
-      "ordem": 17
+      "ordem": 18
     },
     {
       "sku": "ZUM-VDBA-101",
@@ -578,7 +601,7 @@
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
-      "ordem": 18
+      "ordem": 19
     },
     {
       "sku": "ZUM-CJBC-001",
@@ -599,7 +622,7 @@
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
-      "ordem": 19
+      "ordem": 20
     },
     {
       "sku": "ZUM-CJBC-500",
@@ -620,7 +643,7 @@
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
-      "ordem": 20
+      "ordem": 21
     },
     {
       "sku": "ZUM-CMLS-900",
@@ -643,7 +666,7 @@
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
-      "ordem": 21
+      "ordem": 22
     }
   ]
 }
