@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-27T01:57:49.164Z",
+  "geradoEm": "2026-07-27T02:54:39.479Z",
   "produtos": [
     {
       "sku": "ZUM-BLPO-700",
@@ -277,7 +277,6 @@
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDALC-100/midia-1784302086299.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDALC-100/midia-1783569620681.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDALC-100/midia-1783569600961.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDALC-100/midia-1783569529665.png"
       ],
@@ -290,6 +289,9 @@
         ],
         "Marrom": [
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDALC-100/CORES/marrom-1783569585843.jpg"
+        ],
+        "Off-white": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDALC-100/CORES/off-white-1785120865387.jpg"
         ]
       },
       "ordem": 8
