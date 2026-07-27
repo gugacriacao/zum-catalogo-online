@@ -1678,6 +1678,15 @@ window.ZUM = (function(){
       var avail = availSizes();
       return avail.length===0 || avail.every(function(s){ return s.out; });
     }
+    // Diferente de semEstoqueNaCor (cor inteira esgotada): aqui olha só o tamanho
+    // que está selecionado AGORA — cobre o caso comum de P disponível e G esgotado
+    // na mesma cor, onde antes o tamanho esgotado ficava com o botão travado (sem
+    // clique) e a cliente não tinha como pedir aviso justamente do tamanho que faltava.
+    function tamanhoSelecionadoIndisponivel(){
+      var avail = availSizes();
+      var sel = avail.filter(function(s){ return s.s===state.tamanho; })[0];
+      return !sel || sel.out;
+    }
     var related = STATE.produtos.filter(function(x){return x.category===p.category && x.slug!==p.slug;}).slice(0,4);
 
     function thumbsHTML(){
@@ -1708,13 +1717,16 @@ window.ZUM = (function(){
     function sizesHTML(){
       return availSizes().map(function(s){
         var label = s.s==='UN' ? 'Único' : s.s;
-        if(s.out) return '<button data-tam="'+s.s+'" disabled class="min-w-12 border border-border/40 px-4 py-2 text-xs uppercase tracking-[0.2em] text-muted-foreground/40 line-through">'+label+'</button>';
         var active = s.s===state.tamanho;
+        // Esgotado agora fica CLICÁVEL (sem disabled) — riscado/apagado igual antes,
+        // mas selecionável, pra cliente poder escolher esse tamanho e pedir "avise-me"
+        // especificamente dele (antes era um botão morto, sem nenhum caminho daqui).
+        if(s.out) return '<button data-tam="'+s.s+'" class="min-w-12 border px-4 py-2 text-xs uppercase tracking-[0.2em] text-muted-foreground/40 line-through transition-colors '+(active?'border-foreground/50':'border-border/40 hover:border-foreground/30')+'">'+label+'</button>';
         return '<button data-tam="'+s.s+'" class="min-w-12 border px-4 py-2 text-xs uppercase tracking-[0.2em] transition-colors '+(active?'border-foreground bg-foreground text-background':'border-border text-foreground hover:border-foreground')+'">'+label+'</button>';
       }).join('');
     }
     function wireSizeButtons(){
-      document.querySelectorAll('#sizes button:not([disabled])').forEach(function(btn){
+      document.querySelectorAll('#sizes button').forEach(function(btn){
         btn.addEventListener('click', function(){
           state.tamanho = btn.getAttribute('data-tam');
           document.getElementById('sizes').innerHTML = sizesHTML();
@@ -1730,11 +1742,15 @@ window.ZUM = (function(){
     // inteiro (que deixava adicionar cor sem estoque só porque outra cor do
     // mesmo produto tinha peça).
     function comprarHTML(){
-      var out = semEstoqueNaCor();
+      var corToda = semEstoqueNaCor();
+      var out = tamanhoSelecionadoIndisponivel();
       if(out){
+        var msg = corToda
+          ? 'Sem estoque nesta cor.'
+          : 'Sem estoque no tamanho ' + (state.tamanho==='UN'?'Único':state.tamanho) + ' — outros tamanhos disponíveis acima.';
         return '<div class="mt-10 border border-border/60 p-4">'+
           '<p class="label-caps text-muted-foreground">Disponibilidade</p>'+
-          '<p class="mt-2 text-sm text-red-700">Sem estoque nesta cor e tamanho.</p>'+
+          '<p class="mt-2 text-sm text-red-700">'+msg+'</p>'+
         '</div>'+
         '<div class="mt-4"><button class="btn-zum w-full sm:w-auto" id="aviseBtn">Avise-me quando chegar</button></div>';
       }
