@@ -300,6 +300,28 @@
   </div>
 </div>
 
+<!-- ---------- AVISE-ME QUANDO CHEGAR (modal) ---------- -->
+<div id="aviseBackdrop" class="fixed inset-0 z-[90] hidden items-center justify-center bg-foreground/30 p-4" onclick="ZUM.closeAvise()">
+  <div class="w-full max-w-sm bg-background p-6 shadow-2xl" onclick="event.stopPropagation()">
+    <div class="flex items-center justify-between">
+      <span class="label-caps">Avise-me quando chegar</span>
+      <button aria-label="Fechar" onclick="ZUM.closeAvise()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <p id="aviseInfo" class="mt-2 text-xs text-muted-foreground"></p>
+    <div class="mt-5 space-y-4 text-sm" id="aviseFormArea">
+      <div><label class="mb-1 block text-[11px] uppercase tracking-[0.15em] text-muted-foreground">Nome</label>
+        <input type="text" id="aviseNome" placeholder="Seu nome" class="w-full border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground"></div>
+      <div><label class="mb-1 block text-[11px] uppercase tracking-[0.15em] text-muted-foreground">WhatsApp</label>
+        <input type="tel" id="aviseWpp" placeholder="(00) 00000-0000" class="w-full border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground"></div>
+      <p class="text-[11px] text-muted-foreground">Ao enviar, você concorda em receber uma mensagem no WhatsApp da ZUM quando este produto voltar ao estoque.</p>
+      <p id="aviseMsg" class="text-xs text-red-700"></p>
+      <button class="btn-zum w-full" onclick="ZUM.enviarAvise()">Quero ser avisada</button>
+    </div>
+  </div>
+</div>
+
 <script>
 window.ZUM = (function(){
   "use strict";
@@ -1286,7 +1308,11 @@ window.ZUM = (function(){
     }
 
     try{
-      var r = await asCall('criarPedidoPendente', { cliente: cliente, itens: itensApi, frete: frete });
+      // contaEmail: e-mail da conta logada (não o campo editável do
+      // formulário) — é a chave que getPedidosContaSite usa pra "Meus
+      // Pedidos" sempre achar esse pedido depois, mesmo que a pessoa troque
+      // telefone/endereço no perfil no futuro.
+      var r = await asCall('criarPedidoPendente', { cliente: cliente, itens: itensApi, frete: frete, contaEmail: CUSTOMER.email });
       if(!r || !r.ok || !r.pedido){
         if(btn){ btn.disabled=false; btn.textContent='Pagar com Pix ou Cartão'; }
         alert('Não foi possível registrar o pedido'+(r&&r.erro?(': '+r.erro):'')+'. Tente novamente.');
@@ -1709,7 +1735,8 @@ window.ZUM = (function(){
         return '<div class="mt-10 border border-border/60 p-4">'+
           '<p class="label-caps text-muted-foreground">Disponibilidade</p>'+
           '<p class="mt-2 text-sm text-red-700">Sem estoque nesta cor e tamanho.</p>'+
-        '</div>';
+        '</div>'+
+        '<div class="mt-4"><button class="btn-zum w-full sm:w-auto" id="aviseBtn">Avise-me quando chegar</button></div>';
       }
       var porCor = p.estoquePorVariante && p.estoquePorVariante[normalizeCor(state.cor)];
       var qtd = porCor ? (porCor[normalizeCor(state.tamanho)]!==undefined ? porCor[normalizeCor(state.tamanho)] : null) : null;
@@ -1721,7 +1748,13 @@ window.ZUM = (function(){
         detalhe+
       '</div>';
     }
-    function wireCompra(){}
+    // Vitrine é só consulta (sem sacola/checkout) — por isso wireCompra()
+    // aqui só cuida do "Avise-me quando chegar", nunca de "Adicionar à
+    // Sacola" (que nem existe nessa versão da página de produto).
+    function wireCompra(){
+      var aviseBtn = document.getElementById('aviseBtn');
+      if(aviseBtn) aviseBtn.addEventListener('click', function(){ abrirAviseMe(p, state); });
+    }
     function refreshCompra(){
       var el = document.getElementById('compraArea');
       if(el){ el.innerHTML = comprarHTML(); wireCompra(); }
@@ -1822,7 +1855,9 @@ document.getElementById('newsForm').addEventListener('submit', function(e){
   return {
     openSearch: openSearch,
     closeSearch: closeSearch,
-    onSearchInput: onSearchInput
+    onSearchInput: onSearchInput,
+    closeAvise: closeAvise,
+    enviarAvise: enviarAvise
   };
 })();
 </script>
