@@ -1342,7 +1342,11 @@ window.ZUM = (function(){
     }
 
     try{
-      var r = await asCall('criarPedidoPendente', { cliente: cliente, itens: itensApi, frete: frete });
+      // contaEmail: e-mail da conta logada (não o campo editável do
+      // formulário) — é a chave que getPedidosContaSite usa pra "Meus
+      // Pedidos" sempre achar esse pedido depois, mesmo que a pessoa troque
+      // telefone/endereço no perfil no futuro.
+      var r = await asCall('criarPedidoPendente', { cliente: cliente, itens: itensApi, frete: frete, contaEmail: CUSTOMER.email });
       if(!r || !r.ok || !r.pedido){
         if(btn){ btn.disabled=false; btn.textContent='Pagar com Pix ou Cartão'; }
         alert('Não foi possível registrar o pedido'+(r&&r.erro?(': '+r.erro):'')+'. Tente novamente.');
