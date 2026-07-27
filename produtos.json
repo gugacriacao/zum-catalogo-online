@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-24T18:58:00.621Z",
+  "geradoEm": "2026-07-27T01:57:49.164Z",
   "produtos": [
     {
       "sku": "ZUM-BLPO-700",
@@ -142,6 +142,9 @@
         ],
         "Off": [
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/CORES/off-1784314199229.jpg"
+        ],
+        "Caqui": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/CORES/caqui-1785117436209.jpg"
         ]
       },
       "ordem": 4
