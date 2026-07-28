@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-27T15:20:02.475Z",
+  "geradoEm": "2026-07-28T00:06:46.739Z",
   "produtos": [
     {
       "sku": "ZUM-BLPO-700",
@@ -404,7 +404,7 @@
       "badge": "",
       "destaque": "Algodão",
       "descricao": "",
-      "estoqueNum": 9,
+      "estoqueNum": 5,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783480100247.png",
@@ -433,7 +433,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 3,
+      "estoqueNum": 4,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CC-400/midia-1783478963409.png",
@@ -461,6 +461,7 @@
       "cat": "Vestidos",
       "preco": 189.9,
       "cores": [
+        "Azul",
         "Preto",
         "Rosa",
         "Verde"
