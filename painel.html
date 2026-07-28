@@ -405,7 +405,7 @@ body{font-family:-apple-system,sans-serif;background:#f4f4f4;min-height:100vh}
       <div class="hint">💻 Publicar código: selecione index.html, vitrine.html, vercel.json e/ou os arquivos de api/ (criar-pagamento.js, webhook-infinitepay.js, calcular-frete.js) quando eles mudarem — sobe direto, sem terminal. produtos.json e banners.json nunca são aceitos aqui (use sempre 🚀 Publicar agora pra esses dois).</div>
       <div class="hint" id="hintSincFotos" style="display:none;color:#2e7d32;font-weight:600"></div>
       <div class="hint" style="margin-top:10px">
-        <button class="btn btn-outline" onclick="removerCatalogoAntigo()" style="color:#b91c1c;border-color:#b91c1c">🗑 Remover catalogo.html do GitHub (aposentado em 28/Jul/2026)</button>
+        <button class="btn btn-outline" onclick="removerArquivosAntigos()" style="color:#b91c1c;border-color:#b91c1c">🗑 Limpar arquivos antigos do GitHub (16 arquivos sem uso)</button>
       </div>
     </div>
     <div class="config-group" style="background:#f9f6f0">
@@ -2558,43 +2558,75 @@ async function publicarCodigo(fileList) {
   }
 }
 
-/* ==================== REMOVER CATALOGO.HTML (aposentado) ==================== */
-// 28/Jul/2026: catalogo.html era o site antigo. index.html (com carrinho,
-// checkout e frete real) virou o site oficial na raiz do domínio — ver
-// vercel.json e memory/session_2026_07_28_frete_superfrete.md. Esse botão
-// remove o arquivo do GitHub de vez (uso único; pode ficar aqui sem problema
-// depois — só vai dar "arquivo não existe" se clicado de novo).
-async function removerCatalogoAntigo() {
+/* ==================== REMOVER ARQUIVOS ANTIGOS (aposentados) ==================== */
+// 28/Jul/2026: limpeza dos arquivos que sobraram de versões antigas do
+// projeto e não são mais usados por nada — confirmado sem nenhuma referência
+// em index.html, vitrine.html, painel.html, api/*.js ou vercel.json (os
+// únicos arquivos que realmente rodam hoje). Ver
+// memory/session_2026_07_28_frete_superfrete.md pra lista completa e o
+// raciocínio por trás de cada um. Apagar do GitHub não é definitivo de
+// verdade — fica no histórico do Git, dá pra recuperar se precisar.
+var ARQUIVOS_ANTIGOS_PARA_REMOVER = [
+  'catalogo.html',              // site antigo — substituído pelo index.html
+  'catalogo-v4.html',           // versão antiga, sem uso
+  'gerenciar-banners.html',     // painel antigo de banners, sem uso
+  'gerenciar-catalogo.html',    // painel antigo de catálogo, sem uso
+  'loja.html',                  // versão antiga, sem uso
+  'ordenar-banners.html',       // ferramenta antiga, sem uso
+  'ordenar-produtos.html',      // ferramenta antiga, sem uso
+  'INSTALACAO.html',            // guia antigo, substituído pelo HISTORICO-COMPLETO.html
+  'PUBLICAR.command',           // script antigo, substituído pelo TESTAR-E-PUBLICAR.command / Publicar código
+  'RESUMO-PROJETO.md',          // doc antigo (26/06/2026), substituído pelo HISTORICO-COMPLETO.html
+  'COMO-USAR.txt',              // doc antigo, substituído pelo HISTORICO-COMPLETO.html
+  '.zum-test',                  // marcador de teste de conexão, sem uso
+  'calcular-frete.js',          // cópia perdida na raiz (a de verdade é api/calcular-frete.js)
+  'preview-frete.html',         // preview de desenvolvimento — o checkout real (index.html) já tem a função
+  'RESUMOS/2026-06-25_v1.md',   // snapshot antigo, sem uso
+  'RESUMOS/ZUM-Loja-Backend.gs' // snapshot antigo, sem uso
+];
+
+async function removerArquivosAntigos() {
   var token = (localStorage.getItem('zum-gh-token')||'').trim();
   if (!token) { setTab('config'); toast('⚠ Configure o GitHub Token em ⚙ Config'); return; }
-  if (!confirm('Remover catalogo.html do GitHub?\n\nEle já não é mais usado — o site oficial agora é o index.html. Essa ação não pode ser desfeita por aqui (mas continua no histórico do Git, se precisar recuperar).')) return;
+  var lista = ARQUIVOS_ANTIGOS_PARA_REMOVER.join('\n • ');
+  if (!confirm('Remover estes '+ARQUIVOS_ANTIGOS_PARA_REMOVER.length+' arquivos antigos do GitHub?\n\n • '+lista+'\n\nNenhum deles é usado pelo site, painel ou API hoje. Essa ação não pode ser desfeita por aqui (mas continua no histórico do Git, se precisar recuperar).')) return;
 
   var owner = localStorage.getItem('zum-gh-owner') || GH_OWNER;
   var repo  = localStorage.getItem('zum-gh-repo')  || GH_REPO;
-  var api = 'https://api.github.com/repos/'+owner+'/'+repo+'/contents/catalogo.html';
+  var ok = [], jaNaoExistia = [], erro = [];
 
-  toast('⏳ Removendo catalogo.html...');
-  try {
-    var sha = await getShaGitHub(api, token);
-    if (!sha) { toast('✓ catalogo.html já não existe no GitHub.', 6000); return; }
-    var r = await fetch(api, {
-      method:'DELETE',
-      headers:{
-        'Authorization':'Bearer '+token,
-        'Accept':'application/vnd.github+json',
-        'Content-Type':'application/json',
-        'X-GitHub-Api-Version':'2022-11-28'
-      },
-      body: JSON.stringify({message:'Remover: catalogo.html (aposentado — site oficial agora é index.html)', sha: sha})
-    });
-    if (!r.ok) {
-      var err = await r.json().catch(function(){ return {}; });
-      throw new Error('HTTP '+r.status+': '+(err.message||'erro'));
+  for (var i = 0; i < ARQUIVOS_ANTIGOS_PARA_REMOVER.length; i++) {
+    var path = ARQUIVOS_ANTIGOS_PARA_REMOVER[i];
+    var api = 'https://api.github.com/repos/'+owner+'/'+repo+'/contents/'+encodeURIComponent(path).replace(/%2F/g,'/');
+    toast('⏳ Removendo '+path+'... ('+(i+1)+'/'+ARQUIVOS_ANTIGOS_PARA_REMOVER.length+')');
+    try {
+      var sha = await getShaGitHub(api, token);
+      if (!sha) { jaNaoExistia.push(path); continue; }
+      var r = await fetch(api, {
+        method:'DELETE',
+        headers:{
+          'Authorization':'Bearer '+token,
+          'Accept':'application/vnd.github+json',
+          'Content-Type':'application/json',
+          'X-GitHub-Api-Version':'2022-11-28'
+        },
+        body: JSON.stringify({message:'Remover: '+path+' (arquivo antigo sem uso)', sha: sha})
+      });
+      if (!r.ok) {
+        var err = await r.json().catch(function(){ return {}; });
+        throw new Error(err.message||('HTTP '+r.status));
+      }
+      ok.push(path);
+    } catch(e) {
+      erro.push(path+' ('+e.message+')');
     }
-    toast('✓ catalogo.html removido do GitHub. A Vercel atualiza sozinha em instantes.', 8000);
-  } catch(e) {
-    alert('❌ Falha ao remover catalogo.html:\n\n'+e.message);
   }
+
+  var resumo = '';
+  if (ok.length) resumo += '✓ Removidos ('+ok.length+'): '+ok.join(', ')+'\n\n';
+  if (jaNaoExistia.length) resumo += 'ℹ Já não existiam ('+jaNaoExistia.length+'): '+jaNaoExistia.join(', ')+'\n\n';
+  if (erro.length) resumo += '❌ Falharam ('+erro.length+'): '+erro.join(', ');
+  alert('Limpeza concluída.\n\n'+resumo);
 }
 
 /* ==================== PUBLICAR TUDO ==================== */
