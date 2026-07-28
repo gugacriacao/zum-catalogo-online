@@ -138,7 +138,11 @@ module.exports = async function handler(req, res) {
       .sort(function (a, b) { return a.preco - b.preco; });
 
     if (!opcoes.length) {
-      res.status(200).json({ ok: false, erro: 'Nenhuma opção de frete disponível pra esse CEP' });
+      // DEBUG TEMPORÁRIO (28/Jul/2026): inclui a resposta crua da SuperFrete
+      // pra descobrir por que o filtro (has_error/price) está zerando tudo,
+      // já que o cálculo manual no site deles retorna PAC/SEDEX normalmente
+      // pro mesmo CEP. Remover assim que a causa for encontrada.
+      res.status(200).json({ ok: false, erro: 'Nenhuma opção de frete disponível pra esse CEP', debugRaw: data });
       return;
     }
 
