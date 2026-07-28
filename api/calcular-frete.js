@@ -86,19 +86,23 @@ module.exports = async function handler(req, res) {
 
     var caixa = caixaPorPeso(pesoTotal);
 
-    var valorDeclarado = itens.reduce(function (soma, it) {
-      return soma + (Number(it.preco) || 0) * (Number(it.qty) || 1);
-    }, 0);
-
     var payload = {
       from: { postal_code: CEP_ORIGEM },
       to: { postal_code: cepDestino },
       services: '1,2', // só Correios: 1=PAC, 2=SEDEX (Jadlog/Loggi fora por decisão do usuário)
       options: {
+        // Seguro (declaração de valor) desligado de propósito: a SuperFrete
+        // rejeita a cotação inteira ("faixa pra peso/quantidade/valor não
+        // encontrada") quando o pacote é leve (~300g) e o valor declarado é
+        // alto — combinação comum aqui, já que uma peça de roupa pesa pouco
+        // mas vale bastante. Confirmado em teste real (28/Jul/2026, CEP
+        // 58084-015): com seguro ligado, PAC e SEDEX voltavam com erro; sem
+        // seguro, ambos cotam normalmente. Ver
+        // memory/session_2026_07_28_frete_superfrete.md.
         own_hand: false,
         receipt: false,
-        insurance_value: valorDeclarado,
-        use_insurance_value: valorDeclarado > 0
+        insurance_value: 0,
+        use_insurance_value: false
       },
       package: {
         weight: pesoTotal,
@@ -138,11 +142,7 @@ module.exports = async function handler(req, res) {
       .sort(function (a, b) { return a.preco - b.preco; });
 
     if (!opcoes.length) {
-      // DEBUG TEMPORÁRIO (28/Jul/2026): inclui a resposta crua da SuperFrete
-      // pra descobrir por que o filtro (has_error/price) está zerando tudo,
-      // já que o cálculo manual no site deles retorna PAC/SEDEX normalmente
-      // pro mesmo CEP. Remover assim que a causa for encontrada.
-      res.status(200).json({ ok: false, erro: 'Nenhuma opção de frete disponível pra esse CEP', debugRaw: data });
+      res.status(200).json({ ok: false, erro: 'Nenhuma opção de frete disponível pra esse CEP' });
       return;
     }
 
