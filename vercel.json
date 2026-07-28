@@ -1,10 +1,5 @@
 {
-  "redirects": [
-    { "source": "/", "destination": "/catalogozumonline", "permanent": false }
-  ],
   "rewrites": [
-    { "source": "/catalogozumonline", "destination": "/catalogo.html" },
-    { "source": "/catalogozumonline/", "destination": "/catalogo.html" },
     { "source": "/teste", "destination": "/index.html" },
     { "source": "/teste/", "destination": "/index.html" }
   ],
