@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZUM — Preview do cálculo de frete</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          background: 'var(--background)',
+          foreground: 'var(--foreground)',
+          muted: 'var(--muted)',
+          'muted-foreground': 'var(--muted-foreground)',
+          border: 'var(--border)',
+        },
+        fontFamily: {
+          display: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+          sans: ['"Jost"', '"Helvetica Neue"', 'sans-serif'],
+        }
+      }
+    }
+  }
+</script>
+<style>
+  :root{
+    --background: oklch(0.985 0.003 90);
+    --foreground: oklch(0.15 0 0);
+    --muted: oklch(0.96 0.005 90);
+    --muted-foreground: oklch(0.55 0 0);
+    --border: oklch(0.9 0.005 90);
+  }
+  html,body{background-color:var(--background);color:var(--foreground);font-family:'Jost',sans-serif;-webkit-font-smoothing:antialiased;}
+  .label-caps{font-family:'Jost',sans-serif;text-transform:uppercase;letter-spacing:0.28em;font-weight:400;font-size:0.72rem;}
+  .btn-zum{display:inline-flex;align-items:center;justify-content:center;background-color:var(--foreground);color:var(--background);text-transform:uppercase;letter-spacing:0.32em;font-size:0.75rem;padding:1rem 2.25rem;transition:opacity .2s ease;border:none;cursor:pointer;font-family:inherit;width:100%;}
+  .btn-zum:hover{opacity:.82;}
+  .btn-zum[disabled]{opacity:.35;cursor:not-allowed;}
+  a{color:inherit;}
+  button{font-family:inherit;}
+</style>
+</head>
+<body>
+
+<div class="mx-auto max-w-xl px-4 py-10">
+  <div class="mb-6 border border-border bg-muted px-4 py-3 text-[12px] leading-snug text-muted-foreground">
+    <b>Preview</b> — mesmo bloco de endereço/frete do checkout real. CEP via ViaCEP e
+    cálculo de frete via SuperFrete, ambos de verdade (chama <code>/api/calcular-frete</code>,
+    o mesmo endpoint do checkout) — só funciona depois de publicado no site.
+  </div>
+
+  <div class="border border-border/60 bg-background shadow-sm">
+    <div class="flex items-center justify-between border-b border-border/60 px-6 py-5">
+      <span class="label-caps">Calcule o frete</span>
+    </div>
+    <div class="px-6 py-6" id="drawerBody">
+      <div class="space-y-4 text-sm">
+        <div><label class="mb-1 block text-[11px] uppercase tracking-[0.15em] text-muted-foreground">CEP</label>
+          <input type="tel" id="fCep" placeholder="00000-000" oninput="onCep()" class="w-full border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground"></div>
+        <div><label class="mb-1 block text-[11px] uppercase tracking-[0.15em] text-muted-foreground">Rua</label>
+          <input type="text" id="fRua" placeholder="Rua / Avenida" class="w-full border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground"></div>
+        <div class="flex gap-3">
+          <div class="flex-1"><label class="mb-1 block text-[11px] uppercase tracking-[0.15em] text-muted-foreground">Número</label>
+            <input type="text" id="fNum" placeholder="123" class="w-full border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground"></div>
+          <div class="flex-1"><label class="mb-1 block text-[11px] uppercase tracking-[0.15em] text-muted-foreground">Complemento</label>
+            <input type="text" id="fComp" placeholder="Apto, bloco..." class="w-full border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground"></div>
+        </div>
+        <div class="flex gap-3">
+          <div class="flex-1"><label class="mb-1 block text-[11px] uppercase tracking-[0.15em] text-muted-foreground">Bairro</label>
+            <input type="text" id="fBairro" placeholder="Bairro" class="w-full border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground"></div>
+          <div class="flex-1"><label class="mb-1 block text-[11px] uppercase tracking-[0.15em] text-muted-foreground">Cidade</label>
+            <input type="text" id="fCidade" placeholder="Cidade" class="w-full border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground"></div>
+        </div>
+        <div><label class="mb-1 block text-[11px] uppercase tracking-[0.15em] text-muted-foreground">Estado</label>
+          <input type="text" id="fUf" placeholder="CE" maxlength="2" class="w-full border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground"></div>
+      </div>
+
+      <div id="freteBlock" class="mt-4"></div>
+
+      <div class="mt-4 space-y-2 text-sm">
+        <div class="flex justify-between text-muted-foreground"><span>Subtotal</span><span id="subtotalOut">R$ 189,80</span></div>
+        <div class="flex justify-between text-muted-foreground"><span>Frete</span><span id="freteOut">Calculado a seguir</span></div>
+        <div class="flex justify-between border-t border-border/60 pt-2 text-base"><span>Total</span><span id="totalOut">R$ 189,80</span></div>
+      </div>
+
+      <button class="btn-zum mt-6" id="btnContinuar" disabled>Continuar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var SUBTOTAL = 189.80;
+var FRETE_VALOR = 15.00;
+var CIDADES_LOCAL = ['FORTALEZA','EUSEBIO'];
+var CIDADES_COMBINAR = ['CAUCAIA','MARACANAU','ITAITINGA','PACATUBA','AQUIRAZ',
+  'MARANGUAPE','GUAIUBA','HORIZONTE','PACAJUS','PINDORETAMA'];
+
+var FRETE_TIPO = null;
+var FRETE_VALOR_ATUAL = 0;
+var FRETE_OPCOES = [];
+var FRETE_OPCAO_IDX = 0;
+var FRETE_CEP_CALC = '';
+
+function $(id){ return document.getElementById(id); }
+function money(v){ return v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}); }
+function normalizeCor(s){
+  return String(s||'').trim().toUpperCase()
+    .replace(/Á|À|Â|Ã/g,'A').replace(/É|Ê/g,'E').replace(/Í/g,'I')
+    .replace(/Ó|Ô|Õ/g,'O').replace(/Ú/g,'U').replace(/Ç/g,'C');
+}
+function escolherFrete(idx){
+  FRETE_OPCAO_IDX = idx;
+  FRETE_VALOR_ATUAL = FRETE_OPCOES[idx] ? FRETE_OPCOES[idx].preco : 0;
+  renderFreteBlock(); atualizarTotais();
+}
+
+// Cotação real — chama o mesmo endpoint /api/calcular-frete usado pelo
+// checkout de verdade. Carrinho de exemplo fixo (bate com o Subtotal
+// mostrado na tela) só pra ter peso/categoria pra estimar o frete.
+async function calcularFreteReal(cep){
+  try{
+    var r = await fetch('/api/calcular-frete', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ cep: cep, itens: [{categoria:'T-shirts', qty:1, preco: SUBTOTAL}] })
+    });
+    return await r.json();
+  }catch(e){
+    return { ok:false, erro:String(e) };
+  }
+}
+
+async function avaliarFrete(){
+  var cidade = normalizeCor($('fCidade') ? $('fCidade').value : '');
+  var uf = normalizeCor($('fUf') ? $('fUf').value : '');
+  var cep = $('fCep') ? $('fCep').value.replace(/\D/g,'') : '';
+
+  if(cep.length!==8 || !cidade || !uf){
+    FRETE_TIPO = null; FRETE_VALOR_ATUAL = 0; renderFreteBlock(); atualizarTotais(); return;
+  }
+  if(uf==='CE' && CIDADES_LOCAL.indexOf(cidade)!==-1){
+    FRETE_TIPO = 'local'; FRETE_VALOR_ATUAL = FRETE_VALOR;
+    renderFreteBlock(); atualizarTotais(); validForm(); return;
+  }
+  if(uf==='CE' && CIDADES_COMBINAR.indexOf(cidade)!==-1){
+    FRETE_TIPO = 'combinar'; FRETE_VALOR_ATUAL = 0;
+    renderFreteBlock(); atualizarTotais(); validForm(); return;
+  }
+  if(FRETE_CEP_CALC === cep && FRETE_TIPO==='calculado' && FRETE_OPCOES.length){
+    renderFreteBlock(); return;
+  }
+
+  FRETE_TIPO = 'calculando'; FRETE_OPCOES = []; renderFreteBlock(); atualizarTotais();
+  var data = await calcularFreteReal(cep);
+  if(data && data.ok && data.opcoes && data.opcoes.length){
+    FRETE_TIPO = 'calculado'; FRETE_OPCOES = data.opcoes.slice(0,3); FRETE_OPCAO_IDX = 0;
+    FRETE_VALOR_ATUAL = FRETE_OPCOES[0].preco; FRETE_CEP_CALC = cep;
+  } else {
+    FRETE_TIPO = 'erro'; FRETE_VALOR_ATUAL = 0;
+  }
+  renderFreteBlock(); atualizarTotais(); validForm();
+}
+
+function renderFreteBlock(){
+  var el = $('freteBlock');
+  if(!el) return;
+  if(FRETE_TIPO==='local'){
+    el.innerHTML = '<div class="border border-border p-3 text-xs">🛵 Entrega em Fortaleza/Eusébio — '+money(FRETE_VALOR)+', até 1 dia útil (moto aplicativo)</div>';
+  } else if(FRETE_TIPO==='combinar'){
+    el.innerHTML = '<div class="border border-orange-300 bg-orange-50 p-3 text-xs text-orange-800">📍 Pra sua região vamos confirmar prazo e valor do frete pelo WhatsApp assim que o pedido for feito.</div>';
+  } else if(FRETE_TIPO==='calculando'){
+    el.innerHTML = '<div class="border border-border p-3 text-xs text-muted-foreground">Calculando frete…</div>';
+  } else if(FRETE_TIPO==='calculado'){
+    el.innerHTML = '<div class="space-y-2">'+FRETE_OPCOES.map(function(o,i){
+      return '<label class="flex items-center justify-between border p-3 text-xs cursor-pointer '+(i===FRETE_OPCAO_IDX?'border-foreground':'border-border')+'">'+
+        '<span><input type="radio" name="freteOpcao" '+(i===FRETE_OPCAO_IDX?'checked':'')+' onchange="escolherFrete('+i+')" class="mr-2 align-middle">'+o.servico+(o.transportadora?' ('+o.transportadora+')':'')+' — '+o.prazoDias+' dias úteis</span>'+
+        '<span>'+money(o.preco)+'</span>'+
+      '</label>';
+    }).join('')+'</div>';
+  } else if(FRETE_TIPO==='erro'){
+    el.innerHTML = '<div class="border border-red-300 bg-red-50 p-3 text-xs text-red-700">Não conseguimos calcular o frete agora. Vamos confirmar o valor pelo WhatsApp após o pedido.</div>';
+  } else {
+    el.innerHTML = '';
+  }
+}
+
+function atualizarTotais(){
+  var fr = FRETE_VALOR_ATUAL;
+  var freteTxt;
+  if(FRETE_TIPO==='combinar' || FRETE_TIPO==='erro') freteTxt = 'A combinar';
+  else if(FRETE_TIPO==='calculando') freteTxt = 'Calculando…';
+  else if(fr>0) freteTxt = money(fr);
+  else freteTxt = FRETE_TIPO ? 'Grátis' : 'Calculado a seguir';
+  $('subtotalOut').textContent = money(SUBTOTAL);
+  $('freteOut').textContent = freteTxt;
+  $('totalOut').textContent = money(SUBTOTAL + fr);
+}
+
+function validForm(){
+  var ok = !!FRETE_TIPO && FRETE_TIPO!=='calculando';
+  $('btnContinuar').disabled = !ok;
+}
+
+async function onCep(){
+  var v = $('fCep').value.replace(/\D/g,'').slice(0,8);
+  $('fCep').value = v.length>5 ? v.replace(/(\d{5})(\d{1,3})/,'$1-$2') : v;
+  if(v.length===8){
+    try{
+      var r = await fetch('https://viacep.com.br/ws/'+v+'/json/');
+      var d = await r.json();
+      if(!d.erro){
+        $('fRua').value=d.logradouro||''; $('fBairro').value=d.bairro||'';
+        $('fCidade').value=d.localidade||''; $('fUf').value=d.uf||'';
+      }
+    }catch(e){}
+    avaliarFrete();
+  } else {
+    FRETE_TIPO = null; FRETE_VALOR_ATUAL = 0; renderFreteBlock(); atualizarTotais();
+  }
+  validForm();
+}
+
+atualizarTotais();
+</script>
+</body>
+</html>
