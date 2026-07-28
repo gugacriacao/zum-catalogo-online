@@ -1063,7 +1063,8 @@ window.ZUM = (function(){
           '<span><input type="radio" name="freteOpcao" '+(i===FRETE_OPCAO_IDX?'checked':'')+' onchange="ZUM.escolherFrete('+i+')" class="mr-2 align-middle">'+o.servico+(o.transportadora?' ('+o.transportadora+')':'')+' — '+o.prazoDias+' dias úteis</span>'+
           '<span>'+money(o.preco)+'</span>'+
         '</label>';
-      }).join('')+'</div>';
+      }).join('')+'</div>'+
+      '<p class="mt-2 text-[11px] text-muted-foreground">Prazo estimado, contado a partir da postagem nos Correios (geralmente no mesmo dia útil ou no seguinte à compra) — pode variar de acordo com a logística dos Correios.</p>';
     } else if(FRETE_TIPO==='erro'){
       el.innerHTML = retirarBtn+'<div class="border border-red-300 bg-red-50 p-3 text-xs text-red-700">Não conseguimos calcular o frete agora. Vamos confirmar o valor pelo WhatsApp após o pedido.</div>';
     } else {
