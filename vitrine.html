@@ -348,13 +348,13 @@ window.ZUM = (function(){
   // de vender pra quem não dá pra entregar. Lista aproximada dos municípios
   // da RMF (ajustar se a área de entrega mudar); o checkout não bloqueia a
   // compra fora dela, só avisa e sugere confirmar pelo WhatsApp antes.
-  var RMF_CIDADES = ['FORTALEZA','AQUIRAZ','CASCAVEL','CAUCAIA','CHOROZINHO','EUSEBIO',
-    'GUAIUBA','HORIZONTE','ITAITINGA','MARACANAU','MARANGUAPE','PACAJUS','PACATUBA',
-    'PINDORETAMA','SAO GONCALO DO AMARANTE','TRAIRI'];
-  function entregaDisponivel(cidade, uf){
-    if(normalizeCor(uf) !== 'CE') return false;
-    return RMF_CIDADES.indexOf(normalizeCor(cidade)) !== -1;
-  }
+  // Zonas de frete (28/Jul/2026) — ver mesma mudança no index.html. Site
+  // entrega pra qualquer lugar do Brasil agora: Fortaleza+Eusébio tem
+  // entrega local fixa de moto, RMF próxima confirma pelo WhatsApp, resto
+  // usa cálculo automático via SuperFrete (avaliarFrete() + /api/calcular-frete.js).
+  var CIDADES_LOCAL = ['FORTALEZA','EUSEBIO'];
+  var CIDADES_COMBINAR = ['CAUCAIA','MARACANAU','ITAITINGA','PACATUBA','AQUIRAZ',
+    'MARANGUAPE','GUAIUBA','HORIZONTE','PACAJUS','PINDORETAMA'];
   // Normaliza nome de cor pra comparar com segurança: a coluna "cor" da
   // planilha (lida ao vivo pelo ZumAgent) é texto livre, digitado por
   // humanos — vem tudo maiúsculo e às vezes sem acento (ex: "Bordô" vira
@@ -870,8 +870,14 @@ window.ZUM = (function(){
   // ============================================================
   var CART = [];
   var CART_STEP = 'sacola'; // sacola | dados | confirmar
-  var FRETE_OPCAO = 'entrega';
   var PEDIDO_FINALIZADO = false;
+
+  // Estado do frete calculado pra etapa "dados" em diante — ver avaliarFrete().
+  var FRETE_TIPO = null;
+  var FRETE_VALOR_ATUAL = 0;
+  var FRETE_OPCOES = [];
+  var FRETE_OPCAO_IDX = 0;
+  var FRETE_CEP_CALC = '';
 
   function loadCart(){
     try{ CART = JSON.parse(localStorage.getItem('zum-site-cart')||'[]'); }catch(e){ CART = []; }
@@ -889,7 +895,7 @@ window.ZUM = (function(){
   function addToCart(p, cor, tamanho, qty){
     var ex = CART.filter(function(i){return i.sku===p.sku && i.color===cor && i.size===tamanho;})[0];
     if(ex){ ex.qty += qty; }
-    else{ CART.push({sku:p.sku, name:p.nome, price:p.preco, color:cor, size:tamanho, qty:qty, image:p.image}); }
+    else{ CART.push({sku:p.sku, name:p.nome, price:p.preco, color:cor, size:tamanho, qty:qty, image:p.image, category:p.category}); }
     saveCart();
   }
   // ---------- AVISE-ME QUANDO CHEGAR ----------
@@ -931,7 +937,102 @@ window.ZUM = (function(){
 
   function cartQty(i, d){ CART[i].qty = Math.max(1, CART[i].qty+d); saveCart(); renderCartDrawer(); }
   function cartDel(i){ CART.splice(i,1); saveCart(); renderCartDrawer(); }
-  function setFrete(op){ FRETE_OPCAO = op; renderCartDrawer(); }
+
+  // ---------- FRETE (Fortaleza/Eusébio fixo, RMF próxima combinada, resto calculado) ----------
+  function setRetirar(ativo){
+    if(ativo){
+      FRETE_TIPO = 'retirar'; FRETE_VALOR_ATUAL = 0;
+      renderFreteBlock();
+    } else {
+      FRETE_TIPO = null; FRETE_VALOR_ATUAL = 0;
+      avaliarFrete();
+    }
+    validForm();
+  }
+
+  function escolherFrete(idx){
+    FRETE_OPCAO_IDX = idx;
+    FRETE_VALOR_ATUAL = FRETE_OPCOES[idx] ? FRETE_OPCOES[idx].preco : 0;
+    renderFreteBlock();
+  }
+
+  async function avaliarFrete(){
+    if(FRETE_TIPO === 'retirar') return;
+    var cidade = normalizeCor($('fCidade') ? $('fCidade').value : '');
+    var uf = normalizeCor($('fUf') ? $('fUf').value : '');
+    var cep = $('fCep') ? $('fCep').value.replace(/\D/g,'') : '';
+
+    if(cep.length!==8 || !cidade || !uf){
+      FRETE_TIPO = null; FRETE_VALOR_ATUAL = 0; renderFreteBlock(); return;
+    }
+    if(uf==='CE' && CIDADES_LOCAL.indexOf(cidade)!==-1){
+      FRETE_TIPO = 'local'; FRETE_VALOR_ATUAL = FRETE_VALOR;
+      renderFreteBlock(); validForm(); return;
+    }
+    if(uf==='CE' && CIDADES_COMBINAR.indexOf(cidade)!==-1){
+      FRETE_TIPO = 'combinar'; FRETE_VALOR_ATUAL = 0;
+      renderFreteBlock(); validForm(); return;
+    }
+
+    if(FRETE_CEP_CALC === cep && FRETE_TIPO==='calculado' && FRETE_OPCOES.length){
+      renderFreteBlock(); return;
+    }
+
+    FRETE_TIPO = 'calculando'; FRETE_OPCOES = []; renderFreteBlock();
+    try{
+      var itensFrete = CART.map(function(i){ return { categoria: i.category||'', qty: i.qty, preco: i.price }; });
+      var r = await fetch('/api/calcular-frete', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ cep: cep, itens: itensFrete })
+      });
+      var data = await r.json();
+      if(data && data.ok && data.opcoes && data.opcoes.length){
+        FRETE_TIPO = 'calculado'; FRETE_OPCOES = data.opcoes.slice(0,3); FRETE_OPCAO_IDX = 0;
+        FRETE_VALOR_ATUAL = FRETE_OPCOES[0].preco; FRETE_CEP_CALC = cep;
+      } else {
+        FRETE_TIPO = 'erro'; FRETE_VALOR_ATUAL = 0;
+      }
+    }catch(e){
+      FRETE_TIPO = 'erro'; FRETE_VALOR_ATUAL = 0;
+    }
+    renderFreteBlock(); validForm();
+  }
+
+  function freteLabel(){
+    if(FRETE_TIPO==='retirar') return 'Retirar no local';
+    if(FRETE_TIPO==='local') return 'Entrega (moto) — até 1 dia útil';
+    if(FRETE_TIPO==='combinar' || FRETE_TIPO==='erro') return 'A combinar pelo WhatsApp';
+    if(FRETE_TIPO==='calculado' && FRETE_OPCOES[FRETE_OPCAO_IDX]) return FRETE_OPCOES[FRETE_OPCAO_IDX].servico+' — '+FRETE_OPCOES[FRETE_OPCAO_IDX].prazoDias+' dias úteis';
+    return '';
+  }
+
+  function renderFreteBlock(){
+    var el = $('freteBlock');
+    if(!el) return;
+    if(FRETE_TIPO==='retirar'){
+      el.innerHTML = '<div class="border border-foreground bg-foreground text-background p-3 text-xs flex items-center justify-between">🏪 Retirar na loja — grátis <button type="button" onclick="ZUM.setRetirar(false)" class="underline">Cancelar</button></div>';
+      return;
+    }
+    var retirarBtn = '<button type="button" onclick="ZUM.setRetirar(true)" class="mb-2 text-[11px] uppercase tracking-[0.15em] underline text-muted-foreground">🏪 Prefiro retirar na loja</button>';
+    if(FRETE_TIPO==='local'){
+      el.innerHTML = retirarBtn+'<div class="border border-border p-3 text-xs">🛵 Entrega em Fortaleza/Eusébio — '+money(FRETE_VALOR)+', até 1 dia útil (moto aplicativo)</div>';
+    } else if(FRETE_TIPO==='combinar'){
+      el.innerHTML = retirarBtn+'<div class="border border-orange-300 bg-orange-50 p-3 text-xs text-orange-800">📍 Pra sua região vamos confirmar prazo e valor do frete pelo WhatsApp assim que o pedido for feito.</div>';
+    } else if(FRETE_TIPO==='calculando'){
+      el.innerHTML = retirarBtn+'<div class="border border-border p-3 text-xs text-muted-foreground">Calculando frete…</div>';
+    } else if(FRETE_TIPO==='calculado'){
+      el.innerHTML = retirarBtn+'<div class="space-y-2">'+FRETE_OPCOES.map(function(o,i){
+        return '<label class="flex items-center justify-between border p-3 text-xs cursor-pointer '+(i===FRETE_OPCAO_IDX?'border-foreground':'border-border')+'">'+
+          '<span><input type="radio" name="freteOpcao" '+(i===FRETE_OPCAO_IDX?'checked':'')+' onchange="ZUM.escolherFrete('+i+')" class="mr-2 align-middle">'+o.servico+(o.transportadora?' ('+o.transportadora+')':'')+' — '+o.prazoDias+' dias úteis</span>'+
+          '<span>'+money(o.preco)+'</span>'+
+        '</label>';
+      }).join('')+'</div>';
+    } else if(FRETE_TIPO==='erro'){
+      el.innerHTML = retirarBtn+'<div class="border border-red-300 bg-red-50 p-3 text-xs text-red-700">Não conseguimos calcular o frete agora. Vamos confirmar o valor pelo WhatsApp após o pedido.</div>';
+    } else {
+      el.innerHTML = '';
+    }
+  }
 
   function openCart(step){
     CART_STEP = step || 'sacola';
@@ -965,10 +1066,16 @@ window.ZUM = (function(){
 
   function totalsHTML(){
     var t = cartTotal();
-    var fr = FRETE_OPCAO==='entrega' ? FRETE_VALOR : 0;
+    var fr = FRETE_VALOR_ATUAL;
+    var freteTxt;
+    if(FRETE_TIPO==='combinar' || FRETE_TIPO==='erro') freteTxt = 'A combinar';
+    else if(FRETE_TIPO==='retirar') freteTxt = 'Grátis';
+    else if(FRETE_TIPO==='calculando') freteTxt = 'Calculando…';
+    else if(fr>0) freteTxt = money(fr);
+    else freteTxt = FRETE_TIPO ? 'Grátis' : 'Calculado a seguir';
     return '<div class="mt-4 space-y-2 text-sm">'+
       '<div class="flex justify-between text-muted-foreground"><span>Subtotal</span><span>'+money(t)+'</span></div>'+
-      '<div class="flex justify-between text-muted-foreground"><span>Frete</span><span>'+(fr>0?money(fr):'Grátis')+'</span></div>'+
+      '<div class="flex justify-between text-muted-foreground"><span>Frete</span><span>'+freteTxt+'</span></div>'+
       '<div class="flex justify-between border-t border-border/60 pt-2 text-base"><span>Total</span><span>'+money(t+fr)+'</span></div>'+
     '</div>';
   }
@@ -986,11 +1093,8 @@ window.ZUM = (function(){
       }
       body.innerHTML =
         '<div>'+CART.map(function(it,i){ return drawerItemHTML(it,i,true); }).join('')+'</div>'+
-        '<div class="mt-4 flex gap-2 text-xs">'+
-          '<button onclick="ZUM.setFrete(\'entrega\')" class="flex-1 border px-3 py-3 '+(FRETE_OPCAO==='entrega'?'border-foreground bg-foreground text-background':'border-border')+'">🛵 Entrega<br><span class="opacity-80">'+money(FRETE_VALOR)+'</span></button>'+
-          '<button onclick="ZUM.setFrete(\'retirar\')" class="flex-1 border px-3 py-3 '+(FRETE_OPCAO==='retirar'?'border-foreground bg-foreground text-background':'border-border')+'">🏪 Retirar<br><span class="opacity-80">Grátis</span></button>'+
-        '</div>'+
         totalsHTML()+
+        '<p class="mt-2 text-[11px] text-muted-foreground">O frete é calculado na próxima etapa, a partir do seu CEP.</p>'+
         '<button class="btn-zum mt-6 w-full" onclick="ZUM.goCheckout()">Finalizar Compra</button>';
     }
 
@@ -1012,7 +1116,7 @@ window.ZUM = (function(){
           '<div class="flex gap-3">'+field('fBairro','Bairro','text','Bairro','oninput="ZUM.validForm()"',true)+field('fCidade','Cidade','text','Cidade','oninput="ZUM.validForm()"',true)+'</div>'+
           field('fUf','Estado','text','CE','oninput="ZUM.validForm()" maxlength="2"')+
         '</div>'+
-        '<p id="entregaAviso" class="mt-3 hidden text-[12px] leading-snug text-orange-700"></p>'+
+        '<div id="freteBlock" class="mt-4"></div>'+
         (CUSTOMER ? '' :
           '<div class="mt-6 border-t border-border/60 pt-5">'+
             '<p class="text-[11px] uppercase tracking-[0.15em] text-muted-foreground">Cadastro obrigatório para finalizar a compra</p>'+
@@ -1024,18 +1128,20 @@ window.ZUM = (function(){
         )+
         '<button class="btn-zum mt-6 w-full" id="btnContinuar" disabled onclick="ZUM.goConfirm()">Continuar</button>';
       restoreFormValues();
+      avaliarFrete();
       validForm();
     }
 
     else if(CART_STEP==='confirmar'){
       titleEl.textContent = 'Confirmar Pedido';
-      var fr = FRETE_OPCAO==='entrega' ? FRETE_VALOR : 0;
       body.innerHTML =
         '<div class="mb-5 flex items-center gap-2 text-[11px] uppercase tracking-[0.15em] text-muted-foreground">'+
           '<button onclick="ZUM.openCart(\'dados\')" class="underline">← Dados</button></div>'+
         '<div>'+CART.map(function(it,i){ return drawerItemHTML(it,i,false); }).join('')+'</div>'+
         totalsHTML()+
-        '<p class="mt-4 text-[12px] text-muted-foreground">Entrega para '+($('fCidade')?$('fCidade').value:'')+' '+($('fUf')?$('fUf').value:'')+' · '+(FRETE_OPCAO==='entrega'?'Entrega':'Retirar no local')+'</p>'+
+        '<p class="mt-4 text-[12px] text-muted-foreground">Entrega para '+($('fCidade')?$('fCidade').value:'')+' '+($('fUf')?$('fUf').value:'')+' · '+freteLabel()+'</p>'+
+        (FRETE_TIPO==='combinar' || FRETE_TIPO==='erro' ?
+          '<p class="mt-2 text-[12px] text-orange-700">O valor do frete será confirmado pelo WhatsApp logo após o pedido.</p>' : '')+
         '<button class="btn-zum mt-6 w-full" id="btnPagar" onclick="ZUM.goPay()">Pagar com Pix ou Cartão</button>'+
         '<p class="mt-3 text-[11px] text-muted-foreground">Você será direcionado ao checkout seguro da InfinitePay pra finalizar o pagamento.</p>';
     }
@@ -1206,6 +1312,9 @@ window.ZUM = (function(){
           $('fCidade').value=d.localidade||''; $('fUf').value=d.uf||'';
         }
       }catch(e){}
+      avaliarFrete();
+    } else if(FRETE_TIPO!=='retirar'){
+      FRETE_TIPO = null; FRETE_VALOR_ATUAL = 0; renderFreteBlock();
     }
     validForm();
   }
@@ -1220,23 +1329,11 @@ window.ZUM = (function(){
       ok = ok && senhaConta.length>=6 && $('fAceitaMkt') && $('fAceitaMkt').checked;
     }
 
-    if($('btnContinuar')) $('btnContinuar').disabled = !ok;
+    // Frete precisa estar resolvido antes de continuar (ver avaliarFrete()).
+    // 'combinar' e 'erro' liberam — o valor é confirmado depois pelo WhatsApp.
+    ok = ok && !!FRETE_TIPO && FRETE_TIPO!=='calculando';
 
-    // Aviso de área de entrega: hoje só cobrimos Fortaleza e Região
-    // Metropolitana, mas o checkout aceita endereço de qualquer lugar do
-    // Brasil — sem isso o cliente só ia descobrir que não entregamos pra
-    // ele depois de já ter pago.
-    var aviso = $('entregaAviso');
-    if(aviso){
-      var cidade = $('fCidade') ? $('fCidade').value.trim() : '';
-      var uf = $('fUf') ? $('fUf').value.trim() : '';
-      if(cidade && uf && uf.length===2 && !entregaDisponivel(cidade, uf)){
-        aviso.innerHTML = 'Hoje a gente só entrega em Fortaleza e Região Metropolitana. Pra '+cidade+'/'+uf.toUpperCase()+', fale com a gente no <a href="https://wa.me/5585981110467?text=Ol%C3%A1!%20Quero%20saber%20se%20voc%C3%AAs%20entregam%20na%20minha%20cidade." target="_blank" rel="noopener" class="underline">WhatsApp</a> antes de finalizar, pra confirmar se dá pra combinar o envio.';
-        aviso.classList.remove('hidden');
-      } else {
-        aviso.classList.add('hidden');
-      }
-    }
+    if($('btnContinuar')) $('btnContinuar').disabled = !ok;
   }
 
   function asUrl(){ return (STATE.banners && STATE.banners.asUrl) || ''; }
@@ -1299,7 +1396,7 @@ window.ZUM = (function(){
       complemento: dados.fComp||'', bairro: dados.fBairro||'',
       cep: dados.fCep||''
     };
-    var frete = FRETE_OPCAO==='entrega' ? FRETE_VALOR : 0;
+    var frete = FRETE_VALOR_ATUAL;
 
     if(!cliente.nome){
       if(btn){ btn.disabled=false; btn.textContent='Pagar com Pix ou Cartão'; }
