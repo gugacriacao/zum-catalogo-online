@@ -142,7 +142,11 @@ module.exports = async function handler(req, res) {
       .sort(function (a, b) { return a.preco - b.preco; });
 
     if (!opcoes.length) {
-      res.status(200).json({ ok: false, erro: 'Nenhuma opção de frete disponível pra esse CEP' });
+      // DEBUG TEMPORÁRIO (28/Jul/2026, segunda rodada): a correção do seguro
+      // não resolveu sozinha — incluindo o payload enviado + resposta crua
+      // pra achar o que mais está causando "faixa não encontrada". Remover
+      // assim que resolvido.
+      res.status(200).json({ ok: false, erro: 'Nenhuma opção de frete disponível pra esse CEP', debugPayload: payload, debugRaw: data });
       return;
     }
 
