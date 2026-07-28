@@ -75,7 +75,14 @@ module.exports = async function handler(req, res) {
     }
 
     function arredondarPraCima(v, passo) {
-      return Math.ceil(v / passo) * passo;
+      // Math.round(...*100)/100 no final é de propósito: Math.ceil(v/passo)*passo
+      // sozinho gera erro de ponto flutuante do JS (ex.: 0.2+0.08 vira
+      // 0.30000000000000004, não 0.3 exato). A SuperFrete não reconhece esse
+      // peso "quebrado" na tabela de preços dela e devolve erro genérico
+      // ("faixa pra peso/quantidade/valor não encontrada") pra PAC e SEDEX —
+      // foi a causa raiz confirmada em teste real (28/Jul/2026, CEP
+      // 58084-015). Ver memory/session_2026_07_28_frete_superfrete.md.
+      return Math.round((Math.ceil(v / passo) * passo) * 100) / 100;
     }
 
     var pesoTotal = itens.reduce(function (soma, it) {
@@ -142,11 +149,7 @@ module.exports = async function handler(req, res) {
       .sort(function (a, b) { return a.preco - b.preco; });
 
     if (!opcoes.length) {
-      // DEBUG TEMPORÁRIO (28/Jul/2026, segunda rodada): a correção do seguro
-      // não resolveu sozinha — incluindo o payload enviado + resposta crua
-      // pra achar o que mais está causando "faixa não encontrada". Remover
-      // assim que resolvido.
-      res.status(200).json({ ok: false, erro: 'Nenhuma opção de frete disponível pra esse CEP', debugPayload: payload, debugRaw: data });
+      res.status(200).json({ ok: false, erro: 'Nenhuma opção de frete disponível pra esse CEP' });
       return;
     }
 
