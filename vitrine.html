@@ -551,7 +551,7 @@ window.ZUM = (function(){
       cep: $('accCep')?$('accCep').value:'', rua: $('accRua')?$('accRua').value:'',
       numero: $('accNum')?$('accNum').value:'', complemento: $('accComp')?$('accComp').value:'',
       bairro: $('accBairro')?$('accBairro').value:'', cidade: $('accCidade')?$('accCidade').value:'',
-      uf: $('accUf')?$('accUf').value:'', aceitaMarketing: aceitaMkt
+      uf: $('accUf')?$('accUf').value:'', aceitaMarketing: aceitaMkt, origem: 'vitrine'
     });
     if(!r || !r.ok){ msg.className='mt-3 text-xs text-red-700'; msg.textContent = (r && r.erro) || 'Não foi possível criar a conta. Tente novamente.'; return; }
     salvarSessaoConta(r.conta);
@@ -1214,7 +1214,7 @@ window.ZUM = (function(){
         bairro: $('fBairro')?$('fBairro').value:'',
         cidade: $('fCidade')?$('fCidade').value:'',
         uf: $('fUf')?$('fUf').value:'',
-        aceitaMarketing: true
+        aceitaMarketing: true, origem: 'vitrine'
       });
 
       if(!r || !r.ok || !r.conta){
@@ -1395,7 +1395,7 @@ window.ZUM = (function(){
       // formulário) — é a chave que getPedidosContaSite usa pra "Meus
       // Pedidos" sempre achar esse pedido depois, mesmo que a pessoa troque
       // telefone/endereço no perfil no futuro.
-      var r = await asCall('criarPedidoPendente', { cliente: cliente, itens: itensApi, frete: frete, contaEmail: CUSTOMER.email });
+      var r = await asCall('criarPedidoPendente', { cliente: cliente, itens: itensApi, frete: frete, contaEmail: CUSTOMER.email, origem: 'vitrine' });
       if(!r || !r.ok || !r.pedido){
         if(btn){ btn.disabled=false; btn.textContent='Pagar com Pix ou Cartão'; }
         alert('Não foi possível registrar o pedido'+(r&&r.erro?(': '+r.erro):'')+'. Tente novamente.');
@@ -1468,7 +1468,7 @@ window.ZUM = (function(){
       var url = asUrl();
       if(url){
         var payload = JSON.stringify({action:'registrarSacola', itens:CART, total:cartTotal(), token:API_TOKEN,
-          email:($('fEmail')?$('fEmail').value:''), wpp:($('fWpp')?$('fWpp').value:'')});
+          email:($('fEmail')?$('fEmail').value:''), wpp:($('fWpp')?$('fWpp').value:''), origem:'vitrine'});
         navigator.sendBeacon(url, payload);
       }
     }
