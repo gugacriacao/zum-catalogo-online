@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-31T22:01:49.776Z",
+  "geradoEm": "2026-07-31T22:04:14.105Z",
   "produtos": [
     {
       "sku": "ZUM-BLPO-700",
@@ -150,6 +150,33 @@
       "ordem": 4
     },
     {
+      "sku": "ZUM-CMLS-900",
+      "nome": "Camisaria",
+      "cat": "Camisaria",
+      "preco": 289,
+      "cores": [
+        "Branco"
+      ],
+      "tamanhos": [
+        "P",
+        "M",
+        "G"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 2,
+      "ativo": true,
+      "fotos": [
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CMLS-900/midia-1785535365355.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CMLS-900/midia-1785535373974.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CMLS-900/midia-1785535378363.png"
+      ],
+      "fotosCores": {},
+      "ordem": 5
+    },
+    {
       "sku": "ZUM-CLCN-401",
       "nome": "Calça cenoura",
       "cat": "Calças",
@@ -174,7 +201,7 @@
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CLCN-401/midia-1784417434671.png"
       ],
       "fotosCores": {},
-      "ordem": 5
+      "ordem": 6
     },
     {
       "sku": "ZUM-VDRC-105",
@@ -223,7 +250,7 @@
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/CORES/azul-1783641475380.jpg"
         ]
       },
-      "ordem": 6
+      "ordem": 7
     },
     {
       "sku": "ZUM-RGRE-800",
@@ -249,7 +276,7 @@
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-RGRE-800/midia-1784423119392.png"
       ],
       "fotosCores": {},
-      "ordem": 7
+      "ordem": 8
     },
     {
       "sku": "ZUM-VDALC-100",
@@ -290,7 +317,7 @@
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDALC-100/CORES/off-white-1785120865387.jpg"
         ]
       },
-      "ordem": 8
+      "ordem": 9
     },
     {
       "sku": "ZUM-VDFU-106",
@@ -315,7 +342,7 @@
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDFU-106/midia-1783640109818.png"
       ],
       "fotosCores": {},
-      "ordem": 9
+      "ordem": 10
     },
     {
       "sku": "ZUM-VDMG-104",
@@ -352,7 +379,7 @@
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/CORES/azul-1783480207656.jpg"
         ]
       },
-      "ordem": 10
+      "ordem": 11
     },
     {
       "sku": "ZUM-VDBT-102",
@@ -383,7 +410,7 @@
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDBT-102/CORES/preto-1783520039715.jpg"
         ]
       },
-      "ordem": 11
+      "ordem": 12
     },
     {
       "sku": "ZUM-TSOV-200",
@@ -414,7 +441,7 @@
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783533933777.png"
       ],
       "fotosCores": {},
-      "ordem": 12
+      "ordem": 13
     },
     {
       "sku": "ZUM-CC-400",
@@ -454,7 +481,7 @@
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CC-400/CORES/bege-1783569804849.jpg"
         ]
       },
-      "ordem": 13
+      "ordem": 14
     },
     {
       "sku": "ZUM-VDDN-103",
@@ -491,7 +518,7 @@
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDDN-103/CORES/azul-1783643841651.jpg"
         ]
       },
-      "ordem": 14
+      "ordem": 15
     },
     {
       "sku": "ZUM-TSBC-201",
@@ -514,7 +541,7 @@
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
-      "ordem": 15
+      "ordem": 16
     },
     {
       "sku": "ZUM-KMBC-001",
@@ -537,7 +564,7 @@
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-KMBC-001/midia-1783929573801.png"
       ],
       "fotosCores": {},
-      "ordem": 16
+      "ordem": 17
     },
     {
       "sku": "ZUM-BDBA-300",
@@ -559,7 +586,7 @@
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
-      "ordem": 17
+      "ordem": 18
     },
     {
       "sku": "ZUM-BDBM-301",
@@ -581,7 +608,7 @@
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
-      "ordem": 18
+      "ordem": 19
     },
     {
       "sku": "ZUM-VDBA-101",
@@ -603,7 +630,7 @@
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
-      "ordem": 19
+      "ordem": 20
     },
     {
       "sku": "ZUM-CJBC-001",
@@ -624,7 +651,7 @@
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
-      "ordem": 20
+      "ordem": 21
     },
     {
       "sku": "ZUM-CJBC-500",
@@ -642,29 +669,6 @@
       "destaque": "",
       "descricao": "",
       "estoqueNum": 0,
-      "ativo": false,
-      "fotos": [],
-      "fotosCores": {},
-      "ordem": 21
-    },
-    {
-      "sku": "ZUM-CMLS-900",
-      "nome": "Camisaria",
-      "cat": "Camisaria",
-      "preco": 289,
-      "cores": [
-        "Branco"
-      ],
-      "tamanhos": [
-        "P",
-        "M",
-        "G"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "destaque": "",
-      "descricao": "",
-      "estoqueNum": 2,
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
