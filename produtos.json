@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-31T13:30:38.211Z",
+  "geradoEm": "2026-07-31T14:30:10.676Z",
   "produtos": [
     {
       "sku": "ZUM-BLPO-700",
@@ -198,7 +198,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 5,
+      "estoqueNum": 4,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-1783864612196.png",
@@ -334,7 +334,7 @@
       "badge": "",
       "destaque": "Tecido Poliamida. Tamanho único: 36/42",
       "descricao": "",
-      "estoqueNum": 3,
+      "estoqueNum": 2,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/midia-1783480241093.png",
@@ -474,7 +474,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 2,
+      "estoqueNum": 1,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDDN-103/midia-1783643692817.png",
