@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-31T12:44:46.339Z",
+  "geradoEm": "2026-07-31T12:46:48.670Z",
   "produtos": [
     {
       "sku": "ZUM-BLPO-700",
@@ -187,7 +187,8 @@
         "Preto",
         "Azul",
         "Marrom",
-        "Branco"
+        "Branco",
+        "Amarela"
       ],
       "tamanhos": [
         "UN"
@@ -196,7 +197,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 0,
+      "estoqueNum": 5,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-1783864612196.png",
@@ -404,7 +405,7 @@
       "badge": "",
       "destaque": "Algodão",
       "descricao": "",
-      "estoqueNum": 5,
+      "estoqueNum": 3,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783480100247.png",
@@ -509,7 +510,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 2,
+      "estoqueNum": 0,
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
