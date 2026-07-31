@@ -930,9 +930,15 @@ async function excluirAvisoPessoa(linha, btnEl) {
 /* ==================== TABS ==================== */
 function setTab(t) {
   tabAtual = t;
-  ['produtos','topo','meio','stories','homeDesktop','outdoorDesktop','avisos','config'].forEach(function(id){
-    document.getElementById('tab-'+id).classList.toggle('on', id===t);
-    document.getElementById('tb-'+id).classList.toggle('on', id===t);
+  // 'topo'/'meio'/'stories' saíram da lista: os botões tb-topo/tb-meio/tb-stories
+  // foram removidos do menu (só serviam o catalogo.html antigo), mas os painéis
+  // e o código de cada um continuam no arquivo, só não são mais navegáveis.
+  // Guard com "if (el)" evita quebrar tudo se algum id aqui não tiver botão/painel.
+  ['produtos','homeDesktop','outdoorDesktop','avisos','config'].forEach(function(id){
+    var painel = document.getElementById('tab-'+id);
+    var botao  = document.getElementById('tb-'+id);
+    if (painel) painel.classList.toggle('on', id===t);
+    if (botao)  botao.classList.toggle('on', id===t);
   });
   if (t === 'avisos') carregarAvisosEstoque();
 }
