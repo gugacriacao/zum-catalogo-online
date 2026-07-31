@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-31T12:50:56.070Z",
+  "geradoEm": "2026-07-31T13:15:11.380Z",
   "produtos": [
     {
       "sku": "ZUM-BLPO-700",
@@ -188,7 +188,8 @@
         "Azul",
         "Marrom",
         "Branco",
-        "Amarela"
+        "Amarela",
+        "Azul Bebê"
       ],
       "tamanhos": [
         "UN"
@@ -206,7 +207,6 @@
       ],
       "fotosCores": {
         "Off-white": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/CORES/off-white-1783477485452.jpg",
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/CORES/off-white-1783477547567.jpg"
         ],
         "Bordô": [
@@ -474,7 +474,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 1,
+      "estoqueNum": 2,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDDN-103/midia-1783643692817.png",
