@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-31T22:04:15.811Z",
+  "geradoEm": "2026-08-05T19:01:06.457Z",
   "asUrl": "https://script.google.com/macros/s/AKfycbwHavGCAgB01Vm3b6kEqN26x1MRA62VVA6P2UWfbeDVFbDxfyQ9PbAhr6B44ElRK_5q/exec",
   "destaqueLabel": "Destaques",
   "topo": [
@@ -13,8 +13,76 @@
       "zoom": 1
     }
   ],
-  "meio": [],
-  "stories": [],
+  "meio": [
+    {
+      "ativo": true,
+      "sku": "",
+      "after": 50,
+      "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/MEIO/banner-meio-01.png",
+      "mk": "",
+      "mt": "",
+      "pos": "53.8% 41.5%",
+      "zoom": 1.35
+    },
+    {
+      "ativo": true,
+      "sku": "",
+      "after": 50,
+      "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/MEIO/banner-meio-02.png",
+      "mk": "",
+      "mt": "",
+      "pos": "50% 50%",
+      "zoom": 1
+    },
+    {
+      "ativo": true,
+      "sku": "",
+      "after": 50,
+      "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/MEIO/banner-meio-03.png",
+      "mk": "",
+      "mt": "",
+      "pos": "50% 50%",
+      "zoom": 1
+    }
+  ],
+  "stories": [
+    {
+      "ativo": true,
+      "sku": "",
+      "after": 2,
+      "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/STORIES/stories-01.png",
+      "layout": "half",
+      "pos": "50% 50%",
+      "zoom": 1
+    },
+    {
+      "ativo": true,
+      "sku": "",
+      "after": 2,
+      "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/STORIES/stories-02.png",
+      "layout": "half",
+      "pos": "50% 50%",
+      "zoom": 1
+    },
+    {
+      "ativo": true,
+      "sku": "",
+      "after": 2,
+      "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/STORIES/stories-03.png",
+      "layout": "half",
+      "pos": "50% 50%",
+      "zoom": 1
+    },
+    {
+      "ativo": true,
+      "sku": "",
+      "after": 2,
+      "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/STORIES/stories-04.mp4",
+      "layout": "half",
+      "pos": "50% 50%",
+      "zoom": 1.1
+    }
+  ],
   "homeDesktop": [
     {
       "ativo": true,
