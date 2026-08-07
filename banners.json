@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-08-06T20:59:19.020Z",
+  "geradoEm": "2026-08-07T06:44:34.963Z",
   "asUrl": "https://script.google.com/macros/s/AKfycbwHavGCAgB01Vm3b6kEqN26x1MRA62VVA6P2UWfbeDVFbDxfyQ9PbAhr6B44ElRK_5q/exec",
   "destaqueLabel": "Destaques",
   "topo": [
@@ -97,5 +97,13 @@
       "zoom": 1
     }
   ],
-  "outdoorDesktop": []
+  "outdoorDesktop": [
+    {
+      "ativo": true,
+      "sku": "",
+      "img": "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/BANNERS/OUTDOOR-DESKTOP/banner-outdoor-desktop-01.png",
+      "pos": "50% 50%",
+      "zoom": 1
+    }
+  ]
 }
