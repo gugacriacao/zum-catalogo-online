@@ -396,7 +396,13 @@ window.ZUM = (function(){
   function normalizeCor(s){
     return String(s||'').trim().toUpperCase()
       .replace(/Á|À|Â|Ã/g,'A').replace(/É|Ê/g,'E').replace(/Í/g,'I')
-      .replace(/Ó|Ô|Õ/g,'O').replace(/Ú/g,'U').replace(/Ç/g,'C');
+      .replace(/Ó|Ô|Õ/g,'O').replace(/Ú/g,'U').replace(/Ç/g,'C')
+      // Off-white x Off White: "OW" no COR_COD_TO_NOME vira "Off White" (espaço),
+      // mas o nome oficial da cor no produtos.json é "Off-white" (hífen) — a
+      // chave nunca batia, então o estoque por variante caía no fallback
+      // otimista (sem porCor = sem bloqueio) e a cor aparecia disponível mesmo
+      // sem estoque real. Remove espaço/hífen dos dois lados pra sempre bater.
+      .replace(/[\s-]/g,'');
   }
 
   // ============================================================
