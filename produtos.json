@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-08-11T09:14:36.468Z",
+  "geradoEm": "2026-08-11T17:03:17.501Z",
   "produtos": [
     {
       "sku": "ZUM-BLPO-700",
@@ -578,6 +578,31 @@
       "ordem": 17
     },
     {
+      "sku": "ZUM-BDBM-301",
+      "nome": "Body manguinha",
+      "cat": "Bodies",
+      "preco": 60,
+      "cores": [
+        "Cinza",
+        "Marrom",
+        "Preto",
+        "Bordô",
+        "Azul marinho"
+      ],
+      "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 11,
+      "ativo": false,
+      "fotos": [],
+      "fotosCores": {},
+      "ordem": 18
+    },
+    {
       "sku": "ZUM-TSBC-201",
       "nome": "T-shirt basica",
       "cat": "T-shirts",
@@ -598,7 +623,7 @@
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
-      "ordem": 18
+      "ordem": 19
     },
     {
       "sku": "ZUM-KMBC-001",
@@ -621,7 +646,7 @@
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-KMBC-001/midia-1783929573801.png"
       ],
       "fotosCores": {},
-      "ordem": 19
+      "ordem": 20
     },
     {
       "sku": "ZUM-BDBA-300",
@@ -631,28 +656,6 @@
       "cores": [
         "Marrom",
         "Preto"
-      ],
-      "tamanhos": [
-        "UN"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "destaque": "",
-      "descricao": "",
-      "estoqueNum": 0,
-      "ativo": false,
-      "fotos": [],
-      "fotosCores": {},
-      "ordem": 20
-    },
-    {
-      "sku": "ZUM-BDBM-301",
-      "nome": "Body manguinha",
-      "cat": "Bodies",
-      "preco": 60,
-      "cores": [
-        "Cinza",
-        "Marrom"
       ],
       "tamanhos": [
         "UN"
