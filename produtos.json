@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-08-13T03:54:07.891Z",
+  "geradoEm": "2026-08-13T03:56:34.491Z",
   "produtos": [
     {
       "sku": "ZUM-BLPO-700",
@@ -584,8 +584,8 @@
       "estoqueNum": 0,
       "ativo": true,
       "fotos": [
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDFF-109/midia-1786593191899.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDFF-109/midia-1786593197179.png"
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDFF-109/midia-1786593197179.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDFF-109/midia-1786593191899.png"
       ],
       "fotosCores": {},
       "ordem": 17
