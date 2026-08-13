@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-08-11T17:13:02.982Z",
+  "geradoEm": "2026-08-13T03:54:07.891Z",
   "produtos": [
     {
       "sku": "ZUM-BLPO-700",
@@ -64,7 +64,7 @@
       "sku": "ZUM-VDPL-107",
       "nome": "Vestido Pala",
       "cat": "Vestidos",
-      "preco": 295.9,
+      "preco": 295,
       "cores": [
         "Azul",
         "Vinho",
@@ -101,7 +101,7 @@
       "sku": "ZUM-SKMD-600",
       "nome": "Saia midi",
       "cat": "Saias",
-      "preco": 219.9,
+      "preco": 219,
       "cores": [
         "Azul",
         "Beterraba",
@@ -166,7 +166,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 1,
+      "estoqueNum": 4,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CMLS-900/midia-1785535365355.png",
@@ -207,7 +207,7 @@
       "sku": "ZUM-VDRC-105",
       "nome": "Vestido recorte costas",
       "cat": "Vestidos",
-      "preco": 189.9,
+      "preco": 189,
       "cores": [
         "Bordô",
         "Off-white",
@@ -277,7 +277,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 0,
+      "estoqueNum": 1,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-RGRE-800/midia-1784424275899.png",
@@ -332,7 +332,7 @@
       "sku": "ZUM-VDFU-106",
       "nome": "Vestido frente unica",
       "cat": "Vestidos",
-      "preco": 189.9,
+      "preco": 189,
       "cores": [
         "Bege"
       ],
@@ -357,7 +357,7 @@
       "sku": "ZUM-VDMG-104",
       "nome": "Vestido manga",
       "cat": "Vestidos",
-      "preco": 189.9,
+      "preco": 189,
       "cores": [
         "Azul",
         "Marrom",
@@ -377,8 +377,7 @@
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/midia-1783480241093.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/midia-1783480220676.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/midia-1783641930539.png"
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/midia-1783480220676.png"
       ],
       "fotosCores": {
         "Marrom": [
@@ -389,6 +388,15 @@
         ],
         "Azul": [
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/CORES/azul-1783480207656.jpg"
+        ],
+        "Verde": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/CORES/verde-1786592390720.jpg"
+        ],
+        "Amarela": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/CORES/amarela-1786592400005.jpg"
+        ],
+        "Rosa": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/CORES/rosa-1786592403907.jpg"
         ]
       },
       "ordem": 11
@@ -397,7 +405,7 @@
       "sku": "ZUM-VDDU-108",
       "nome": "Vestido decote u costas",
       "cat": "Vestidos",
-      "preco": 189.9,
+      "preco": 189,
       "cores": [
         "Azul Bebê"
       ],
@@ -421,7 +429,7 @@
       "sku": "ZUM-VDBT-102",
       "nome": "Vestido busto torcido",
       "cat": "Vestidos",
-      "preco": 189.9,
+      "preco": 189,
       "cores": [
         "Bordô",
         "Marrom",
@@ -458,17 +466,19 @@
         "Branco",
         "Marrom",
         "Preto",
-        "Off-white"
+        "Off-white",
+        "Rosa"
       ],
       "tamanhos": [
         "G",
-        "P"
+        "P",
+        "UN"
       ],
       "stock": "Em estoque",
       "badge": "",
       "destaque": "Algodão",
       "descricao": "",
-      "estoqueNum": 2,
+      "estoqueNum": 3,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783480100247.png",
@@ -483,7 +493,7 @@
       "sku": "ZUM-CC-400",
       "nome": "Calça cargo",
       "cat": "Calças",
-      "preco": 189.9,
+      "preco": 189,
       "cores": [
         "Bege",
         "Preto"
@@ -523,7 +533,7 @@
       "sku": "ZUM-VDDN-103",
       "nome": "Vestido decote nadador",
       "cat": "Vestidos",
-      "preco": 189.9,
+      "preco": 189,
       "cores": [
         "Azul",
         "Preto",
@@ -560,7 +570,7 @@
       "sku": "ZUM-VDFF-109",
       "nome": "Vestido faixa frente",
       "cat": "Vestidos",
-      "preco": 189.9,
+      "preco": 189,
       "cores": [
         "Marrom"
       ],
@@ -572,10 +582,36 @@
       "destaque": "",
       "descricao": "",
       "estoqueNum": 0,
+      "ativo": true,
+      "fotos": [
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDFF-109/midia-1786593191899.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDFF-109/midia-1786593197179.png"
+      ],
+      "fotosCores": {},
+      "ordem": 17
+    },
+    {
+      "sku": "ZUM-CJBD-501",
+      "nome": "Conjunto blusa e short bordado",
+      "cat": "Conjuntos",
+      "preco": 389,
+      "cores": [
+        "Areia",
+        "Verde militar"
+      ],
+      "tamanhos": [
+        "P",
+        "M"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 4,
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
-      "ordem": 17
+      "ordem": 18
     },
     {
       "sku": "ZUM-BDBM-301",
@@ -596,11 +632,11 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 11,
+      "estoqueNum": 13,
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
-      "ordem": 18
+      "ordem": 19
     },
     {
       "sku": "ZUM-TSBC-201",
@@ -609,42 +645,21 @@
       "preco": 99,
       "cores": [
         "Rosa",
-        "Capuccino"
+        "Capuccino",
+        "Azul Bebê"
       ],
       "tamanhos": [
         "G",
-        "M"
+        "M",
+        "P"
       ],
       "stock": "Em estoque",
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 0,
+      "estoqueNum": 8,
       "ativo": false,
       "fotos": [],
-      "fotosCores": {},
-      "ordem": 19
-    },
-    {
-      "sku": "ZUM-KMBC-001",
-      "nome": "produto teste pagamento checkout",
-      "cat": "",
-      "preco": 1,
-      "cores": [
-        "Preto"
-      ],
-      "tamanhos": [
-        "UN"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "destaque": "",
-      "descricao": "",
-      "estoqueNum": 5,
-      "ativo": false,
-      "fotos": [
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-KMBC-001/midia-1783929573801.png"
-      ],
       "fotosCores": {},
       "ordem": 20
     },
@@ -652,10 +667,9 @@
       "sku": "ZUM-BDBA-300",
       "nome": "Body assimétrico",
       "cat": "Bodies",
-      "preco": 60,
+      "preco": 99,
       "cores": [
-        "Marrom",
-        "Preto"
+        "Bege"
       ],
       "tamanhos": [
         "UN"
@@ -664,7 +678,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 0,
+      "estoqueNum": 1,
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
@@ -674,7 +688,7 @@
       "sku": "ZUM-VDBA-101",
       "nome": "Vestido básico",
       "cat": "Vestidos",
-      "preco": 189.9,
+      "preco": 189,
       "cores": [
         "Marrom",
         "Preto"
@@ -733,6 +747,29 @@
       "fotos": [],
       "fotosCores": {},
       "ordem": 24
+    },
+    {
+      "sku": "ZUM-KMBC-001",
+      "nome": "produto teste pagamento checkout",
+      "cat": "",
+      "preco": 1,
+      "cores": [
+        "Preto"
+      ],
+      "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 5,
+      "ativo": false,
+      "fotos": [
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-KMBC-001/midia-1783929573801.png"
+      ],
+      "fotosCores": {},
+      "ordem": 25
     }
   ]
 }
