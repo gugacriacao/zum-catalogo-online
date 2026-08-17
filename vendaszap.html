@@ -52,8 +52,8 @@
   .swatch{padding:.35rem .75rem;border:1px solid var(--border);border-radius:.5rem;font-size:.78rem;cursor:pointer;background:#fff}
   .swatch.sel{background:var(--primary);color:#fff;border-color:var(--primary)}
   .swatch.off{opacity:.3;text-decoration:line-through;cursor:not-allowed}
-  input{width:100%;font-family:'Jost',sans-serif;padding:.6rem .75rem;border:1px solid var(--border);
-    border-radius:.5rem;font-size:.88rem;background:var(--background);color:var(--foreground)}
+  input,select{width:100%;font-family:'Jost',sans-serif;padding:.65rem .75rem;border:1px solid var(--border);
+    border-radius:.5rem;font-size:1rem;background:var(--background);color:var(--foreground);min-height:44px}
   .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.4);display:none;align-items:center;justify-content:center;z-index:50;padding:1rem}
   .modal-bg.show{display:flex}
   .modal-img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:.7rem;background:var(--lilac);margin-bottom:.75rem}
@@ -63,12 +63,49 @@
   #grid{grid-template-columns:repeat(2,1fr)}
   @media (min-width:640px){ #grid{grid-template-columns:repeat(3,1fr)} }
   @media (min-width:900px){ #grid{grid-template-columns:repeat(4,1fr)} }
+
+  /* ===== Mobile layout (19/08/2026) =====
+     Antes o #layout usava grid-template-columns:1fr 380px fixo inline,
+     então em telas de celular (375–430px) a sacola ficava espremida do
+     lado do catálogo, cortando texto e campos pra fora da tela. Agora o
+     padrão é 1 coluna (catálogo em cima, sacola embaixo) e só vira
+     2 colunas lado a lado a partir de 960px, onde há espaço real pros
+     380px da sacola. */
+  #layout{grid-template-columns:1fr}
+  @media (min-width:960px){ #layout{grid-template-columns:1fr 380px} }
+
+  /* Alvos de toque maiores no celular — botões de qtd e cor eram pequenos
+     demais pra dedo (abaixo do mínimo de 44px recomendado pela Apple). */
+  .qtdbtn{width:1.25rem;height:1.25rem;display:inline-flex;align-items:center;justify-content:center}
+  @media (max-width:639px){
+    .qtdbtn{width:2.25rem;height:2.25rem;font-size:1rem}
+    .swatch{padding:.55rem 1rem;font-size:.85rem}
+    header .max-w-7xl{padding-top:1rem;padding-bottom:1rem}
+  }
+
+  /* Barra da sacola (20/08/2026) — antes era fixa no rodapé da tela; agora
+     fica dentro do fluxo normal da página, logo abaixo da busca/categorias
+     e acima da grade de produtos. Some sozinha quando a sacola tá vazia. */
+  #cartBar{
+    display:none;border-radius:.7rem;margin-bottom:1.25rem;
+    background:var(--primary);color:#fff;padding:.9rem 1.1rem;
+    align-items:center;justify-content:space-between;gap:.75rem;flex-wrap:wrap;cursor:pointer
+  }
+  #cartBar.show{display:flex}
+  #cartBar:hover{opacity:.92}
+
+  /* Modal em formato "bottom sheet" no celular — mais fácil de alcançar
+     com o polegar do que um modal centralizado. */
+  @media (max-width:639px){
+    .modal-bg{align-items:flex-end;padding:0}
+    .modal-bg > div{border-radius:1.1rem 1.1rem 0 0;max-height:92vh}
+  }
 </style>
 </head>
 <body>
 
 <header class="border-b" style="border-color:var(--border)">
-  <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-5 flex items-center justify-between gap-3 flex-wrap">
     <div>
       <div class="font-vitrine text-2xl tracking-widest">ZUM</div>
       <div class="label-caps">Vendas Zap · Checkout de atendimento</div>
@@ -77,19 +114,29 @@
   </div>
 </header>
 
-<div class="max-w-7xl mx-auto px-6 py-6 grid gap-6" style="grid-template-columns:1fr 380px" id="layout">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 grid gap-6" id="layout">
   <main>
     <div class="flex gap-3 mb-4 flex-wrap">
       <input id="busca" placeholder="Buscar produto…" oninput="renderGrid()" class="flex-1 min-w-[200px]">
-      <select id="filtroCategoria" onchange="renderGrid()" class="border rounded-lg px-3 py-2 text-sm" style="border-color:var(--border)">
+      <select id="filtroCategoria" onchange="renderGrid()" class="border rounded-lg px-3 py-2 text-sm" style="border-color:var(--border);width:auto">
         <option value="">Todas categorias</option>
       </select>
     </div>
+
+    <!-- Barra da sacola — logo abaixo da busca/categorias, acima da grade
+         de produtos. Toca em qualquer ponto pra rolar até a sacola. Some
+         sozinha quando a sacola tá vazia. -->
+    <div id="cartBar" onclick="document.getElementById('cartAside').scrollIntoView({behavior:'smooth'})">
+      <span class="font-vitrine text-lg" id="cartBarCount">0 itens</span>
+      <span style="font-family:'Jost',sans-serif;font-weight:600" id="cartBarTotal">R$ 0,00</span>
+      <span class="label-caps" style="color:#fff">Ver sacola →</span>
+    </div>
+
     <div class="label-caps mb-3" id="status"></div>
     <div class="grid gap-4" id="grid"></div>
   </main>
 
-  <aside class="border rounded-xl p-5 h-fit" style="border-color:var(--border);background:#fff">
+  <aside class="border rounded-xl p-5 h-fit" id="cartAside" style="border-color:var(--border);background:#fff">
     <div class="font-vitrine text-xl mb-3">Sacola da cliente</div>
     <div id="cartItems"><div class="label-caps">Vazia — clique num produto pra adicionar.</div></div>
 
@@ -121,19 +168,14 @@
           <input type="radio" name="frete" value="15" onchange="calcTotais()" style="width:auto"> Entrega (R$15)
         </label>
       </div>
+    </div>
 
-      <div class="label-caps mt-3 mb-1">Nome da cliente *</div>
-      <input id="cliNome" placeholder="Nome completo">
+    <div class="mt-4">
+      <div class="label-caps mb-1">Nome da cliente *</div>
+      <input id="cliNome" placeholder="Nome completo" onblur="buscarClienteRecorrente()">
       <div class="label-caps mt-3 mb-1">WhatsApp *</div>
-      <input id="cliWhats" placeholder="(85) 9xxxx-xxxx">
-      <div class="label-caps mt-3 mb-1">E-mail (opcional)</div>
-      <input id="cliEmail" placeholder="email@exemplo.com">
-      <div class="grid grid-cols-2 gap-2 mt-3">
-        <div><div class="label-caps mb-1">CEP</div><input id="cliCep" placeholder="00000-000"></div>
-        <div><div class="label-caps mb-1">Nº</div><input id="cliNumero" placeholder="Número"></div>
-      </div>
-      <div class="label-caps mt-3 mb-1">Complemento</div>
-      <input id="cliComplemento" placeholder="Casa, apto…">
+      <input id="cliWhats" placeholder="(85) 9xxxx-xxxx" onblur="buscarClienteRecorrente()">
+      <div id="clienteEncontradoMsg" class="text-sm mt-2" style="display:none;color:#3f7d4f">✅ Cliente já cadastrada — dados preenchidos automaticamente.</div>
     </div>
 
     <button class="btn-zum mt-4" id="btnGerar" onclick="gerarPedido()">Gerar link de pagamento</button>
@@ -520,9 +562,9 @@ function renderCart(){
         '<div><b class="text-sm">'+i.nome+'</b><div class="label-caps">'+i.cor+(i.tamanho?' · '+i.tamanho:'')+' · R$ '+i.preco+',00</div></div>'+
       '</div>'+
       '<div class="flex items-center gap-2 text-sm">'+
-        '<button onclick="mudarQtd('+idx+',-1)" class="border rounded w-5 h-5" style="border-color:var(--border)">−</button>'+
+        '<button onclick="mudarQtd('+idx+',-1)" class="qtdbtn border rounded" style="border-color:var(--border)">−</button>'+
         i.qtd+
-        '<button onclick="mudarQtd('+idx+',1)" class="border rounded w-5 h-5" style="border-color:var(--border)">+</button>'+
+        '<button onclick="mudarQtd('+idx+',1)" class="qtdbtn border rounded" style="border-color:var(--border)">+</button>'+
       '</div></div>';
   }).join('');
   calcTotais();
@@ -572,6 +614,18 @@ function calcTotais(){
   } else {
     descRow.style.display = 'none';
   }
+
+  atualizarBarraSacola(subtotal - desconto + frete);
+}
+
+// Barra da sacola, embutida no fluxo da página (ver CSS #cartBar) — só
+// aparece quando tem algo na sacola, evita ocupar espaço da tela à toa.
+function atualizarBarraSacola(total){
+  var qtdTotal = CART.reduce(function(s,i){ return s + i.qtd; }, 0);
+  var bar = document.getElementById('cartBar');
+  document.getElementById('cartBarCount').textContent = qtdTotal + (qtdTotal===1 ? ' item' : ' itens');
+  document.getElementById('cartBarTotal').textContent = brl(total);
+  bar.classList.toggle('show', qtdTotal > 0);
 }
 
 // Distribui o desconto proporcionalmente entre os itens da sacola, com o
@@ -588,6 +642,38 @@ function itensComDesconto(){
   });
 }
 
+// ==========================================================
+// CLIENTE RECORRENTE — autocompletar (19/08/2026)
+// ----------------------------------------------------------
+// Isso só funciona depois que a action 'buscarClientePorContato' existir
+// no ZumAgent.gs (ainda não existe hoje — ver aviso pro Tavinho no chat).
+// Até lá, essa chamada sempre recebe {ok:false} do backend (ação
+// desconhecida) e a função simplesmente não faz nada — não quebra o
+// formulário nem mostra erro pra Suzana. Agora busca só por nome/WhatsApp,
+// já que o formulário ficou só com esses dois campos.
+var buscaClienteEmAndamento = false;
+var ultimoTermoBuscado = '';
+async function buscarClienteRecorrente(){
+  var nome = document.getElementById('cliNome').value.trim();
+  var whats = document.getElementById('cliWhats').value.trim();
+
+  var termo = whats.replace(/\D/g,'').length>=10 ? whats : (nome.length>=5 ? nome : '');
+  if(!termo || termo===ultimoTermoBuscado || buscaClienteEmAndamento) return;
+  ultimoTermoBuscado = termo;
+  buscaClienteEmAndamento = true;
+
+  try{
+    var r = await asCall('buscarClientePorContato', {query: termo});
+    if(r && r.ok && r.encontrado && r.cliente){
+      var c = r.cliente;
+      if(c.nome) document.getElementById('cliNome').value = c.nome;
+      if(c.celular) document.getElementById('cliWhats').value = c.celular;
+      document.getElementById('clienteEncontradoMsg').style.display = 'block';
+    }
+  }catch(e){ /* silencioso — recurso opcional, nunca deve travar o pedido */ }
+  finally{ buscaClienteEmAndamento = false; }
+}
+
 async function gerarPedido(){
   var resultadoEl = document.getElementById('resultado');
   resultadoEl.innerHTML = '';
@@ -595,10 +681,6 @@ async function gerarPedido(){
   if(!CART.length){ resultadoEl.innerHTML = '<div class="text-sm text-red-600">Adicione ao menos um produto à sacola.</div>'; return; }
   var nome = document.getElementById('cliNome').value.trim();
   var whatsRaw = document.getElementById('cliWhats').value.trim();
-  var email = document.getElementById('cliEmail').value.trim();
-  var cep = document.getElementById('cliCep').value.trim();
-  var numero = document.getElementById('cliNumero').value.trim();
-  var complemento = document.getElementById('cliComplemento').value.trim();
   if(!nome){ resultadoEl.innerHTML = '<div class="text-sm text-red-600">Informe o nome da cliente.</div>'; return; }
   if(!whatsRaw){ resultadoEl.innerHTML = '<div class="text-sm text-red-600">Informe o WhatsApp da cliente.</div>'; return; }
 
@@ -621,7 +703,7 @@ async function gerarPedido(){
     //    assim, quando o pagamento confirmar, a Venda final bate com o que
     //    a cliente realmente pagou.
     var pedidoData = await asCall('criarPedidoPendente', {
-      cliente: {nome: nome, celular: whatsRaw, email: email},
+      cliente: {nome: nome, celular: whatsRaw},
       itens: CART.map(function(i){ return {codigo:i.codigo, qtd:i.qtd}; }),
       frete: frete,
       desconto: descontoReais > 0 ? {tipo:'valor', valor: descontoReais} : null,
@@ -648,7 +730,7 @@ async function gerarPedido(){
       body: JSON.stringify({
         pedido: codigoPedido,
         itens: itensPagamento,
-        cliente: {nome:nome, celular:whatsRaw, email:email, cep:cep, numero:numero, complemento:complemento}
+        cliente: {nome:nome, celular:whatsRaw}
       })
     });
     var payData = await payResp.json();
@@ -669,7 +751,8 @@ async function gerarPedido(){
       '<a href="'+linkZap+'" target="_blank" style="text-decoration:none"><button class="btn-outline">Enviar no WhatsApp</button></a>';
 
     CART = []; renderCart();
-    ['cliNome','cliWhats','cliEmail','cliCep','cliNumero','cliComplemento','descontoValor'].forEach(function(id){ document.getElementById(id).value=''; });
+    ['cliNome','cliWhats','descontoValor'].forEach(function(id){ document.getElementById(id).value=''; });
+    document.getElementById('clienteEncontradoMsg').style.display = 'none';
     calcTotais();
 
   }catch(e){
