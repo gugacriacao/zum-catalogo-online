@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-08-17T16:24:40.517Z",
+  "geradoEm": "2026-08-17T17:11:52.838Z",
   "produtos": [
     {
       "sku": "ZUM-BLPO-700",
@@ -43,7 +43,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 4,
+      "estoqueNum": 2,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CLPO-402/midia-1784385109391.png",
@@ -115,7 +115,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 1,
+      "estoqueNum": 0,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/midia-1784302557737.png",
@@ -166,7 +166,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 4,
+      "estoqueNum": 2,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CMLS-900/midia-1785535365355.png",
@@ -373,7 +373,7 @@
       "badge": "",
       "destaque": "Tecido Poliamida. Tamanho único: 36/42",
       "descricao": "",
-      "estoqueNum": 2,
+      "estoqueNum": 1,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/midia-1783480241093.png",
@@ -607,7 +607,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 4,
+      "estoqueNum": 3,
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
@@ -632,7 +632,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 13,
+      "estoqueNum": 10,
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
@@ -669,6 +669,8 @@
       "cat": "Bodies",
       "preco": 99,
       "cores": [
+        "Marrom",
+        "Preto",
         "Bege"
       ],
       "tamanhos": [
@@ -678,7 +680,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 1,
+      "estoqueNum": 3,
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
