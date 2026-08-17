@@ -59,12 +59,16 @@
   .modal-img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:.7rem;background:var(--lilac);margin-bottom:.75rem}
   .link-box{word-break:break-all;font-size:.75rem;background:var(--background);border:1px solid var(--border);
     border-radius:.5rem;padding:.7rem}
+  /* Grade de produtos: até 4 colunas, responsivo (18/08/2026) */
+  #grid{grid-template-columns:repeat(2,1fr)}
+  @media (min-width:640px){ #grid{grid-template-columns:repeat(3,1fr)} }
+  @media (min-width:900px){ #grid{grid-template-columns:repeat(4,1fr)} }
 </style>
 </head>
 <body>
 
 <header class="border-b" style="border-color:var(--border)">
-  <div class="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
+  <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
     <div>
       <div class="font-vitrine text-2xl tracking-widest">ZUM</div>
       <div class="label-caps">Vendas Zap · Checkout de atendimento</div>
@@ -73,7 +77,7 @@
   </div>
 </header>
 
-<div class="max-w-6xl mx-auto px-6 py-6 grid gap-6" style="grid-template-columns:1fr 380px" id="layout">
+<div class="max-w-7xl mx-auto px-6 py-6 grid gap-6" style="grid-template-columns:1fr 380px" id="layout">
   <main>
     <div class="flex gap-3 mb-4 flex-wrap">
       <input id="busca" placeholder="Buscar produto…" oninput="renderGrid()" class="flex-1 min-w-[200px]">
@@ -82,7 +86,7 @@
       </select>
     </div>
     <div class="label-caps mb-3" id="status"></div>
-    <div class="grid gap-4" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr))" id="grid"></div>
+    <div class="grid gap-4" id="grid"></div>
   </main>
 
   <aside class="border rounded-xl p-5 h-fit" style="border-color:var(--border);background:#fff">
@@ -146,10 +150,14 @@
     </div>
     <div class="label-caps mb-3" id="modalCategoria"></div>
     <img class="modal-img" id="modalImg" src="" alt="">
-    <div class="label-caps mb-1">Cor</div>
-    <div class="flex flex-wrap gap-2 mb-3" id="modalCores"></div>
-    <div class="label-caps mb-1">Tamanho</div>
-    <div class="flex flex-wrap gap-2 mb-3" id="modalTamanhos"></div>
+    <div id="modalCorRow">
+      <div class="label-caps mb-1">Cor</div>
+      <div class="flex flex-wrap gap-2 mb-3" id="modalCores"></div>
+    </div>
+    <div id="modalTamRow">
+      <div class="label-caps mb-1">Tamanho</div>
+      <div class="flex flex-wrap gap-2 mb-3" id="modalTamanhos"></div>
+    </div>
     <div class="label-caps mb-3" id="modalEstoque"></div>
     <button class="btn-zum" id="modalAdd" onclick="confirmarAdd()" disabled>Adicionar à sacola</button>
   </div>
@@ -173,6 +181,11 @@ var COR_NOME_TO_COD = {
   'Preto':'PT','Bordô':'BD','Marrom':'MR','Off-white':'OW','Off White':'OW','Offwhite':'OW','Off':'OW','Vinho':'VH','Azul':'AZ',
   'Rosa':'RS','Verde':'VD','Branco':'BR','Azul Marinho':'AN','Cinza':'CZ','Bege':'BG',
   'Areia':'AR','Beterraba':'BT'
+};
+var COR_COD_TO_NOME = {
+  'PT':'Preto','BD':'Bordô','MR':'Marrom','OW':'Off White','VH':'Vinho',
+  'AZ':'Azul','RS':'Rosa','VD':'Verde','BR':'Branco','AN':'Azul Marinho',
+  'CZ':'Cinza','BG':'Bege','AR':'Areia','BT':'Beterraba'
 };
 
 function normalizeCor(s){
@@ -217,11 +230,17 @@ function mapProduto(p){
 
 // Tamanhos disponíveis PARA UMA COR ESPECÍFICA — nunca usa o estoque agregado
 // do produto inteiro (uma cor podia aparecer disponível sem ter peça real).
+// 19/08/2026 — 3º ajuste: o fallback "sem registro = disponível" só faz
+// sentido ANTES do estoque ao vivo chegar (1ª renderização, otimista, se
+// corrige sozinha no re-render). Depois que já chegou (STATE.estoqueCarregado),
+// cor/tamanho sem nenhum registro no ZumAgent é tratado como SEM estoque —
+// era exatamente essa brecha que deixava cor "fantasma" aparecer (ex: Vestido
+// Alça mostrando Off-white sem ter nenhuma peça dessa cor).
 function tamanhosDisponiveis(p, cor){
   if(p.estoqueNum===0) return (p.tamanhos||[]).map(function(t){ return {s:t, out:true}; });
   var porCor = (p.estoquePorVariante && p.estoquePorVariante[normalizeCor(cor)]) || null;
   return (p.tamanhos||[]).map(function(t){
-    if(!porCor) return { s:t, out:false, qtd:null };
+    if(!porCor) return { s:t, out: !!STATE.estoqueCarregado, qtd: STATE.estoqueCarregado ? 0 : null };
     var qtd = porCor[normalizeCor(t)] || 0;
     return { s:t, out: qtd<=0, qtd:qtd };
   });
@@ -263,8 +282,7 @@ async function carregarProdutos(){
     if(!data1 || !data1.produtos) throw new Error('Não consegui ler produtos.json.');
 
     STATE.produtos = data1.produtos.map(mapProduto)
-      .filter(function(p){ return p.ativo && p.fotos.length>0; })
-      .sort(function(a,b){ return a.ordem-b.ordem; });
+      .filter(function(p){ return p.ativo && p.fotos.length>0; });
 
     montarFiltroCategoria();
     renderGrid();
@@ -290,13 +308,22 @@ async function carregarProdutos(){
         var base = codigo.split('-').slice(0,3).join('-');
         if(!porBase[base]) porBase[base] = { estoqueTotal:0, preco:0, porVariante:{} };
         var g = porBase[base];
-        g.estoqueTotal += Number(item.estoque)||0;
-        if(item.preco) g.preco = item.preco;
-        var chaveCor = normalizeCor(item.cor);
+        var qtd = Number(item.estoque)||0;
+        g.estoqueTotal += qtd;
+        if(!g.preco && item.preco) g.preco = Number(item.preco);
+        // A coluna "cor" da planilha é texto livre digitado à mão (vem
+        // inconsistente, ex: "Bordô" virou "BORDO"). O código de 2 letras
+        // embutido no SKU (ex: "-OW-") é bem mais confiável — mesma correção
+        // já aplicada no index.html/vitrine.html, pra não ter disparidade
+        // entre as telas (18/08/2026).
         var partes = codigo.split('-');
-        var tam = partes.length >= 5 ? partes[4] : 'UN';
+        var corCodigo = partes[3] || '';
+        var tamCodigo = partes[4] || 'UN';
+        var corResolvida = COR_COD_TO_NOME[corCodigo] || item.cor || '';
+        var chaveCor = normalizeCor(corResolvida);
+        var tam = normalizeCor(tamCodigo);
         if(!g.porVariante[chaveCor]) g.porVariante[chaveCor] = {};
-        g.porVariante[chaveCor][normalizeCor(tam)] = (g.porVariante[chaveCor][normalizeCor(tam)]||0) + (Number(item.estoque)||0);
+        g.porVariante[chaveCor][tam] = (g.porVariante[chaveCor][tam]||0) + qtd;
       });
       STATE.produtos.forEach(function(p){
         var live = porBase[p.sku];
@@ -304,8 +331,16 @@ async function carregarProdutos(){
           if(live.preco) p.preco = live.preco;
           p.estoqueNum = live.estoqueTotal;
           p.estoquePorVariante = live.porVariante;
+        } else {
+          // Produto sem NENHUMA linha no estoque ao vivo — trata como zerado
+          // (antes ficava com o número otimista do produtos.json pra sempre).
+          p.estoqueNum = 0;
         }
       });
+      // Marca que o estoque ao vivo já chegou — a partir daqui,
+      // tamanhosDisponiveis() para de ser otimista com cor/tamanho sem
+      // registro (ver comentário na função).
+      STATE.estoqueCarregado = true;
     }
     document.getElementById('status').textContent = STATE.produtos.length + ' produtos — estoque em tempo real.';
     document.getElementById('statusHeader').textContent = 'online';
@@ -330,13 +365,26 @@ function renderGrid(){
   var grid = document.getElementById('grid');
   grid.innerHTML = '';
 
-  STATE.produtos.forEach(function(p){
+  // Pedido explícito (19/08/2026): só entra na grade quem tem cor+tamanho
+  // de verdade disponível — nada de mostrar produto zerado nem por último,
+  // pra ficar simples e sem confusão na hora da Suzana marcar o pedido.
+  // Usa a MESMA verificação por variante do modal (corComEstoque), não o
+  // agregado p.estoqueNum, pra nunca haver disparidade entre "aparece na
+  // grade" e "abre e tem opção real no modal".
+  var listaOrdenada = STATE.produtos
+    .map(function(p){
+      return { p: p, coresComEstoque: p.cores.filter(function(c){ return corComEstoque(p, c); }) };
+    })
+    .filter(function(item){ return item.coresComEstoque.length > 0; })
+    .sort(function(a,b){ return a.p.nome.localeCompare(b.p.nome, 'pt-BR'); });
+
+  listaOrdenada.forEach(function(item){
+    var p = item.p, coresComEstoque = item.coresComEstoque;
     if(cat && p.category !== cat) return;
     if(busca && !(p.nome.toLowerCase().indexOf(busca)>-1 || p.category.toLowerCase().indexOf(busca)>-1)) return;
 
-    var temEstoque = p.estoqueNum > 0;
     var card = document.createElement('div');
-    card.className = 'card' + (temEstoque ? '' : ' off');
+    card.className = 'card';
     card.onclick = function(){ abrirModal(p.sku); };
     card.innerHTML =
       '<img src="'+p.image+'" alt="'+p.nome+'" loading="lazy">' +
@@ -344,7 +392,7 @@ function renderGrid(){
         '<div class="label-caps">'+p.category+'</div>'+
         '<div class="font-vitrine text-lg leading-tight">'+p.nome+'</div>'+
         '<div class="font-semibold text-sm mt-1">R$ '+p.preco+',00</div>'+
-        '<div class="label-caps mt-1">'+p.cores.length+' cor(es)'+(temEstoque?'':' · sem estoque')+'</div>'+
+        '<div class="label-caps mt-1">'+coresComEstoque.length+' cor(es)</div>'+
       '</div>';
     grid.appendChild(card);
   });
@@ -354,6 +402,12 @@ function renderGrid(){
 
 function acharProduto(sku){ return STATE.produtos.find(function(p){ return p.sku===sku; }); }
 
+// Uma cor só entra no modal se tiver pelo menos um tamanho com estoque
+// nela — cor sem nenhum tamanho disponível simplesmente não aparece.
+function corComEstoque(p, cor){
+  return tamanhosDisponiveis(p, cor).some(function(o){ return !o.out; });
+}
+
 function abrirModal(sku){
   modalSku = sku; modalCorSel = null; modalTamSel = null;
   var p = acharProduto(sku);
@@ -361,7 +415,24 @@ function abrirModal(sku){
   document.getElementById('modalCategoria').textContent = p.category + ' · R$ ' + p.preco + ',00';
   document.getElementById('modalImg').src = p.image;
 
-  document.getElementById('modalCores').innerHTML = p.cores.map(function(c){
+  var coresDisponiveis = (p.cores||[]).filter(function(c){ return corComEstoque(p, c); });
+  var corRow = document.getElementById('modalCorRow');
+  var tamRow = document.getElementById('modalTamRow');
+
+  if(!coresDisponiveis.length){
+    // Sem nenhuma combinação em estoque — não faz sentido mostrar cor/tamanho.
+    corRow.style.display = 'none';
+    tamRow.style.display = 'none';
+    document.getElementById('modalCores').innerHTML = '';
+    document.getElementById('modalTamanhos').innerHTML = '';
+    document.getElementById('modalEstoque').textContent = 'Sem estoque disponível.';
+    document.getElementById('modalAdd').disabled = true;
+    document.getElementById('modalBg').classList.add('show');
+    return;
+  }
+
+  corRow.style.display = '';
+  document.getElementById('modalCores').innerHTML = coresDisponiveis.map(function(c){
     return '<button class="swatch" onclick="selCor(\''+c.replace(/'/g,"\\'")+'\')">'+c+'</button>';
   }).join('');
   document.getElementById('modalTamanhos').innerHTML = '<span class="label-caps">Escolha a cor</span>';
@@ -369,8 +440,8 @@ function abrirModal(sku){
   document.getElementById('modalAdd').disabled = true;
   document.getElementById('modalBg').classList.add('show');
 
-  // Já seleciona a cor sozinha se só tiver uma — agiliza o atendimento.
-  if(p.cores.length === 1) selCor(p.cores[0]);
+  // Já seleciona a cor sozinha se só tiver uma disponível — agiliza o atendimento.
+  if(coresDisponiveis.length === 1) selCor(coresDisponiveis[0]);
 }
 
 function selCor(cor){
@@ -379,15 +450,19 @@ function selCor(cor){
   document.getElementById('modalImg').src = imagemDaCor(p, cor);
   [...document.querySelectorAll('#modalCores .swatch')].forEach(function(b){ b.classList.toggle('sel', b.textContent===cor); });
 
-  var opcoes = tamanhosDisponiveis(p, cor);
-  if(opcoes.length===1 && opcoes[0].s==='UN'){
+  var opcoesDisponiveis = tamanhosDisponiveis(p, cor).filter(function(o){ return !o.out; });
+  var tamRow = document.getElementById('modalTamRow');
+
+  if(opcoesDisponiveis.length===1 && opcoesDisponiveis[0].s==='UN'){
+    // Produto sem grade de tamanho real — não faz sentido mostrar a linha.
     modalTamSel = 'UN';
-    document.getElementById('modalTamanhos').innerHTML = '<span class="label-caps">Tamanho único</span>';
+    tamRow.style.display = 'none';
     atualizarEstoqueModal();
     return;
   }
-  document.getElementById('modalTamanhos').innerHTML = opcoes.map(function(o){
-    return '<button class="swatch '+(o.out?'off':'')+'" '+(o.out?'':('onclick="selTam(\''+o.s+'\')"'))+'>'+o.s+'</button>';
+  tamRow.style.display = '';
+  document.getElementById('modalTamanhos').innerHTML = opcoesDisponiveis.map(function(o){
+    return '<button class="swatch" onclick="selTam(\''+o.s+'\')">'+o.s+'</button>';
   }).join('');
   document.getElementById('modalAdd').disabled = true;
   document.getElementById('modalEstoque').textContent = '';
