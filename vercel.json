@@ -4,7 +4,9 @@
   ],
   "rewrites": [
     { "source": "/teste", "destination": "/index.html" },
-    { "source": "/teste/", "destination": "/index.html" }
+    { "source": "/teste/", "destination": "/index.html" },
+    { "source": "/teste/vendaszap", "destination": "/vendaszap.html" },
+    { "source": "/teste/vendaszap/", "destination": "/vendaszap.html" }
   ],
   "headers": [
     {
