@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-08-17T18:39:15.482Z",
+  "geradoEm": "2026-08-17T18:42:20.772Z",
   "produtos": [
     {
       "sku": "ZUM-BLPO-700",
@@ -766,7 +766,7 @@
       "destaque": "",
       "descricao": "",
       "estoqueNum": 1,
-      "ativo": true,
+      "ativo": false,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-KMBC-001/midia-1783929573801.png"
       ],
