@@ -1,5 +1,8 @@
 {
-  "geradoEm": "2026-09-23T04:23:59.648Z",
+  "geradoEm": "2026-09-23T04:45:10.181Z",
+  "coresHex": {
+    "listrada": "#e30821"
+  },
   "produtos": [
     {
       "sku": "ZUM-TSLT-202",
@@ -24,6 +27,7 @@
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSLT-202/midia-1790131694435.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSLT-202/midia-1790131698686.png"
       ],
+      "coresHex": {},
       "fotosCores": {},
       "ordem": 1
     },
@@ -52,6 +56,7 @@
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CMLS-900/midia-1785535373974.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CMLS-900/midia-1785535378363.png"
       ],
+      "coresHex": {},
       "fotosCores": {},
       "ordem": 2
     },
@@ -79,6 +84,7 @@
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CJBD-501/midia-1790131712975.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CJBD-501/midia-1790131716918.png"
       ],
+      "coresHex": {},
       "fotosCores": {},
       "ordem": 3
     },
@@ -104,6 +110,7 @@
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-BLPL-701/midia-1790131672627.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-BLPL-701/midia-1790131676535.png"
       ],
+      "coresHex": {},
       "fotosCores": {},
       "ordem": 4
     },
@@ -127,6 +134,7 @@
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-PABD-1000/midia-1790133612075.png"
       ],
+      "coresHex": {},
       "fotosCores": {},
       "ordem": 5
     },
@@ -153,6 +161,7 @@
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-RGRE-800/midia-1784423113035.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-RGRE-800/midia-1784423119392.png"
       ],
+      "coresHex": {},
       "fotosCores": {},
       "ordem": 6
     },
@@ -180,6 +189,7 @@
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/midia-1784302557737.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/midia-1784302489750.png"
       ],
+      "coresHex": {},
       "fotosCores": {
         "Vinho": [
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/CORES/vinho-1784302745573.jpg"
@@ -232,6 +242,7 @@
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CLCN-401/midia-1784417427555.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CLCN-401/midia-1784417434671.png"
       ],
+      "coresHex": {},
       "fotosCores": {},
       "ordem": 8
     },
@@ -259,6 +270,7 @@
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-BDRE-302/midia-1790132449168.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-BDRE-302/midia-1790132455090.png"
       ],
+      "coresHex": {},
       "fotosCores": {},
       "ordem": 9
     },
@@ -286,6 +298,7 @@
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSBC-201/midia-1787711664977.png"
       ],
+      "coresHex": {},
       "fotosCores": {
         "Rosa": [
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSBC-201/CORES/rosa-1787711675002.jpg"
@@ -323,6 +336,7 @@
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CLPO-402/midia-1784385118843.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CLPO-402/midia-1784385178564.png"
       ],
+      "coresHex": {},
       "fotosCores": {
         "Rosa": [
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CLPO-402/CORES/rosa-1784385168119.jpg"
@@ -358,6 +372,7 @@
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-BDBA-300/midia-1790133783513.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-BDBA-300/midia-1790133885682.png"
       ],
+      "coresHex": {},
       "fotosCores": {},
       "ordem": 12
     },
@@ -383,6 +398,7 @@
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-BLPO-700/midia-1784394656845.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-BLPO-700/midia-1784394529324.png"
       ],
+      "coresHex": {},
       "fotosCores": {},
       "ordem": 13
     },
@@ -407,6 +423,7 @@
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CLAL-403/midia-1790134264304.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CLAL-403/midia-1790134808182.png"
       ],
+      "coresHex": {},
       "fotosCores": {},
       "ordem": 14
     },
@@ -436,6 +453,7 @@
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-BDBM-301/midia-1790135074308.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-BDBM-301/midia-1790135079022.png"
       ],
+      "coresHex": {},
       "fotosCores": {},
       "ordem": 15
     },
@@ -469,6 +487,7 @@
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-1783477624666.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-1786085791291.png"
       ],
+      "coresHex": {},
       "fotosCores": {
         "Off-white": [
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/CORES/off-white-1783477547567.jpg"
@@ -522,6 +541,7 @@
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDALC-100/midia-1783569600961.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDALC-100/midia-1783569529665.png"
       ],
+      "coresHex": {},
       "fotosCores": {
         "Bordô": [
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDALC-100/CORES/bordô-1783569572614.jpg"
@@ -562,6 +582,7 @@
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/midia-1783861485974.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/midia-1783864139580.png"
       ],
+      "coresHex": {},
       "fotosCores": {
         "Vinho": [
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/CORES/vinho-1783862847096.jpg"
@@ -597,6 +618,7 @@
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDFU-106/midia-1783640118611.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDFU-106/midia-1783640109818.png"
       ],
+      "coresHex": {},
       "fotosCores": {},
       "ordem": 19
     },
@@ -626,6 +648,7 @@
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/midia-1783480241093.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/midia-1783480220676.png"
       ],
+      "coresHex": {},
       "fotosCores": {
         "Marrom": [
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/CORES/marrom-1783480191875.jpg"
@@ -669,6 +692,7 @@
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDDU-108/midia-1786439577409.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDDU-108/midia-1786439580972.png"
       ],
+      "coresHex": {},
       "fotosCores": {},
       "ordem": 21
     },
@@ -696,6 +720,7 @@
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDBT-102/midia-03.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDBT-102/midia-02.png"
       ],
+      "coresHex": {},
       "fotosCores": {
         "Preto": [
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDBT-102/CORES/preto-1783520039715.jpg"
@@ -733,6 +758,7 @@
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783480107596.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783533933777.png"
       ],
+      "coresHex": {},
       "fotosCores": {},
       "ordem": 23
     },
@@ -762,6 +788,7 @@
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CC-400/midia-1783479007713.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CC-400/midia-1783479011096.png"
       ],
+      "coresHex": {},
       "fotosCores": {
         "Preto": [
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CC-400/CORES/preto-1783479016221.jpg",
@@ -803,6 +830,7 @@
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDDN-103/midia-1783643692817.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDDN-103/midia-1783643800487.png"
       ],
+      "coresHex": {},
       "fotosCores": {
         "Preto": [
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDDN-103/CORES/preto-1783643871683.jpg"
@@ -837,6 +865,7 @@
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDFF-109/midia-1786593197179.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDFF-109/midia-1786593191899.png"
       ],
+      "coresHex": {},
       "fotosCores": {},
       "ordem": 26
     },
@@ -859,6 +888,7 @@
       "estoqueNum": 0,
       "ativo": false,
       "fotos": [],
+      "coresHex": {},
       "fotosCores": {},
       "ordem": 27
     },
@@ -880,6 +910,7 @@
       "estoqueNum": 0,
       "ativo": false,
       "fotos": [],
+      "coresHex": {},
       "fotosCores": {},
       "ordem": 28
     },
@@ -901,6 +932,7 @@
       "estoqueNum": 0,
       "ativo": false,
       "fotos": [],
+      "coresHex": {},
       "fotosCores": {},
       "ordem": 29
     },
@@ -922,6 +954,7 @@
       "estoqueNum": 3,
       "ativo": false,
       "fotos": [],
+      "coresHex": {},
       "fotosCores": {},
       "ordem": 30
     },
@@ -946,6 +979,7 @@
       "estoqueNum": 2,
       "ativo": false,
       "fotos": [],
+      "coresHex": {},
       "fotosCores": {},
       "ordem": 31
     },
@@ -969,6 +1003,7 @@
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-KMBC-001/midia-1783929573801.png"
       ],
+      "coresHex": {},
       "fotosCores": {},
       "ordem": 32
     }
