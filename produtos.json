@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-08-26T02:37:15.920Z",
+  "geradoEm": "2026-09-23T02:47:11.733Z",
   "produtos": [
     {
       "sku": "ZUM-BLPO-700",
@@ -115,7 +115,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 0,
+      "estoqueNum": 5,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/midia-1784302557737.png",
@@ -155,7 +155,8 @@
       "cat": "Camisaria",
       "preco": 289,
       "cores": [
-        "Branco"
+        "Branco",
+        "Azul marinho"
       ],
       "tamanhos": [
         "P",
@@ -166,7 +167,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 2,
+      "estoqueNum": 4,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CMLS-900/midia-1785535365355.png",
@@ -226,7 +227,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 6,
+      "estoqueNum": 2,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-1783864612196.png",
@@ -305,7 +306,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 1,
+      "estoqueNum": 0,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDALC-100/midia-1784302086299.png",
@@ -343,7 +344,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 1,
+      "estoqueNum": 0,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDFU-106/midia-1783640125518.png",
@@ -416,7 +417,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 1,
+      "estoqueNum": 0,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDDU-108/midia-1786439577409.png",
@@ -475,7 +476,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 8,
+      "estoqueNum": 2,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSBC-201/midia-1787711664977.png"
@@ -515,7 +516,7 @@
       "badge": "",
       "destaque": "Algodão",
       "descricao": "",
-      "estoqueNum": 3,
+      "estoqueNum": 2,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783480100247.png",
@@ -575,7 +576,10 @@
         "Azul",
         "Preto",
         "Rosa",
-        "Verde"
+        "Verde",
+        "Vermelha",
+        "Off-white",
+        "Marrom"
       ],
       "tamanhos": [
         "UN"
@@ -584,7 +588,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 0,
+      "estoqueNum": 3,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDDN-103/midia-1783643692817.png",
@@ -638,13 +642,14 @@
       ],
       "tamanhos": [
         "P",
-        "M"
+        "M",
+        "UN"
       ],
       "stock": "Em estoque",
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 3,
+      "estoqueNum": 4,
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
@@ -660,7 +665,8 @@
         "Marrom",
         "Preto",
         "Bordô",
-        "Azul marinho"
+        "Azul marinho",
+        "Verde"
       ],
       "tamanhos": [
         "UN"
@@ -683,7 +689,9 @@
       "cores": [
         "Marrom",
         "Preto",
-        "Bege"
+        "Bege",
+        "Off-white",
+        "Verde"
       ],
       "tamanhos": [
         "UN"
@@ -692,7 +700,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 3,
+      "estoqueNum": 5,
       "ativo": false,
       "fotos": [],
       "fotosCores": {},
@@ -784,6 +792,160 @@
       ],
       "fotosCores": {},
       "ordem": 25
+    },
+    {
+      "sku": "ZUM-VDRC-110",
+      "nome": "recorte costas",
+      "cat": "Vestidos",
+      "preco": 189,
+      "cores": [
+        "Off-white"
+      ],
+      "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 3,
+      "ativo": true,
+      "fotos": [],
+      "fotosCores": {},
+      "ordem": 26
+    },
+    {
+      "sku": "ZUM-CLAL-403",
+      "nome": "Calça alfaiataria",
+      "cat": "Calças",
+      "preco": 369,
+      "cores": [
+        "Off-white"
+      ],
+      "tamanhos": [
+        "P"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 1,
+      "ativo": true,
+      "fotos": [],
+      "fotosCores": {},
+      "ordem": 27
+    },
+    {
+      "sku": "ZUM-PABD-1000",
+      "nome": "Pareôu bordado",
+      "cat": "PAREÔU",
+      "preco": 179,
+      "cores": [
+        "Bege"
+      ],
+      "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 3,
+      "ativo": true,
+      "fotos": [],
+      "fotosCores": {},
+      "ordem": 28
+    },
+    {
+      "sku": "ZUM-BDRE-302",
+      "nome": "Body regata",
+      "cat": "Bodies",
+      "preco": 99,
+      "cores": [
+        "Preto",
+        "Marrom",
+        "Bordô",
+        "Azul marinho"
+      ],
+      "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 8,
+      "ativo": true,
+      "fotos": [],
+      "fotosCores": {},
+      "ordem": 29
+    },
+    {
+      "sku": "ZUM-BLPL-701",
+      "nome": "Blusa polo listrada",
+      "cat": "Blusas",
+      "preco": 204,
+      "cores": [
+        "Listrada"
+      ],
+      "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 4,
+      "ativo": true,
+      "fotos": [],
+      "fotosCores": {},
+      "ordem": 30
+    },
+    {
+      "sku": "ZUM-TSLT-202",
+      "nome": "T-shirt listrada vermelha",
+      "cat": "T-shirts",
+      "preco": 198,
+      "cores": [
+        "Vermelha",
+        "Azul marinho"
+      ],
+      "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 5,
+      "ativo": true,
+      "fotos": [],
+      "fotosCores": {},
+      "ordem": 31
+    },
+    {
+      "sku": "ZUM-VDDR-111",
+      "nome": "Vestido drapeado rosa",
+      "cat": "Vestidos",
+      "preco": 199,
+      "cores": [
+        "Rosa",
+        "Preto",
+        "Branco",
+        "Verde militar"
+      ],
+      "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 2,
+      "ativo": true,
+      "fotos": [],
+      "fotosCores": {},
+      "ordem": 32
     }
   ]
 }
