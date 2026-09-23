@@ -1,12 +1,12 @@
 {
-  "geradoEm": "2026-09-23T04:45:10.181Z",
+  "geradoEm": "2026-09-23T04:46:50.832Z",
   "coresHex": {
     "listrada": "#e30821"
   },
   "produtos": [
     {
       "sku": "ZUM-TSLT-202",
-      "nome": "T-shirt listrada vermelha",
+      "nome": "T-shirt listrada",
       "cat": "T-shirts",
       "preco": 198,
       "cores": [
