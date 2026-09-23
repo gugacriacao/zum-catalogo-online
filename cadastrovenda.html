@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>ZUM — Cadastro de Venda</title>
+<meta name="robots" content="noindex, nofollow">
+<!--
+  CADASTRO DE VENDA — usezum.com.br/cadastrovenda (23/09/2026)
+  ================================================
+  Cópia do Vendas Zap (mesmo catálogo, mesmo estoque ao vivo, mesma sacola),
+  mas o botão final é "Cadastrar venda": grava a venda direto no Sistema
+  (ZumAgent -> CadastroVenda.gs -> registrarVenda, a MESMA função do ZUM
+  Agent), com cliente cadastrada (busca) ou nova, data editável e
+  pagamento Pago / Parcial / Pendente + forma de pagamento.
+  Protegida por PIN (VENDA_PIN, só no Apps Script).
+  Regra "vale pros 3" NÃO se aplica a este arquivo — é ferramenta interna.
+
+  --- Comentário original do Vendas Zap (base desta página) ---
+  Página derivada do site, usando as MESMAS fontes de dados e a MESMA lógica
+  de carregamento de produto do index.html (18/08/2026 — antes lia só a API
+  ao vivo do ZumAgent, o que deixava sem foto e sem a mesma categorização/
+  filtro do site; corrigido pra seguir exatamente o padrão de produção):
+    1) produtos.json  -> catálogo base (fotos, categoria, ordem, ativo)
+    2) ZumAgent (live) -> sobrepõe preço e estoque por cor+tamanho em tempo real
+  E pra pagamento, usa o mesmo backend que já roda em produção:
+    3) ZumAgent -> criarPedidoPendente   (mesmo endpoint do site)
+    4) /api/criar-pagamento              (mesma função Vercel do site, que já
+                                           chama a InfinitePay e já tem
+                                           webhook-infinitepay confirmando o
+                                           pagamento automaticamente)
+  A ÚNICA diferença real em relação ao checkout normal do site: em vez de
+  redirecionar o navegador pro link da InfinitePay (window.location.href),
+  aqui a Suzana só recebe o link pra copiar/mandar no WhatsApp — quem paga
+  é a cliente, no celular dela.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root{
+    --background: oklch(0.985 0.003 90);
+    --foreground: oklch(0.15 0 0);
+    --primary: oklch(0.12 0 0);
+    --lilac: oklch(0.92 0.02 310);
+    --border: oklch(0.9 0.005 90);
+    --muted: oklch(0.55 0.01 90);
+  }
+  body{background:var(--background);color:var(--foreground);font-family:'Jost',sans-serif}
+  .font-vitrine{font-family:'Cormorant Garamond',serif}
+  .label-caps{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .btn-zum{background:var(--primary);color:#fff;padding:.85rem 1rem;border-radius:.6rem;font-size:.8rem;
+    letter-spacing:.08em;text-transform:uppercase;font-weight:600;width:100%;border:none;cursor:pointer}
+  .btn-zum:disabled{opacity:.45;cursor:not-allowed}
+  .btn-outline{background:#fff;color:var(--foreground);border:1px solid var(--border);padding:.7rem 1rem;
+    border-radius:.6rem;font-size:.78rem;width:100%;cursor:pointer}
+  .card{background:#fff;border:1px solid var(--border);border-radius:.7rem;overflow:hidden;cursor:pointer;transition:.15s}
+  .card:hover{border-color:var(--lilac)}
+  .card.off{opacity:.45}
+  .card img,.card video{width:100%;aspect-ratio:4/5;object-fit:cover;background:var(--lilac)}
+  .card .info{padding:.75rem}
+  .swatch{padding:.35rem .75rem;border:1px solid var(--border);border-radius:.5rem;font-size:.78rem;cursor:pointer;background:#fff}
+  .swatch.sel{background:var(--primary);color:#fff;border-color:var(--primary)}
+  .swatch.off{opacity:.3;text-decoration:line-through;cursor:not-allowed}
+  input,select{width:100%;font-family:'Jost',sans-serif;padding:.65rem .75rem;border:1px solid var(--border);
+    border-radius:.5rem;font-size:1rem;background:var(--background);color:var(--foreground);min-height:44px}
+  .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.4);display:none;align-items:center;justify-content:center;z-index:50;padding:1rem}
+  .modal-bg.show{display:flex}
+  .modal-img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:.7rem;background:var(--lilac);margin-bottom:.75rem}
+  .link-box{word-break:break-all;font-size:.75rem;background:var(--background);border:1px solid var(--border);
+    border-radius:.5rem;padding:.7rem}
+  /* Grade de produtos: até 4 colunas, responsivo (18/08/2026) */
+  #grid{grid-template-columns:repeat(2,1fr)}
+  @media (min-width:640px){ #grid{grid-template-columns:repeat(3,1fr)} }
+  @media (min-width:900px){ #grid{grid-template-columns:repeat(4,1fr)} }
+
+  /* ===== Mobile layout (19/08/2026) =====
+     Antes o #layout usava grid-template-columns:1fr 380px fixo inline,
+     então em telas de celular (375–430px) a sacola ficava espremida do
+     lado do catálogo, cortando texto e campos pra fora da tela. Agora o
+     padrão é 1 coluna (catálogo em cima, sacola embaixo) e só vira
+     2 colunas lado a lado a partir de 960px, onde há espaço real pros
+     380px da sacola. */
+  #layout{grid-template-columns:1fr}
+  @media (min-width:960px){ #layout{grid-template-columns:1fr 380px} }
+
+  /* Alvos de toque maiores no celular — botões de qtd e cor eram pequenos
+     demais pra dedo (abaixo do mínimo de 44px recomendado pela Apple). */
+  .qtdbtn{width:1.25rem;height:1.25rem;display:inline-flex;align-items:center;justify-content:center}
+  @media (max-width:639px){
+    .qtdbtn{width:2.25rem;height:2.25rem;font-size:1rem}
+    .swatch{padding:.55rem 1rem;font-size:.85rem}
+    header .max-w-7xl{padding-top:1rem;padding-bottom:1rem}
+  }
+
+  /* Barra da sacola (20/08/2026) — antes era fixa no rodapé da tela; agora
+     fica dentro do fluxo normal da página, logo abaixo da busca/categorias
+     e acima da grade de produtos. Some sozinha quando a sacola tá vazia. */
+  #cartBar{
+    display:none;border-radius:.7rem;margin-bottom:1.25rem;
+    background:var(--primary);color:#fff;padding:.9rem 1.1rem;
+    align-items:center;justify-content:space-between;gap:.75rem;flex-wrap:wrap;cursor:pointer
+  }
+  #cartBar.show{display:flex}
+  #cartBar:hover{opacity:.92}
+
+  /* Modal em formato "bottom sheet" no celular — mais fácil de alcançar
+     com o polegar do que um modal centralizado. */
+  @media (max-width:639px){
+    .modal-bg{align-items:flex-end;padding:0}
+    .modal-bg > div{border-radius:1.1rem 1.1rem 0 0;max-height:92vh}
+  }
+
+  /* ===== Cadastro de Venda (23/09/2026) ===== */
+  .ac-wrap{position:relative}
+  .ac-list{display:none;position:absolute;left:0;right:0;top:calc(100% + 4px);background:#fff;border:1px solid var(--border);
+    border-radius:.6rem;box-shadow:0 8px 24px rgba(0,0,0,.08);z-index:40;max-height:320px;overflow-y:auto}
+  .ac-list.show{display:block}
+  .ac-item{padding:.65rem .8rem;cursor:pointer;display:flex;justify-content:space-between;gap:.75rem;font-size:.9rem;border-bottom:1px solid var(--border)}
+  .ac-item:last-child{border-bottom:none}
+  .ac-item span{color:var(--muted);font-size:.8rem;white-space:nowrap}
+  .ac-item:hover,.ac-item.hl{background:var(--lilac)}
+  .ac-nova{color:var(--primary);font-weight:600;justify-content:flex-start}
+  .cli-sel{justify-content:space-between;align-items:center;gap:.75rem;border:1px solid var(--primary);border-radius:.6rem;padding:.65rem .8rem;background:#fff}
+  .link-btn{background:none;border:none;color:var(--muted);text-decoration:underline;font-size:.78rem;cursor:pointer;padding:0}
+  #statusPag .swatch,#metodoPag .swatch{padding:.6rem .5rem;text-align:center}
+  .pin-card{background:#fff;border-radius:1rem;padding:1.75rem;max-width:340px;width:100%;text-align:center}
+  #pinInput{text-align:center;font-size:1.4rem;letter-spacing:.4em}
+</style>
+</head>
+<body>
+
+<header class="border-b" style="border-color:var(--border)">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-5 flex items-center justify-between gap-3 flex-wrap">
+    <div>
+      <div class="font-vitrine text-2xl tracking-widest">ZUM</div>
+      <div class="label-caps">Cadastro de venda · uso interno</div>
+    </div>
+    <div class="flex items-center gap-3"><div class="label-caps" id="statusHeader">carregando…</div><button type="button" class="link-btn" onclick="sairPin()">sair</button></div>
+  </div>
+</header>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 grid gap-6" id="layout">
+  <main>
+    <div class="flex gap-3 mb-4 flex-wrap">
+      <input id="busca" placeholder="Buscar produto…" oninput="renderGrid()" class="flex-1 min-w-[200px]">
+      <select id="filtroCategoria" onchange="renderGrid()" class="border rounded-lg px-3 py-2 text-sm" style="border-color:var(--border);width:auto">
+        <option value="">Todas categorias</option>
+      </select>
+    </div>
+
+    <!-- Barra da sacola — logo abaixo da busca/categorias, acima da grade
+         de produtos. Toca em qualquer ponto pra rolar até a sacola. Some
+         sozinha quando a sacola tá vazia. -->
+    <div id="cartBar" onclick="document.getElementById('cartAside').scrollIntoView({behavior:'smooth'})">
+      <span class="font-vitrine text-lg" id="cartBarCount">0 itens</span>
+      <span style="font-family:'Jost',sans-serif;font-weight:600" id="cartBarTotal">R$ 0,00</span>
+      <span class="label-caps" style="color:#fff">Ver sacola →</span>
+    </div>
+
+    <div class="label-caps mb-3" id="status"></div>
+    <div class="grid gap-4" id="grid"></div>
+  </main>
+
+  <aside class="border rounded-xl p-5 h-fit" id="cartAside" style="border-color:var(--border);background:#fff">
+    <div class="font-vitrine text-xl mb-3">Venda</div>
+    <div id="cartItems"><div class="label-caps">Vazia — clique num produto pra adicionar.</div></div>
+
+    <div class="mt-4 pt-4 border-t text-sm" style="border-color:var(--border)">
+      <div class="flex justify-between mb-1"><span>Subtotal</span><b id="subtotal">R$ 0,00</b></div>
+      <div class="flex justify-between mb-1" id="descontoRow" style="display:none"><span>Desconto</span><b id="descontoTxt" style="color:#b5493f">− R$ 0,00</b></div>
+      <div class="flex justify-between mb-1"><span>Frete</span><b id="freteTxt">R$ 0,00</b></div>
+      <div class="flex justify-between font-bold text-base mt-1"><span>Total</span><b id="totalGeral">R$ 0,00</b></div>
+    </div>
+
+    <div class="mt-4">
+      <div class="label-caps mb-1">Desconto (opcional)</div>
+      <div class="flex gap-2">
+        <div class="flex border rounded-lg overflow-hidden" style="border-color:var(--border)">
+          <button type="button" id="tipoDescR" class="px-3 text-sm swatch sel" style="border:none;border-radius:0" onclick="setTipoDesconto('valor')">R$</button>
+          <button type="button" id="tipoDescP" class="px-3 text-sm swatch" style="border:none;border-radius:0;border-left:1px solid var(--border)" onclick="setTipoDesconto('percentual')">%</button>
+        </div>
+        <input id="descontoValor" type="number" min="0" step="0.01" placeholder="0" oninput="calcTotais()" style="flex:1">
+      </div>
+    </div>
+
+    <div class="mt-4">
+      <div class="label-caps mb-1">Entrega</div>
+      <div class="flex gap-2">
+        <label class="flex items-center gap-1 border rounded-lg px-2 py-1.5 text-sm flex-1 cursor-pointer" style="border-color:var(--border)">
+          <input type="radio" name="frete" value="0" checked onchange="calcTotais()" style="width:auto"> Retirada
+        </label>
+        <label class="flex items-center gap-1 border rounded-lg px-2 py-1.5 text-sm flex-1 cursor-pointer" style="border-color:var(--border)">
+          <input type="radio" name="frete" value="15" onchange="calcTotais()" style="width:auto"> Entrega (R$15)
+        </label>
+      </div>
+    </div>
+
+    <div class="mt-4">
+      <div class="label-caps mb-1">Data da venda</div>
+      <input id="dataVenda" type="date">
+    </div>
+
+    <!-- CLIENTE — busca nas clientes cadastradas (nome ou WhatsApp) -->
+    <div class="mt-4" id="blocoBuscaCliente">
+      <div class="label-caps mb-1">Cliente *</div>
+      <div class="ac-wrap">
+        <input id="cliBusca" placeholder="Digite o nome ou o WhatsApp…" autocomplete="off"
+               oninput="acBuscar()" onfocus="acBuscar()" onkeydown="acTeclado(event)">
+        <div class="ac-list" id="acList"></div>
+      </div>
+      <div id="cliSelecionada" class="cli-sel" style="display:none">
+        <div><b id="cliSelNome"></b><div class="label-caps" id="cliSelWhats"></div></div>
+        <button type="button" class="link-btn" onclick="limparCliente()">trocar</button>
+      </div>
+      <button type="button" class="btn-outline mt-2" id="btnNovaCliente" onclick="abrirNovaCliente()">+ Cadastrar nova cliente</button>
+    </div>
+
+    <div class="mt-4" id="blocoNovaCliente" style="display:none">
+      <div class="flex justify-between items-center mb-1">
+        <div class="label-caps">Nova cliente</div>
+        <button type="button" class="link-btn" onclick="fecharNovaCliente()">cancelar</button>
+      </div>
+      <input id="novoNome" placeholder="Nome completo *">
+      <input id="novoWhats" class="mt-2" placeholder="WhatsApp com DDD * — (85) 9xxxx-xxxx" inputmode="tel" oninput="mascaraFone(this)">
+    </div>
+
+    <!-- PAGAMENTO -->
+    <div class="mt-4">
+      <div class="label-caps mb-1">Pagamento *</div>
+      <div class="flex gap-2" id="statusPag">
+        <button type="button" class="swatch flex-1" data-v="✅ Pago" onclick="setStatus(this)">✅ Pago</button>
+        <button type="button" class="swatch flex-1" data-v="🟡 Parcial" onclick="setStatus(this)">🟡 Parcial</button>
+        <button type="button" class="swatch flex-1" data-v="❌ Pendente" onclick="setStatus(this)">❌ Pendente</button>
+      </div>
+    </div>
+
+    <div class="mt-3" id="blocoMetodo" style="display:none">
+      <div class="label-caps mb-1" id="metodoLabel">Forma de pagamento *</div>
+      <div class="grid grid-cols-2 gap-2" id="metodoPag">
+        <button type="button" class="swatch" data-v="Pix" onclick="setMetodo(this)">Pix</button>
+        <button type="button" class="swatch" data-v="Dinheiro" onclick="setMetodo(this)">Dinheiro</button>
+        <button type="button" class="swatch" data-v="Débito" onclick="setMetodo(this)">Débito</button>
+        <button type="button" class="swatch" data-v="Crédito" onclick="setMetodo(this)">Crédito</button>
+      </div>
+    </div>
+
+    <div class="mt-3" id="blocoCartao" style="display:none">
+      <div class="flex gap-2">
+        <select id="cartaoBandeira" style="flex:2"><option value="">Bandeira (opcional)</option></select>
+        <select id="cartaoParcelas" style="flex:1">
+          <option value="1">1x</option><option value="2">2x</option><option value="3">3x</option>
+          <option value="4">4x</option><option value="5">5x</option><option value="6">6x</option>
+          <option value="7">7x</option><option value="8">8x</option><option value="9">9x</option>
+          <option value="10">10x</option><option value="11">11x</option><option value="12">12x</option>
+        </select>
+      </div>
+      <label class="flex items-center gap-2 text-sm mt-2 cursor-pointer">
+        <input type="checkbox" id="cartaoRepassar" style="width:auto;min-height:auto"> Taxa da maquininha repassada pra cliente
+      </label>
+      <div class="label-caps mt-1">Com bandeira escolhida, a taxa entra no lucro igual ao ZUM Agent.</div>
+    </div>
+
+    <div class="mt-3" id="blocoValorPago" style="display:none">
+      <div class="label-caps mb-1">Quanto ela já pagou? *</div>
+      <input id="valorPago" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0,00" oninput="calcTotais()">
+      <div class="label-caps mt-1" id="saldoTxt"></div>
+    </div>
+
+    <div class="mt-3" id="blocoVencimento" style="display:none">
+      <div class="label-caps mb-1">Vencimento do saldo (opcional)</div>
+      <input id="vencimento" type="date">
+    </div>
+
+    <button class="btn-zum mt-5" id="btnCadastrar" onclick="cadastrarVenda()">Cadastrar venda</button>
+    <div id="resultado" class="mt-3"></div>
+  </aside>
+</div>
+
+<div class="modal-bg" id="modalBg">
+  <div class="bg-white rounded-2xl p-6 max-w-md w-full max-h-[90vh] overflow-y-auto">
+    <div class="flex justify-between items-start mb-1">
+      <div class="font-vitrine text-2xl" id="modalNome"></div>
+      <span class="cursor-pointer text-xl" style="color:var(--muted)" onclick="fecharModal()">&times;</span>
+    </div>
+    <div class="label-caps mb-3" id="modalCategoria"></div>
+    <img class="modal-img" id="modalImg" src="" alt="">
+    <div id="modalCorRow">
+      <div class="label-caps mb-1">Cor</div>
+      <div class="flex flex-wrap gap-2 mb-3" id="modalCores"></div>
+    </div>
+    <div id="modalTamRow">
+      <div class="label-caps mb-1">Tamanho</div>
+      <div class="flex flex-wrap gap-2 mb-3" id="modalTamanhos"></div>
+    </div>
+    <div class="label-caps mb-3" id="modalEstoque"></div>
+    <button class="btn-zum" id="modalAdd" onclick="confirmarAdd()" disabled>Adicionar à sacola</button>
+  </div>
+</div>
+
+<!-- PIN — protege clientes e cadastro (PIN fica só no Apps Script) -->
+<div class="modal-bg" id="pinBg" style="align-items:center;padding:1rem">
+  <div class="pin-card">
+    <div class="font-vitrine text-3xl tracking-widest mb-1">ZUM</div>
+    <div class="label-caps mb-4">Cadastro de venda</div>
+    <input id="pinInput" type="password" inputmode="numeric" autocomplete="off" placeholder="PIN" onkeydown="if(event.key==='Enter')entrarComPin()">
+    <div class="text-sm mt-2" style="color:#b5493f;min-height:1.2em" id="pinErro"></div>
+    <button class="btn-zum mt-2" id="pinBtn" onclick="entrarComPin()">Entrar</button>
+  </div>
+</div>
+
+<script>
+/* ==========================================================
+   CONFIG — mesmos valores e mesma lógica de carregamento do
+   index.html (produção). Se o Tavinho trocar o token, o deploy
+   do ZumAgent, ou os nomes/cores no dicionário, atualizar aqui
+   também (idealmente os dois arquivos juntos).
+========================================================== */
+var PRODUTOS_JSON_URL = 'https://www.usezum.com.br/produtos.json';
+var ZUMAGENT_URL = 'https://script.google.com/macros/s/AKfycbwHavGCAgB01Vm3b6kEqN26x1MRA62VVA6P2UWfbeDVFbDxfyQ9PbAhr6B44ElRK_5q/exec';
+var API_TOKEN = 'zum0467';
+
+var COR_NOME_TO_COD = {
+  'Preto':'PT','Bordô':'BD','Marrom':'MR','Off-white':'OW','Off White':'OW','Offwhite':'OW','Off':'OW','Vinho':'VH','Azul':'AZ',
+  'Rosa':'RS','Verde':'VD','Branco':'BR','Azul Marinho':'AN','Cinza':'CZ','Bege':'BG',
+  'Areia':'AR','Beterraba':'BT'
+};
+var COR_COD_TO_NOME = {
+  'PT':'Preto','BD':'Bordô','MR':'Marrom','OW':'Off White','VH':'Vinho',
+  'AZ':'Azul','RS':'Rosa','VD':'Verde','BR':'Branco','AN':'Azul Marinho',
+  'CZ':'Cinza','BG':'Bege','AR':'Areia','BT':'Beterraba'
+};
+
+function normalizeCor(s){
+  return String(s||'').trim().toUpperCase()
+    .replace(/Á|À|Â|Ã/g,'A').replace(/É|Ê/g,'E').replace(/Í/g,'I')
+    .replace(/Ó|Ô|Õ/g,'O').replace(/Ú/g,'U').replace(/Ç/g,'C')
+    .replace(/[\s-]/g,'');
+}
+
+function categoriaCanonica(p){
+  var sku = String(p.sku||'').trim().toUpperCase();
+  var nome = String(p.nome||'').trim();
+  var cat = String(p.cat||'').trim();
+  if(/^ZUM-SK/.test(sku) || /^saia\b/i.test(nome)) return 'Saias';
+  var normal = cat.toLowerCase();
+  if(normal==='saia' || normal==='saias') return 'Saias';
+  if(normal==='calça' || normal==='calcas' || normal==='calças') return 'Calças';
+  if(normal==='blusa' || normal==='blusas') return 'Blusas';
+  if(normal==='vestido' || normal==='vestidos') return 'Vestidos';
+  if(normal==='conjunto' || normal==='conjuntos') return 'Conjuntos';
+  if(normal==='body' || normal==='bodies') return 'Bodies';
+  if(normal==='t-shirt' || normal==='t-shirts' || normal==='tshirt') return 'T-shirts';
+  if(normal==='camisaria') return 'Camisaria';
+  if(normal==='regata' || normal==='regatas') return 'Regatas';
+  return cat || 'Outros';
+}
+
+function slugify(sku){ return sku.toLowerCase(); }
+
+function mapProduto(p){
+  return {
+    sku: p.sku, slug: slugify(p.sku), nome: p.nome,
+    category: categoriaCanonica(p), catOriginal: p.cat,
+    preco: p.preco, cores: p.cores || [],
+    tamanhos: (p.tamanhos && p.tamanhos.length) ? p.tamanhos : ['UN'],
+    estoqueNum: (typeof p.estoqueNum === 'number') ? p.estoqueNum : 1,
+    ativo: p.ativo !== false, fotos: p.fotos || [], fotosCores: p.fotosCores || {},
+    ordem: (typeof p.ordem === 'number') ? p.ordem : 999,
+    image: (p.fotos && p.fotos[0]) || ''
+  };
+}
+
+// Tamanhos disponíveis PARA UMA COR ESPECÍFICA — nunca usa o estoque agregado
+// do produto inteiro (uma cor podia aparecer disponível sem ter peça real).
+// 19/08/2026 — 3º ajuste: o fallback "sem registro = disponível" só faz
+// sentido ANTES do estoque ao vivo chegar (1ª renderização, otimista, se
+// corrige sozinha no re-render). Depois que já chegou (STATE.estoqueCarregado),
+// cor/tamanho sem nenhum registro no ZumAgent é tratado como SEM estoque —
+// era exatamente essa brecha que deixava cor "fantasma" aparecer (ex: Vestido
+// Alça mostrando Off-white sem ter nenhuma peça dessa cor).
+function tamanhosDisponiveis(p, cor){
+  if(p.estoqueNum===0) return (p.tamanhos||[]).map(function(t){ return {s:t, out:true}; });
+  var porCor = (p.estoquePorVariante && p.estoquePorVariante[normalizeCor(cor)]) || null;
+  return (p.tamanhos||[]).map(function(t){
+    if(!porCor) return { s:t, out: !!STATE.estoqueCarregado, qtd: STATE.estoqueCarregado ? 0 : null };
+    var qtd = porCor[normalizeCor(t)] || 0;
+    return { s:t, out: qtd<=0, qtd:qtd };
+  });
+}
+
+function imagemDaCor(p, cor){
+  var lista = (p.fotosCores && p.fotosCores[cor]) || p.fotos;
+  return (lista && lista[0]) || p.image || '';
+}
+
+// Código completo da variante (cor+tamanho) — mesmo padrão gravado na
+// planilha (ex: ZUM-BLPO-700-RS-M), usado por criarPedidoPendente.
+function codigoVariante(p, cor, tam){
+  var corCod = COR_NOME_TO_COD[cor] || String(cor||'').toUpperCase().replace(/[^A-Z]/g,'').slice(0,2) || 'XX';
+  return p.sku + '-' + corCod + '-' + (tam || 'UN');
+}
+
+var STATE = { produtos: [], loaded:false };
+var CART = [];
+var modalSku = null, modalCorSel = null, modalTamSel = null;
+
+async function asCall(action, data){
+  try{
+    var body = Object.assign({action:action, token:API_TOKEN}, data);
+    var r = await fetch(ZUMAGENT_URL, {method:'POST', body:JSON.stringify(body)});
+    return await r.json();
+  }catch(e){ return {ok:false, erro:'Falha de conexão: '+e.message}; }
+}
+
+// Mesma sequência do index.html: 1) produtos.json monta o catálogo (fotos,
+// categoria, ordem, ativo) — 2) ZumAgent ao vivo sobrepõe preço e estoque
+// real por cor+tamanho em cima disso. As duas fontes continuam sendo a
+// mesma que o site usa, então tudo fica sincronizado junto.
+async function carregarProdutos(){
+  document.getElementById('status').textContent = 'Carregando catálogo…';
+  try{
+    var r1 = await fetch(PRODUTOS_JSON_URL + '?_=' + Date.now(), {cache:'no-store'});
+    var data1 = r1.ok ? await r1.json() : null;
+    if(!data1 || !data1.produtos) throw new Error('Não consegui ler produtos.json.');
+
+    STATE.produtos = data1.produtos.map(mapProduto)
+      .filter(function(p){ return p.ativo && p.fotos.length>0; });
+
+    montarFiltroCategoria();
+    renderGrid();
+    document.getElementById('status').textContent = STATE.produtos.length + ' produtos — atualizando estoque ao vivo…';
+    document.getElementById('statusHeader').textContent = 'catálogo ok';
+  }catch(e){
+    document.getElementById('status').textContent = '❌ ' + e.message;
+    document.getElementById('statusHeader').textContent = 'erro ao carregar';
+    return;
+  }
+
+  // Overlay de preço/estoque em tempo real (não bloqueia a tela se falhar —
+  // fica só sem o número exato de estoque por variante, igual ao site).
+  try{
+    var apiUrl = ZUMAGENT_URL + '?api=produtos&token=' + encodeURIComponent(API_TOKEN);
+    var r2 = await fetch(apiUrl, {cache:'no-store'});
+    var data2 = r2.ok ? await r2.json() : null;
+    if(data2 && data2.ok && data2.produtos){
+      var porBase = {};
+      data2.produtos.forEach(function(item){
+        var codigo = String(item.codigo||'').trim();
+        if(!codigo) return;
+        var base = codigo.split('-').slice(0,3).join('-');
+        if(!porBase[base]) porBase[base] = { estoqueTotal:0, preco:0, porVariante:{} };
+        var g = porBase[base];
+        var qtd = Number(item.estoque)||0;
+        g.estoqueTotal += qtd;
+        if(!g.preco && item.preco) g.preco = Number(item.preco);
+        // A coluna "cor" da planilha é texto livre digitado à mão (vem
+        // inconsistente, ex: "Bordô" virou "BORDO"). O código de 2 letras
+        // embutido no SKU (ex: "-OW-") é bem mais confiável — mesma correção
+        // já aplicada no index.html/vitrine.html, pra não ter disparidade
+        // entre as telas (18/08/2026).
+        var partes = codigo.split('-');
+        var corCodigo = partes[3] || '';
+        var tamCodigo = partes[4] || 'UN';
+        var corResolvida = COR_COD_TO_NOME[corCodigo] || item.cor || '';
+        var chaveCor = normalizeCor(corResolvida);
+        var tam = normalizeCor(tamCodigo);
+        if(!g.porVariante[chaveCor]) g.porVariante[chaveCor] = {};
+        g.porVariante[chaveCor][tam] = (g.porVariante[chaveCor][tam]||0) + qtd;
+        // Cadastro de Venda: guarda o código REAL da linha da planilha pra
+        // essa cor+tamanho — é ele que registrarVenda procura na aba Produtos.
+        if(!g.codigos) g.codigos = {};
+        if(!g.codigos[chaveCor]) g.codigos[chaveCor] = {};
+        g.codigos[chaveCor][tam] = codigo;
+      });
+      STATE.produtos.forEach(function(p){
+        var live = porBase[p.sku];
+        if(live){
+          if(live.preco) p.preco = live.preco;
+          p.estoqueNum = live.estoqueTotal;
+          p.estoquePorVariante = live.porVariante;
+          p.codigosVariante = live.codigos || {};
+        } else {
+          // Produto sem NENHUMA linha no estoque ao vivo — trata como zerado
+          // (antes ficava com o número otimista do produtos.json pra sempre).
+          p.estoqueNum = 0;
+        }
+      });
+      // Marca que o estoque ao vivo já chegou — a partir daqui,
+      // tamanhosDisponiveis() para de ser otimista com cor/tamanho sem
+      // registro (ver comentário na função).
+      STATE.estoqueCarregado = true;
+    }
+    document.getElementById('status').textContent = STATE.produtos.length + ' produtos — estoque em tempo real.';
+    document.getElementById('statusHeader').textContent = 'online';
+  }catch(e){
+    document.getElementById('status').textContent = STATE.produtos.length + ' produtos (estoque pode estar desatualizado — ' + e.message + ').';
+  }
+  renderGrid();
+}
+
+function montarFiltroCategoria(){
+  var cats = [...new Set(STATE.produtos.map(function(p){return p.category;}))].sort();
+  var sel = document.getElementById('filtroCategoria');
+  var atual = sel.value;
+  sel.innerHTML = '<option value="">Todas categorias</option>' +
+    cats.map(function(c){return '<option value="'+c+'">'+c+'</option>';}).join('');
+  sel.value = atual;
+}
+
+function renderGrid(){
+  var busca = document.getElementById('busca').value.trim().toLowerCase();
+  var cat = document.getElementById('filtroCategoria').value;
+  var grid = document.getElementById('grid');
+  grid.innerHTML = '';
+
+  // Pedido explícito (19/08/2026): só entra na grade quem tem cor+tamanho
+  // de verdade disponível — nada de mostrar produto zerado nem por último,
+  // pra ficar simples e sem confusão na hora da Suzana marcar o pedido.
+  // Usa a MESMA verificação por variante do modal (corComEstoque), não o
+  // agregado p.estoqueNum, pra nunca haver disparidade entre "aparece na
+  // grade" e "abre e tem opção real no modal".
+  var listaOrdenada = STATE.produtos
+    .map(function(p){
+      return { p: p, coresComEstoque: p.cores.filter(function(c){ return corComEstoque(p, c); }) };
+    })
+    .filter(function(item){ return item.coresComEstoque.length > 0; })
+    .sort(function(a,b){ return a.p.nome.localeCompare(b.p.nome, 'pt-BR'); });
+
+  listaOrdenada.forEach(function(item){
+    var p = item.p, coresComEstoque = item.coresComEstoque;
+    if(cat && p.category !== cat) return;
+    if(busca && !(p.nome.toLowerCase().indexOf(busca)>-1 || p.category.toLowerCase().indexOf(busca)>-1)) return;
+
+    var card = document.createElement('div');
+    card.className = 'card';
+    card.onclick = function(){ abrirModal(p.sku); };
+    card.innerHTML =
+      '<img src="'+p.image+'" alt="'+p.nome+'" loading="lazy">' +
+      '<div class="info">'+
+        '<div class="label-caps">'+p.category+'</div>'+
+        '<div class="font-vitrine text-lg leading-tight">'+p.nome+'</div>'+
+        '<div class="font-semibold text-sm mt-1">R$ '+p.preco+',00</div>'+
+        '<div class="label-caps mt-1">'+coresComEstoque.length+' cor(es)</div>'+
+      '</div>';
+    grid.appendChild(card);
+  });
+
+  if(!grid.children.length) grid.innerHTML = '<div class="label-caps">Nenhum produto encontrado.</div>';
+}
+
+function acharProduto(sku){ return STATE.produtos.find(function(p){ return p.sku===sku; }); }
+
+// Uma cor só entra no modal se tiver pelo menos um tamanho com estoque
+// nela — cor sem nenhum tamanho disponível simplesmente não aparece.
+function corComEstoque(p, cor){
+  return tamanhosDisponiveis(p, cor).some(function(o){ return !o.out; });
+}
+
+function abrirModal(sku){
+  modalSku = sku; modalCorSel = null; modalTamSel = null;
+  var p = acharProduto(sku);
+  document.getElementById('modalNome').textContent = p.nome;
+  document.getElementById('modalCategoria').textContent = p.category + ' · R$ ' + p.preco + ',00';
+  document.getElementById('modalImg').src = p.image;
+
+  var coresDisponiveis = (p.cores||[]).filter(function(c){ return corComEstoque(p, c); });
+  var corRow = document.getElementById('modalCorRow');
+  var tamRow = document.getElementById('modalTamRow');
+
+  if(!coresDisponiveis.length){
+    // Sem nenhuma combinação em estoque — não faz sentido mostrar cor/tamanho.
+    corRow.style.display = 'none';
+    tamRow.style.display = 'none';
+    document.getElementById('modalCores').innerHTML = '';
+    document.getElementById('modalTamanhos').innerHTML = '';
+    document.getElementById('modalEstoque').textContent = 'Sem estoque disponível.';
+    document.getElementById('modalAdd').disabled = true;
+    document.getElementById('modalBg').classList.add('show');
+    return;
+  }
+
+  corRow.style.display = '';
+  document.getElementById('modalCores').innerHTML = coresDisponiveis.map(function(c){
+    return '<button class="swatch" onclick="selCor(\''+c.replace(/'/g,"\\'")+'\')">'+c+'</button>';
+  }).join('');
+  document.getElementById('modalTamanhos').innerHTML = '<span class="label-caps">Escolha a cor</span>';
+  document.getElementById('modalEstoque').textContent = '';
+  document.getElementById('modalAdd').disabled = true;
+  document.getElementById('modalBg').classList.add('show');
+
+  // Já seleciona a cor sozinha se só tiver uma disponível — agiliza o atendimento.
+  if(coresDisponiveis.length === 1) selCor(coresDisponiveis[0]);
+}
+
+function selCor(cor){
+  modalCorSel = cor; modalTamSel = null;
+  var p = acharProduto(modalSku);
+  document.getElementById('modalImg').src = imagemDaCor(p, cor);
+  [...document.querySelectorAll('#modalCores .swatch')].forEach(function(b){ b.classList.toggle('sel', b.textContent===cor); });
+
+  var opcoesDisponiveis = tamanhosDisponiveis(p, cor).filter(function(o){ return !o.out; });
+  var tamRow = document.getElementById('modalTamRow');
+
+  if(opcoesDisponiveis.length===1 && opcoesDisponiveis[0].s==='UN'){
+    // Produto sem grade de tamanho real — não faz sentido mostrar a linha.
+    modalTamSel = 'UN';
+    tamRow.style.display = 'none';
+    atualizarEstoqueModal();
+    return;
+  }
+  tamRow.style.display = '';
+  document.getElementById('modalTamanhos').innerHTML = opcoesDisponiveis.map(function(o){
+    return '<button class="swatch" onclick="selTam(\''+o.s+'\')">'+o.s+'</button>';
+  }).join('');
+  document.getElementById('modalAdd').disabled = true;
+  document.getElementById('modalEstoque').textContent = '';
+}
+
+function selTam(tam){
+  modalTamSel = tam;
+  [...document.querySelectorAll('#modalTamanhos .swatch')].forEach(function(b){ b.classList.toggle('sel', b.textContent===tam); });
+  atualizarEstoqueModal();
+}
+
+function atualizarEstoqueModal(){
+  var p = acharProduto(modalSku);
+  if(!p || !modalCorSel || !modalTamSel){ document.getElementById('modalAdd').disabled = true; return; }
+  var opcao = tamanhosDisponiveis(p, modalCorSel).find(function(o){ return o.s===modalTamSel; });
+  var disponivel = opcao && !opcao.out;
+  document.getElementById('modalEstoque').textContent = disponivel
+    ? ((opcao.qtd!=null ? opcao.qtd+' em estoque · ' : '') + 'R$ '+p.preco+',00')
+    : 'Sem estoque nessa combinação';
+  document.getElementById('modalAdd').disabled = !disponivel;
+}
+
+function fecharModal(){ document.getElementById('modalBg').classList.remove('show'); }
+
+function confirmarAdd(){
+  var p = acharProduto(modalSku);
+  if(!p || !modalCorSel || !modalTamSel) return;
+  var opcao = tamanhosDisponiveis(p, modalCorSel).find(function(o){ return o.s===modalTamSel; });
+  if(!opcao || opcao.out) return;
+
+  var codReal = p.codigosVariante && p.codigosVariante[normalizeCor(modalCorSel)] && p.codigosVariante[normalizeCor(modalCorSel)][normalizeCor(modalTamSel)];
+  if(!codReal){ alert('Estoque ao vivo ainda não carregou (ou essa variante não está na planilha). Espere o "estoque em tempo real" no topo e tente de novo.'); return; }
+  var codigo = codReal;
+  var estoqueMax = opcao.qtd!=null ? opcao.qtd : 99;
+  var existente = CART.find(function(i){return i.codigo===codigo;});
+  if(existente){
+    if(existente.qtd < estoqueMax) existente.qtd++;
+  } else {
+    CART.push({
+      codigo: codigo, nome: p.nome, cor: modalCorSel,
+      tamanho: modalTamSel==='UN' ? '' : modalTamSel,
+      preco: p.preco, qtd: 1, estoqueMax: estoqueMax,
+      image: imagemDaCor(p, modalCorSel)
+    });
+  }
+  fecharModal();
+  renderCart();
+}
+
+function renderCart(){
+  var el = document.getElementById('cartItems');
+  if(!CART.length){ el.innerHTML = '<div class="label-caps">Vazia — clique num produto pra adicionar.</div>'; calcTotais(); return; }
+  el.innerHTML = CART.map(function(i,idx){
+    return '<div class="flex justify-between items-start py-2 border-b" style="border-color:var(--border)">'+
+      '<div class="flex gap-2">'+
+        '<img src="'+i.image+'" style="width:38px;height:48px;object-fit:cover;border-radius:4px;background:var(--lilac)">'+
+        '<div><b class="text-sm">'+i.nome+'</b><div class="label-caps">'+i.cor+(i.tamanho?' · '+i.tamanho:'')+' · R$ '+i.preco+',00</div></div>'+
+      '</div>'+
+      '<div class="flex items-center gap-2 text-sm">'+
+        '<button onclick="mudarQtd('+idx+',-1)" class="qtdbtn border rounded" style="border-color:var(--border)">−</button>'+
+        i.qtd+
+        '<button onclick="mudarQtd('+idx+',1)" class="qtdbtn border rounded" style="border-color:var(--border)">+</button>'+
+      '</div></div>';
+  }).join('');
+  calcTotais();
+}
+
+function mudarQtd(idx, delta){
+  var i = CART[idx]; var nova = i.qtd + delta;
+  if(nova <= 0){ CART.splice(idx,1); renderCart(); return; }
+  if(nova > i.estoqueMax) return;
+  i.qtd = nova; renderCart();
+}
+
+function brl(v){ return 'R$ ' + v.toFixed(2).replace('.',','); }
+
+var TIPO_DESCONTO = 'valor'; // 'valor' (R$) ou 'percentual' (%)
+
+function setTipoDesconto(tipo){
+  TIPO_DESCONTO = tipo;
+  document.getElementById('tipoDescR').classList.toggle('sel', tipo==='valor');
+  document.getElementById('tipoDescP').classList.toggle('sel', tipo==='percentual');
+  document.getElementById('descontoValor').placeholder = tipo==='percentual' ? '0' : '0,00';
+  calcTotais();
+}
+
+// Calcula o valor do desconto em R$ a partir do campo (R$ direto, ou % sobre
+// o subtotal) — sempre travado pra não passar do subtotal nem ficar negativo.
+function valorDescontoReais(subtotal){
+  var v = Number((document.getElementById('descontoValor').value || '0').toString().replace(',','.'));
+  if(!v || v <= 0) return 0;
+  var reais = TIPO_DESCONTO === 'percentual' ? subtotal * (Math.min(v,100)/100) : v;
+  return Math.min(Math.max(reais,0), subtotal);
+}
+
+function calcTotais(){
+  var subtotal = CART.reduce(function(s,i){return s + i.preco*i.qtd;}, 0);
+  var frete = Number((document.querySelector('input[name=frete]:checked')||{}).value || 0);
+  var desconto = valorDescontoReais(subtotal);
+
+  document.getElementById('subtotal').textContent = brl(subtotal);
+  document.getElementById('freteTxt').textContent = brl(frete);
+  document.getElementById('totalGeral').textContent = brl(subtotal - desconto + frete);
+
+  var descRow = document.getElementById('descontoRow');
+  if(desconto > 0){
+    descRow.style.display = 'flex';
+    document.getElementById('descontoTxt').textContent = '− ' + brl(desconto);
+  } else {
+    descRow.style.display = 'none';
+  }
+
+  atualizarBarraSacola(subtotal - desconto + frete);
+  if(typeof atualizarSaldo === 'function') atualizarSaldo();
+}
+
+// Barra da sacola, embutida no fluxo da página (ver CSS #cartBar) — só
+// aparece quando tem algo na sacola, evita ocupar espaço da tela à toa.
+function atualizarBarraSacola(total){
+  var qtdTotal = CART.reduce(function(s,i){ return s + i.qtd; }, 0);
+  var bar = document.getElementById('cartBar');
+  document.getElementById('cartBarCount').textContent = qtdTotal + (qtdTotal===1 ? ' item' : ' itens');
+  document.getElementById('cartBarTotal').textContent = brl(total);
+  bar.classList.toggle('show', qtdTotal > 0);
+}
+
+// Distribui o desconto proporcionalmente entre os itens da sacola, com o
+// MESMO cálculo que o ZumAgent faz ao gravar o pedido — assim o valor
+// cobrado na InfinitePay bate exatamente com o que fica registrado como
+// venda depois. Nunca gera preço negativo.
+function itensComDesconto(){
+  var subtotal = CART.reduce(function(s,i){return s + i.preco*i.qtd;}, 0);
+  var desconto = valorDescontoReais(subtotal);
+  var fator = subtotal > 0 ? (1 - desconto/subtotal) : 1;
+  return CART.map(function(i){
+    var precoComDesc = Math.round(i.preco * fator * 100) / 100;
+    return Object.assign({}, i, {precoOriginal:i.preco, preco:precoComDesc});
+  });
+}
+
+// ==========================================================
+// CADASTRO DE VENDA (23/09/2026)
+// ----------------------------------------------------------
+// Tudo abaixo substitui o "gerar link de pagamento" do Vendas Zap.
+// A venda é gravada pelo ZumAgent via ações cvLogin / cvDados /
+// cvCadastrarVenda (arquivo CadastroVenda.gs no Apps Script), que por
+// dentro chamam a MESMA registrarVenda() do ZUM Agent.
+// Essas 3 ações exigem PIN (fica só no Apps Script, nunca no site).
+// ==========================================================
+var PIN = '';
+var CLIENTES = [];          // [{nome, celular}] — só chega depois do PIN
+var CLIENTE_SEL = null;     // cliente já cadastrada escolhida na busca
+var MODO_NOVA = false;      // true = cadastrando cliente nova
+var STATUS_PAG = '✅ Pago';
+var METODO_PAG = '';
+var AC_IDX = -1;
+var ENVIANDO = false;
+
+function hojeISO(){
+  var d = new Date();
+  return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);
+}
+function dataBR(iso){ var p = String(iso||'').split('-'); return p.length===3 ? p[2]+'/'+p[1]+'/'+p[0] : iso; }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+function semAcento(s){ return String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase(); }
+function digitos(s){ return String(s||'').replace(/\D/g,''); }
+function novoId(){ return Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,10); }
+
+function mascaraFone(el){
+  var d = digitos(el.value).slice(0,11);
+  var out = d;
+  if(d.length>2) out = '('+d.slice(0,2)+') '+d.slice(2);
+  if(d.length>7) out = '('+d.slice(0,2)+') '+d.slice(2, d.length===11?7:6)+'-'+d.slice(d.length===11?7:6);
+  el.value = out;
+}
+
+// ---------------- PIN ----------------
+function pinGuardado(){ try{ return sessionStorage.getItem('zum-cv-pin')||''; }catch(e){ return ''; } }
+function guardarPin(p){ try{ if(p) sessionStorage.setItem('zum-cv-pin', p); else sessionStorage.removeItem('zum-cv-pin'); }catch(e){} }
+
+function mostrarPin(msg){
+  document.getElementById('pinBg').classList.add('show');
+  document.getElementById('pinErro').textContent = msg || '';
+  setTimeout(function(){ document.getElementById('pinInput').focus(); }, 50);
+}
+
+async function entrarComPin(){
+  var p = document.getElementById('pinInput').value.trim();
+  if(!p) return;
+  var btn = document.getElementById('pinBtn');
+  btn.disabled = true; btn.textContent = 'Conferindo…';
+  var ok = await carregarDadosProtegidos(p);
+  btn.disabled = false; btn.textContent = 'Entrar';
+  if(ok){
+    document.getElementById('pinBg').classList.remove('show');
+    document.getElementById('pinInput').value = '';
+  }
+}
+
+// Busca clientes + bandeiras. Só funciona com PIN certo.
+async function carregarDadosProtegidos(p){
+  var r = await asCall('cvDados', {pin: p});
+  if(!r || !r.ok){
+    guardarPin('');
+    mostrarPin((r && r.erro) || 'Não consegui conferir o PIN.');
+    return false;
+  }
+  PIN = p; guardarPin(p);
+  CLIENTES = (r.clientes||[]).filter(function(c){ return c.nome; })
+    .sort(function(a,b){ return a.nome.localeCompare(b.nome,'pt-BR'); });
+  var sel = document.getElementById('cartaoBandeira');
+  sel.innerHTML = '<option value="">Bandeira (opcional)</option>' +
+    (r.bandeiras||[]).map(function(b){ return '<option value="'+esc(b)+'">'+esc(b)+'</option>'; }).join('');
+  document.getElementById('statusHeader').textContent = 'online · '+CLIENTES.length+' clientes';
+  return true;
+}
+
+function sairPin(){ guardarPin(''); PIN=''; CLIENTES=[]; location.reload(); }
+
+// ---------------- CLIENTE (autocompletar) ----------------
+function acBuscar(){
+  var termo = document.getElementById('cliBusca').value.trim();
+  var lista = document.getElementById('acList');
+  AC_IDX = -1;
+  if(!termo){ lista.classList.remove('show'); lista.innerHTML=''; return; }
+  var t = semAcento(termo), td = digitos(termo);
+  var achados = CLIENTES.filter(function(c){
+    if(semAcento(c.nome).indexOf(t) > -1) return true;
+    return td.length >= 3 && digitos(c.celular).indexOf(td) > -1;
+  }).slice(0, 8);
+
+  var html = achados.map(function(c, i){
+    return '<div class="ac-item" data-i="'+i+'" onmousedown="acEscolher('+CLIENTES.indexOf(c)+')">'+
+      '<b>'+esc(c.nome)+'</b><span>'+esc(c.celular||'sem WhatsApp')+'</span></div>';
+  }).join('');
+  html += '<div class="ac-item ac-nova" onmousedown="abrirNovaCliente(true)">+ Cadastrar "'+esc(termo)+'" como nova cliente</div>';
+  lista.innerHTML = html;
+  lista.classList.add('show');
+}
+
+function acTeclado(ev){
+  var itens = document.querySelectorAll('#acList .ac-item');
+  if(!itens.length) return;
+  if(ev.key==='ArrowDown'){ AC_IDX = Math.min(AC_IDX+1, itens.length-1); ev.preventDefault(); }
+  else if(ev.key==='ArrowUp'){ AC_IDX = Math.max(AC_IDX-1, 0); ev.preventDefault(); }
+  else if(ev.key==='Enter' && AC_IDX>=0){ ev.preventDefault(); itens[AC_IDX].dispatchEvent(new Event('mousedown')); return; }
+  else if(ev.key==='Escape'){ document.getElementById('acList').classList.remove('show'); return; }
+  itens.forEach(function(el,i){ el.classList.toggle('hl', i===AC_IDX); });
+}
+
+function acEscolher(idx){
+  CLIENTE_SEL = CLIENTES[idx];
+  MODO_NOVA = false;
+  document.getElementById('acList').classList.remove('show');
+  document.getElementById('cliBusca').value = '';
+  document.getElementById('cliBusca').parentNode.style.display = 'none';
+  document.getElementById('btnNovaCliente').style.display = 'none';
+  document.getElementById('cliSelNome').textContent = CLIENTE_SEL.nome;
+  document.getElementById('cliSelWhats').textContent = CLIENTE_SEL.celular || 'sem WhatsApp cadastrado';
+  document.getElementById('cliSelecionada').style.display = 'flex';
+}
+
+function limparCliente(){
+  CLIENTE_SEL = null;
+  document.getElementById('cliSelecionada').style.display = 'none';
+  document.getElementById('cliBusca').parentNode.style.display = '';
+  document.getElementById('btnNovaCliente').style.display = '';
+  document.getElementById('cliBusca').focus();
+}
+
+function abrirNovaCliente(usarTermo){
+  var termo = document.getElementById('cliBusca').value.trim();
+  MODO_NOVA = true; CLIENTE_SEL = null;
+  document.getElementById('acList').classList.remove('show');
+  document.getElementById('blocoBuscaCliente').style.display = 'none';
+  document.getElementById('blocoNovaCliente').style.display = '';
+  var nome = document.getElementById('novoNome'), wh = document.getElementById('novoWhats');
+  nome.value = ''; wh.value = '';
+  if(usarTermo && termo){
+    if(digitos(termo).length >= 8 && !/[a-zA-Z]/.test(termo)){ wh.value = termo; mascaraFone(wh); }
+    else nome.value = termo;
+  }
+  (nome.value ? wh : nome).focus();
+}
+
+function fecharNovaCliente(){
+  MODO_NOVA = false;
+  document.getElementById('blocoNovaCliente').style.display = 'none';
+  document.getElementById('blocoBuscaCliente').style.display = '';
+  limparCliente();
+}
+
+// Fecha a lista ao clicar fora
+document.addEventListener('click', function(ev){
+  if(!ev.target.closest || !ev.target.closest('.ac-wrap')) document.getElementById('acList').classList.remove('show');
+});
+
+// ---------------- PAGAMENTO ----------------
+function setStatus(btn){
+  STATUS_PAG = btn.getAttribute('data-v');
+  [...document.querySelectorAll('#statusPag .swatch')].forEach(function(b){ b.classList.toggle('sel', b===btn); });
+  var pend = STATUS_PAG==='❌ Pendente', parc = STATUS_PAG==='🟡 Parcial';
+  document.getElementById('blocoMetodo').style.display = pend ? 'none' : '';
+  document.getElementById('blocoValorPago').style.display = parc ? '' : 'none';
+  document.getElementById('blocoVencimento').style.display = (pend||parc) ? '' : 'none';
+  document.getElementById('metodoLabel').textContent = parc ? 'Como ela pagou a entrada? *' : 'Forma de pagamento *';
+  if(pend){ METODO_PAG=''; [...document.querySelectorAll('#metodoPag .swatch')].forEach(function(b){ b.classList.remove('sel'); }); }
+  atualizarCartao();
+  calcTotais();
+}
+
+function setMetodo(btn){
+  METODO_PAG = btn.getAttribute('data-v');
+  [...document.querySelectorAll('#metodoPag .swatch')].forEach(function(b){ b.classList.toggle('sel', b===btn); });
+  atualizarCartao();
+}
+
+function atualizarCartao(){
+  var ehCartao = (METODO_PAG==='Crédito' || METODO_PAG==='Débito') && STATUS_PAG!=='❌ Pendente';
+  document.getElementById('blocoCartao').style.display = ehCartao ? '' : 'none';
+  document.getElementById('cartaoParcelas').style.display = METODO_PAG==='Crédito' ? '' : 'none';
+}
+
+function totalAtual(){
+  var subtotal = CART.reduce(function(s,i){return s + i.preco*i.qtd;}, 0);
+  var frete = Number((document.querySelector('input[name=frete]:checked')||{}).value || 0);
+  return { subtotal: subtotal, frete: frete, desconto: valorDescontoReais(subtotal),
+           total: subtotal - valorDescontoReais(subtotal) + frete };
+}
+
+function atualizarSaldo(){
+  var el = document.getElementById('saldoTxt'); if(!el) return;
+  var pago = Number(String(document.getElementById('valorPago').value||'0').replace(',','.')) || 0;
+  var t = totalAtual().total;
+  el.textContent = pago > 0 ? ('Fica devendo: ' + brl(Math.max(t - pago, 0))) : '';
+}
+
+// ---------------- CADASTRAR ----------------
+function erro(msg){ document.getElementById('resultado').innerHTML = '<div class="text-sm text-red-600">❌ '+esc(msg)+'</div>'; }
+
+async function cadastrarVenda(){
+  if(ENVIANDO) return;
+  document.getElementById('resultado').innerHTML = '';
+  if(!PIN){ mostrarPin(); return; }
+  if(!CART.length) return erro('Adicione ao menos um produto à sacola.');
+
+  var cliente = null, novoCliente = null, nomeCli = '', whatsCli = '';
+  if(MODO_NOVA){
+    nomeCli = document.getElementById('novoNome').value.trim();
+    whatsCli = document.getElementById('novoWhats').value.trim();
+    if(!nomeCli) return erro('Informe o nome da cliente nova.');
+    if(digitos(whatsCli).length < 10) return erro('Informe o WhatsApp da cliente nova com DDD.');
+    novoCliente = {nome: nomeCli, celular: whatsCli};
+  } else {
+    if(!CLIENTE_SEL) return erro('Escolha a cliente na busca ou cadastre uma nova.');
+    cliente = CLIENTE_SEL.nome; nomeCli = CLIENTE_SEL.nome; whatsCli = CLIENTE_SEL.celular || '';
+  }
+
+  var data = document.getElementById('dataVenda').value;
+  if(!data) return erro('Informe a data da venda.');
+  if(STATUS_PAG !== '❌ Pendente' && !METODO_PAG) return erro('Escolha a forma de pagamento.');
+
+  var t = totalAtual();
+  var valorPago = 0;
+  if(STATUS_PAG === '🟡 Parcial'){
+    valorPago = Number(String(document.getElementById('valorPago').value||'0').replace(',','.')) || 0;
+    if(valorPago <= 0) return erro('Informe quanto a cliente já pagou.');
+    if(valorPago >= t.total - 0.004) return erro('Valor pago cobre o total — marque como ✅ Pago.');
+  }
+
+  var cartao = null;
+  var bandeira = document.getElementById('cartaoBandeira').value;
+  if((METODO_PAG==='Crédito' || METODO_PAG==='Débito') && bandeira && STATUS_PAG!=='❌ Pendente'){
+    cartao = { bandeira: bandeira, tipo: METODO_PAG,
+               parcelas: METODO_PAG==='Crédito' ? Number(document.getElementById('cartaoParcelas').value)||1 : 1,
+               repassar: !!document.getElementById('cartaoRepassar').checked };
+  }
+
+  // registrarVenda só entende desconto em % (mesma conversão do ZUM Agent)
+  var descontoPct = t.subtotal > 0 ? Math.min(t.desconto / t.subtotal * 100, 100) : 0;
+
+  var venda = {
+    data: data,
+    cliente: cliente,
+    novoCliente: novoCliente,
+    itens: CART.map(function(i){ return { codigoProduto: i.codigo, qtd: i.qtd, precoUnit: i.preco }; }),
+    pagamento: STATUS_PAG,
+    metodoPagamento: STATUS_PAG==='❌ Pendente' ? '' : METODO_PAG,
+    cartao: cartao,
+    valorPago: valorPago,
+    vencimento: (STATUS_PAG!=='✅ Pago') ? (document.getElementById('vencimento').value||'') : '',
+    desconto: descontoPct,
+    frete: t.frete
+  };
+
+  // Resumo pra conferir antes de gravar (evita venda errada na planilha)
+  var resumo = CART.map(function(i){ return '• '+i.qtd+'x '+i.nome+' ('+i.cor+(i.tamanho?' '+i.tamanho:'')+')'; }).join('\n');
+  var ok = confirm('Cadastrar esta venda?\n\nCliente: '+nomeCli+(novoCliente?' (NOVA)':'')+
+    '\nData: '+dataBR(data)+'\n\n'+resumo+
+    (t.desconto>0 ? '\nDesconto: − '+brl(t.desconto) : '')+
+    (t.frete>0 ? '\nFrete: '+brl(t.frete) : '')+
+    '\nTotal: '+brl(t.total)+
+    '\n\nPagamento: '+STATUS_PAG+(venda.metodoPagamento ? ' · '+venda.metodoPagamento : '')+
+    (valorPago ? '\nPago agora: '+brl(valorPago)+' · Saldo: '+brl(t.total-valorPago) : ''));
+  if(!ok) return;
+
+  ENVIANDO = true;
+  var btn = document.getElementById('btnCadastrar');
+  btn.disabled = true; btn.textContent = 'Gravando no Sistema…';
+  document.getElementById('resultado').innerHTML = '<div class="label-caps">Gravando venda, baixando estoque… (leva uns segundos)</div>';
+
+  var idVenda = novoId();
+  var r = await asCall('cvCadastrarVenda', {pin: PIN, idVenda: idVenda, venda: venda});
+  // Se a conexão caiu no meio, tenta de novo com o MESMO id — o servidor não duplica.
+  if(r && r.ok===false && /Falha de conexão/.test(r.erro||'')){
+    r = await asCall('cvCadastrarVenda', {pin: PIN, idVenda: idVenda, venda: venda});
+  }
+
+  ENVIANDO = false;
+  btn.disabled = false; btn.textContent = 'Cadastrar venda';
+
+  if(!r || !r.ok){
+    if(r && r.pinInvalido){ guardarPin(''); PIN=''; mostrarPin('PIN expirou ou foi trocado. Digite de novo.'); }
+    return erro((r && r.erro) || 'Falha ao cadastrar.');
+  }
+
+  // Recibo pro WhatsApp da cliente
+  var linhas = CART.map(function(i){ return '• '+i.qtd+'x '+i.nome+' ('+i.cor+(i.tamanho?' '+i.tamanho:'')+') — '+brl(i.preco*i.qtd); }).join('\n');
+  var msg = 'Oi '+nomeCli.split(' ')[0]+'! Aqui é da ZUM 💛\n\nSua compra de '+dataBR(data)+':\n'+linhas+
+    (t.desconto>0 ? '\nDesconto: − '+brl(t.desconto) : '')+
+    (t.frete>0 ? '\nFrete: '+brl(t.frete) : '')+
+    '\nTotal: '+brl(t.total)+'\n'+
+    (STATUS_PAG==='✅ Pago' ? '\nPagamento confirmado ('+venda.metodoPagamento+'). Obrigada! ✨'
+     : STATUS_PAG==='🟡 Parcial' ? '\nRecebido: '+brl(valorPago)+'\nFalta: '+brl(t.total-valorPago)+(venda.vencimento?' até '+dataBR(venda.vencimento):'')
+     : '\nPagamento pendente'+(venda.vencimento?' — vencimento '+dataBR(venda.vencimento):'')+'.');
+  var fone = digitos(novoCliente ? novoCliente.celular : whatsCli);
+  var linkZap = fone.length>=10 ? 'https://wa.me/'+(fone.length<=11?'55'+fone:fone)+'?text='+encodeURIComponent(msg) : '';
+
+  document.getElementById('resultado').innerHTML =
+    '<div class="text-sm mb-2" style="color:#3f7d4f">✅ '+(r.repetida?'(já estava gravada) ':'')+esc(r.msg||'Venda cadastrada.')+'</div>'+
+    (linkZap ? '<a href="'+linkZap+'" target="_blank" style="text-decoration:none"><button class="btn-outline">Enviar recibo no WhatsApp</button></a>' : '');
+
+  // Cliente nova entra na lista local na hora (sem precisar recarregar)
+  if(novoCliente && !CLIENTES.some(function(c){ return c.nome.toLowerCase()===novoCliente.nome.toLowerCase(); })){
+    CLIENTES.push({nome: r.nomeCliente || novoCliente.nome, celular: novoCliente.celular});
+  }
+
+  // Limpa o formulário pra próxima venda (data e status ficam como estavam)
+  CART = []; renderCart();
+  document.getElementById('descontoValor').value = '';
+  document.getElementById('valorPago').value = '';
+  document.getElementById('vencimento').value = '';
+  if(MODO_NOVA) fecharNovaCliente(); else limparCliente();
+  calcTotais();
+
+  // Recarrega estoque ao vivo (a venda acabou de baixar peças)
+  carregarProdutos();
+}
+
+// ---------------- INÍCIO ----------------
+document.getElementById('dataVenda').value = hojeISO();
+setStatus(document.querySelector('#statusPag .swatch'));
+carregarProdutos();
+(async function(){
+  var p = pinGuardado();
+  if(p){ await carregarDadosProtegidos(p); } else { mostrarPin(); }
+})();
+</script>
+</body>
+</html>
