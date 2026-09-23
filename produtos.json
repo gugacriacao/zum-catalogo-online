@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-09-23T02:47:11.733Z",
+  "geradoEm": "2026-09-23T03:24:58.563Z",
   "produtos": [
     {
       "sku": "ZUM-BLPO-700",
@@ -650,8 +650,11 @@
       "destaque": "",
       "descricao": "",
       "estoqueNum": 4,
-      "ativo": false,
-      "fotos": [],
+      "ativo": true,
+      "fotos": [
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CJBD-501/midia-1790131712975.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CJBD-501/midia-1790131716918.png"
+      ],
       "fotosCores": {},
       "ordem": 19
     },
@@ -676,7 +679,7 @@
       "destaque": "",
       "descricao": "",
       "estoqueNum": 10,
-      "ativo": false,
+      "ativo": true,
       "fotos": [],
       "fotosCores": {},
       "ordem": 20
@@ -701,8 +704,11 @@
       "destaque": "",
       "descricao": "",
       "estoqueNum": 5,
-      "ativo": false,
-      "fotos": [],
+      "ativo": true,
+      "fotos": [
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-BDBA-300/midia-1790133783513.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-BDBA-300/midia-1790133885682.png"
+      ],
       "fotosCores": {},
       "ordem": 21
     },
@@ -837,7 +843,7 @@
     },
     {
       "sku": "ZUM-PABD-1000",
-      "nome": "Pareôu bordado",
+      "nome": "Pareô bordado",
       "cat": "PAREÔU",
       "preco": 179,
       "cores": [
@@ -852,7 +858,9 @@
       "descricao": "",
       "estoqueNum": 3,
       "ativo": true,
-      "fotos": [],
+      "fotos": [
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-PABD-1000/midia-1790133612075.png"
+      ],
       "fotosCores": {},
       "ordem": 28
     },
@@ -876,7 +884,10 @@
       "descricao": "",
       "estoqueNum": 8,
       "ativo": true,
-      "fotos": [],
+      "fotos": [
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-BDRE-302/midia-1790132449168.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-BDRE-302/midia-1790132455090.png"
+      ],
       "fotosCores": {},
       "ordem": 29
     },
@@ -897,7 +908,11 @@
       "descricao": "",
       "estoqueNum": 4,
       "ativo": true,
-      "fotos": [],
+      "fotos": [
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-BLPL-701/midia-1790131668394.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-BLPL-701/midia-1790131672627.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-BLPL-701/midia-1790131676535.png"
+      ],
       "fotosCores": {},
       "ordem": 30
     },
@@ -919,7 +934,11 @@
       "descricao": "",
       "estoqueNum": 5,
       "ativo": true,
-      "fotos": [],
+      "fotos": [
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSLT-202/midia-1790131686247.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSLT-202/midia-1790131694435.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSLT-202/midia-1790131698686.png"
+      ],
       "fotosCores": {},
       "ordem": 31
     },
