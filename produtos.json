@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-09-23T04:46:50.832Z",
+  "geradoEm": "2026-09-23T04:48:48.330Z",
   "coresHex": {
     "listrada": "#e30821"
   },
@@ -24,11 +24,14 @@
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSLT-202/midia-1790131686247.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSLT-202/midia-1790131694435.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSLT-202/midia-1790131698686.png"
       ],
       "coresHex": {},
-      "fotosCores": {},
+      "fotosCores": {
+        "Azul marinho": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSLT-202/CORES/azul-marinho-1790138900639.jpg"
+        ]
+      },
       "ordem": 1
     },
     {
