@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-09-25T02:31:58.667Z",
+  "geradoEm": "2026-09-26T18:21:11.930Z",
   "coresHex": {
     "listrada": "#e30821"
   },
@@ -637,16 +637,18 @@
         "Preto",
         "Verde",
         "Amarela",
-        "Rosa"
+        "Rosa",
+        "Amarelo"
       ],
       "tamanhos": [
-        "UN"
+        "UN",
+        "M"
       ],
       "stock": "Em estoque",
       "badge": "",
       "destaque": "Tecido Poliamida. Tamanho único: 36/42",
       "descricao": "",
-      "estoqueNum": 0,
+      "estoqueNum": 5,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/midia-1783480241093.png",
