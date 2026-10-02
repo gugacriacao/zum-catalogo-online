@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-09-26T18:21:11.930Z",
+  "geradoEm": "2026-10-02T02:11:56.315Z",
   "coresHex": {
     "listrada": "#e30821"
   },
@@ -20,7 +20,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 2,
+      "estoqueNum": 0,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSLT-202/midia-1790131686247.png",
@@ -107,7 +107,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 3,
+      "estoqueNum": 1,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-BLPL-701/midia-1790131668394.png",
@@ -239,7 +239,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 2,
+      "estoqueNum": 1,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CLCN-401/midia-1784417417779.png",
@@ -484,7 +484,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 2,
+      "estoqueNum": 1,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-1783864612196.png",
@@ -648,7 +648,7 @@
       "badge": "",
       "destaque": "Tecido Poliamida. Tamanho único: 36/42",
       "descricao": "",
-      "estoqueNum": 5,
+      "estoqueNum": 4,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/midia-1783480241093.png",
@@ -830,7 +830,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 4,
+      "estoqueNum": 3,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDDN-103/midia-1783643692817.png",
@@ -982,7 +982,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 2,
+      "estoqueNum": 1,
       "ativo": false,
       "fotos": [],
       "coresHex": {},
