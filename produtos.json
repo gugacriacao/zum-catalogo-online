@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-10-10T02:27:33.928Z",
+  "geradoEm": "2026-10-29T04:46:42.933Z",
   "coresHex": {
     "listrada": "#e30821"
   },
@@ -8,10 +8,11 @@
       "sku": "ZUM-TSLT-202",
       "nome": "T-shirt listrada",
       "cat": "T-shirts",
-      "preco": 198,
+      "preco": 199,
       "cores": [
         "Vermelha",
-        "Azul marinho"
+        "Azul marinho",
+        "Verde"
       ],
       "tamanhos": [
         "UN"
@@ -20,7 +21,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 0,
+      "estoqueNum": 8,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSLT-202/midia-1790131686247.png",
@@ -187,7 +188,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 5,
+      "estoqueNum": 4,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/midia-1784302557737.png",
@@ -228,7 +229,9 @@
       "cat": "Calças",
       "preco": 319,
       "cores": [
-        "Amarela"
+        "Amarela",
+        "Marrom",
+        "Preto"
       ],
       "tamanhos": [
         "P",
@@ -239,7 +242,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 1,
+      "estoqueNum": 7,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CLCN-401/midia-1784417417779.png",
@@ -268,7 +271,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 7,
+      "estoqueNum": 2,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-BDRE-302/midia-1790132449168.png",
@@ -370,7 +373,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 5,
+      "estoqueNum": 0,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-BDBA-300/midia-1790133783513.png",
@@ -451,7 +454,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 10,
+      "estoqueNum": 2,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-BDBM-301/midia-1790135074308.png",
@@ -475,7 +478,8 @@
         "Branco",
         "Amarela",
         "Azul Bebê",
-        "Verde"
+        "Verde",
+        "Amarelo"
       ],
       "tamanhos": [
         "UN"
@@ -484,7 +488,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 1,
+      "estoqueNum": 4,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-1783864612196.png",
@@ -638,7 +642,8 @@
         "Verde",
         "Amarela",
         "Rosa",
-        "Amarelo"
+        "Amarelo",
+        "Vermelha"
       ],
       "tamanhos": [
         "UN",
@@ -648,7 +653,7 @@
       "badge": "",
       "destaque": "Tecido Poliamida. Tamanho único: 36/42",
       "descricao": "",
-      "estoqueNum": 4,
+      "estoqueNum": 5,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/midia-1783480241093.png",
@@ -821,7 +826,9 @@
         "Verde",
         "Vermelha",
         "Off-white",
-        "Marrom"
+        "Marrom",
+        "Azul marinho",
+        "Amarelo"
       ],
       "tamanhos": [
         "UN"
@@ -830,7 +837,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 3,
+      "estoqueNum": 10,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDDN-103/midia-1783643692817.png",
@@ -921,50 +928,6 @@
       "ordem": 28
     },
     {
-      "sku": "ZUM-CJBC-500",
-      "nome": "Conjunto calça e t-shirt",
-      "cat": "Conjuntos",
-      "preco": 279.9,
-      "cores": [
-        "Marrom"
-      ],
-      "tamanhos": [
-        "UN"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "destaque": "",
-      "descricao": "",
-      "estoqueNum": 0,
-      "ativo": false,
-      "fotos": [],
-      "coresHex": {},
-      "fotosCores": {},
-      "ordem": 29
-    },
-    {
-      "sku": "ZUM-VDRC-110",
-      "nome": "recorte costas",
-      "cat": "Vestidos",
-      "preco": 189,
-      "cores": [
-        "Off-white"
-      ],
-      "tamanhos": [
-        "UN"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "destaque": "",
-      "descricao": "",
-      "estoqueNum": 2,
-      "ativo": false,
-      "fotos": [],
-      "coresHex": {},
-      "fotosCores": {},
-      "ordem": 30
-    },
-    {
       "sku": "ZUM-VDDR-111",
       "nome": "Vestido drapeado rosa",
       "cat": "Vestidos",
@@ -987,7 +950,7 @@
       "fotos": [],
       "coresHex": {},
       "fotosCores": {},
-      "ordem": 31
+      "ordem": 29
     },
     {
       "sku": "ZUM-KMBC-001",
@@ -1011,7 +974,102 @@
       ],
       "coresHex": {},
       "fotosCores": {},
+      "ordem": 30
+    },
+    {
+      "sku": "ZUM-VDBB-112",
+      "nome": "Vestido babado Vermelho",
+      "cat": "Vestidos",
+      "preco": 219,
+      "cores": [
+        "Vermelha",
+        "Capuccino"
+      ],
+      "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 3,
+      "ativo": true,
+      "fotos": [],
+      "coresHex": {},
+      "fotosCores": {},
+      "ordem": 31
+    },
+    {
+      "sku": "ZUM-VDLT-113",
+      "nome": "Vestido listrado",
+      "cat": "Vestidos",
+      "preco": 469.9,
+      "cores": [
+        "Listrada"
+      ],
+      "tamanhos": [
+        "P",
+        "M"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 4,
+      "ativo": true,
+      "fotos": [],
+      "coresHex": {},
+      "fotosCores": {},
       "ordem": 32
+    },
+    {
+      "sku": "ZUM-CABO-1100",
+      "nome": "Camisaria bolso",
+      "cat": "Camisaria",
+      "preco": 249,
+      "cores": [
+        "Verde militar",
+        "Amarelo"
+      ],
+      "tamanhos": [
+        "P",
+        "G"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 3,
+      "ativo": true,
+      "fotos": [],
+      "coresHex": {},
+      "fotosCores": {},
+      "ordem": 33
+    },
+    {
+      "sku": "ZUM-CJAL-503",
+      "nome": "Conjunto Aladin",
+      "cat": "Conjuntos",
+      "preco": 499,
+      "cores": [
+        "Rosa",
+        "Off-white"
+      ],
+      "tamanhos": [
+        "P",
+        "M",
+        "G"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 6,
+      "ativo": true,
+      "fotos": [],
+      "coresHex": {},
+      "fotosCores": {},
+      "ordem": 34
     }
   ]
 }
