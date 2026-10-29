@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-10-29T04:48:54.399Z",
+  "geradoEm": "2026-10-29T05:39:21.300Z",
   "coresHex": {
     "listrada": "#e30821"
   },
@@ -229,9 +229,7 @@
       "cat": "Calças",
       "preco": 319,
       "cores": [
-        "Amarela",
-        "Marrom",
-        "Preto"
+        "Amarela"
       ],
       "tamanhos": [
         "P",
@@ -242,7 +240,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 7,
+      "estoqueNum": 1,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CLCN-401/midia-1784417417779.png",
@@ -415,16 +413,19 @@
       "cat": "Calças",
       "preco": 369,
       "cores": [
+        "Marrom",
+        "Preto",
         "Off-white"
       ],
       "tamanhos": [
-        "P"
+        "P",
+        "M"
       ],
       "stock": "Em estoque",
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 1,
+      "estoqueNum": 7,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CLAL-403/midia-1790134264304.png",
