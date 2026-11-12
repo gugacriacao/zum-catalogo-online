@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-10-30T21:44:25.114Z",
+  "geradoEm": "2026-11-12T15:15:47.231Z",
   "coresHex": {
     "listrada": "#e30821"
   },
@@ -21,7 +21,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 6,
+      "estoqueNum": 4,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSLT-202/midia-1790131686247.png",
@@ -425,7 +425,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 7,
+      "estoqueNum": 6,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CLAL-403/midia-1790134264304.png",
@@ -654,7 +654,7 @@
       "badge": "",
       "destaque": "Tecido Poliamida. Tamanho único: 36/42",
       "descricao": "",
-      "estoqueNum": 3,
+      "estoqueNum": 2,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/midia-1783480241093.png",
@@ -932,7 +932,7 @@
       "sku": "ZUM-VDDR-111",
       "nome": "Vestido drapeado rosa",
       "cat": "Vestidos",
-      "preco": 199,
+      "preco": 219,
       "cores": [
         "Rosa",
         "Preto",
@@ -994,7 +994,7 @@
       "destaque": "",
       "descricao": "",
       "estoqueNum": 3,
-      "ativo": true,
+      "ativo": false,
       "fotos": [],
       "coresHex": {},
       "fotosCores": {},
@@ -1017,7 +1017,7 @@
       "destaque": "",
       "descricao": "",
       "estoqueNum": 4,
-      "ativo": true,
+      "ativo": false,
       "fotos": [],
       "coresHex": {},
       "fotosCores": {},
@@ -1041,7 +1041,7 @@
       "destaque": "",
       "descricao": "",
       "estoqueNum": 2,
-      "ativo": true,
+      "ativo": false,
       "fotos": [],
       "coresHex": {},
       "fotosCores": {},
@@ -1066,7 +1066,7 @@
       "destaque": "",
       "descricao": "",
       "estoqueNum": 5,
-      "ativo": true,
+      "ativo": false,
       "fotos": [],
       "coresHex": {},
       "fotosCores": {},
