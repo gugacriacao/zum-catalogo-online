@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-11-18T11:42:41.280Z",
+  "geradoEm": "2026-11-18T11:55:38.604Z",
   "coresHex": {
     "listrada": "#e30821"
   },
@@ -490,7 +490,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 6,
+      "estoqueNum": 7,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-1783864612196.png",
@@ -950,7 +950,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 9,
+      "estoqueNum": 6,
       "ativo": true,
       "fotos": [],
       "coresHex": {},
@@ -1092,7 +1092,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 8,
+      "estoqueNum": 7,
       "ativo": true,
       "fotos": [],
       "coresHex": {},
