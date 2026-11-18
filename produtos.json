@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-11-12T15:15:47.231Z",
+  "geradoEm": "2026-11-18T11:36:02.798Z",
   "coresHex": {
     "listrada": "#e30821"
   },
@@ -480,7 +480,8 @@
         "Amarela",
         "Azul Bebê",
         "Verde",
-        "Amarelo"
+        "Amarelo",
+        "Rosa"
       ],
       "tamanhos": [
         "UN"
@@ -489,7 +490,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 1,
+      "estoqueNum": 6,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-1783864612196.png",
@@ -654,7 +655,7 @@
       "badge": "",
       "destaque": "Tecido Poliamida. Tamanho único: 36/42",
       "descricao": "",
-      "estoqueNum": 2,
+      "estoqueNum": 1,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/midia-1783480241093.png",
@@ -829,7 +830,8 @@
         "Off-white",
         "Marrom",
         "Azul marinho",
-        "Amarelo"
+        "Amarelo",
+        "Branco"
       ],
       "tamanhos": [
         "UN"
@@ -838,7 +840,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 5,
+      "estoqueNum": 8,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDDN-103/midia-1783643692817.png",
@@ -937,7 +939,9 @@
         "Rosa",
         "Preto",
         "Branco",
-        "Verde militar"
+        "Verde militar",
+        "Marrom",
+        "Azul marinho"
       ],
       "tamanhos": [
         "UN"
@@ -946,8 +950,8 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 1,
-      "ativo": false,
+      "estoqueNum": 9,
+      "ativo": true,
       "fotos": [],
       "coresHex": {},
       "fotosCores": {},
@@ -994,7 +998,7 @@
       "destaque": "",
       "descricao": "",
       "estoqueNum": 3,
-      "ativo": false,
+      "ativo": true,
       "fotos": [],
       "coresHex": {},
       "fotosCores": {},
@@ -1017,7 +1021,7 @@
       "destaque": "",
       "descricao": "",
       "estoqueNum": 4,
-      "ativo": false,
+      "ativo": true,
       "fotos": [],
       "coresHex": {},
       "fotosCores": {},
@@ -1041,7 +1045,7 @@
       "destaque": "",
       "descricao": "",
       "estoqueNum": 2,
-      "ativo": false,
+      "ativo": true,
       "fotos": [],
       "coresHex": {},
       "fotosCores": {},
@@ -1066,11 +1070,34 @@
       "destaque": "",
       "descricao": "",
       "estoqueNum": 5,
-      "ativo": false,
+      "ativo": true,
       "fotos": [],
       "coresHex": {},
       "fotosCores": {},
       "ordem": 34
+    },
+    {
+      "sku": "ZUM-VDTQC-114",
+      "nome": "vestido tomara que caia bordô",
+      "cat": "Vestidos",
+      "preco": 219,
+      "cores": [
+        "Bordô",
+        "Preto"
+      ],
+      "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 8,
+      "ativo": true,
+      "fotos": [],
+      "coresHex": {},
+      "fotosCores": {},
+      "ordem": 35
     }
   ]
 }
