@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-11-21T14:12:36.318Z",
+  "geradoEm": "2026-11-21T14:14:21.902Z",
   "coresHex": {
     "listrada": "#e30821"
   },
@@ -224,34 +224,6 @@
       "ordem": 7
     },
     {
-      "sku": "ZUM-CJBD-501",
-      "nome": "Conjunto blusa e short bordado",
-      "cat": "Conjuntos",
-      "preco": 389,
-      "cores": [
-        "Areia",
-        "Verde militar"
-      ],
-      "tamanhos": [
-        "P",
-        "M",
-        "UN"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "destaque": "",
-      "descricao": "",
-      "estoqueNum": 0,
-      "ativo": false,
-      "fotos": [
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CJBD-501/midia-1790131712975.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CJBD-501/midia-1790131716918.png"
-      ],
-      "coresHex": {},
-      "fotosCores": {},
-      "ordem": 8
-    },
-    {
       "sku": "ZUM-BDRE-302",
       "nome": "Body regata",
       "cat": "Bodies",
@@ -277,7 +249,7 @@
       ],
       "coresHex": {},
       "fotosCores": {},
-      "ordem": 9
+      "ordem": 8
     },
     {
       "sku": "ZUM-TSBC-201",
@@ -315,41 +287,7 @@
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSBC-201/CORES/azul-bebê-1787711693552.jpg"
         ]
       },
-      "ordem": 10
-    },
-    {
-      "sku": "ZUM-CLPO-402",
-      "nome": "Calça poa",
-      "cat": "Calças",
-      "preco": 329,
-      "cores": [
-        "Off"
-      ],
-      "tamanhos": [
-        "M",
-        "G"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "destaque": "",
-      "descricao": "",
-      "estoqueNum": 0,
-      "ativo": false,
-      "fotos": [
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CLPO-402/midia-1784385109391.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CLPO-402/midia-1784385118843.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CLPO-402/midia-1784385178564.png"
-      ],
-      "coresHex": {},
-      "fotosCores": {
-        "Rosa": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CLPO-402/CORES/rosa-1784385168119.jpg"
-        ],
-        "Off": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CLPO-402/CORES/off-1784385172468.jpg"
-        ]
-      },
-      "ordem": 11
+      "ordem": 9
     },
     {
       "sku": "ZUM-BDBA-300",
@@ -378,7 +316,7 @@
       ],
       "coresHex": {},
       "fotosCores": {},
-      "ordem": 12
+      "ordem": 10
     },
     {
       "sku": "ZUM-CLAL-403",
@@ -406,7 +344,7 @@
       ],
       "coresHex": {},
       "fotosCores": {},
-      "ordem": 13
+      "ordem": 11
     },
     {
       "sku": "ZUM-BDBM-301",
@@ -436,7 +374,7 @@
       ],
       "coresHex": {},
       "fotosCores": {},
-      "ordem": 14
+      "ordem": 12
     },
     {
       "sku": "ZUM-VDRC-105",
@@ -497,49 +435,7 @@
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/CORES/azul-bebê-1786439606063.jpg"
         ]
       },
-      "ordem": 15
-    },
-    {
-      "sku": "ZUM-VDALC-100",
-      "nome": "Vestido alça",
-      "cat": "Vestidos",
-      "preco": 189,
-      "cores": [
-        "Bordô",
-        "Off-white",
-        "Azul",
-        "Marrom"
-      ],
-      "tamanhos": [
-        "UN"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "destaque": "",
-      "descricao": "",
-      "estoqueNum": 0,
-      "ativo": false,
-      "fotos": [
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDALC-100/midia-1784302086299.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDALC-100/midia-1783569600961.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDALC-100/midia-1783569529665.png"
-      ],
-      "coresHex": {},
-      "fotosCores": {
-        "Bordô": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDALC-100/CORES/bordô-1783569572614.jpg"
-        ],
-        "Azul": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDALC-100/CORES/azul-1783569579457.jpg"
-        ],
-        "Marrom": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDALC-100/CORES/marrom-1783569585843.jpg"
-        ],
-        "Off-white": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDALC-100/CORES/off-white-1785120865387.jpg"
-        ]
-      },
-      "ordem": 16
+      "ordem": 13
     },
     {
       "sku": "ZUM-VDPL-107",
@@ -577,7 +473,7 @@
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/CORES/azul-1783862858611.jpg"
         ]
       },
-      "ordem": 17
+      "ordem": 14
     },
     {
       "sku": "ZUM-VDFU-106",
@@ -603,7 +499,7 @@
       ],
       "coresHex": {},
       "fotosCores": {},
-      "ordem": 18
+      "ordem": 15
     },
     {
       "sku": "ZUM-VDMG-104",
@@ -655,7 +551,7 @@
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/CORES/rosa-1786592403907.jpg"
         ]
       },
-      "ordem": 19
+      "ordem": 16
     },
     {
       "sku": "ZUM-VDBT-102",
@@ -687,7 +583,7 @@
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDBT-102/CORES/preto-1783520039715.jpg"
         ]
       },
-      "ordem": 20
+      "ordem": 17
     },
     {
       "sku": "ZUM-TSOV-200",
@@ -721,7 +617,7 @@
       ],
       "coresHex": {},
       "fotosCores": {},
-      "ordem": 21
+      "ordem": 18
     },
     {
       "sku": "ZUM-CC-400",
@@ -762,7 +658,7 @@
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CC-400/CORES/bege-1783569804849.jpg"
         ]
       },
-      "ordem": 22
+      "ordem": 19
     },
     {
       "sku": "ZUM-VDDN-103",
@@ -806,52 +702,7 @@
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDDN-103/CORES/azul-1783643841651.jpg"
         ]
       },
-      "ordem": 23
-    },
-    {
-      "sku": "ZUM-VDBA-101",
-      "nome": "Vestido básico",
-      "cat": "Vestidos",
-      "preco": 189,
-      "cores": [
-        "Marrom",
-        "Preto"
-      ],
-      "tamanhos": [
-        "UN"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "destaque": "",
-      "descricao": "",
-      "estoqueNum": 0,
-      "ativo": false,
-      "fotos": [],
-      "coresHex": {},
-      "fotosCores": {},
-      "ordem": 24
-    },
-    {
-      "sku": "ZUM-CJBC-001",
-      "nome": "Conjunto calça e t-shirt",
-      "cat": "Conjuntos",
-      "preco": 279.9,
-      "cores": [
-        "Marrom"
-      ],
-      "tamanhos": [
-        "UN"
-      ],
-      "stock": "SEM ESTOQUE",
-      "badge": "",
-      "destaque": "",
-      "descricao": "",
-      "estoqueNum": 0,
-      "ativo": false,
-      "fotos": [],
-      "coresHex": {},
-      "fotosCores": {},
-      "ordem": 25
+      "ordem": 20
     },
     {
       "sku": "ZUM-VDDR-111",
@@ -878,7 +729,7 @@
       "fotos": [],
       "coresHex": {},
       "fotosCores": {},
-      "ordem": 26
+      "ordem": 21
     },
     {
       "sku": "ZUM-KMBC-001",
@@ -902,7 +753,7 @@
       ],
       "coresHex": {},
       "fotosCores": {},
-      "ordem": 27
+      "ordem": 22
     },
     {
       "sku": "ZUM-VDBB-112",
@@ -925,7 +776,7 @@
       "fotos": [],
       "coresHex": {},
       "fotosCores": {},
-      "ordem": 28
+      "ordem": 23
     },
     {
       "sku": "ZUM-VDLT-113",
@@ -948,7 +799,7 @@
       "fotos": [],
       "coresHex": {},
       "fotosCores": {},
-      "ordem": 29
+      "ordem": 24
     },
     {
       "sku": "ZUM-CABO-1100",
@@ -972,7 +823,7 @@
       "fotos": [],
       "coresHex": {},
       "fotosCores": {},
-      "ordem": 30
+      "ordem": 25
     },
     {
       "sku": "ZUM-CJAL-503",
@@ -997,7 +848,7 @@
       "fotos": [],
       "coresHex": {},
       "fotosCores": {},
-      "ordem": 31
+      "ordem": 26
     },
     {
       "sku": "ZUM-VDTQC-114",
@@ -1020,73 +871,7 @@
       "fotos": [],
       "coresHex": {},
       "fotosCores": {},
-      "ordem": 32
-    },
-    {
-      "sku": "ZUM-BLPO-700",
-      "nome": "Blusa poa",
-      "cat": "Blusas",
-      "preco": 249,
-      "cores": [
-        "Rosa"
-      ],
-      "tamanhos": [
-        "M"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "destaque": "",
-      "descricao": "",
-      "estoqueNum": 0,
-      "ativo": true,
-      "fotos": [],
-      "coresHex": {},
-      "fotosCores": {},
-      "ordem": 33
-    },
-    {
-      "sku": "ZUM-VDDU-108",
-      "nome": "Vestido decote u costas",
-      "cat": "Vestidos",
-      "preco": 189,
-      "cores": [
-        "Azul Bebê"
-      ],
-      "tamanhos": [
-        "UN"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "destaque": "",
-      "descricao": "",
-      "estoqueNum": 0,
-      "ativo": true,
-      "fotos": [],
-      "coresHex": {},
-      "fotosCores": {},
-      "ordem": 34
-    },
-    {
-      "sku": "ZUM-VDFF-109",
-      "nome": "Vestido faixa frente",
-      "cat": "Vestidos",
-      "preco": 189,
-      "cores": [
-        "Marrom"
-      ],
-      "tamanhos": [
-        "UN"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "destaque": "",
-      "descricao": "",
-      "estoqueNum": 0,
-      "ativo": true,
-      "fotos": [],
-      "coresHex": {},
-      "fotosCores": {},
-      "ordem": 35
+      "ordem": 27
     }
   ]
 }
