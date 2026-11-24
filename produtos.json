@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-11-21T14:15:19.117Z",
+  "geradoEm": "2026-11-24T03:14:16.069Z",
   "coresHex": {
     "listrada": "#e30821"
   },
@@ -143,6 +143,35 @@
       "ordem": 5
     },
     {
+      "sku": "ZUM-BDBA-300",
+      "nome": "Body assimétrico",
+      "cat": "Bodies",
+      "preco": 119,
+      "cores": [
+        "Marrom",
+        "Preto",
+        "Bege",
+        "Off-white",
+        "Verde"
+      ],
+      "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 0,
+      "ativo": true,
+      "fotos": [
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-BDBA-300/midia-1790133783513.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-BDBA-300/midia-1790133885682.png"
+      ],
+      "coresHex": {},
+      "fotosCores": {},
+      "ordem": 6
+    },
+    {
       "sku": "ZUM-SKMD-600",
       "nome": "Saia midi",
       "cat": "Saias",
@@ -193,7 +222,7 @@
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/CORES/caqui-1786085543517.jpg"
         ]
       },
-      "ordem": 6
+      "ordem": 7
     },
     {
       "sku": "ZUM-CLCN-401",
@@ -213,7 +242,7 @@
       "destaque": "",
       "descricao": "",
       "estoqueNum": 0,
-      "ativo": true,
+      "ativo": false,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CLCN-401/midia-1784417417779.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CLCN-401/midia-1784417427555.png",
@@ -221,7 +250,7 @@
       ],
       "coresHex": {},
       "fotosCores": {},
-      "ordem": 7
+      "ordem": 8
     },
     {
       "sku": "ZUM-BDRE-302",
@@ -249,7 +278,7 @@
       ],
       "coresHex": {},
       "fotosCores": {},
-      "ordem": 8
+      "ordem": 9
     },
     {
       "sku": "ZUM-TSBC-201",
@@ -287,35 +316,6 @@
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSBC-201/CORES/azul-bebê-1787711693552.jpg"
         ]
       },
-      "ordem": 9
-    },
-    {
-      "sku": "ZUM-BDBA-300",
-      "nome": "Body assimétrico",
-      "cat": "Bodies",
-      "preco": 119,
-      "cores": [
-        "Marrom",
-        "Preto",
-        "Bege",
-        "Off-white",
-        "Verde"
-      ],
-      "tamanhos": [
-        "UN"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "destaque": "",
-      "descricao": "",
-      "estoqueNum": 0,
-      "ativo": true,
-      "fotos": [
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-BDBA-300/midia-1790133783513.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-BDBA-300/midia-1790133885682.png"
-      ],
-      "coresHex": {},
-      "fotosCores": {},
       "ordem": 10
     },
     {
@@ -491,7 +491,7 @@
       "destaque": "",
       "descricao": "",
       "estoqueNum": 0,
-      "ativo": true,
+      "ativo": false,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDFU-106/midia-1783640125518.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDFU-106/midia-1783640118611.png",
@@ -524,7 +524,7 @@
       "badge": "",
       "destaque": "Tecido Poliamida. Tamanho único: 36/42",
       "descricao": "",
-      "estoqueNum": 1,
+      "estoqueNum": 2,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDMG-104/midia-1783480241093.png",
@@ -872,6 +872,29 @@
       "coresHex": {},
       "fotosCores": {},
       "ordem": 27
+    },
+    {
+      "sku": "ZUM-CLPO-402",
+      "nome": "Calça poa",
+      "cat": "Calças",
+      "preco": 329,
+      "cores": [
+        "Off"
+      ],
+      "tamanhos": [
+        "M",
+        "G"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 0,
+      "ativo": true,
+      "fotos": [],
+      "coresHex": {},
+      "fotosCores": {},
+      "ordem": 28
     }
   ]
 }
