@@ -1,120 +1,9 @@
 {
-  "geradoEm": "2026-11-24T03:14:16.069Z",
+  "geradoEm": "2026-11-25T02:30:43.363Z",
   "coresHex": {
     "listrada": "#e30821"
   },
   "produtos": [
-    {
-      "sku": "ZUM-TSLT-202",
-      "nome": "T-shirt listrada",
-      "cat": "T-shirts",
-      "preco": 199,
-      "cores": [
-        "Vermelha",
-        "Azul marinho",
-        "Verde"
-      ],
-      "tamanhos": [
-        "UN"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "destaque": "",
-      "descricao": "",
-      "estoqueNum": 3,
-      "ativo": true,
-      "fotos": [
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSLT-202/midia-1790131686247.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSLT-202/midia-1790131698686.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSLT-202/midia-1790139007084.png"
-      ],
-      "coresHex": {},
-      "fotosCores": {
-        "Azul marinho": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSLT-202/CORES/azul-marinho-1790138900639.jpg"
-        ]
-      },
-      "ordem": 1
-    },
-    {
-      "sku": "ZUM-CMLS-900",
-      "nome": "Camisaria",
-      "cat": "Camisaria",
-      "preco": 289,
-      "cores": [
-        "Branco",
-        "Azul marinho"
-      ],
-      "tamanhos": [
-        "P",
-        "M",
-        "G"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "destaque": "",
-      "descricao": "",
-      "estoqueNum": 0,
-      "ativo": true,
-      "fotos": [
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CMLS-900/midia-1785535365355.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CMLS-900/midia-1785535373974.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CMLS-900/midia-1785535378363.png"
-      ],
-      "coresHex": {},
-      "fotosCores": {},
-      "ordem": 2
-    },
-    {
-      "sku": "ZUM-BLPL-701",
-      "nome": "Blusa polo listrada",
-      "cat": "Blusas",
-      "preco": 204,
-      "cores": [
-        "Listrada"
-      ],
-      "tamanhos": [
-        "UN"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "destaque": "",
-      "descricao": "",
-      "estoqueNum": 0,
-      "ativo": true,
-      "fotos": [
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-BLPL-701/midia-1790131668394.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-BLPL-701/midia-1790131672627.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-BLPL-701/midia-1790131676535.png"
-      ],
-      "coresHex": {},
-      "fotosCores": {},
-      "ordem": 3
-    },
-    {
-      "sku": "ZUM-PABD-1000",
-      "nome": "Pareô bordado",
-      "cat": "Pareô",
-      "preco": 179,
-      "cores": [
-        "Bege"
-      ],
-      "tamanhos": [
-        "UN"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "destaque": "",
-      "descricao": "",
-      "estoqueNum": 3,
-      "ativo": true,
-      "fotos": [
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-PABD-1000/midia-1790133612075.png"
-      ],
-      "coresHex": {},
-      "fotosCores": {},
-      "ordem": 4
-    },
     {
       "sku": "ZUM-RGRE-800",
       "nome": "Regata renda",
@@ -140,36 +29,7 @@
       ],
       "coresHex": {},
       "fotosCores": {},
-      "ordem": 5
-    },
-    {
-      "sku": "ZUM-BDBA-300",
-      "nome": "Body assimétrico",
-      "cat": "Bodies",
-      "preco": 119,
-      "cores": [
-        "Marrom",
-        "Preto",
-        "Bege",
-        "Off-white",
-        "Verde"
-      ],
-      "tamanhos": [
-        "UN"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "destaque": "",
-      "descricao": "",
-      "estoqueNum": 0,
-      "ativo": true,
-      "fotos": [
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-BDBA-300/midia-1790133783513.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-BDBA-300/midia-1790133885682.png"
-      ],
-      "coresHex": {},
-      "fotosCores": {},
-      "ordem": 6
+      "ordem": 1
     },
     {
       "sku": "ZUM-SKMD-600",
@@ -222,20 +82,48 @@
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-SKMD-600/CORES/caqui-1786085543517.jpg"
         ]
       },
-      "ordem": 7
+      "ordem": 2
     },
     {
-      "sku": "ZUM-CLCN-401",
-      "nome": "Calça cenoura",
+      "sku": "ZUM-CLAL-403",
+      "nome": "Calça alfaiataria",
       "cat": "Calças",
-      "preco": 319,
+      "preco": 369,
       "cores": [
-        "Amarela"
+        "Marrom",
+        "Preto",
+        "Off-white"
       ],
       "tamanhos": [
         "P",
-        "M",
-        "G"
+        "M"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 1,
+      "ativo": true,
+      "fotos": [
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CLAL-403/midia-1790134264304.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CLAL-403/midia-1790134808182.png"
+      ],
+      "coresHex": {},
+      "fotosCores": {},
+      "ordem": 3
+    },
+    {
+      "sku": "ZUM-TSLT-202",
+      "nome": "T-shirt listrada",
+      "cat": "T-shirts",
+      "preco": 199,
+      "cores": [
+        "Vermelha",
+        "Azul marinho",
+        "Verde"
+      ],
+      "tamanhos": [
+        "UN"
       ],
       "stock": "Em estoque",
       "badge": "",
@@ -244,13 +132,17 @@
       "estoqueNum": 0,
       "ativo": false,
       "fotos": [
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CLCN-401/midia-1784417417779.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CLCN-401/midia-1784417427555.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CLCN-401/midia-1784417434671.png"
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSLT-202/midia-1790131686247.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSLT-202/midia-1790131698686.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSLT-202/midia-1790139007084.png"
       ],
       "coresHex": {},
-      "fotosCores": {},
-      "ordem": 8
+      "fotosCores": {
+        "Azul marinho": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSLT-202/CORES/azul-marinho-1790138900639.jpg"
+        ]
+      },
+      "ordem": 4
     },
     {
       "sku": "ZUM-BDRE-302",
@@ -278,7 +170,181 @@
       ],
       "coresHex": {},
       "fotosCores": {},
+      "ordem": 5
+    },
+    {
+      "sku": "ZUM-CMLS-900",
+      "nome": "Camisaria",
+      "cat": "Camisaria",
+      "preco": 289,
+      "cores": [
+        "Branco",
+        "Azul marinho"
+      ],
+      "tamanhos": [
+        "P",
+        "M",
+        "G"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 0,
+      "ativo": false,
+      "fotos": [
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CMLS-900/midia-1785535365355.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CMLS-900/midia-1785535373974.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CMLS-900/midia-1785535378363.png"
+      ],
+      "coresHex": {},
+      "fotosCores": {},
+      "ordem": 6
+    },
+    {
+      "sku": "ZUM-BLPL-701",
+      "nome": "Blusa polo listrada",
+      "cat": "Blusas",
+      "preco": 204,
+      "cores": [
+        "Listrada"
+      ],
+      "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 0,
+      "ativo": false,
+      "fotos": [
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-BLPL-701/midia-1790131668394.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-BLPL-701/midia-1790131672627.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-BLPL-701/midia-1790131676535.png"
+      ],
+      "coresHex": {},
+      "fotosCores": {},
+      "ordem": 7
+    },
+    {
+      "sku": "ZUM-PABD-1000",
+      "nome": "Pareô bordado",
+      "cat": "Pareô",
+      "preco": 179,
+      "cores": [
+        "Bege"
+      ],
+      "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 3,
+      "ativo": true,
+      "fotos": [
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-PABD-1000/midia-1790133612075.png"
+      ],
+      "coresHex": {},
+      "fotosCores": {},
+      "ordem": 8
+    },
+    {
+      "sku": "ZUM-BDBA-300",
+      "nome": "Body assimétrico",
+      "cat": "Bodies",
+      "preco": 119,
+      "cores": [
+        "Marrom",
+        "Preto",
+        "Bege",
+        "Off-white",
+        "Verde"
+      ],
+      "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 0,
+      "ativo": false,
+      "fotos": [
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-BDBA-300/midia-1790133783513.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-BDBA-300/midia-1790133885682.png"
+      ],
+      "coresHex": {},
+      "fotosCores": {},
       "ordem": 9
+    },
+    {
+      "sku": "ZUM-CLCN-401",
+      "nome": "Calça cenoura",
+      "cat": "Calças",
+      "preco": 319,
+      "cores": [
+        "Amarela"
+      ],
+      "tamanhos": [
+        "P",
+        "M",
+        "G"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 0,
+      "ativo": false,
+      "fotos": [
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CLCN-401/midia-1784417417779.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CLCN-401/midia-1784417427555.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CLCN-401/midia-1784417434671.png"
+      ],
+      "coresHex": {},
+      "fotosCores": {},
+      "ordem": 10
+    },
+    {
+      "sku": "ZUM-VDPL-107",
+      "nome": "Vestido Pala",
+      "cat": "Vestidos",
+      "preco": 295,
+      "cores": [
+        "Azul",
+        "Vinho",
+        "Marrom"
+      ],
+      "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 1,
+      "ativo": true,
+      "fotos": [
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/midia-1783861479458.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/midia-1783861485974.png",
+        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/midia-1783864139580.png"
+      ],
+      "coresHex": {},
+      "fotosCores": {
+        "Vinho": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/CORES/vinho-1783862847096.jpg"
+        ],
+        "Marrom": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/CORES/marrom-1783861510379.jpg"
+        ],
+        "Azul": [
+          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/CORES/azul-1783862858611.jpg"
+        ]
+      },
+      "ordem": 11
     },
     {
       "sku": "ZUM-TSBC-201",
@@ -316,35 +382,7 @@
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSBC-201/CORES/azul-bebê-1787711693552.jpg"
         ]
       },
-      "ordem": 10
-    },
-    {
-      "sku": "ZUM-CLAL-403",
-      "nome": "Calça alfaiataria",
-      "cat": "Calças",
-      "preco": 369,
-      "cores": [
-        "Marrom",
-        "Preto",
-        "Off-white"
-      ],
-      "tamanhos": [
-        "P",
-        "M"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "destaque": "",
-      "descricao": "",
-      "estoqueNum": 5,
-      "ativo": true,
-      "fotos": [
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CLAL-403/midia-1790134264304.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-CLAL-403/midia-1790134808182.png"
-      ],
-      "coresHex": {},
-      "fotosCores": {},
-      "ordem": 11
+      "ordem": 12
     },
     {
       "sku": "ZUM-BDBM-301",
@@ -367,14 +405,14 @@
       "destaque": "",
       "descricao": "",
       "estoqueNum": 0,
-      "ativo": true,
+      "ativo": false,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-BDBM-301/midia-1790135074308.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-BDBM-301/midia-1790135079022.png"
       ],
       "coresHex": {},
       "fotosCores": {},
-      "ordem": 12
+      "ordem": 13
     },
     {
       "sku": "ZUM-VDRC-105",
@@ -401,7 +439,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 2,
+      "estoqueNum": 1,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/midia-1783864612196.png",
@@ -433,44 +471,6 @@
         ],
         "Azul Bebê": [
           "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDRC-105/CORES/azul-bebê-1786439606063.jpg"
-        ]
-      },
-      "ordem": 13
-    },
-    {
-      "sku": "ZUM-VDPL-107",
-      "nome": "Vestido Pala",
-      "cat": "Vestidos",
-      "preco": 295,
-      "cores": [
-        "Azul",
-        "Vinho",
-        "Marrom"
-      ],
-      "tamanhos": [
-        "UN"
-      ],
-      "stock": "Em estoque",
-      "badge": "",
-      "destaque": "",
-      "descricao": "",
-      "estoqueNum": 1,
-      "ativo": true,
-      "fotos": [
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/midia-1783861479458.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/midia-1783861485974.png",
-        "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/midia-1783864139580.png"
-      ],
-      "coresHex": {},
-      "fotosCores": {
-        "Vinho": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/CORES/vinho-1783862847096.jpg"
-        ],
-        "Marrom": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/CORES/marrom-1783861510379.jpg"
-        ],
-        "Azul": [
-          "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDPL-107/CORES/azul-1783862858611.jpg"
         ]
       },
       "ordem": 14
@@ -607,8 +607,8 @@
       "badge": "",
       "destaque": "Algodão",
       "descricao": "",
-      "estoqueNum": 1,
-      "ativo": true,
+      "estoqueNum": 0,
+      "ativo": false,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783480100247.png",
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-TSOV-200/midia-1783480103971.png",
@@ -684,7 +684,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 7,
+      "estoqueNum": 6,
       "ativo": true,
       "fotos": [
         "https://raw.githubusercontent.com/gugacriacao/zum-catalogo-online/main/FOTOS/ZUM-VDDN-103/midia-1783643692817.png",
@@ -724,7 +724,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 4,
+      "estoqueNum": 3,
       "ativo": true,
       "fotos": [],
       "coresHex": {},
@@ -818,8 +818,8 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 1,
-      "ativo": true,
+      "estoqueNum": 0,
+      "ativo": false,
       "fotos": [],
       "coresHex": {},
       "fotosCores": {},
@@ -866,7 +866,7 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 4,
+      "estoqueNum": 3,
       "ativo": true,
       "fotos": [],
       "coresHex": {},
@@ -874,14 +874,107 @@
       "ordem": 27
     },
     {
-      "sku": "ZUM-CLPO-402",
-      "nome": "Calça poa",
-      "cat": "Calças",
-      "preco": 329,
+      "sku": "ZUM-VDBA-101",
+      "nome": "Vestido básico",
+      "cat": "Vestidos",
+      "preco": 179.9,
       "cores": [
-        "Off"
+        "Preto",
+        "Marrom"
       ],
       "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 0,
+      "ativo": false,
+      "fotos": [],
+      "coresHex": {},
+      "fotosCores": {},
+      "ordem": 28
+    },
+    {
+      "sku": "ZUM-VDALC-100",
+      "nome": "Vestido alça",
+      "cat": "Vestidos",
+      "preco": 179.9,
+      "cores": [
+        "Bordô",
+        "Off-white"
+      ],
+      "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 0,
+      "ativo": false,
+      "fotos": [],
+      "coresHex": {},
+      "fotosCores": {},
+      "ordem": 29
+    },
+    {
+      "sku": "ZUM-CJBC-001",
+      "nome": "Conjunto calça e t-shirt",
+      "cat": "Conjuntos",
+      "preco": 279.9,
+      "cores": [
+        "Marrom"
+      ],
+      "tamanhos": [
+        "UN"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 0,
+      "ativo": false,
+      "fotos": [],
+      "coresHex": {},
+      "fotosCores": {},
+      "ordem": 30
+    },
+    {
+      "sku": "ZUM-VDRE-115",
+      "nome": "Vestido renda",
+      "cat": "Vestidos",
+      "preco": 499,
+      "cores": [
+        "Off-white",
+        "Preto"
+      ],
+      "tamanhos": [
+        "P",
+        "M"
+      ],
+      "stock": "Em estoque",
+      "badge": "",
+      "destaque": "",
+      "descricao": "",
+      "estoqueNum": 4,
+      "ativo": true,
+      "fotos": [],
+      "coresHex": {},
+      "fotosCores": {},
+      "ordem": 31
+    },
+    {
+      "sku": "ZUM-CJFR-504",
+      "nome": "Conjunto franja",
+      "cat": "Conjuntos",
+      "preco": 569,
+      "cores": [
+        "Marrom"
+      ],
+      "tamanhos": [
+        "P",
         "M",
         "G"
       ],
@@ -889,12 +982,12 @@
       "badge": "",
       "destaque": "",
       "descricao": "",
-      "estoqueNum": 0,
+      "estoqueNum": 4,
       "ativo": true,
       "fotos": [],
       "coresHex": {},
       "fotosCores": {},
-      "ordem": 28
+      "ordem": 32
     }
   ]
 }
